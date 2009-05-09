@@ -34,7 +34,11 @@ module Test
 
 
 	class RunTests
-		def test(msg)
+		def refute(msg)
+			assert(msg) do !yield end
+		end
+
+		def assert(msg)
 			Test.count[:tests] += 1
 			if block_given? then
 				result = yield ? :success : :failure
@@ -70,21 +74,21 @@ end
 
 
 Test.run_if_mainfile do
-	test "Should be a success" do
+	assert "Should be a success" do
 		true
 	end
 	
-	test "Should raise and by that be a success" do
+	assert "Should raise and by that be a success" do
 		raises do raise "Of course it does" end
 	end
 	
-	test "Pending"
+	assert "Pending"
 	
-	test "Failure" do
+	assert "Failure- An assertion returning false is a failure" do
 		false
 	end
 	
-	test "Error" do
+	assert "Error - Uncaught exceptions cause a test to be reported as 'Error'" do
 		raise "Error!"
 	end
 	
