@@ -22,7 +22,8 @@ module Test
 			end
 
 			def run_suite(name, tests)
-				puts "\e[m          #{'  '*@depth}#{name.join('.')} (#{tests.size} tests)"
+				label, size = '  '*@depth+name.join('.'), tests.size.to_s
+				printf "\e[40;37m          %-*s (%d tests)\e[0m\n", 80-19-size.length, label, size
 				@depth += 1
 				super
 				@depth -= 1
