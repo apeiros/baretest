@@ -21,11 +21,11 @@ module Test
 			instance_eval(&block)
 			@current_suite.pop
 		end
-	
+
 		def assert(message=nil, &block)
 			@suite[@current_suite] << [:assert, message, block]
 		end
-	
+
 		def refute(message=nil, &block)
 			@suite[@current_suite] << [:refute, message, block]
 		end
@@ -90,7 +90,7 @@ Test.run_if_mainfile do
 			false
 		end
 	end
-	
+
 	suite "Failure" do
 		assert "An assertion returning a falsish value (nil/false) is a failure" do
 			false
@@ -100,7 +100,7 @@ Test.run_if_mainfile do
 			true
 		end
 	end
-	
+
 	suite "Pending" do
 		assert "An assertion without a block is pending"
 		refute "A refutation without a block is pending"
