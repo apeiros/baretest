@@ -5,26 +5,26 @@ require 'test/support'
 module Test
 	@extender, @mock_adapter = {}, nil
 	class <<self
-		attr_reader :extender, :mock_adapter
+		attr_reader :extender, :mock_adapter, :run
 	end
 
 	def self.run_if_mainfile(&block)
-		(@run ||= Run.new('cli')).suite.instance_eval(&block)
+		(@run ||= Run.new).suite.instance_eval(&block)
 		return unless caller.first[/^[^:]*/] == $0
-		@run.run
+		@run.run('cli')
 	end
 
 	class Run
 		attr_reader :suite
 
-		def initialize(runner)
-			require "test/run/#{runner}"
-			extend(Test.extender["test/run/#{runner}"])
-			extend(Test.mock_adapter) if Test.mock_adapter
+		def initialize()
 			@suite = Suite.new
 		end
 
-		def run(count=Hash.new(0))
+		def run(runner, count=Hash.new(0))
+			require "test/run/#{runner}"
+			extend(Test.extender["test/run/#{runner}"])
+			extend(Test.mock_adapter) if Test.mock_adapter
 			@count = count
 			run_all(@suite) do |main_suite| run_suite(main_suite) end
 		end
