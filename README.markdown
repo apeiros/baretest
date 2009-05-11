@@ -32,6 +32,8 @@ Features
 Planned Features
 ----------------
 
+* baretest executable to run tests on multiple files at once
+* Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
 
 
