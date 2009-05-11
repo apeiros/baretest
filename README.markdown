@@ -26,13 +26,26 @@ Features
 * Teardown and Setup for suites
 * Callbacks to integrate mock libraries
 * API to use it from code
+* baretest executable to run tests on multiple files at once
 
+
+
+Executable
+----------
+
+    baretest [options] glob[, ...]
+
+    Options:
+      -f FORMATTER             use FORMATTER for output
+          --formatter
+      -d, --debug              set debugging flags (set $DEBUG to true)
+      -v, --version            print the version and exit
+      -w, --warn               turn warnings on for your script
 
 
 Planned Features
 ----------------
 
-* baretest executable to run tests on multiple files at once
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
 
