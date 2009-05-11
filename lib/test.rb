@@ -26,14 +26,10 @@ module Test
 
 		def run(count=Hash.new(0))
 			@count = count
-			run_all(@suite) do |main_suite|
-				run_suite(main_suite)
-			end
+			run_all(@suite) do |main_suite| run_suite(main_suite) end
 		end
 
-		def run_all(suites)
-			yield(suites)
-		end
+		def run_all(suites) yield(suites) end
 		def run_suite(suite)
 			suite.tests.each do |test|
 				run_test(test) { |assertion| assertion.execute }
@@ -43,9 +39,7 @@ module Test
 			suite.suites.each do |suite| run_suite(suite) end
 			@count[:suite] += 1
 		end
-		def run_test(assertion)
-			yield(assertion)
-		end
+		def run_test(assertion) yield(assertion) end
 	end
 
 	class Suite
@@ -62,8 +56,14 @@ module Test
 			ancestors
 		end
 
-		def suite(name=nil, &block)
-			@suites << suite = Suite.new(name, self)
+		def suite(name=nil, opts={}, &block)
+			begin
+				Array(opts[:requires]).each { |file| require file } if opts[:requires]
+			rescue LoadError
+				@suites << suite = Skipped::Suite.new(name, self)
+			else
+				@suites << suite = self.class.new(name, self) # All suites within Skipped::Suite are Skipped::Suite
+			end
 			suite.instance_eval(&block)
 		end
 
@@ -75,13 +75,8 @@ module Test
 			block ? @teardown << block : @teardown
 		end
 
-		def assert(message=nil, &block)
-			@tests << Assertion.new(self, :assert, message, &block)
-		end
-
-		def refute(message=nil, &block)
-			@tests << Assertion.new(self, :refute, message, &block)
-		end
+		def assert(message=nil, &block) @tests << Assertion.new(self, :assert, message, &block) end
+		def refute(message=nil, &block) @tests << Assertion.new(self, :refute, message, &block) end
 	end
 
 	class Assertion
@@ -103,6 +98,18 @@ module Test
 			self
 		else
 			self
+		end
+	end
+
+	module Skipped
+		class Suite < ::Test::Suite
+			def assert(message=nil, &block) @tests << Skipped::Assertion.new(self, :assert, message, &block) end
+			def refute(message=nil, &block) @tests << Skipped::Assertion.new(self, :refute, message, &block) end
+			def setup(&block) [] end
+			def teardown(&block) [] end
+		end
+		class Assertion < ::Test::Assertion
+			def execute() @status = :skipped and self end
 		end
 	end
 
@@ -207,6 +214,12 @@ Test.run_if_mainfile do
 
 		teardown do
 			@foo = nil # not that it'd make much sense, just to demonstrate
+		end
+	end
+
+	suite "Dependencies", :requires => ['foo', 'bar'] do
+		assert "Will be skipped, due to unsatisfied dependencies" do
+			raise "This code therefore will never be executed"
 		end
 	end
 end
