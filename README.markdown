@@ -22,7 +22,7 @@ Features
 * Ships with colored Shell formatter, XML- and TAP formatter
 * Simple to add new formatters (the standard formatters are only roughly 30 lines of code each)
 * Teardown and Setup for suites
-* Callbacks to integrate mock libraries hazzle free
+* Callbacks to integrate mock libraries
 * API to use it from code
 * YARD code to extract the specifications without running the code (TODO)
 
