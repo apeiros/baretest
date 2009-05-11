@@ -1,13 +1,14 @@
 module Test
-	module Run
+	class Run
 		module Spec
-			def run_setup(*args)
-				super
+			def run_all(*args)
 				@depth = 0
+				super
 			end
 
-			def run_suite(name, tests)
-				puts('  '*@depth+name.last)
+			def run_suite(suite)
+				return super unless suite.name
+				puts('  '*@depth+suite.name)
 				@depth += 1
 				super
 				@depth -= 1
@@ -20,5 +21,5 @@ module Test
 		end
 	end
 
-	@main_suite.extend Run::Spec
+	@extender["test/run/spec"] = Run::Spec
 end

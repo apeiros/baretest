@@ -1,5 +1,5 @@
 module Test
-	module Run
+	class Run
 		module CLI
 			Formats = {
 				:pending => "\e[43m%s\e[0m%s %s\n",
@@ -8,12 +8,8 @@ module Test
 				:error   => "\e[31;40;1m%s\e[0m%s %s\n"  # ]]]]]]]] - bbedit hates open brackets...
 			}
 
-			def run_setup(*args)
-				super
-				@depth = 0
-			end
-
 			def run_all(*args)
+				@depth = 0
 				puts "Running all tests\n\n"
 				start = Time.now
 				super
@@ -21,8 +17,9 @@ module Test
 				  Time.now-start, *@count.values_at(:test, :success, :pending, :failure, :error)
 			end
 
-			def run_suite(name, tests)
-				label, size = '  '*@depth+name.join('.'), tests.size.to_s
+			def run_suite(suite)
+				return super unless suite.name
+				label, size = '  '*@depth+(suite.name || 'Main'), suite.tests.size.to_s
 				printf "\e[40;37m          %-*s (%d tests)\e[0m\n", 80-19-size.length, label, size
 				@depth += 1
 				super
@@ -37,5 +34,5 @@ module Test
 		end
 	end
 
-	@main_suite.extend Run::CLI
+	@extender["test/run/cli"] = Run::CLI
 end

@@ -1,12 +1,9 @@
 module Test
-	module Run
+	class Run
 		module XML
-			def run_setup(*args)
-				super
-				@depth = 1
-			end
-
 			def run_all(*args)
+				@depth = 1
+
 				puts '<?xml version="1.0" encoding="utf-8"?>'
 				puts '<tests>'
 				start  = Time.now
@@ -28,8 +25,8 @@ module Test
 				puts %{<status>#{status}</status>}
 			end
 
-			def run_suite(name, tests)
-				puts %{#{"\t"*@depth}<suite name="#{name.last}">}
+			def run_suite(suite)
+				puts %{#{"\t"*@depth}<suite name="#{suite.name}">}
 				@depth += 1
 				super
 				@depth -= 1
@@ -46,5 +43,5 @@ module Test
 		end
 	end
 
-	@main_suite.extend Run::XML
+	@extender["test/run/xml"] = Run::XML
 end
