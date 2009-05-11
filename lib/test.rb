@@ -3,8 +3,10 @@ require 'test/support'
 
 
 module Test
-	@extender = {}
-	def self.extender() @extender end
+	@extender, @mock_adapter = {}, nil
+	class <<self
+		attr_reader :extender, :mock_adapter
+	end
 
 	def self.run_if_mainfile(&block)
 		(@run ||= Run.new('cli')).suite.instance_eval(&block)
@@ -18,6 +20,7 @@ module Test
 		def initialize(runner)
 			require "test/run/#{runner}"
 			extend(Test.extender["test/run/#{runner}"])
+			extend(Test.mock_adapter) if Test.mock_adapter
 			@suite = Suite.new
 		end
 
