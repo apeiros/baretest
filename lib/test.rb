@@ -46,11 +46,17 @@ module Test
 	end
 
 	class Suite
-		attr_reader :suites, :tests, :name
+		attr_reader :suites, :tests, :name, :parent
 
 		def initialize(name=nil, parent=nil, &block)
-			@name, @parent, @suites, @tests = name, parent, [], []
+			@name, @parent, @suites, @tests, @setup, @teardown = name, parent, [], [], [], []
 			instance_eval(&block) if block
+		end
+
+		def ancestors
+			ancestors, parent = [self], nil # parent must be initialized for the next line to work
+			ancestors << parent while parent = ancestors.last.parent
+			ancestors
 		end
 
 		def suite(name=nil, &block)
@@ -58,24 +64,37 @@ module Test
 			suite.instance_eval(&block)
 		end
 
+		def setup(&block)
+			block ? @setup << block : @setup
+		end
+
+		def teardown(&block)
+			block ? @teardown << block : @teardown
+		end
+
 		def assert(message=nil, &block)
-			@tests << Assertion.new(:assert, message, &block)
+			@tests << Assertion.new(self, :assert, message, &block)
 		end
 
 		def refute(message=nil, &block)
-			@tests << Assertion.new(:refute, message, &block)
+			@tests << Assertion.new(self, :refute, message, &block)
 		end
 	end
 
 	class Assertion
 		attr_reader :status, :error, :message
-		def initialize(action, message, &block)
-			@status, @error, @message, @action, @block = nil, nil, (message || "No message given"), action, block
+		def initialize(suite, action, message, &block)
+			@suite, @status, @error, @message, @action, @block = suite, nil, nil, (message || "No message given"), action, block
 		end
 
 		def execute
-			@status = :pending
-			@status = ((@action == :refute) ^ @block.call) ? :success : :failure if @block
+			if @block
+				@suite.ancestors.map { |suite| suite.setup }.flatten.reverse.each { |setup| instance_eval(&setup) }
+				@status = ((@action == :refute) ^ (instance_eval(&@block))) ? :success : :failure
+				@suite.ancestors.map { |suite| suite.teardown }.flatten.reverse.each { |setup| instance_eval(&setup) }
+			else
+				@status = :pending
+			end
 		rescue => e
 			@status = :error
 			self
@@ -140,13 +159,51 @@ Test.run_if_mainfile do
 			b = 0.17
 			within_delta a, b, 0.001
 		end
-		
+
 		suite "Nested suite" do
 			assert "Assert two randomly ordered arrays to contain the same values" do
 				a = [*"A".."Z"] # an array with values from A to Z
 				b = a.sort_by { rand }
 				a.equal_unordered(b) # can be used with any Enumerable, uses hash-key identity
 			end
+		end
+	end
+
+	suite "Setup & Teardown" do
+		setup do
+			@foo = "foo"
+			@bar = "bar"
+		end
+
+		assert "@foo should be set" do
+			@foo == "foo"
+		end
+
+		refute "@baz is only defined for subsequent nested suite" do
+			@baz == "baz"
+		end
+
+		suite "Nested suite" do
+			setup do
+				@bar = "inner bar"
+				@baz = "baz"
+			end
+
+			assert "@foo is inherited" do
+				@foo == "foo"
+			end
+
+			assert "@bar is overridden" do
+				@bar == "inner bar"
+			end
+
+			assert "@baz is defined only for inner" do
+				@baz == "baz"
+			end
+		end
+
+		teardown do
+			@foo = nil # not that it'd make much sense, just to demonstrate
 		end
 	end
 end
