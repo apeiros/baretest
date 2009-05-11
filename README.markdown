@@ -20,7 +20,7 @@ Features
 * Helpers to deal painlessly with raising, throwing, float imprecision, unordered collections etc.
 * Ships with colored Shell formatter, XML- and TAP formatter (TODO: TAP)
 * Simple to add new formatters (the standard formatters are only roughly 30 lines of code each)
-* Teardown and Setup for suites (
+* Teardown and Setup for suites (TODO)
 * API to use it from code
 
 
