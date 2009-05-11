@@ -2,37 +2,55 @@ module Test
 	class Run
 		module CLI
 			Formats = {
-				:pending => "\e[43m%s\e[0m%s %s\n",
-				:success => "\e[42m%s\e[0m%s %s\n",
-				:failure => "\e[41m%s\e[0m%s %s\n",
-				:error   => "\e[31;40;1m%s\e[0m%s %s\n"  # ]]]]]]]] - bbedit hates open brackets...
+				:pending => "\e[43m%9s\e[0m  %s%s\n",
+				:success => "\e[42m%9s\e[0m  %s%s\n",
+				:failure => "\e[41m%9s\e[0m  %s%s\n",
+				:error   => "\e[37;40;1m%9s\e[0m  %s%s\n"  # ]]]]]]]] - bbedit hates open brackets...
+			}
+			FooterFormats = {
+				:pending => "\e[43m%9s\e[0m\n",
+				:success => "\e[42m%9s\e[0m\n",
+				:failure => "\e[41m%9s\e[0m\n",
+				:error   => "\e[37;40;1m%9s\e[0m\n"  # ]]]]]]]] - bbedit hates open brackets...
 			}
 
 			def run_all(*args)
 				@depth = 0
-				puts "Running all tests\n\n"
+				puts "Running all tests\n"
 				start = Time.now
-				super
-				printf "%2$d tests run in %1$.1fs\n%3$d successful, %4$d pending, %5$d failures, %6$d errors\n",
+				super # run all suites
+				status = case
+					when @count[:error]   > 0 then :error
+					when @count[:failure] > 0 then :failure
+					when @count[:pending] > 0 then :pending
+					else :success
+				end
+				printf "\n%2$d tests run in %1$.1fs\n%3$d successful, %4$d pending, %5$d failures, %6$d errors\n",
 				  Time.now-start, *@count.values_at(:test, :success, :pending, :failure, :error)
+				print "Final status: "
+				printf FooterFormats[status], status_label(status)
 			end
 
 			def run_suite(suite)
 				return super unless suite.name
-				label, size = '  '*@depth+(suite.name || 'Main'), suite.tests.size.to_s
-				printf "\e[40;37m          %-*s (%d tests)\e[0m\n", 80-19-size.length, label, size
+				#label, size = '  '*@depth+suite.name, suite.tests.size.to_s
+				#printf "\n\e[1m%-*s\e[0m (%d tests)\n", 71-size.length, label, size
+				puts "          \n           \e[1m#{'  '*@depth+suite.name}\e[0m (#{suite.tests.size} tests)"
 				@depth += 1
-				super
+				super # run the suite
 				@depth -= 1
-				puts
 			end
 			
 			def run_test(assertion)
-				rv = super
-				printf(Formats[rv.status], rv.status.to_s.capitalize.center(9), '  '*@depth, rv.message)
+				rv          = super # run the assertion
+				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.message)
+			end
+			
+			def status_label(status)
+				status.to_s.capitalize.center(9)
 			end
 		end
 	end
 
-	@extender["test/run/cli"] = Run::CLI
+	@extender["test/run/cli"] = Run::CLI # register the extender
 end
