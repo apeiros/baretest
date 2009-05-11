@@ -3,57 +3,68 @@ require 'test/support'
 
 
 module Test
+	@extender = {}
+	def self.extender() @extender end
+
 	def self.run_if_mainfile(&block)
-		@main_suite.instance_eval(&block)
+		(@run ||= Run.new('xml')).suite.instance_eval(&block)
 		return unless caller.first[/^[^:]*/] == $0
-		@main_suite.run('cli')
+		@run.run
 	end
 
-	# suite actually contains all suites
-	class Suite
-		def initialize(ancestors=nil)
-			@suite, @current_suite = {}, []
-		end
+	class Run
+		attr_reader :suite
 
-		def suite(name=nil, &block)
-			@current_suite << name
-			@suite[@current_suite.dup] ||= []
-			instance_eval(&block)
-			@current_suite.pop
-		end
-
-		def assert(message=nil, &block)
-			@suite[@current_suite] << [:assert, message, block]
-		end
-
-		def refute(message=nil, &block)
-			@suite[@current_suite] << [:refute, message, block]
-		end
-
-		def run(runner)
+		def initialize(runner)
 			require "test/run/#{runner}"
-			@count  = Hash.new(0)
-			@ran    = []
-			run_setup()
-			run_all(@suite) do |suites|
-				suites.sort_by { rand }.each do |name, tests|
-					run_suite(name, tests) do # enable hooks
-						tests.sort_by { rand }.each do |action, message, block|
-							assertion = Assertion.new(action, message, &block)
-							run_test(assertion) { |_assertion| _assertion.execute } # enable hooks
-							@count[:test] += 1
-							@count[assertion.status] += 1
-						end
-						@count[:suite] += 1
-					end
-				end
+			extend(Test.extender["test/run/#{runner}"])
+			@suite = Suite.new
+		end
+
+		def run(count=Hash.new(0))
+			@count = count
+			run_all(@suite) do |main_suite|
+				run_suite(main_suite)
 			end
 		end
 
-		def run_setup() end
-		def run_all(suites) yield(suites) end
-		def run_suite(*args) yield(*args) end
-		def run_test(*args) yield(*args) end
+		def run_all(suites)
+			yield(suites)
+		end
+		def run_suite(suite)
+			suite.tests.sort_by { rand }.each do |test|
+				run_test(test) { |assertion| assertion.execute }
+				@count[:test] += 1
+				@count[test.status] += 1
+			end
+			suite.suites.sort_by { rand }.each do |suite| run_suite(suite) end
+			@count[:suite] += 1
+		end
+		def run_test(assertion)
+			yield(assertion)
+		end
+	end
+
+	class Suite
+		attr_reader :suites, :tests, :name
+
+		def initialize(name=nil, parent=nil, &block)
+			@name, @parent, @suites, @tests = name, parent, [], []
+			instance_eval(&block) if block
+		end
+
+		def suite(name=nil, &block)
+			@suites << suite = Suite.new(name, self)
+			suite.instance_eval(&block)
+		end
+
+		def assert(message=nil, &block)
+			@tests << Assertion.new(:assert, message, &block)
+		end
+
+		def refute(message=nil, &block)
+			@tests << Assertion.new(:refute, message, &block)
+		end
 	end
 
 	class Assertion
@@ -129,11 +140,13 @@ Test.run_if_mainfile do
 			b = 0.17
 			within_delta a, b, 0.001
 		end
-
-		assert "Assert two randomly ordered arrays to contain the same values" do
-			a = [*"A".."Z"] # an array with values from A to Z
-			b = a.sort_by { rand }
-			a.equal_unordered(b) # can be used with any Enumerable, uses hash-key identity
+		
+		suite "Nested suite" do
+			assert "Assert two randomly ordered arrays to contain the same values" do
+				a = [*"A".."Z"] # an array with values from A to Z
+				b = a.sort_by { rand }
+				a.equal_unordered(b) # can be used with any Enumerable, uses hash-key identity
+			end
 		end
 	end
 end
