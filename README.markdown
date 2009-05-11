@@ -8,7 +8,7 @@ Summary
 
 Bare Test is a concise testing framework that has all you need but nothing more.
 You only need to learn 2 methods to use it, and around 10 to be a power user.
-All of that in under 100 lines of code.
+And all of that in under 100 lines of code.
 
 
 
@@ -19,14 +19,20 @@ Features
 * Strightforward and terse assertions (just a block whose return value defines success/failure)
 * Easy grouping of assertions into suites
 * BDD style specifications/test descriptions (NOT code), also extractable
-* Uncomplicated dependency testing and skipping (TODO: implement - might be dropped)
+* Uncomplicated dependency testing and skipping
 * Helpers to deal painlessly with raising, throwing, float imprecision, unordered collections etc.
 * Ships with colored Shell formatter, XML- and TAP formatter
 * Trivial to add new formatters (the standard formatters are only roughly 20-50 lines of code each)
 * Teardown and Setup for suites
 * Callbacks to integrate mock libraries
 * API to use it from code
-* YARD code to extract the specifications without running the code (TODO)
+
+
+
+Planned Features
+----------------
+
+* YARD code to extract the specifications without running the code
 
 
 
@@ -130,6 +136,12 @@ Example Testsuite
 
         teardown do
           @foo = nil # not that it'd make much sense, just to demonstrate
+        end
+      end
+
+      suite "Dependencies", :requires => ['foo', 'bar'] do
+        assert "Will be skipped, due to unsatisfied dependencies" do
+          "And this code therefore will never be executed"
         end
       end
     end
