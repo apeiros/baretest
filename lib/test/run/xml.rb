@@ -12,7 +12,8 @@ module Test
 				status = case
 					when @count[:error]   > 0 then 'error'
 					when @count[:failure] > 0 then 'failure'
-					when @count[:pending] > 0 then 'pending'
+					when @count[:pending] > 0 then 'incomplete'
+					when @count[:skipped] > 0 then 'incomplete'
 					else 'success'
 				end
 				puts %{</tests>}

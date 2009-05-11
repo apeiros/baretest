@@ -3,15 +3,16 @@ module Test
 		module CLI
 			Formats = {
 				:pending => "\e[43m%9s\e[0m  %s%s\n",
+				:skipped => "\e[43m%9s\e[0m  %s%s\n",
 				:success => "\e[42m%9s\e[0m  %s%s\n",
 				:failure => "\e[41m%9s\e[0m  %s%s\n",
 				:error   => "\e[37;40;1m%9s\e[0m  %s%s\n"  # ]]]]]]]] - bbedit hates open brackets...
 			}
 			FooterFormats = {
-				:pending => "\e[43m%9s\e[0m\n",
-				:success => "\e[42m%9s\e[0m\n",
-				:failure => "\e[41m%9s\e[0m\n",
-				:error   => "\e[37;40;1m%9s\e[0m\n"  # ]]]]]]]] - bbedit hates open brackets...
+				:incomplete => "\e[43m%9s\e[0m\n",
+				:success    => "\e[42m%9s\e[0m\n",
+				:failure    => "\e[41m%9s\e[0m\n",
+				:error      => "\e[37;40;1m%9s\e[0m\n"  # ]]]]]]]] - bbedit hates open brackets...
 			}
 
 			def run_all(*args)
@@ -22,7 +23,8 @@ module Test
 				status = case
 					when @count[:error]   > 0 then :error
 					when @count[:failure] > 0 then :failure
-					when @count[:pending] > 0 then :pending
+					when @count[:pending] > 0 then :incomplete
+					when @count[:skipped] > 0 then :incomplete
 					else :success
 				end
 				printf "\n%2$d tests run in %1$.1fs\n%3$d successful, %4$d pending, %5$d failures, %6$d errors\n",
