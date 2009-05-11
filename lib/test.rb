@@ -32,12 +32,12 @@ module Test
 			yield(suites)
 		end
 		def run_suite(suite)
-			suite.tests.sort_by { rand }.each do |test|
+			suite.tests.each do |test|
 				run_test(test) { |assertion| assertion.execute }
 				@count[:test] += 1
 				@count[test.status] += 1
 			end
-			suite.suites.sort_by { rand }.each do |suite| run_suite(suite) end
+			suite.suites.each do |suite| run_suite(suite) end
 			@count[:suite] += 1
 		end
 		def run_test(assertion)
