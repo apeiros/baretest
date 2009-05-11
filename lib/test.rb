@@ -7,7 +7,7 @@ module Test
 	def self.extender() @extender end
 
 	def self.run_if_mainfile(&block)
-		(@run ||= Run.new('xml')).suite.instance_eval(&block)
+		(@run ||= Run.new('cli')).suite.instance_eval(&block)
 		return unless caller.first[/^[^:]*/] == $0
 		@run.run
 	end
