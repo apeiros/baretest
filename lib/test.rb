@@ -80,9 +80,9 @@ module Test
 	end
 
 	class Assertion
-		attr_reader :status, :error, :message
+		attr_reader :status, :exception, :message
 		def initialize(suite, action, message, &block)
-			@suite, @status, @error, @message, @action, @block = suite, nil, nil, (message || "No message given"), action, block
+			@suite, @status, @exception, @message, @action, @block = suite, nil, nil, (message || "No message given"), action, block
 		end
 
 		def execute
@@ -94,7 +94,7 @@ module Test
 				@status = :pending
 			end
 		rescue => e
-			@status = :error
+			@exception, @status = e, :error
 			self
 		else
 			self
