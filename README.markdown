@@ -54,6 +54,9 @@ Planned Features
 
 Example Testsuite
 -----------------
+
+From examples/test.rb:
+
     Test.run_if_mainfile do
       # assertions and refutations can be grouped in suites. They will share
       # setup and teardown
@@ -62,33 +65,20 @@ Example Testsuite
         assert "An assertion returning a trueish value (non nil/false) is a success" do
           true
         end
-
-        refute "A refutation returning a falsish value (nil/false) is a success" do
-          false
-        end
       end
 
       suite "Failure" do
         assert "An assertion returning a falsish value (nil/false) is a failure" do
           false
         end
-
-        refute "A refutation returning a trueish value (non nil/false) is a failure" do
-          true
-        end
       end
 
       suite "Pending" do
         assert "An assertion without a block is pending"
-        refute "A refutation without a block is pending"
       end
 
       suite "Error" do
         assert "Uncaught exceptions in an assertion are an error" do
-          raise "Error!"
-        end
-
-        refute "Uncaught exceptions in a refutation are an error" do
           raise "Error!"
         end
       end
@@ -126,10 +116,6 @@ Example Testsuite
           @foo == "foo"
         end
 
-        refute "@baz is only defined for subsequent nested suite" do
-          @baz == "baz"
-        end
-
         suite "Nested suite" do
           setup do
             @bar = "inner bar"
@@ -156,7 +142,7 @@ Example Testsuite
 
       suite "Dependencies", :requires => ['foo', 'bar'] do
         assert "Will be skipped, due to unsatisfied dependencies" do
-          "And this code therefore will never be executed"
+          raise "This code therefore will never be executed"
         end
       end
     end
