@@ -75,21 +75,23 @@ module Test
 			block ? @teardown << block : @teardown
 		end
 
-		def assert(message=nil, &block) @tests << Assertion.new(self, :assert, message, &block) end
-		def refute(message=nil, &block) @tests << Assertion.new(self, :refute, message, &block) end
+		def assert(message=nil, &block) @tests << Assertion.new(self, message, &block) end
 	end
 
 	class Assertion
 		attr_reader :status, :exception, :message
-		def initialize(suite, action, message, &block)
-			@suite, @status, @exception, @message, @action, @block = suite, nil, nil, (message || "No message given"), action, block
+		def initialize(suite, message, &block)
+			@suite, @status, @exception, @message, @block = suite, nil, nil, (message || "No message given"), block
 		end
 
 		def execute
 			if @block
+				# run all setups in the order of their nesting (outermost first, innermost last)
 				@suite.ancestors.map { |suite| suite.setup }.flatten.reverse.each { |setup| instance_eval(&setup) }
-				@status = ((@action == :refute) ^ (instance_eval(&@block))) ? :success : :failure
-				@suite.ancestors.map { |suite| suite.teardown }.flatten.reverse.each { |setup| instance_eval(&setup) }
+				# run the assertion
+				@status = instance_eval(&@block) ? :success : :failure
+				# run all teardowns in the order of their nesting (innermost first, outermost last)
+				@suite.ancestors.map { |suite| suite.teardown }.flatten.each { |setup| instance_eval(&setup) }
 			else
 				@status = :pending
 			end
@@ -103,8 +105,7 @@ module Test
 
 	module Skipped
 		class Suite < ::Test::Suite
-			def assert(message=nil, &block) @tests << Skipped::Assertion.new(self, :assert, message, &block) end
-			def refute(message=nil, &block) @tests << Skipped::Assertion.new(self, :refute, message, &block) end
+			def assert(message=nil, &block) @tests << Skipped::Assertion.new(self, message, &block) end
 			def setup(&block) [] end
 			def teardown(&block) [] end
 		end
