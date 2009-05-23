@@ -62,19 +62,45 @@ module Test
 			rescue LoadError
 				@suites << suite = Skipped::Suite.new(name, self)
 			else
-				@suites << suite = self.class.new(name, self) # All suites within Skipped::Suite are Skipped::Suite
+				# All suites within Skipped::Suite are Skipped::Suite
+				@suites << suite = (block ? self.class : Skipped::Suite).new(name, self)
 			end
 			suite.instance_eval(&block)
 		end
 
-		def setup(&block)
-			block ? @setup << block : @setup
-		end
+		# Define a setup block for this suite. The block will be ran before every
+		# assertion once, even for nested suites.
+		def setup(&block) block ? @setup << block : @setup end
 
-		def teardown(&block)
-			block ? @teardown << block : @teardown
-		end
+		# Define a teardown block for this suite. The block will be ran after every
+		# assertion once, even for nested suites.
+		def teardown(&block) block ? @teardown << block : @teardown end
 
+		# Define an assertion. The block is supposed to return a trueish value
+		# (anything but nil or false).
+		#
+		# An assertion has 5 possible states:
+		# success
+		# :    The assertion passed. This means the block returned a trueish value.
+		# failure
+		# :    The assertion failed. This means the block returned a falsish value.
+		#      Alternatively it raised a Test::Failure (NOT YET IMPLEMENTED).
+		#      The latter has the advantage that it can provide nicer diagnostics.
+		# pending
+		# :    No block given to the assertion to be run
+		# skipped
+		# :    If one of the parent suites is missing a dependency, its assertions
+		#      will be skipped
+		# error
+		# :    The assertion errored out. This means the block raised an exception
+		#
+		# There are various helper methods in lib/test/support.rb which help you
+		# defining nicer diagnostics or just easier ways to test common scenarios.
+		# The following are test helpers:
+		# * Kernel#raises(exception_class=StandardError)
+		# * Kernel#within_delta(a, b, delta)
+		# * Kernel#equal_unordered(a,b)
+		# * Enumerable#equal_unordered(other)
 		def assert(message=nil, &block) @tests << Assertion.new(self, message, &block) end
 	end
 
