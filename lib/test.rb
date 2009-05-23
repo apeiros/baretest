@@ -11,7 +11,7 @@ module Test
 	def self.run_if_mainfile(&block)
 		(@run ||= Run.new).suite.instance_eval(&block)
 		return unless caller.first[/^[^:]*/] == $0
-		@run.run('cli')
+		@run.run(ENV['FORMAT'] || 'cli')
 	end
 
 	class Run
@@ -43,17 +43,12 @@ module Test
 	end
 
 	class Suite
-		attr_reader :suites, :tests, :name, :parent
+		attr_reader :suites, :tests, :name, :parent, :ancestors
 
 		def initialize(name=nil, parent=nil, &block)
 			@name, @parent, @suites, @tests, @setup, @teardown = name, parent, [], [], [], []
+			@ancestors = [self] + (@parent ? @parent.ancestors : [])
 			instance_eval(&block) if block
-		end
-
-		def ancestors
-			ancestors, parent = [self], nil # parent must be initialized for the next line to work
-			ancestors << parent while parent = ancestors.last.parent
-			ancestors
 		end
 
 		def suite(name=nil, opts={}, &block)
@@ -118,15 +113,11 @@ module Test
 				@status = instance_eval(&@block) ? :success : :failure
 				# run all teardowns in the order of their nesting (innermost first, outermost last)
 				@suite.ancestors.map { |suite| suite.teardown }.flatten.each { |setup| instance_eval(&setup) }
-			else
-				@status = :pending
-			end
+			else @status = :pending end
 		rescue => e
 			@exception, @status = e, :error
 			self
-		else
-			self
-		end
+		else self end
 	end
 
 	module Skipped
