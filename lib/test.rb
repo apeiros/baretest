@@ -3,7 +3,9 @@ require 'test/support'
 
 
 module Test
-	@extender, @mock_adapter = {}, nil
+	@extender     = {}
+	@mock_adapter = nil
+
 	class <<self
 		# A hash of extenders (require-string => module) to be used with Test::Run.
 		attr_reader :extender
@@ -16,13 +18,22 @@ module Test
 		attr_reader :run
 	end
 
+	# Adds the contained assertions and suites to the toplevel suite
+	def self.define(name=nil, opts={}, &block)
+		if @run && name then
+			@run.suite.suite(name, opts, &block)
+		else
+			@run = Run.new(name, opts, &block)
+		end
+	end
+
 	# Creates a Test::Run instance, adds the assertions and suites defined in its
 	# own block to that Test::Run instance's toplevel suite and if $PROGRAM_NAME
 	# (aka $0) is equal to __FILE__ (means the current file is the file directly
 	# executed by ruby, and not just required/loaded/evaled by another file),
 	# subsequently also runs that suite.
-	def self.run_if_mainfile(&block)
-		(@run ||= Run.new).suite.instance_eval(&block)
+	def self.run_if_mainfile(name=nil, opts={}, &block)
+		define(name, opts, &block)
 		return unless caller.first[/^[^:]*/] == $0
 		@run.run(ENV['FORMAT'] || 'cli')
 	end
@@ -38,8 +49,8 @@ module Test
 		# The toplevel suite.
 		attr_reader :suite
 
-		def initialize()
-			@suite = Suite.new
+		def initialize(name=nil, opts={}, &block)
+			@suite = Suite.create(name, nil, opts, &block)
 		end
 
 		# Run the toplevel suite.
@@ -83,9 +94,10 @@ module Test
 		# Invoked once for every assertion.
 		# Gets the assertion to run as single argument.
 		def run_test(assertion)
-			yield(assertion)
+			rv = yield(assertion)
 			@count[:test]            += 1
 			@count[assertion.status] += 1
+			rv
 		end
 	end
 
@@ -112,6 +124,16 @@ module Test
 		# parent suite, then that suite's parent and so on
 		attr_reader :ancestors
 
+		def self.create(name=nil, parent=nil, opts={}, &block)
+			Array(opts[:requires]).each { |file| require file } if opts[:requires]
+		rescue LoadError
+			# A suite is skipped if requirements are not met
+			Skipped::Suite.new(name, parent, &block)
+		else
+			# All suites within Skipped::Suite are Skipped::Suite
+			(block ? self : Skipped::Suite).new(name, parent, &block)
+		end
+
 		def initialize(name=nil, parent=nil, &block)
 			@name      = name
 			@parent    = parent
@@ -131,16 +153,7 @@ module Test
 		# :   A list of files to require, if one of the requires fails, the suite
 		#     will be skipped. Accepts a String or an Array
 		def suite(name=nil, opts={}, &block)
-			begin
-				Array(opts[:requires]).each { |file| require file } if opts[:requires]
-			rescue LoadError
-				# A suite is skipped if requirements are not met
-				@suites << suite = Skipped::Suite.new(name, self)
-			else
-				# All suites within Skipped::Suite are Skipped::Suite
-				@suites << suite = (block ? self.class : Skipped::Suite).new(name, self)
-			end
-			suite.instance_eval(&block)
+			@suites << self.class.create(name, self, opts, &block)
 		end
 
 		# Define a setup block for this suite. The block will be ran before every
@@ -269,6 +282,4 @@ module Test
 			def execute() @status = :skipped and self end
 		end
 	end
-
-	@main_suite = Suite.new
 end
