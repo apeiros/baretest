@@ -5,9 +5,9 @@ require 'optparse'
 formatter = 'cli'
 
 opts = OptionParser.new("", 24, '  ') do |opts|
-  opts.banner = "Usage: baretest [options] glob[, ...]"
+  opts.banner = "Usage: baretest [options] [glob, ...]"
 
-  opts.separator ""
+  opts.separator "glob defaults to 'test/**/*.rb'\n"
   opts.separator "Options:"
 
   opts.on("-f", "--formatter FORMATTER", "use FORMATTER for output") { |use|
@@ -19,7 +19,7 @@ opts = OptionParser.new("", 24, '  ') do |opts|
   }
 
   opts.on("-v", "--version", "print the version and exit") {
-    puts "baretest version 0.1"
+    puts "baretest version 0.2"
     exit
   }
 
@@ -30,6 +30,10 @@ opts = OptionParser.new("", 24, '  ') do |opts|
 	opts.parse! ARGV
 end
 
-ARGV.each { |path| Dir.glob(path) { load(path) } }
+if ARGV.empty? then
+	Dir.glob('test/**/*.rb') { |path| load(path) }
+else
+	ARGV.each { |path| Dir.glob(path) { load(path) } }
+end
 
 Test.run.run(formatter)
