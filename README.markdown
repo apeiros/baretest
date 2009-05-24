@@ -20,12 +20,15 @@ Features
 * BDD style specifications/test descriptions (NOT code), also extractable
 * Uncomplicated dependency testing and skipping
 * Helpers to deal painlessly with raising, throwing, float imprecision, unordered collections etc.
-* Ships with colored Shell formatter, Diagnostic-, XML- and TAP formatter
+* Ships with colored Shell formatter, Diagnostic-, Interactive-, XML- and TAP formatter
 * Trivial to add new formatters (the standard formatters are only roughly 20-50 lines of code each)
 * Teardown and Setup for suites
 * Callbacks to integrate mock libraries
 * API to use it from code
 * baretest executable to run tests on multiple files at once
+* Interactive formatter - drops you into an irb session within failed assertion
+  with all setup methods executed, so you can inspect interactively why it
+  failed.
 
 
 
@@ -48,6 +51,19 @@ Planned Features
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
 
+
+
+Rejected Features
+-----------------
+
+* Diagnostics for assertions (e.g. assert_equal(:a, :b) will give you 'Expected
+  :a but got :b' as diagnostic).
+  They could be implemented using a Test::Failure exception that stores the
+  diagnostic text and more Test::Assertion\#helper\_methods which generate them.
+  However, I think that if they are needed, assertions should be broken down
+  further instead.
+  Also for really fixing issues, the interactive formatter should be by far
+  the nicer way.
 
 
 
