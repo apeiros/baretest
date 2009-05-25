@@ -64,6 +64,8 @@ Rejected Features
   further instead.
   Also for really fixing issues, the interactive formatter should be by far
   the nicer way.
+  But of course, everything is up for discussion, so bring up a strong rationale
+  in favor of it, or a patch that is not too complex, and I will reconsider it.
 
 
 
