@@ -7,11 +7,19 @@ formatter = 'cli'
 opts = OptionParser.new("", 24, '  ') do |opts|
   opts.banner = "Usage: baretest [options] [glob, ...]"
 
-  opts.separator "glob defaults to 'test/**/*.rb'\n"
+  opts.separator "glob defaults to 'test/**/*.rb'"
+  opts.separator "providing a directory as glob is equivalent to dir/**/*.rb\n"
   opts.separator "Options:"
 
   opts.on("-f", "--formatter FORMATTER", "use FORMATTER for output") { |use|
-  	formatter = use
+    formatter = use
+  }
+
+  opts.on("-F", "--formatters", "show available formatters") { |use|
+    Dir.glob("{#{$LOAD_PATH.join(',')}}/test/run/*.rb") { |path|
+      puts "- #{File.basename(path, '.rb')}"
+    }
+    exit
   }
 
   opts.on("-d", "--debug", "set debugging flags (set $DEBUG to true)") {
@@ -27,13 +35,19 @@ opts = OptionParser.new("", 24, '  ') do |opts|
     $VERBOSE = true
   }
 
-	opts.parse! ARGV
+  opts.parse! ARGV
 end
 
 if ARGV.empty? then
-	Dir.glob('test/**/*.rb') { |path| load(path) }
+  Dir.glob('test/**/*.rb') { |path| load(path) }
 else
-	ARGV.each { |path| Dir.glob(path) { load(path) } }
+  ARGV.each { |path|
+    if File.directory?(path) then
+      Dir.glob("#{path}/**/*.rb") { load(path) }
+    else
+      Dir.glob(path) { load(path) }
+    end
+  }
 end
 
 Test.run.run(formatter)
