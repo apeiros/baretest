@@ -6,29 +6,32 @@ Bare Test
 Summary
 -------
 
-Three methods to use it, Twenty to master it, less than hundred lines of code -
-yet fully featured test-framework. That is Bare Test.
-
+Three methods to use it, Twenty to master it, less than a hundred lines of code.
+Bare Test, try it and you'll love it.
 
 
 
 Features
 --------
 
-* Strightforward and terse assertions (just a block whose return value defines success/failure)
+* Strightforward and terse assertions (just a block whose return value defines
+  success/failure)
 * Easy grouping of assertions into suites
 * BDD style specifications/test descriptions (NOT code), also extractable
 * Uncomplicated dependency testing and skipping
-* Helpers to deal painlessly with raising, throwing, float imprecision, unordered collections etc.
-* Ships with colored Shell formatter, Diagnostic-, Interactive-, XML- and TAP formatter
-* Trivial to add new formatters (the standard formatters are only roughly 20-50 lines of code each)
-* Teardown and Setup for suites
-* Callbacks to integrate mock libraries
-* API to use it from code
-* baretest executable to run tests on multiple files at once
+* Helpers to deal painlessly with raising, throwing, float imprecision,
+  unordered collections etc.
+* Ships with colored Shell formatter, Diagnostic-, Interactive-, XML- and TAP
+  formatter
 * Interactive formatter - drops you into an irb session within failed assertion
   with all setup methods executed, so you can inspect interactively why it
   failed.
+* Trivial to add new formatters (the standard formatters are only roughly 20-50
+  lines of code each)
+* Teardown and Setup for suites
+* Callbacks to integrate mock libraries
+* API to use it from code, such as rake tasks (comes with an example rake-task)
+* baretest executable to run tests on multiple files at once
 
 
 
@@ -66,6 +69,21 @@ Rejected Features
   the nicer way.
   But of course, everything is up for discussion, so bring up a strong rationale
   in favor of it, or a patch that is not too complex, and I will reconsider it.
+
+
+
+A Bit of Background
+-------------------
+
+Originally, bare-test started out as a project for shits & giggles on the flight
+back from vegas (railsconf09), to prove that it is possible to have a fully
+fledged test-framework in under 100 lines of source-code.
+Later I realized that this project could become more. For one it was (still is)
+dead simple to add another formatter, it is just as dead simple to embedd it
+in code.
+The principles are trivial to understand, embrace and extend.
+Upon that it dawned me, that the project was viable and I began adding features
+not found in other projects.
 
 
 
