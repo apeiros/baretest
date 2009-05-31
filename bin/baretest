@@ -10,21 +10,22 @@
 
 require 'optparse'
 begin
-	require 'test'
+  require 'test'
 rescue LoadError
-	begin
-		require 'rubygems'
-		require 'test'
-	rescue LoadError
-		$LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
-		require 'test'
-	end
+  begin
+    require 'rubygems'
+    require 'test'
+  rescue LoadError
+    $LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
+    require 'test'
+  end
 end
 
 
 
 format      = ENV['FORMAT'] || 'cli'
 interactive = ['false', nil].include?(ENV['INTERACTIVE']) ? false : true
+setup_path  = nil
 
 opts = OptionParser.new("", 24, '  ') do |opts|
   opts.banner = "Usage: baretest [options] [glob, ...]"
@@ -52,6 +53,10 @@ opts = OptionParser.new("", 24, '  ') do |opts|
     interactive = true
   }
 
+  opts.on("-s", "--setup FILE", "specify setup file") { |path|
+    setup_path = path
+  }
+
   opts.on("-v", "--version", "print the version and exit") {
     puts "baretest version 0.2"
     exit
@@ -65,8 +70,15 @@ opts = OptionParser.new("", 24, '  ') do |opts|
 end
 
 if ARGV.empty? then
-  Dir.glob('test/**/*.rb') { |path| load(path) }
+  setup_path ||= 'test/setup.rb'
+  load(setup_path) if File.exist?(setup_path)
+  Dir.glob('test/lib/**/*.rb') { |path|
+    helper_path = path.sub(%r{^test/lib/}, 'test/helper/')
+    load(helper_path) if File.exist?(helper_path)
+    load(path)
+  }
 else
+  load(setup_path) if setup_path && File.exist?(setup_path)
   ARGV.each { |path|
     if File.directory?(path) then
       Dir.glob("#{path}/**/*.rb") { load(path) }
