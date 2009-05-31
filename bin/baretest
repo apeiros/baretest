@@ -1,21 +1,33 @@
 #!/usr/bin/env ruby
 
-require 'optparse'
+#--
+# Copyright 2009 by Stefan Rusterholz.
+# All rights reserved.
+# See LICENSE.txt for permissions.
+#++
 
-formatter = 'cli'
+
+
+require 'optparse'
+require 'test'
+
+
+
+format      = ENV['FORMAT'] || 'cli'
+interactive = ['false', nil].include?(ENV['INTERACTIVE']) ? false : true
 
 opts = OptionParser.new("", 24, '  ') do |opts|
   opts.banner = "Usage: baretest [options] [glob, ...]"
 
-  opts.separator "glob defaults to 'test/**/*.rb'"
-  opts.separator "providing a directory as glob is equivalent to dir/**/*.rb\n"
+  opts.separator "Glob defaults to 'test/**/*.rb'"
+  opts.separator "Providing a directory as glob is equivalent to dir/**/*.rb\n"
   opts.separator "Options:"
 
-  opts.on("-f", "--formatter FORMATTER", "use FORMATTER for output") { |use|
-    formatter = use
+  opts.on("-f", "--format FORMAT", "use FORMAT for output") { |use|
+    format = use
   }
 
-  opts.on("-F", "--formatters", "show available formatters") { |use|
+  opts.on("-F", "--formats", "show available formats") { |use|
     Dir.glob("{#{$LOAD_PATH.join(',')}}/test/run/*.rb") { |path|
       puts "- #{File.basename(path, '.rb')}"
     }
@@ -24,6 +36,10 @@ opts = OptionParser.new("", 24, '  ') do |opts|
 
   opts.on("-d", "--debug", "set debugging flags (set $DEBUG to true)") {
     $DEBUG = true
+  }
+
+  opts.on("-i", "--interactive", "drop into IRB on error or failure") {
+    interactive = true
   }
 
   opts.on("-v", "--version", "print the version and exit") {
@@ -50,4 +66,4 @@ else
   }
 end
 
-Test.run.run(formatter)
+Test.run(:format => format, :interactive => interactive)
