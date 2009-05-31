@@ -15,6 +15,12 @@ module Test
 		module AssertionExtensions
 		end
 
+		class AssertionContext < ::Test::Assertion
+			def to_s
+				"Assertion"
+			end
+		end
+
 		def self.extended(by)
 			by.init do
 				require 'irb'
@@ -39,7 +45,7 @@ module Test
 			@count[assertion.status] += 1
 			rv
 		end
-		
+
 		def start_irb_mode(assertion)
 			ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.name }
 
@@ -53,16 +59,14 @@ module Test
 		# This method is highlevel hax, try to add necessary API to
 		# Test::Assertion
 		def irb_mode_for_assertion(assertion)
-			irb_context = assertion.clean_copy
+			irb_context = assertion.clean_copy(AssertionContext)
 			irb_context.setup
 			@irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context.send(:binding)))
 			irb  = @irb # for closure
-			
+
 			# HAX - cargo cult, taken from irb.rb, not yet really understood.
-			IRB.instance_eval do
-				@CONF[:IRB_RC].call(irb.context) if @CONF[:IRB_RC] # loads the irbrc?
-				@CONF[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
-			end
+			IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC] # loads the irbrc?
+			IRB.conf[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
 			# /HAX
 
 			trap("SIGINT") do
@@ -72,7 +76,7 @@ module Test
 
 			irb_context.teardown
 		end
-		
+
 		def stop_irb_mode(assertion)
 			super
 		rescue NoMethodError # HAX, not happy about that. necessary due to order of extend
