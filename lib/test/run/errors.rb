@@ -1,7 +1,15 @@
+#--
+# Copyright 2009 by Stefan Rusterholz.
+# All rights reserved.
+# See LICENSE.txt for permissions.
+#++
+
+
+
 module Test
 	class Run
 		module Errors
-			def run_all(*args)
+			def run_all
 				@depth = 0
 				puts "Running all tests, reporting errors"
 				super
@@ -21,7 +29,8 @@ module Test
 				rv          = super # run the assertion
 				puts('  '*@depth+rv.message)
 				if rv.exception then
-					puts((['-'*80, rv.exception]+rv.exception.backtrace+['-'*80, '']).map { |l|
+					size = caller.size+5
+					puts((['-'*80, rv.exception]+rv.exception.backtrace[0..-size]+['-'*80, '']).map { |l|
 						('  '*(@depth+1))+l
 					})
 				end

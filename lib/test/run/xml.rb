@@ -1,7 +1,15 @@
+#--
+# Copyright 2009 by Stefan Rusterholz.
+# All rights reserved.
+# See LICENSE.txt for permissions.
+#++
+
+
+
 module Test
 	class Run
 		module XML
-			def run_all(*args)
+			def run_all
 				@depth = 1
 
 				puts '<?xml version="1.0" encoding="utf-8"?>'

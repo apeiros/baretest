@@ -1,3 +1,11 @@
+#--
+# Copyright 2009 by Stefan Rusterholz.
+# All rights reserved.
+# See LICENSE.txt for permissions.
+#++
+
+
+
 module Test
 	class Run
 		module CLI
@@ -46,6 +54,7 @@ module Test
 			def run_test(assertion)
 				rv          = super # run the assertion
 				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.message)
+				rv
 			end
 			
 			def status_label(status)

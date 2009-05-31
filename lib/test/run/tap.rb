@@ -1,7 +1,15 @@
+#--
+# Copyright 2009 by Stefan Rusterholz.
+# All rights reserved.
+# See LICENSE.txt for permissions.
+#++
+
+
+
 module Test
 	class Run
 		module TAP
-			def run_all(suite)
+			def run_all
 				puts "TAP version 13"
 				count = proc { |acc,csuite| acc+csuite.tests.size+csuite.suites.inject(0, &count) }
 				puts "1..#{count[0, suite]}"
