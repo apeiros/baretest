@@ -97,8 +97,8 @@ module Test
 			self
 		end
 
-		def clean_copy
-			self.class.new(@suite, @message, &@block)
+		def clean_copy(use_class=nil)
+			(use_class || self.class).new(@suite, @message, &@block)
 		end
 	end
 end
