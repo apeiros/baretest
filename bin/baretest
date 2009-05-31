@@ -9,7 +9,17 @@
 
 
 require 'optparse'
-require 'test'
+begin
+	require 'test'
+rescue LoadError
+	begin
+		require 'rubygems'
+		require 'test'
+	rescue LoadError
+		$LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
+		require 'test'
+	end
+end
 
 
 
