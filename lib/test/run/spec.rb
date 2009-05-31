@@ -21,7 +21,7 @@ module Test
 				super
 				@depth -= 1
 			end
-			
+
 			def run_test(assertion)
 				puts('  '*@depth+assertion.message)
 			end

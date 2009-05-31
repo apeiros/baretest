@@ -50,13 +50,13 @@ module Test
 				super # run the suite
 				@depth -= 1
 			end
-			
+
 			def run_test(assertion)
 				rv          = super # run the assertion
 				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.message)
 				rv
 			end
-			
+
 			def status_label(status)
 				status.to_s.capitalize.center(9)
 			end

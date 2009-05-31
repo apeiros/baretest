@@ -14,7 +14,7 @@ module Kernel
 	def within_delta(a, b, delta)
 		(a-b).abs < delta
 	end
-	
+
 	def equal_unordered(a,b)
     count = Hash.new(0)
     a.each { |element| count[element] += 1 }

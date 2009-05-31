@@ -24,7 +24,7 @@ module Test
 				super # run the suite
 				@depth -= 1
 			end
-			
+
 			def run_test(assertion)
 				rv          = super # run the assertion
 				puts('  '*@depth+rv.message)
