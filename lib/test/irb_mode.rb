@@ -96,6 +96,7 @@ module Test
 		end
 
 		def stop_irb_mode(assertion)
+			puts
 			super
 		rescue NoMethodError # HAX, not happy about that. necessary due to order of extend
 		end
