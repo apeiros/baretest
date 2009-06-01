@@ -63,6 +63,16 @@ module Test
 			@suites << self.class.create(name, self, opts, &block)
 		end
 
+		# All setups in the order of their nesting (outermost first, innermost last)
+		def ancestry_setup
+			ancestors.map { |suite| suite.setup }.flatten.reverse
+		end
+
+		# All teardowns in the order of their nesting (innermost first, outermost last)
+		def ancestry_teardown
+			ancestors.map { |suite| suite.teardown }.flatten
+		end
+
 		# Define a setup block for this suite. The block will be ran before every
 		# assertion once, even for nested suites.
 		def setup(&block)

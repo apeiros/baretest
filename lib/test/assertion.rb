@@ -71,12 +71,12 @@ module Test
 
 		# Run all setups in the order of their nesting (outermost first, innermost last)
 		def setup
-			@suite.ancestors.map { |suite| suite.setup }.flatten.reverse_each { |setup| instance_eval(&setup) }
+			@suite.ancestry_setup.each { |setup| instance_eval(&setup) } if @suite
 		end
 
 		# Run all teardowns in the order of their nesting (innermost first, outermost last)
 		def teardown
-			@suite.ancestors.map { |suite| suite.teardown }.flatten.each { |setup| instance_eval(&setup) }
+			@suite.ancestry_teardown.each { |setup| instance_eval(&setup) } if @suite
 		end
 
 		# Runs the assertion and sets the status and exception
