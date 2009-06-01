@@ -16,8 +16,24 @@ module Test
 		end
 
 		class AssertionContext < ::Test::Assertion
+			attr_accessor :original_assertion
+
 			def to_s
 				"Assertion"
+			end
+
+			def e!
+				em!
+				bt!
+			end
+
+			def em!
+				puts @original_assertion.exception
+			end
+
+			def bt!
+				size = caller.size+3
+				puts @original_assertion.exception.backtrace[0..-size]
 			end
 		end
 
@@ -52,6 +68,7 @@ module Test
 			puts
 			puts "#{assertion.status.to_s.capitalize} in #{ancestry.join(' > ')}"
 			puts "  #{assertion.message}"
+			puts "#{assertion.exception} - #{assertion.exception.backtrace.first}"
 			super
 		rescue NoMethodError # HAX, not happy about that. necessary due to order of extend
 		end
@@ -60,6 +77,7 @@ module Test
 		# Test::Assertion
 		def irb_mode_for_assertion(assertion)
 			irb_context = assertion.clean_copy(AssertionContext)
+			irb_context.original_assertion = assertion
 			irb_context.setup
 			@irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context.send(:binding)))
 			irb  = @irb # for closure
