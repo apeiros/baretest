@@ -46,7 +46,7 @@ module Test
 				rv = super
 				puts %{#{"\t"*@depth}<test>}
 				puts %{#{"\t"*@depth}\t<status>#{rv.status}</status>}
-				puts %{#{"\t"*@depth}\t<message>#{rv.message}</message>}
+				puts %{#{"\t"*@depth}\t<description>#{rv.description}</description>}
 				puts %{#{"\t"*@depth}</test>}
 			end
 		end

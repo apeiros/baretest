@@ -67,7 +67,7 @@ module Test
 
 			puts
 			puts "#{assertion.status.to_s.capitalize} in #{ancestry.join(' > ')}"
-			puts "  #{assertion.message}"
+			puts "  #{assertion.description}"
 			puts "#{assertion.exception} - #{assertion.exception.backtrace.first}"
 			super
 		rescue NoMethodError # HAX, not happy about that. necessary due to order of extend

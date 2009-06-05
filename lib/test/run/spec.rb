@@ -23,7 +23,7 @@ module Test
 			end
 
 			def run_test(assertion)
-				puts('  '*@depth+assertion.message)
+				puts('  '*@depth+assertion.description)
 			end
 		end
 	end

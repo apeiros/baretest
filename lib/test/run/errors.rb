@@ -27,7 +27,7 @@ module Test
 
 			def run_test(assertion)
 				rv          = super # run the assertion
-				puts('  '*@depth+rv.message)
+				puts('  '*@depth+rv.description)
 				if rv.exception then
 					size = caller.size+5
 					puts((['-'*80, rv.exception]+rv.exception.backtrace[0..-size]+['-'*80, '']).map { |l|

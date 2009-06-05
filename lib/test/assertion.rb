@@ -9,7 +9,7 @@
 module Test
 
 	# Defines an assertion
-	# An assertion belongs to a suite and consists of a message and a block.
+	# An assertion belongs to a suite and consists of a description and a block.
 	# The verify the assertion, the suite's (and its ancestors) setup blocks are
 	# executed, then the assertions block is executed and after that, the suite's
 	# (and ancestors) teardown blocks are invoked.
@@ -46,7 +46,10 @@ module Test
 		attr_reader :exception
 
 		# The description of this assertion.
-		attr_reader :message
+		attr_reader :description
+
+		# The failure reason.
+		attr_reader :failure_reason
 
 		# The suite this assertion belongs to
 		attr_reader :suite
@@ -56,17 +59,18 @@ module Test
 
 		# suite
 		# :   The suite the Assertion belongs to
-		# message
+		# description
 		# :   A descriptive string about what this Assertion tests.
 		# &block
 		# :   The block definition. Without one, the Assertion will have a :pending
 		#     status.
-		def initialize(suite, message, &block)
-			@suite     = suite
-			@status    = nil
-			@exception = nil
-			@message   = message || "No message given"
-			@block     = block
+		def initialize(suite, description, &block)
+			@suite          = suite
+			@status         = nil
+			@failure_reason = nil
+			@exception      = nil
+			@description    = description || "No description given"
+			@block          = block
 		end
 
 		# Run all setups in the order of their nesting (outermost first, innermost last)
@@ -90,15 +94,20 @@ module Test
 			else
 				@status = :pending
 			end
-		rescue => e
-			@exception, @status = e, :error
+		rescue ::Test::Assertion::Failure => failure
+			@status         = :failure
+			@failure_reason = failure
+		rescue => exception
+			@failure_reason = "An error occurred"
+			@exception      = exception
+			@status         = :error
 			self
 		else
 			self
 		end
 
 		def clean_copy(use_class=nil)
-			(use_class || self.class).new(@suite, @message, &@block)
+			(use_class || self.class).new(@suite, @description, &@block)
 		end
 	end
 end

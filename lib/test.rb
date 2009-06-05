@@ -64,8 +64,8 @@ module Test
 		class Suite < ::Test::Suite
 			# :nodoc:
 			# All Assertions use Skipped::Assertion instead of Test::Assertion.
-			def assert(message=nil, &block)
-				@tests << Skipped::Assertion.new(self, message, &block)
+			def assert(description=nil, &block)
+				@tests << Skipped::Assertion.new(self, description, &block)
 			end
 
 			# :nodoc:

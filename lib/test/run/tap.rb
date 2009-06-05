@@ -22,7 +22,7 @@ module Test
 				printf "%sok %d - %s%s\n",
 					rv.status == :success ? '' : 'not ',
 					@current+=1,
-					rv.message,
+					rv.description,
 					rv.status == :success ? '' : " # #{rv.status}"
 			end
 		end

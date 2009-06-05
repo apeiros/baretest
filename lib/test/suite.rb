@@ -88,8 +88,8 @@ module Test
 		# Define an assertion. The block is supposed to return a trueish value
 		# (anything but nil or false).
 		# See Assertion for more info.
-		def assert(message=nil, &block)
-			@tests << Assertion.new(self, message, &block)
+		def assert(description=nil, &block)
+			@tests << Assertion.new(self, description, &block)
 		end
 	end
 end

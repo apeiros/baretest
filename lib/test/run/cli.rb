@@ -53,7 +53,7 @@ module Test
 
 			def run_test(assertion)
 				rv          = super # run the assertion
-				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.message)
+				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.description)
 				rv
 			end
 
