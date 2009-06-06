@@ -11,6 +11,19 @@ require 'test/assertion/failure'
 
 
 module Test
+	@touch = {}
+	def self.touch(thing=nil)
+		@touch[Thread.current] ||= Hash.new(0)
+		@touch[Thread.current][thing] += 1
+	end
+
+	def self.touched(thing=nil)
+		@touch[Thread.current] ||= Hash.new(0)
+		@touch[Thread.current][thing]
+	end
+end
+
+module Test
 	class Assertion
 		module Support
 			def raises(exception_class=StandardError)
@@ -58,7 +71,23 @@ module Test
 				else
 					expected, actual = *args
 				end
-				failure "Expected %p but got %p", expected, actual unless expected.equal?(actual)
+				failure "Expected %p but got %p.", expected, actual unless expected.equal?(actual)
+				true
+			end
+
+			def touch(thing=nil)
+				::Test.touch(thing)
+			end
+
+			def touched(thing=nil, times=1)
+				touched_times = ::Test.touched(thing)
+				unless touched_times == times then
+					if thing then
+						failure "Expected the code to touch %p %s times, but did %s times.", thing, times, touched_times
+					else
+						failure "Expected the code to touch %s times, but did %s times.", times, touched_times
+					end
+				end
 				true
 			end
 
