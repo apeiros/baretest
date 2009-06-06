@@ -105,7 +105,7 @@ module Test
 end # Test
 
 module Enumerable
-	def equal_unordered(other)
+	def equal_unordered?(other)
     count = Hash.new(0)
     other.each { |element| count[element] += 1 }
     each { |element| count[element] -= 1 }
