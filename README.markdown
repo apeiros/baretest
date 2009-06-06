@@ -32,6 +32,8 @@ Features
 * Callbacks to integrate mock libraries
 * API to use it from code, such as rake tasks (comes with an example rake-task)
 * baretest executable to run tests on multiple files at once
+* Diagnostic assertion helpers (e.g. same(:a, :b) will give you 'Expected
+  :a but got :b' as diagnostic)
 
 
 
@@ -59,17 +61,7 @@ Planned Features
 Rejected Features
 -----------------
 
-* Diagnostics for assertions (e.g. assert_equal(:a, :b) will give you 'Expected
-  :a but got :b' as diagnostic).
-  They could be implemented using a Test::Failure exception that stores the
-  diagnostic text and more Test::Assertion\#helper\_methods which generate them.
-  However, I think that if they are needed, assertions should be broken down
-  further instead.
-  Also for really fixing issues, the interactive formatter should be by far
-  the nicer way.
-  But of course, everything is up for discussion, so bring up a strong rationale
-  in favor of it, or a patch that is not too complex, and I will reconsider it.
-
+* Currently none
 
 
 A Bit of Background
