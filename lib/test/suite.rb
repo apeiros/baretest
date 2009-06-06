@@ -9,7 +9,7 @@
 module Test
 
 	# A Suite is a container for multiple assertions.
-	# You can give a suite a name, also a suite can contain
+	# You can give a suite a description, also a suite can contain
 	# setup and teardown blocks that are executed before (setup) and after
 	# (teardown) every assertion.
 	# Suites can also be nested. Nested suites will inherit setup and teardown.
@@ -21,8 +21,8 @@ module Test
 		# All assertions in this suite
 		attr_reader :tests
 
-		# This suites name. Toplevel suites usually don't have a name.
-		attr_reader :name
+		# This suites description. Toplevel suites usually don't have a description.
+		attr_reader :description
 
 		# This suites direct parent. Nil if toplevel suite.
 		attr_reader :parent
@@ -31,24 +31,24 @@ module Test
 		# parent suite, then that suite's parent and so on
 		attr_reader :ancestors
 
-		def self.create(name=nil, parent=nil, opts={}, &block)
+		def self.create(description=nil, parent=nil, opts={}, &block)
 			Array(opts[:requires]).each { |file| require file } if opts[:requires]
 		rescue LoadError
 			# A suite is skipped if requirements are not met
-			Skipped::Suite.new(name, parent, &block)
+			Skipped::Suite.new(description, parent, &block)
 		else
 			# All suites within Skipped::Suite are Skipped::Suite
-			(block ? self : Skipped::Suite).new(name, parent, &block)
+			(block ? self : Skipped::Suite).new(description, parent, &block)
 		end
 
-		def initialize(name=nil, parent=nil, &block)
-			@name      = name
-			@parent    = parent
-			@suites    = []
-			@tests     = []
-			@setup     = []
-			@teardown  = []
-			@ancestors = [self] + (@parent ? @parent.ancestors : [])
+		def initialize(description=nil, parent=nil, &block)
+			@description = description
+			@parent      = parent
+			@suites      = []
+			@tests       = []
+			@setup       = []
+			@teardown    = []
+			@ancestors   = [self] + (@parent ? @parent.ancestors : [])
 			instance_eval(&block) if block
 		end
 
@@ -59,8 +59,8 @@ module Test
 		# requires
 		# :   A list of files to require, if one of the requires fails, the suite
 		#     will be skipped. Accepts a String or an Array
-		def suite(name=nil, opts={}, &block)
-			@suites << self.class.create(name, self, opts, &block)
+		def suite(description=nil, opts={}, &block)
+			@suites << self.class.create(description, self, opts, &block)
 		end
 
 		# All setups in the order of their nesting (outermost first, innermost last)

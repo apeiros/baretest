@@ -15,8 +15,8 @@ module Test
 			end
 
 			def run_suite(suite)
-				return super unless suite.name
-				puts("\n"+'  '*@depth+suite.name)
+				return super unless suite.description
+				puts("\n"+'  '*@depth+suite.description)
 				@depth += 1
 				super
 				@depth -= 1

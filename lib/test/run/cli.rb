@@ -42,10 +42,10 @@ module Test
 			end
 
 			def run_suite(suite)
-				return super unless suite.name
-				#label, size = '  '*@depth+suite.name, suite.tests.size.to_s
+				return super unless suite.description
+				#label, size = '  '*@depth+suite.description, suite.tests.size.to_s
 				#printf "\n\e[1m%-*s\e[0m (%d tests)\n", 71-size.length, label, size
-				puts "          \n           \e[1m#{'  '*@depth+suite.name}\e[0m (#{suite.tests.size} tests)"
+				puts "          \n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{suite.tests.size} tests)"
 				@depth += 1
 				super # run the suite
 				@depth -= 1

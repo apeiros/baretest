@@ -34,7 +34,7 @@ module Test
 			end
 
 			def run_suite(suite)
-				return super unless suite.name
+				return super unless suite.description
 				@depth += 1
 				super
 				@depth -= 1

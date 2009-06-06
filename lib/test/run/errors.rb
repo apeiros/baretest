@@ -18,8 +18,8 @@ module Test
 			end
 
 			def run_suite(suite)
-				return super unless suite.name
-				puts "#{'  '*@depth+suite.name} (#{suite.tests.size} tests)"
+				return super unless suite.description
+				puts "#{'  '*@depth+suite.description} (#{suite.tests.size} tests)"
 				@depth += 1
 				super # run the suite
 				@depth -= 1

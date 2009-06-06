@@ -35,7 +35,7 @@ module Test
 			end
 
 			def run_suite(suite)
-				puts %{#{"\t"*@depth}<suite name="#{suite.name}">}
+				puts %{#{"\t"*@depth}<suite description="#{suite.description}">}
 				@depth += 1
 				super
 				@depth -= 1
