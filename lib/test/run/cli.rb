@@ -54,6 +54,10 @@ module Test
 			def run_test(assertion)
 				rv          = super # run the assertion
 				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.description)
+				if rv.status == :error then
+					indent = '          '+'  '*@depth
+					print(indent, rv.exception.message, "\n", indent, rv.exception.backtrace.first, "\n")
+				end
 				rv
 			end
 
