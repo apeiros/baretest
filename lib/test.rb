@@ -6,10 +6,10 @@
 
 
 
-require 'test/support'
 require 'test/run'
 require 'test/suite'
 require 'test/assertion'
+require 'test/assertion/support'
 
 
 
