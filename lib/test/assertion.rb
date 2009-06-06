@@ -6,6 +6,10 @@
 
 
 
+require 'test/assertion/failure'
+
+
+
 module Test
 
 	# Defines an assertion
