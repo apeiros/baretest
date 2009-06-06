@@ -93,20 +93,20 @@ module Test
 			if @block then
 				setup
 				# run the assertion
-				@status = instance_eval(&@block) ? :success : :failure
+				begin
+					@status = instance_eval(&@block) ? :success : :failure
+				rescue ::Test::Assertion::Failure => failure
+					@status         = :failure
+					@failure_reason = failure
+				rescue => exception
+					@failure_reason = "An error occurred"
+					@exception      = exception
+					@status         = :error
+				end
 				teardown
 			else
 				@status = :pending
 			end
-		rescue ::Test::Assertion::Failure => failure
-			@status         = :failure
-			@failure_reason = failure
-		rescue => exception
-			@failure_reason = "An error occurred"
-			@exception      = exception
-			@status         = :error
-			self
-		else
 			self
 		end
 
