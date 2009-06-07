@@ -26,16 +26,25 @@ end
 module Test
 	class Assertion
 		module Support
+			# 
 			def raises(exception_class=StandardError)
 				begin
 					yield
 				rescue exception_class
 					true
+				rescue => exception
+					failure "Expected block to raise #{exception_class}, but it raised #{exception.class}."
 				else
-					false
+					failure "Expected block to raise #{exception_class}, but nothing was raised."
 				end
-			rescue
-				false
+			end
+
+			def raises_nothing
+				yield
+			rescue => exception
+				failure "Expected block to raise nothing, but it raised #{exception.class}."
+			else
+				true
 			end
 
 			# For comparisons of Floats you shouldn't use == but
@@ -75,17 +84,34 @@ module Test
 				true
 			end
 
+			# Use this method to test whether certain code (e.g. a callback) was reached.
+			# touch marks that it was reached, #touched tests for whether it was reached.
+			# Example:
+			#   assert "Code in a Proc object is executed when invoking #call on it." do
+			#     a_proc = proc { touch :executed }
+			#     a_proc.call
+			#     touched(:executed)
+			#   end
 			def touch(thing=nil)
 				::Test.touch(thing)
 			end
 
-			def touched(thing=nil, times=1)
+			# See #touch
+			def touched(thing=nil, times=nil)
 				touched_times = ::Test.touched(thing)
-				unless touched_times == times then
+				if times then
+					unless touched_times == times then
+						if thing then
+							failure "Expected the code to touch %p %s times, but did %s times.", thing, times, touched_times
+						else
+							failure "Expected the code to touch %s times, but did %s times.", times, touched_times
+						end
+					end
+				elsif touched_times < 1 then
 					if thing then
-						failure "Expected the code to touch %p %s times, but did %s times.", thing, times, touched_times
+						failure "Expected the code to touch %p, but it was not touched.", thing
 					else
-						failure "Expected the code to touch %s times, but did %s times.", times, touched_times
+						failure "Expected the code to touch, but no touch happened."
 					end
 				end
 				true
@@ -95,6 +121,8 @@ module Test
 			def equal(*args)
 			end
 
+			# Raises Test::Assertion::Failure and runs sprintf over message with *args
+			# Particularly useful with %p and %s.
 			def failure(message, *args)
 				raise Test::Assertion::Failure, sprintf(message, *args)
 			end
