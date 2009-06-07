@@ -45,7 +45,7 @@ module Test
 				return super unless suite.description
 				#label, size = '  '*@depth+suite.description, suite.tests.size.to_s
 				#printf "\n\e[1m%-*s\e[0m (%d tests)\n", 71-size.length, label, size
-				puts "          \n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{suite.tests.size} tests)"
+				puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{suite.tests.size} tests)"
 				@depth += 1
 				super # run the suite
 				@depth -= 1
@@ -55,10 +55,16 @@ module Test
 				rv          = super # run the assertion
 				printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.description)
 				if rv.status == :error then
-					indent = '          '+'  '*@depth
+					indent = '           '+'  '*@depth
 					print(indent, rv.exception.message, "\n", indent, rv.exception.backtrace.first, "\n")
+				elsif rv.status == :failure && rv.failure_reason then
+					print('           ', '  '*@depth, rv.failure_reason, "\n")
 				end
 				rv
+			end
+
+			def word_wrap(string, cols)
+				str.scan(/[^ ]+ /)
 			end
 
 			def status_label(status)
