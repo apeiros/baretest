@@ -70,20 +70,6 @@ module Test
 				true
 			end
 
-			# Uses equal? to test whether the objects are the same
-			# same expected, actual
-			# same :expected => expected, :actual => actual
-			def same(*args)
-				if args.size == 1 && Hash === args.first then
-					expected = args.first[:expected]
-					actual   = args.first[:actual]
-				else
-					expected, actual = *args
-				end
-				failure "Expected %p but got %p.", expected, actual unless expected.equal?(actual)
-				true
-			end
-
 			# Use this method to test whether certain code (e.g. a callback) was reached.
 			# touch marks that it was reached, #touched tests for whether it was reached.
 			# Example:
@@ -117,8 +103,60 @@ module Test
 				true
 			end
 
-			# Uses ...
-			def equal(*args)
+			# Uses equal? to test whether the objects are the same
+			# same expected, actual
+			# same :expected => expected, :actual => actual
+			def same(*args)
+				if args.size == 1 && Hash === args.first then
+					expected = args.first[:expected]
+					actual   = args.first[:actual]
+				else
+					expected, actual = *args
+				end
+				failure "Expected %p but got %p.", expected, actual unless expected.equal?(actual)
+				true
+			end
+
+			# Uses eql? to test whether the objects are equal
+			# equal expected, actual
+			# equal :expected => expected, :actual => actual
+			def hash_key_equal(*args)
+				if args.size == 1 && Hash === args.first then
+					expected = args.first[:expected]
+					actual   = args.first[:actual]
+				else
+					expected, actual = *args
+				end
+				failure "Expected %p but got %p.", expected, actual unless expected.eql?(actual)
+				true
+			end
+
+			# Uses == to test whether the objects are equal
+			# equal expected, actual
+			# equal :expected => expected, :actual => actual
+			def order_equal(*args)
+				if args.size == 1 && Hash === args.first then
+					expected = args.first[:expected]
+					actual   = args.first[:actual]
+				else
+					expected, actual = *args
+				end
+				failure "Expected %p but got %p.", expected, actual unless expected == actual
+				true
+			end
+
+			# Uses === to test whether the objects are equal
+			# equal expected, actual
+			# equal :expected => expected, :actual => actual
+			def case_equal(*args)
+				if args.size == 1 && Hash === args.first then
+					expected = args.first[:expected]
+					actual   = args.first[:actual]
+				else
+					expected, actual = *args
+				end
+				failure "Expected %p but got %p.", expected, actual unless expected === actual
+				true
 			end
 
 			# Raises Test::Assertion::Failure and runs sprintf over message with *args
