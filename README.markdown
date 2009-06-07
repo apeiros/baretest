@@ -35,6 +35,18 @@ Features
 * Diagnostic assertion helpers (e.g. same(:a, :b) will give you 'Expected
   :a but got :b' as diagnostic)
 
+Quick Try
+---------
+
+1. Download from github and unpack (or clone)
+2. Change into the baretest directory: `cd the/baretest/directory`
+3. Run the examples: `./bin/baretest examples/test.rb`
+
+That's it. Alternatively you can run baretests own tests, and play with formatters:
+`./bin/baretest -f tap`
+
+Unfortunately the installer and gem installer aren't ready yet.
+
 
 
 Executable
@@ -57,8 +69,9 @@ Executable
 Planned Features
 ----------------
 
-* Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * Word-wrapping for CLI runner
+* Flags for color and verbose ([no-]color and [no-]verbose) for the executable
+* Passing on flags/options for formatters
 * Alternative CLI runner with status implicit via colored/bg-colored descriptions
 * Alternative CLI runner which prints the name of the test prior the label and rewrites
   the line when the test has executed to add status & coloring.
@@ -70,6 +83,7 @@ Planned Features
     
       touched file
     end
+* Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
 
 
