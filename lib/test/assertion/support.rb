@@ -54,22 +54,6 @@ module Test
 				(a-b).abs < delta
 			end
 
-			# To compare two collections (which must implement #each)
-			# without considering order. E.g. two sets, or the keys of
-			# two hashes.
-			def equal_unordered(a,b)
-				count = Hash.new(0)
-				a.each { |element| count[element] += 1 }
-				b.each { |element| count[element] -= 1 }
-				unless count.all? { |key, value| value.zero? } then
-					only_in_a = count.select { |ele, n| n > 0 }.map { |ele, n| ele }
-					only_in_b = count.select { |ele, n| n < 0 }.map { |ele, n| ele }
-					failure "Expected %p and %p to have the same items the same number of times, " \
-									"but %p are only in a, and %p only in b.", a, b, only_in_a, only_in_b
-				end
-				true
-			end
-
 			# Use this method to test whether certain code (e.g. a callback) was reached.
 			# touch marks that it was reached, #touched tests for whether it was reached.
 			# Example:
@@ -103,17 +87,24 @@ module Test
 				true
 			end
 
+			# See #touch
+			def not_touched(thing=nil)
+				touched(thing, 0)
+			end
+
 			# Uses equal? to test whether the objects are the same
 			# same expected, actual
 			# same :expected => expected, :actual => actual
 			def same(*args)
-				if args.size == 1 && Hash === args.first then
-					expected = args.first[:expected]
-					actual   = args.first[:actual]
-				else
-					expected, actual = *args
+				expected, actual, message = extract_args(args, :expected, :actual, :message)
+
+				unless expected.equal?(actual) then
+					if message then
+						failure "Expected %s to be the same (equal?) as %p but was %p.", message, expected, actual
+					else
+						failure "Expected %p but got %p.", expected, actual
+					end
 				end
-				failure "Expected %p but got %p.", expected, actual unless expected.equal?(actual)
 				true
 			end
 
@@ -121,13 +112,15 @@ module Test
 			# equal expected, actual
 			# equal :expected => expected, :actual => actual
 			def hash_key_equal(*args)
-				if args.size == 1 && Hash === args.first then
-					expected = args.first[:expected]
-					actual   = args.first[:actual]
-				else
-					expected, actual = *args
+				expected, actual, message = extract_args(args, :expected, :actual, :message)
+
+				unless expected.eql?(actual) then
+					if message then
+						failure "Expected %s to be hash-key equal (eql?) to %p but was %p.", message, expected, actual
+					else
+						failure "Expected %p but got %p.", expected, actual
+					end
 				end
-				failure "Expected %p but got %p.", expected, actual unless expected.eql?(actual)
 				true
 			end
 
@@ -135,27 +128,57 @@ module Test
 			# equal expected, actual
 			# equal :expected => expected, :actual => actual
 			def order_equal(*args)
-				if args.size == 1 && Hash === args.first then
-					expected = args.first[:expected]
-					actual   = args.first[:actual]
-				else
-					expected, actual = *args
+				expected, actual, message = extract_args(args, :expected, :actual, :message)
+
+				unless expected == actual then
+					if message then
+						failure "Expected %s to be order equal (==) to %p but was %p.", message, expected, actual
+					else
+						failure "Expected %p but got %p.", expected, actual
+					end
 				end
-				failure "Expected %p but got %p.", expected, actual unless expected == actual
 				true
 			end
+			alias equal order_equal
 
 			# Uses === to test whether the objects are equal
 			# equal expected, actual
 			# equal :expected => expected, :actual => actual
 			def case_equal(*args)
-				if args.size == 1 && Hash === args.first then
-					expected = args.first[:expected]
-					actual   = args.first[:actual]
-				else
-					expected, actual = *args
+				expected, actual, message = extract_args(args, :expected, :actual, :message)
+
+				unless expected === actual then
+					if message then
+						failure "Expected %s to be case equal (===) to %p but was %p.", message, expected, actual
+					else
+						failure "Expected %p but got %p.", expected, actual
+					end
 				end
-				failure "Expected %p but got %p.", expected, actual unless expected === actual
+				true
+			end
+
+			# To compare two collections (which must implement #each)
+			# without considering order. E.g. two sets, or the keys of
+			# two hashes.
+			def equal_unordered(*args)
+				expected, actual, message = extract_args(args, :expected, :actual, :message)
+
+				count = Hash.new(0)
+				expected.each { |element| count[element] += 1 }
+				actual.each   { |element| count[element] -= 1 }
+				unless count.all? { |key, value| value.zero? } then
+					only_in_expected = count.select { |ele, n| n > 0 }.map { |ele, n| ele }
+					only_in_actual   = count.select { |ele, n| n < 0 }.map { |ele, n| ele }
+					if message then
+						failure "Expected %s to have the same items the same number of times, " \
+										"but %p are only in a, and %p only in actual.",
+										message, only_in_expected, only_in_actual
+					else
+						failure "Expected %p and %p to have the same items the same number of times, " \
+										"but %p are only in a, and %p only in actual.",
+										expected, actual, only_in_expected, only_in_actual
+					end
+				end
 				true
 			end
 
@@ -163,6 +186,15 @@ module Test
 			# Particularly useful with %p and %s.
 			def failure(message, *args)
 				raise Test::Assertion::Failure, sprintf(message, *args)
+			end
+
+		private
+			def extract_args(args, *named)
+				if args.size == 1 && Hash === args.first then
+					args.first.values_at(*named)
+				else
+					args.first(named.size)
+				end
 			end
 		end # Support
 
