@@ -8,6 +8,8 @@
 
 
 
+# Make sure the right libs are loaded, tries plain 'test' first, then a rubygem 'test', then
+# the relative path it'd be if it isn't installed at all and you're just testrunning it.
 require 'optparse'
 begin
   require 'test'
@@ -23,6 +25,7 @@ end
 
 
 
+# Get all the command-line arguments and adapt options to it
 format      = ENV['FORMAT'] || 'cli'
 interactive = ['false', nil].include?(ENV['INTERACTIVE']) ? false : true
 setup_path  = nil
@@ -69,12 +72,17 @@ opts = OptionParser.new("", 24, '  ') do |opts|
   opts.parse! ARGV
 end
 
+
+
+# Load the setup file, all helper files and all test files
 if ARGV.empty? then
   setup_path ||= 'test/setup.rb'
   load(setup_path) if File.exist?(setup_path)
   Dir.glob('test/lib/**/*.rb') { |path|
     helper_path = path.sub(%r{^test/lib/}, 'test/helper/')
+    puts "Loading helper file #{helper_path}" if $VERBOSE
     load(helper_path) if File.exist?(helper_path)
+    puts "Loading test file #{path}" if $VERBOSE
     load(path)
   }
 else
@@ -88,4 +96,7 @@ else
   }
 end
 
+
+
+# Run the tests
 Test.run(:format => format, :interactive => interactive)
