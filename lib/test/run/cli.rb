@@ -45,7 +45,14 @@ module Test
 				return super unless suite.description
 				#label, size = '  '*@depth+suite.description, suite.tests.size.to_s
 				#printf "\n\e[1m%-*s\e[0m (%d tests)\n", 71-size.length, label, size
-				puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{suite.tests.size} tests)"
+				case size = suite.tests.size
+					when 0
+						puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m"
+					when 1
+						puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test)"
+					else
+						puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests)"
+				end
 				@depth += 1
 				super # run the suite
 				@depth -= 1
