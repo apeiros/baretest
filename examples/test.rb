@@ -46,7 +46,7 @@ Test.run_if_mainfile do
 			assert "Assert two randomly ordered arrays to contain the same values" do
 				a = [*"A".."Z"] # an array with values from A to Z
 				b = a.sort_by { rand }
-				a.equal_unordered(b) # can be used with any Enumerable, uses hash-key identity
+				equal_unordered(a, b) # can be used with any Enumerable, uses hash-key identity
 			end
 		end
 	end
@@ -87,7 +87,7 @@ Test.run_if_mainfile do
 
 	suite "Dependencies", :requires => ['foo', 'bar'] do
 		assert "Will be skipped, due to unsatisfied dependencies" do
-			raise "This code therefore will never be executed"
+			failure "Why the heck do you have a 'foo/bar' file?"
 		end
 	end
 end
