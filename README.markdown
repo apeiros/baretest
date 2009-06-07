@@ -40,20 +40,36 @@ Features
 Executable
 ----------
 
-    baretest [options] glob[, ...]
-
+    Usage: baretest [options] [glob, ...]
+    Glob defaults to 'test/**/*.rb'
+    Providing a directory as glob is equivalent to dir/**/*.rb
     Options:
-      -f FORMATTER             use FORMATTER for output
-          --formatter
+      -f, --format FORMAT      use FORMAT for output
+      -F, --formats            show available formats
       -d, --debug              set debugging flags (set $DEBUG to true)
+      -i, --interactive        drop into IRB on error or failure
+      -s, --setup FILE         specify setup file
       -v, --version            print the version and exit
       -w, --warn               turn warnings on for your script
+
 
 
 Planned Features
 ----------------
 
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
+* Word-wrapping for CLI runner
+* Alternative CLI runner with status implicit via colored/bg-colored descriptions
+* Alternative CLI runner which prints the name of the test prior the label and rewrites
+  the line when the test has executed to add status & coloring.
+* Simple stubbing with automatic cleanup at teardown. Example:
+    assert "Should require a single file listed in :requires option." do |a|
+      file = 'foo/bar'
+      stub(Kernel, :require) do |file, *args| a.touch(file) end
+      ::Test::Suite.create(nil, nil, :requires => file)
+    
+      touched file
+    end
 * YARD code to extract the specifications without running the code
 
 
@@ -173,3 +189,10 @@ From examples/test.rb:
         end
       end
     end
+
+
+
+Known bugs
+-----------------
+
+* touch/touched have to clean up after every Assertion#execute. Should use the mock hooks.
