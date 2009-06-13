@@ -28,11 +28,24 @@ module Test
 		module Support
 			# Will raise a Failure if the given block doesn't raise or raises a different
 			# exception than the one provided
-			def raises(exception_class=StandardError)
+			# You can optionally give an options :with_message, which is tested with === against
+			# the exception message.
+			# Examples:
+			#   raises do raise "will work" end # => true
+			#   raises SomeException do raise SomeException end # => true
+			#   raises :with_message => "bar" do raise "bar" end # => true
+			#   raises SomeException, :with_message => "bar"; raise SomeException, "bar" end # => true
+			#   raises :with_message => /\Aknown \w+\z/; raise "known unknown" end # => true
+			def raises(exception_class=StandardError, opts={})
 				begin
 					yield
-				rescue exception_class
-					true
+				rescue exception_class => exception
+					if opts[:with_message] && !(opts[:with_message] === exception.message) then
+						failure "Expected block to raise with the message %p, but the message was %p",
+						        exception.message, opts[:with_message]
+					else
+						true
+					end
 				rescue => exception
 					failure "Expected block to raise #{exception_class}, but it raised #{exception.class}."
 				else
