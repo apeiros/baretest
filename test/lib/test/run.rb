@@ -8,7 +8,57 @@
 
 Test.define "Test" do
   suite "Run" do
-    #...
+    suite "::new" do
+      assert "Should return an instance of Run"
+      assert "Should accept 1-2 arguments"
+      assert "Should accept an option ':format' and load the given formatter"
+      assert "Should accept an option ':interactive' and load irb_mode"
+    end
+
+    suite "#suite" do
+      assert "Should return the suite the instance was initialized with"
+    end
+
+    suite "#inits" do
+      assert "Should return the array with blocks called at the end of initialize"
+      assert "Should run the blocks at the end of initialize"
+    end
+
+    suite "#run_all" do
+      assert "Invokes #run_suite with every suite in the Run instance's toplevel suite"
+      assert "Invokes #run_test with every suite in the Run instance's toplevel suite"
+    end
+
+    suite "#run_suite" do
+      assert "Invokes #run_suite with every suite in the given suite"
+      assert "Invokes #run_test with every suite in the given suite"
+      assert "Increments the counter ':suite' at the end"
+    end
+
+    suite "#run_test" do
+      assert "Runs the given test"
+      assert "Increments the counter ':test' at the end"
+
+      suite "The given test was a success" do
+        assert "Increments the counter ':success' at the end"
+      end
+
+      suite "The given test was pending" do
+        assert "Increments the counter ':pending' at the end"
+      end
+
+      suite "The given test was skipped" do
+        assert "Increments the counter ':skipped' at the end"
+      end
+
+      suite "The given test was failure" do
+        assert "Increments the counter ':failure' at the end"
+      end
+
+      suite "The given test was error" do
+        assert "Increments the counter ':error' at the end"
+      end
+    end
   end
 end
 

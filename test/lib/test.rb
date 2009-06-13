@@ -8,15 +8,26 @@
 
 Test.define "Test" do
 	suite "::extender" do
+		assert "Should return a hash" do
+			kind_of(Hash, Test.extender)
+		end
 	end
 
 	suite "::mock_adapter" do
+		assert "Should be implemented" do
+			failure "mock_adapter is not yet implemented"
+		end
 	end
 
 	suite "::toplevel_suite" do
+		assert "Should return an instance of Test::Suite"
+		assert "Should be used by Test::define"
+		assert "Should be used by Test::run_if_mainfile"
+		assert "Should be run by Test::run"
 	end
 
 	suite "::define" do
+		assert "Should add the contained suites and asserts to Test::toplevel_suite"
 	end
 
 	suite "::run_if_mainfile", :requires => ['rbconfig', 'shellwords'] do
@@ -45,7 +56,10 @@ Test.define "Test" do
 		end
 	end
 
-	suite "::run"
+	suite "::run" do
+		assert "Should run Test's toplevel suite"
+	end
+
 	suite "Skipped" do
 		suite "Suite" do
 			assert "assert" # should be SkippedAssertion

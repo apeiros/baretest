@@ -192,6 +192,28 @@ Test.define "Test" do
 		    end
       end # case_equal
 
+      suite "#kind_of" do
+        assert "Should not fail when the value is an instance of the given class" do
+          kind_of(Array, [])
+        end
+
+        assert "Should not fail when the value is an instance of a subclass of the given class" do
+          kind_of(Enumerable, [])
+        end
+
+        assert "Should fail when the value is not instance of the given class or subclass" do
+          fails do
+            kind_of(String, [])
+          end
+        end
+      end
+
+      suite "#failure_with_optional_message" do
+        assert "Should raise a Test::Assertion::Failure"
+        assert "Should use the string with message if message is given"
+        assert "Should use the string without message if no message is given"
+      end
+
       suite "#failure" do
 		    assert "Should raise a Test::Assertion::Failure." do
 		      raises(::Test::Assertion::Failure) do
