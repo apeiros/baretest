@@ -17,6 +17,9 @@ module Test
 	@extender       = {}
 	@mock_adapter   = nil
 	@toplevel_suite = Suite.new
+	@required_file  = ["", *$LOAD_PATH].map { |path|
+	  File.expand_path(File.join(path, __FILE__))
+	}.find { |full| File.exist?(full) }
 
 	class <<self
 		# A hash of extenders (require-string => module) to be used with Test::Run.
@@ -28,6 +31,9 @@ module Test
 		# The toplevel suite. That's the one run_if_mainfile and define add suites
 		# and assertions to.
 		attr_reader :toplevel_suite
+
+		# The full path to this file
+		attr_reader :required_file
 	end
 
 	# Adds the contained assertions and suites to the toplevel suite
