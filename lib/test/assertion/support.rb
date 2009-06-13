@@ -26,7 +26,8 @@ end
 module Test
 	class Assertion
 		module Support
-			# 
+			# Will raise a Failure if the given block doesn't raise or raises a different
+			# exception than the one provided
 			def raises(exception_class=StandardError)
 				begin
 					yield
@@ -39,6 +40,7 @@ module Test
 				end
 			end
 
+			# Will raise a Failure if the given block raises.
 			def raises_nothing
 				yield
 			rescue => exception
@@ -148,11 +150,10 @@ module Test
 				expected, actual, message = extract_args(args, :expected, :actual, :message)
 
 				unless expected === actual then
-					if message then
-						failure "Expected %s to be case equal (===) to %p but was %p.", message, expected, actual
-					else
-						failure "Expected %p but got %p.", expected, actual
-					end
+					failure_with_optional_message \
+						"Expected %s to be case equal (===) to %p but was %p.",
+						"Expected %p but got %p.",
+						message, expected, actual
 				end
 				true
 			end
@@ -180,6 +181,27 @@ module Test
 					end
 				end
 				true
+			end
+
+			# Raises a Failure if the given object is not an instance of the given class
+			# or a descendant thereof
+			def kind_of(*args)
+				expected, actual, message = extract_args(args, :expected, :actual, :message)
+				unless actual.kind_of?(expected) then
+					failure_with_optional_message \
+						"Expected %1$s to be a kind of %3$p, but was a %4$p",
+						"Expected %2$p to be a kind of %1$p, but was a %3$p",
+						message, expected, actual, actual.class
+				end
+				true
+			end
+
+			def failure_with_optional_message(with_message, without_message, message, *args)
+				if message then
+					failure(with_message, message, *args)
+				else
+					failure(without_message, *args)
+				end
 			end
 
 			# Raises Test::Assertion::Failure and runs sprintf over message with *args
