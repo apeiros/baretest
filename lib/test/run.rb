@@ -84,5 +84,22 @@ module Test
 			@count[assertion.status] += 1
 			rv
 		end
+
+    # Status over all tests ran up to now
+    # Can be :error, :failure, :incomplete or :success
+    # The algorithm is a simple fall through:
+    # if any test errored, then global_status is :error,
+    # if not, then if any test failed, global_status is :failure,
+    # if not, then if any test was pending or skipped, global_status is :incomplete,
+    # if not, then global_status is success
+    def global_status
+      case
+        when @count[:error]   > 0 then :error
+        when @count[:failure] > 0 then :failure
+        when @count[:pending] > 0 then :incomplete
+        when @count[:skipped] > 0 then :incomplete
+        else :success
+      end
+    end
 	end
 end
