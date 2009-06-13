@@ -20,34 +20,27 @@ Test.define "Test" do
 	end
 
 	suite "::run_if_mainfile" do
-		suite "if file is the program" do
-			setup do
-				@real_program_name = $PROGRAM_NAME # == $0
-				@fakefile          = "fakefile"
-				$PROGRAM_NAME      = @fakefile
-			end
-	
-			teardown do
-				$PROGRAM_NAME = @real_program_name
-			end
-
-			assert "Should run the suite" do
-				# How to separate this definition from ordinary definitions?
-
-				#Test.run_if_mainfile do
-				#	assert "foobar" do touch(:mainfile_execution) end
-				#end
-	
-				#touched(:mainfile_execution)
-			end
+		setup do
+			ENV['FORMAT'] = 'minimal'
+			@test_path = File.expand_path("#{__FILE__}/../../external/bootstraptest.rb")
+			@wrap_path = File.expand_path("#{__FILE__}/../../external/bootstrapwrap.rb")
+			@inc_path  = File.dirname(Test.required_file)
 		end
 
-		assert "Should not run the suite if the file is not the program" do
-			Test.run_if_mainfile do
-				assert do touch(:mainfile_execution2) end
+		suite "File is the program" do
+			assert "Should run the suite" do
+				IO.popen("ruby -I '#{@inc_path}' -rtest '#{@test_path}'") { |sio|
+					sio.read
+				} =~ /\ATests:    1\nSuccess:  1\nPending:  0\nFailures: 0\nErrors:   0\nTime:     [^\n]+\nStatus:   success\n\z/
 			end
-
-			not_touched(:mainfile_execution2)
+		end
+		
+		suite "File is not the program" do
+			assert "Should not run the suite if the file is not the program" do
+				IO.popen("ruby -I '#{@inc_path}' -rtest '#{@wrap_path}'") { |sio|
+					sio.read
+				} =~ /\ADone\n\z/
+			end
 		end
 	end
 
