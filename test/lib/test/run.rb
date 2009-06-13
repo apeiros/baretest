@@ -9,19 +9,70 @@
 Test.define "Test" do
   suite "Run" do
     suite "::new" do
-      assert "Should return an instance of Run"
-      assert "Should accept 1-2 arguments"
-      assert "Should accept an option ':format' and load the given formatter"
-      assert "Should accept an option ':interactive' and load irb_mode"
+      assert "Should return an instance of Run" do
+        kind_of ::Test::Run, ::Test::Run.new(::Test::Suite.new)
+      end
+
+      assert "Should accept 1-2 arguments" do
+        raises(ArgumentError) do ::Test::Run.new end &&
+        raises_nothing do ::Test::Run.new(::Test::Suite.new) end &&
+        raises_nothing do ::Test::Run.new(::Test::Suite.new, {}) end &&
+        raises(ArgumentError) do ::Test::Run.new(::Test::Suite.new, {}, nil) end
+      end
+
+      assert "Should accept an option ':format'" do
+        raises_nothing do ::Test::Run.new(::Test::Suite.new, :format => 'spec') end
+      end
+
+      assert "Should use the formatter specified in the :format option" do
+        run = ::Test::Run.new(::Test::Suite.new, :format => 'spec')
+        kind_of(::Test::Run::Spec, run)
+      end
+
+      assert "Should accept an option ':interactive' and load irb_mode" do
+        run = ::Test::Run.new(::Test::Suite.new, :interactive => true)
+        kind_of(::Test::IRBMode, run)
+      end
     end
 
     suite "#suite" do
-      assert "Should return the suite the instance was initialized with"
+      assert "Should return the suite the instance was initialized with" do
+        suite = ::Test::Suite.new
+        run   = ::Test::Run.new(suite)
+
+        same(suite, run.suite)
+      end
     end
 
     suite "#inits" do
-      assert "Should return the array with blocks called at the end of initialize"
-      assert "Should run the blocks at the end of initialize"
+      setup do
+        @executed    = []
+        executed     = @executed # for closure
+        @init_blocks = [
+          proc { executed << :block1 },
+          proc { executed << :block2 }
+        ]
+        init_blocks  = @init_blocks # for closure
+        @extender    = Module.new do |m|
+          (class <<m;self;end).send(:define_method, :extended) do |by|
+            init_blocks.each { |init_block|
+              by.init(&init_block)
+            }
+          end
+        end
+        $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
+        ::Test.extender['test/run/test_init'] = @extender # provide the module as formatter
+      end
+
+      assert "Should return the array with blocks called at the end of initialize" do
+        run = ::Test::Run.new(::Test::Suite.new, :format => 'test_init')
+        equal(@init_blocks, run.inits)
+      end
+
+      assert "Should run the blocks at the end of initialize" do
+        run = ::Test::Run.new(::Test::Suite.new, :format => 'test_init')
+        equal([:block1, :block2], @executed)
+      end
     end
 
     suite "#run_all" do

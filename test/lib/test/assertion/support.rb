@@ -209,9 +209,23 @@ Test.define "Test" do
       end
 
       suite "#failure_with_optional_message" do
-        assert "Should raise a Test::Assertion::Failure"
-        assert "Should use the string with message if message is given"
-        assert "Should use the string without message if no message is given"
+        assert "Should raise a Test::Assertion::Failure" do
+		      raises(::Test::Assertion::Failure) do
+		        failure_with_optional_message "With %s", "Without message", "message"
+		      end
+        end
+
+        assert "Should use the string with message if message is given" do
+		      raises(::Test::Assertion::Failure, :with_message => "With message") do
+		        failure_with_optional_message "With %s", "Without message", "message"
+		      end
+		    end
+
+        assert "Should use the string without message if no message is given" do
+		      raises(::Test::Assertion::Failure, :with_message => "Without message") do
+		        failure_with_optional_message "With %s", "Without message", nil
+		      end
+		    end
       end
 
       suite "#failure" do
