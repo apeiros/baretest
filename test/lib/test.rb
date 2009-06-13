@@ -19,17 +19,18 @@ Test.define "Test" do
 	suite "::define" do
 	end
 
-	suite "::run_if_mainfile" do
+	suite "::run_if_mainfile", :requires => ['rbconfig', 'shellwords'] do
 		setup do
 			ENV['FORMAT'] = 'minimal'
-			@test_path = File.expand_path("#{__FILE__}/../../external/bootstraptest.rb")
-			@wrap_path = File.expand_path("#{__FILE__}/../../external/bootstrapwrap.rb")
-			@inc_path  = File.dirname(Test.required_file)
+			@ruby      = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
+			@test_path = Shellwords.escape(File.expand_path("#{__FILE__}/../../external/bootstraptest.rb"))
+			@wrap_path = Shellwords.escape(File.expand_path("#{__FILE__}/../../external/bootstrapwrap.rb"))
+			@inc_path  = Shellwords.escape(File.dirname(Test.required_file))
 		end
 
 		suite "File is the program" do
 			assert "Should run the suite" do
-				IO.popen("ruby -I '#{@inc_path}' -rtest '#{@test_path}'") { |sio|
+				IO.popen("#{@ruby} -I#{@inc_path} -rtest #{@test_path}") { |sio|
 					sio.read
 				} =~ /\ATests:    1\nSuccess:  1\nPending:  0\nFailures: 0\nErrors:   0\nTime:     [^\n]+\nStatus:   success\n\z/
 			end
@@ -37,7 +38,7 @@ Test.define "Test" do
 		
 		suite "File is not the program" do
 			assert "Should not run the suite if the file is not the program" do
-				IO.popen("ruby -I '#{@inc_path}' -rtest '#{@wrap_path}'") { |sio|
+				IO.popen("#{@ruby} -I#{@inc_path} -rtest #{@wrap_path}") { |sio|
 					sio.read
 				} =~ /\ADone\n\z/
 			end
