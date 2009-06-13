@@ -28,13 +28,7 @@ module Test
 				puts "Running all tests\n"
 				start = Time.now
 				super # run all suites
-				status = case
-					when @count[:error]   > 0 then :error
-					when @count[:failure] > 0 then :failure
-					when @count[:pending] > 0 then :incomplete
-					when @count[:skipped] > 0 then :incomplete
-					else :success
-				end
+				status = global_status
 				printf "\n%2$d tests run in %1$.1fs\n%3$d successful, %4$d pending, %5$d failures, %6$d errors\n",
 				  Time.now-start, *@count.values_at(:test, :success, :pending, :failure, :error)
 				print "Final status: "
