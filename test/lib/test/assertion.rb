@@ -114,12 +114,29 @@ Test.define "Test" do
 
     suite "#execute" do
       assert "Execute will run the assertion's block" do
-        assertion = ::Test::Assertion.new(nil, "") { touch(:execute) }
+        this      = self # needed because touch is called in the block of another assertion, so otherwise it'd be local to that assertion
+        assertion = ::Test::Assertion.new(nil, "") { this.touch(:execute) }
         assertion.execute
         touched(:execute)
       end
     end
 
-    suite "#clean_copy"
+    suite "#clean_copy" do
+      assert "Should return an instance of Test::Assertion" do
+        kind_of(::Test::Assertion, ::Test::Assertion.new("", nil).clean_copy)
+      end
+
+      assert "Should have the same description, suite and block" do
+        description = "description"
+        suite       = ::Test::Suite.new
+        block       = proc { true }
+        assertion1  = ::Test::Assertion.new(description, suite, &block)
+        assertion2  = assertion1.clean_copy
+
+        same(assertion1.description, assertion2.description, "description") &&
+        same(assertion1.suite, assertion2.suite, "suite") &&
+        same(assertion1.block, assertion2.block, "block")
+      end
+    end
   end
 end

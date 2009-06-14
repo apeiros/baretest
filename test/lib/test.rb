@@ -45,9 +45,10 @@ Test.define "Test" do
     end
 
     assert "Should be run by Test::run" do
+      this = self # needed because touch is called in the block of another assertion, so otherwise it'd be local to that assertion
       test = ::Test.clone # avoid interfering with the current run
       test.init
-      test.define "A new suite" do assert do touch(:assertion_executed) end end
+      test.define "A new suite" do assert do this.touch(:assertion_executed) end end
       test.run
 
       touched(:assertion_executed)
@@ -94,9 +95,10 @@ Test.define "Test" do
 
   suite "::run" do
     assert "Should run Test's toplevel suite" do
+      this = self # needed because touch is called in the block of another assertion, so otherwise it'd be local to that assertion
       test = ::Test.clone # avoid interfering with the current run
       test.init
-      test.define "A new suite" do assert do touch(:assertion_executed) end end
+      test.define "A new suite" do assert do this.touch(:assertion_executed) end end
       test.run
 
       touched(:assertion_executed)

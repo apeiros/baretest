@@ -46,6 +46,7 @@ Test.define "Test" do
 
     suite "#inits" do
       setup do
+        Test.extender.clear # avoid interference
         @executed    = []
         executed     = @executed # for closure
         @init_blocks = [
