@@ -6,6 +6,11 @@
 
 
 
+require 'pp'
+require 'yaml'
+
+
+
 module Test
   class Suite
     def to_s
