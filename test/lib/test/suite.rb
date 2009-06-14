@@ -17,7 +17,8 @@ Test.define "Test", :requires => 'test/debug' do
 				raises(ArgumentError) { ::Test::Suite.create(nil, nil, {}, nil) }
 			end
 
-		  assert "Should require a single file listed in :requires option." do |a|
+		  assert "Should require a single file listed in :requires option." do
+		    a = self # ruby1.9 fix, no longer yields self with instance_eval
   		  original_require = Kernel.instance_method(:require)
   		  file             = 'foo/bar'
 	  	  Kernel.send(:define_method, :require) do |file, *args| a.touch(file) end
@@ -27,7 +28,8 @@ Test.define "Test", :requires => 'test/debug' do
 		    touched file
 		  end
 
-		  assert "Should require all files listed in :requires option." do |a|
+		  assert "Should require all files listed in :requires option." do
+		    a = self # ruby1.9 fix, no longer yields self with instance_eval
   		  original_require = Kernel.instance_method(:require)
   		  files            = %w[moo/bar moo/baz moo/quuz]
 	  	  Kernel.send(:define_method, :require) do |file, *args| a.touch(file) end
