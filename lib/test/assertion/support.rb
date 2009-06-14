@@ -185,11 +185,11 @@ module Test
 					only_in_actual   = count.select { |ele, n| n < 0 }.map { |ele, n| ele }
 					if message then
 						failure "Expected %s to have the same items the same number of times, " \
-										"but %p are only in a, and %p only in actual.",
+										"but %p are only in expected, and %p only in actual.",
 										message, only_in_expected, only_in_actual
 					else
 						failure "Expected %p and %p to have the same items the same number of times, " \
-										"but %p are only in a, and %p only in actual.",
+										"but %p are only in expected, and %p only in actual.",
 										expected, actual, only_in_expected, only_in_actual
 					end
 				end
