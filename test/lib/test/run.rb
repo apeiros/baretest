@@ -76,7 +76,25 @@ Test.define "Test" do
     end
 
     suite "#run_all" do
-      assert "Invokes #run_suite with every suite in the Run instance's toplevel suite" do
+      assert "Invokes #run_suite with the Run instance's toplevel suite" do
+        invoked_suites = []
+        extender       = Module.new do |m|
+          define_method :run_suite do |suite|
+            invoked_suites << suite
+          end
+        end
+        toplevel_suite = ::Test::Suite.new
+        $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
+        ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
+        run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
+        run.run_all
+
+        equal([toplevel_suite], invoked_suites)
+      end
+    end
+
+    suite "#run_suite" do
+      assert "Invokes #run_suite with every suite in the given suite" do
         invoked_suites = []
         extender       = Module.new do |m|
           define_method :run_suite do |suite|
@@ -90,16 +108,16 @@ Test.define "Test" do
         ]
         toplevel_suite = ::Test::Suite.new
         toplevel_suite.suites.concat(suites) # HAX, should have an API for this
-        suites << toplevel_suite
+        suites.unshift(toplevel_suite)
         $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
         ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
         run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
-        run.run_all
+        run.run_suite(toplevel_suite)
 
         equal_unordered(suites, invoked_suites)
       end
 
-      assert "Invokes #run_test with every test in the Run instance's toplevel suite" do
+      assert "Invokes #run_test with every suite in the given suite" do
         invoked_tests = []
         extender       = Module.new do |m|
           define_method :run_test do |test|
@@ -119,36 +137,97 @@ Test.define "Test" do
 
         equal_unordered(assertions, invoked_tests)
       end
-    end
 
-    suite "#run_suite" do
-      assert "Invokes #run_suite with every suite in the given suite"
-      assert "Invokes #run_test with every suite in the given suite"
-      assert "Increments the counter ':suite' at the end"
+      assert "Increments the counter ':suite' at the end" do
+        toplevel_suite = ::Test::Suite.new
+        run = ::Test::Run.new(toplevel_suite)
+        
+        count_before = run.count[:suite]
+        run.run_suite(toplevel_suite)
+        count_after = run.count[:suite]
+
+        equal(count_before+1, count_after)
+      end
     end
 
     suite "#run_test" do
-      assert "Runs the given test"
-      assert "Increments the counter ':test' at the end"
+      assert "Runs the given test" do
+        # should implement this with a mock, expecting #execute to be called
+        assertion = ::Test::Assertion.new(nil, nil) do true end
+        run       = ::Test::Run.new(::Test::Suite.new)
+        run.run_test(assertion)
+
+        equal(:success, assertion.status)
+      end
+
+      assert "Increments the counter ':test' at the end" do
+        assertion = ::Test::Assertion.new(nil, "") do true end
+        run       = ::Test::Run.new(::Test::Suite.new)
+        count_before = run.count[:test]
+        run.run_test(assertion)
+        count_after = run.count[:test]
+
+        equal(count_before+1, count_after)
+      end
 
       suite "The given test was a success" do
-        assert "Increments the counter ':success' at the end"
+        assert "Increments the counter ':success' at the end" do
+          assertion = ::Test::Assertion.new(nil, "") do true end
+          run       = ::Test::Run.new(::Test::Suite.new)
+          count_before = run.count[:success]
+          run.run_test(assertion)
+          count_after = run.count[:success]
+  
+          equal(count_before+1, count_after)
+        end
       end
 
       suite "The given test was pending" do
-        assert "Increments the counter ':pending' at the end"
+        assert "Increments the counter ':pending' at the end" do
+          assertion = ::Test::Assertion.new(nil, "")
+          run       = ::Test::Run.new(::Test::Suite.new)
+          count_before = run.count[:pending]
+          run.run_test(assertion)
+          count_after = run.count[:pending]
+  
+          equal(count_before+1, count_after)
+        end
       end
 
       suite "The given test was skipped" do
-        assert "Increments the counter ':skipped' at the end"
+        assert "Increments the counter ':skipped' at the end" do
+          assertion = ::Test::Skipped::Assertion.new(nil, "")
+          run       = ::Test::Run.new(::Test::Suite.new)
+          count_before = run.count[:skipped]
+          run.run_test(assertion)
+          count_after = run.count[:skipped]
+  
+          equal(count_before+1, count_after)
+        end
       end
 
       suite "The given test was failure" do
-        assert "Increments the counter ':failure' at the end"
+        assert "Increments the counter ':failure' at the end" do
+          assertion = ::Test::Assertion.new(nil, "") do false end
+          run       = ::Test::Run.new(::Test::Suite.new)
+          count_before = run.count[:failure]
+          run.run_test(assertion)
+          count_after = run.count[:failure]
+  
+          equal(count_before+1, count_after)
+        end
       end
 
       suite "The given test was error" do
-        assert "Increments the counter ':error' at the end"
+        assert "Increments the counter ':error' at the end" do
+          assertion = ::Test::Assertion.new(nil, "") do raise end
+          run       = ::Test::Run.new(::Test::Suite.new)
+          count_before = run.count[:error]
+          run.run_test(assertion)
+          count_after = run.count[:error]
+  
+          equal(count_before+1, count_after)
+        end
       end
     end
   end
