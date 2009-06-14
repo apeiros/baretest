@@ -55,9 +55,9 @@ module Test
       @options     = opts || {}
       @count       = @options[:count] || Hash.new(0)
 
-      Test.extender+Array(@options[:extender]).each do |extender|
+      (Test.extender+Array(@options[:extender])).each do |extender|
         extend(extender)
-      end if @options[:extender]
+      end
 
       # Extend with the output formatter
       if format = @options[:format] then
