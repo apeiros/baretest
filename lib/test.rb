@@ -14,13 +14,6 @@ require 'test/assertion/support'
 
 
 module Test
-	@extender       = {}
-	@mock_adapter   = nil
-	@toplevel_suite = Suite.new
-	@required_file  = ["", *$LOAD_PATH].map { |path|
-	  File.expand_path(File.join(path, __FILE__))
-	}.find { |full| File.exist?(full) }
-
 	class <<self
 		# A hash of extenders (require-string => module) to be used with Test::Run.
 		attr_reader :extender
@@ -35,6 +28,17 @@ module Test
 		# The full path to this file
 		attr_reader :required_file
 	end
+
+  # For bootstrapped selftest
+  def self.init
+    @extender       = {}
+    @mock_adapter   = nil
+    @toplevel_suite = Suite.new
+    @required_file  = ["", *$LOAD_PATH].map { |path|
+      File.expand_path(File.join(path, __FILE__))
+    }.find { |full| File.exist?(full) }
+  end
+  init
 
 	# Adds the contained assertions and suites to the toplevel suite
 	def self.define(name=nil, opts={}, &block)
@@ -59,7 +63,7 @@ module Test
 		end
 	end
 
-	def self.run(opts)
+	def self.run(opts=nil)
 		Run.new(@toplevel_suite, opts).run_all
 	end
 
@@ -73,6 +77,18 @@ module Test
 			def assert(description=nil, &block)
 				@tests << Skipped::Assertion.new(self, description, &block)
 			end
+
+			# :nodoc:
+			# All setup blocks are disabled
+      def ancestry_setup
+				[]
+      end
+  
+			# :nodoc:
+			# All teardown blocks are disabled
+      def ancestry_teardown
+				[]
+      end
 
 			# :nodoc:
 			# All setup blocks are disabled
