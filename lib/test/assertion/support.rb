@@ -7,25 +7,46 @@
 
 
 require 'test/assertion/failure'
+begin
+  require 'thread'
+rescue LoadError; end # no thread support in this ruby
 
 
 
 module Test
   @touch = {}
-  def self.touch(thing=nil)
-    @touch[Thread.current] ||= Hash.new(0)
-    @touch[Thread.current][thing] += 1
+  # We don't want to litter in Assertion
+  # Touches are associated with 
+  def self.touch(assertion, thing=nil)
+    @touch[assertion] ||= Hash.new(0)
+    @touch[assertion][thing] += 1
   end
 
-  def self.touched(thing=nil)
-    @touch[Thread.current] ||= Hash.new(0)
-    @touch[Thread.current][thing]
+  def self.touched(assertion, thing=nil)
+    @touch[assertion] ||= Hash.new(0)
+    @touch[assertion][thing]
+  end
+
+  def self.clean_touches(assertion)
+    @touch.delete(assertion)
   end
 end
 
 module Test
   class Assertion
     module Support
+      module SetupAndTeardown
+        def self.extended(run_obj)
+          run_obj.init do
+            suite.teardown do
+              Test.clean_touches(self) # instance evaled, self is the assertion
+            end
+          end
+        end
+
+        Test.extender << self
+      end
+
       # Will raise a Failure if the given block doesn't raise or raises a different
       # exception than the one provided
       # You can optionally give an options :with_message, which is tested with === against
@@ -78,12 +99,12 @@ module Test
       #     touched(:executed)
       #   end
       def touch(thing=nil)
-        ::Test.touch(thing)
+        ::Test.touch(self, thing)
       end
 
       # See #touch
       def touched(thing=nil, times=nil)
-        touched_times = ::Test.touched(thing)
+        touched_times = ::Test.touched(self, thing)
         if times then
           unless touched_times == times then
             if thing then

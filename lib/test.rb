@@ -10,7 +10,7 @@ require 'test/irb_mode'
 require 'test/run'
 require 'test/suite'
 require 'test/assertion'
-require 'test/assertion/support'
+# See bottom for more requires
 
 
 
@@ -111,3 +111,8 @@ module Test
     end
   end
 end
+
+
+
+# At bottom due to dependencies
+require 'test/assertion/support' # Needs Test.extender to be defined
