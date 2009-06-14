@@ -76,8 +76,49 @@ Test.define "Test" do
     end
 
     suite "#run_all" do
-      assert "Invokes #run_suite with every suite in the Run instance's toplevel suite"
-      assert "Invokes #run_test with every suite in the Run instance's toplevel suite"
+      assert "Invokes #run_suite with every suite in the Run instance's toplevel suite" do
+        invoked_suites = []
+        extender       = Module.new do |m|
+          define_method :run_suite do |suite|
+            invoked_suites << suite
+            super(suite)
+          end
+        end
+        suites = [
+          ::Test::Suite.new,
+          ::Test::Suite.new
+        ]
+        toplevel_suite = ::Test::Suite.new
+        toplevel_suite.suites.concat(suites) # HAX, should have an API for this
+        suites << toplevel_suite
+        $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
+        ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
+        run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
+        run.run_all
+
+        equal_unordered(suites, invoked_suites)
+      end
+
+      assert "Invokes #run_test with every test in the Run instance's toplevel suite" do
+        invoked_tests = []
+        extender       = Module.new do |m|
+          define_method :run_test do |test|
+            invoked_tests << test
+          end
+        end
+        toplevel_suite = ::Test::Suite.new
+        assertions     = [
+          ::Test::Assertion.new(toplevel_suite, "assertion1"),
+          ::Test::Assertion.new(toplevel_suite, "assertion2")
+        ]
+        toplevel_suite.tests.concat(assertions) # HAX, should have an API for this
+        $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
+        ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
+        run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
+        run.run_all
+
+        equal_unordered(assertions, invoked_tests)
+      end
     end
 
     suite "#run_suite" do
