@@ -22,17 +22,27 @@ module Test
 		# The initialisation blocks of extenders
 		attr_reader :inits
 
+		# Some statistics, standard count keys are:
+		# * :test - the number of tests executed until now
+		# * :suite - the number of suites executed until now
+		# * :success - the number of tests with status :success
+		# * :failure - the number of tests with status :failure
+		# * :pending - the number of tests with status :pending
+		# * :skipped - the number of tests with status :skipped
+		# * :error - the number of tests with status :error
+		attr_reader :count
+
 		# Run the passed suite.
 		# Calls run_all with the toplevel suite as argument and a block that
 		# calls run_suite with the yielded argument (which should be the toplevel
 		# suite).
-		def initialize(suite, opts={})
+		def initialize(suite, opts=nil)
 			@suite       = suite
 			@inits       = []
-			@options     = opts
-			@format      = opts[:format] || 'cli'
-			@count       = opts[:count] || Hash.new(0)
-			@interactive = opts[:interactive]
+			@options     = opts || {}
+			@format      = @options[:format]
+			@count       = @options[:count] || Hash.new(0)
+			@interactive = @options[:interactive]
 
 			# Add the mock adapter and initialize it
 			extend(Test.mock_adapter) if Test.mock_adapter
