@@ -141,7 +141,7 @@ Test.define "Test" do
       assert "Increments the counter ':suite' at the end" do
         toplevel_suite = ::Test::Suite.new
         run = ::Test::Run.new(toplevel_suite)
-        
+
         count_before = run.count[:suite]
         run.run_suite(toplevel_suite)
         count_after = run.count[:suite]
@@ -177,7 +177,7 @@ Test.define "Test" do
           count_before = run.count[:success]
           run.run_test(assertion)
           count_after = run.count[:success]
-  
+
           equal(count_before+1, count_after)
         end
       end
@@ -189,7 +189,7 @@ Test.define "Test" do
           count_before = run.count[:pending]
           run.run_test(assertion)
           count_after = run.count[:pending]
-  
+
           equal(count_before+1, count_after)
         end
       end
@@ -201,7 +201,7 @@ Test.define "Test" do
           count_before = run.count[:skipped]
           run.run_test(assertion)
           count_after = run.count[:skipped]
-  
+
           equal(count_before+1, count_after)
         end
       end
@@ -213,7 +213,7 @@ Test.define "Test" do
           count_before = run.count[:failure]
           run.run_test(assertion)
           count_after = run.count[:failure]
-  
+
           equal(count_before+1, count_after)
         end
       end
@@ -225,7 +225,7 @@ Test.define "Test" do
           count_before = run.count[:error]
           run.run_test(assertion)
           count_after = run.count[:error]
-  
+
           equal(count_before+1, count_after)
         end
       end
