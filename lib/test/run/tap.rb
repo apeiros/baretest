@@ -28,5 +28,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/tap"] = Run::TAP
+	@format["test/run/tap"] = Run::TAP
 end

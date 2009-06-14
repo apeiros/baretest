@@ -74,5 +74,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/cli"] = Run::CLI # register the extender
+	@format["test/run/cli"] = Run::CLI # register the extender
 end

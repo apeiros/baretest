@@ -8,7 +8,7 @@
 
 module Test
 	class Assertion
-	  class Failure < StandardError
+		class Failure < StandardError
 		end
 	end
 end

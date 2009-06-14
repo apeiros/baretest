@@ -8,14 +8,14 @@
 
 Test.define "Test" do
 	suite "::extender" do
-		assert "Should return a hash" do
-			kind_of(Hash, Test.extender)
+		assert "Should return an Array" do
+			kind_of(Array, Test.extender)
 		end
 	end
 
-	suite "::mock_adapter" do
-		assert "Should be implemented" do
-			failure "mock_adapter is not yet implemented"
+	suite "::format" do
+		assert "Should return a Hash" do
+			kind_of(Hash, Test.format)
 		end
 	end
 

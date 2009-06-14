@@ -6,6 +6,7 @@
 
 
 
+require 'test/irb_mode'
 require 'test/run'
 require 'test/suite'
 require 'test/assertion'
@@ -15,11 +16,11 @@ require 'test/assertion/support'
 
 module Test
 	class <<self
-		# A hash of extenders (require-string => module) to be used with Test::Run.
-		attr_reader :extender
+		# A hash of formatters (require-string => module) to be used with Test::Run.
+		attr_reader :format
 
-		# For mock integration
-		attr_reader :mock_adapter
+		# For mock integration and others, append modules that should extend the Test::Run instance.
+		attr_reader :extender
 
 		# The toplevel suite. That's the one run_if_mainfile and define add suites
 		# and assertions to.
@@ -31,8 +32,8 @@ module Test
 
   # For bootstrapped selftest
   def self.init
-    @extender       = {}
-    @mock_adapter   = nil
+    @format         = {}
+    @extender       = []
     @toplevel_suite = Suite.new
     @required_file  = ["", *$LOAD_PATH].map { |path|
       File.expand_path(File.join(path, __FILE__))

@@ -56,5 +56,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/interactive"] = Run::Interactive # register the extender
+	@format["test/run/interactive"] = Run::Interactive # register the extender
 end

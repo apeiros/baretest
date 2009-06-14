@@ -27,5 +27,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/minimal"] = Run::Minimal # register the extender
+	@format["test/run/minimal"] = Run::Minimal # register the extender
 end

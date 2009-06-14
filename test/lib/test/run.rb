@@ -61,7 +61,7 @@ Test.define "Test" do
           end
         end
         $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
-        ::Test.extender['test/run/test_init'] = @extender # provide the module as formatter
+        ::Test.format['test/run/test_init'] = @extender # provide the module as formatter
       end
 
       assert "Should return the array with blocks called at the end of initialize" do
@@ -85,7 +85,7 @@ Test.define "Test" do
         end
         toplevel_suite = ::Test::Suite.new
         $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
-        ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
+        ::Test.format['test/run/test_init'] = extender # provide the module as formatter
         run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
         run.run_all
 
@@ -110,7 +110,7 @@ Test.define "Test" do
         toplevel_suite.suites.concat(suites) # HAX, should have an API for this
         suites.unshift(toplevel_suite)
         $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
-        ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
+        ::Test.format['test/run/test_init'] = extender # provide the module as formatter
         run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
         run.run_suite(toplevel_suite)
 
@@ -131,7 +131,7 @@ Test.define "Test" do
         ]
         toplevel_suite.tests.concat(assertions) # HAX, should have an API for this
         $LOADED_FEATURES << 'test/run/test_init.rb' unless $LOADED_FEATURES.include?('test/run/test_init.rb') # suppress require
-        ::Test.extender['test/run/test_init'] = extender # provide the module as formatter
+        ::Test.format['test/run/test_init'] = extender # provide the module as formatter
         run = ::Test::Run.new(toplevel_suite, :format => 'test_init')
         run.run_all
 
@@ -232,31 +232,3 @@ Test.define "Test" do
     end
   end
 end
-
-__END__
-		# The toplevel suite.
-		attr_reader :suite
-		# The initialisation blocks of extenders
-		attr_reader :inits
-		def initialize(suite, opts={})
-			extend(Test.mock_adapter) if Test.mock_adapter
-			require "test/run/#{@format}" if @format
-			extend(Test.extender["test/run/#{@format}"]) if @format
-			require "test/irb_mode" if @interactive
-			extend(Test::IRBMode) if @interactive
-			@inits.each { |init| instance_eval(&init) }
-		end
-		def init(&block)
-		def run_all
-			run_suite(@suite)
-		def run_suite(suite)
-			suite.tests.each do |test|
-				run_test(test)
-			suite.suites.each do |suite|
-				run_suite(suite)
-			@count[:suite] += 1
-		def run_test(assertion)
-			rv = assertion.execute
-			@count[:test]            += 1
-			@count[assertion.status] += 1
-			rv

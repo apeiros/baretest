@@ -28,5 +28,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/spec"] = Run::Spec
+	@format["test/run/spec"] = Run::Spec
 end

@@ -52,5 +52,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/xml"] = Run::XML
+	@format["test/run/xml"] = Run::XML
 end

@@ -38,5 +38,5 @@ module Test
 		end
 	end
 
-	@extender["test/run/errors"] = Run::Errors # register the extender
+	@format["test/run/errors"] = Run::Errors # register the extender
 end

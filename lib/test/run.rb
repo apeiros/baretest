@@ -36,30 +36,52 @@ module Test
 		# Calls run_all with the toplevel suite as argument and a block that
 		# calls run_suite with the yielded argument (which should be the toplevel
 		# suite).
+		# Options accepted:
+		# * :extenders:   An Array of Modules, will be used as argument to self.extend, useful e.g. for
+		#                 mock integration
+		# * :format:      A string with the basename (without suffix) of the formatter to use - or a
+		#                 Module
+		# * :interactive: true/false, will switch this Test::Run instance into IRB mode, where an error
+		#                 will cause an irb session to be started in the context of a clean copy of
+		#                 the assertion with all setup callbacks invoked
+		#
+		# The order of extensions is:
+		# * :extender
+		# * :format (extends with the formatter module)
+		# * :interactive (extends with IRBMode)
 		def initialize(suite, opts=nil)
 			@suite       = suite
 			@inits       = []
 			@options     = opts || {}
-			@format      = @options[:format]
 			@count       = @options[:count] || Hash.new(0)
-			@interactive = @options[:interactive]
 
-			# Add the mock adapter and initialize it
-			extend(Test.mock_adapter) if Test.mock_adapter
+			Test.extender+Array(@options[:extender]).each do |extender|
+				extend(extender)
+			end if @options[:extender]
 
 			# Extend with the output formatter
-			require "test/run/#{@format}" if @format
-			extend(Test.extender["test/run/#{@format}"]) if @format
+			if format = @options[:format] then
+				require "test/run/#{format}" if String === format
+				extend(String === format ? Test.format["test/run/#{format}"] : format)
+			end
 
 			# Extend with irb dropout code
-			require "test/irb_mode" if @interactive
-			extend(Test::IRBMode) if @interactive
+			extend(Test::IRBMode) if @options[:interactive]
 
 			# Initialize extenders
 			@inits.each { |init| instance_eval(&init) }
 		end
 
-		# Hook initializers for extenders
+		# Hook initializers for extenders.
+		# Blocks passed to init will be instance_eval'd at the end of initialize.
+		# Example usage:
+		#   module ExtenderForRun
+		#     def self.extended(run_obj)
+		#        run_obj.init do
+		#          # do some initialization stuff for this module
+		#        end
+		#     end
+		#   end
 		def init(&block)
 			@inits << block
 		end
