@@ -69,6 +69,7 @@ Executable
 Planned Features
 ----------------
 
+* --fail-all flag, to test/review diagnostics of tests
 * Word-wrapping for CLI runner
 * Flags for color and verbose ([no-]color and [no-]verbose) for the executable
 * Passing on flags/options for formatters
@@ -85,6 +86,7 @@ Planned Features
     end
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
+* A redmine plugin
 
 
 
