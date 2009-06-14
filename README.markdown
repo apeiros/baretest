@@ -6,7 +6,7 @@ Bare Test
 Summary
 -------
 
-Three methods to use it, Twenty to master it, less than a hundred lines of code.
+Three methods to use it, Twenty to master it, about hundred lines of code[1].
 Bare Test, try it and you'll love it.
 
 
@@ -209,6 +209,13 @@ From examples/test.rb:
 
 
 Known bugs
------------------
+----------
 
 * touch/touched have to clean up after every Assertion#execute. Should use the mock hooks.
+
+
+
+Foot Notes
+----------
+[1]: "" The abbreviated form without support code and output formatters.
+        The normal code is expanded to more lines for readability.
