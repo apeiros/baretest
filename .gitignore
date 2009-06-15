@@ -1,2 +1,7 @@
+# We don't care about OS X' littering
 .DS_Store
 ._*
+
+# We don't care about build products
+/MANIFEST.txt
+/pkg/*
