@@ -6,13 +6,17 @@ Bare Test
 Summary
 -------
 
-Three methods to use it, Twenty to master it, about hundred lines of code[1].
+A minimal Testframework.
+Three methods to use it, Twenty to master it, about hundred lines of code.
 Bare Test, try it and you'll love it.
 
 
 
-Features
---------
+Description
+-----------
+
+Baretest is a Testframework that tries to stay out of your way, but support you when you want it.
+In order to do so it has a load of features:
 
 * Strightforward and terse assertions (just a block whose return value defines
   success/failure)
@@ -34,6 +38,8 @@ Features
 * baretest executable to run tests on multiple files at once
 * Diagnostic assertion helpers (e.g. same(:a, :b) will give you 'Expected
   :a but got :b' as diagnostic)
+
+
 
 Quick Try
 ---------
@@ -71,19 +77,21 @@ Planned Features
 
 * --fail-all flag, to test/review diagnostics of tests
 * Word-wrapping for CLI runner
-* Flags for color and verbose ([no-]color and [no-]verbose) for the executable
+* Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
 * Passing on flags/options for formatters
 * Alternative CLI runner with status implicit via colored/bg-colored descriptions
 * Alternative CLI runner which prints the name of the test prior the label and rewrites
   the line when the test has executed to add status & coloring.
 * Simple stubbing with automatic cleanup at teardown. Example:
-    assert "Should require a single file listed in :requires option." do |a|
-      file = 'foo/bar'
-      stub(Kernel, :require) do |file, *args| a.touch(file) end
-      ::Test::Suite.create(nil, nil, :requires => file)
-    
-      touched file
-    end
+
+        assert "Should require a single file listed in :requires option." do |a|
+          file = 'foo/bar'
+          stub(Kernel, :require) do |file, *args| a.touch(file) end
+          ::Test::Suite.create(nil, nil, :requires => file)
+        
+          touched file
+        end
+
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
 * A redmine plugin
