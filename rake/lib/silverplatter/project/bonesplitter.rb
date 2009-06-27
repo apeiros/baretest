@@ -168,7 +168,7 @@ module BoneSplitter
   # requires that 'readme' is a file in markdown format and that Markdown exists
   def extract_description(file=Project.meta.readme)
     return nil unless File.readable?(file)
-    return nil unless lib?('hpricot', "Requires %s to extract the summary")
+    return nil unless lib?('nokogiri', "Requires %s to extract the summary")
     html = case File.extname(file)
       when '.rdoc'
         return nil unless lib?('rdoc/markup/to_html', "Requires %s to extract the summary")
@@ -177,7 +177,9 @@ module BoneSplitter
         return nil unless lib?('markdown', "Requires %s to extract the summary")
         Markdown.new(File.read(file)).to_html
     end
-    (Hpricot(html)/"h2[text()=Description]").first.next_sibling.inner_text.strip
+    sibling = (Nokogiri.HTML(html)/"h2[text()=Description]").first.next_sibling
+    sibling = sibling.next_sibling until sibling.node_name == 'p'
+    sibling.inner_text.strip
   rescue => e
     warn "Failed extracting the description: #{e}"
     nil

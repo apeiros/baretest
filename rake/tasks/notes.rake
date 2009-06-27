@@ -1,5 +1,5 @@
 #--
-# Copyright 2007-2008 by Stefan Rusterholz.
+# Copyright 2007-2009 by Stefan Rusterholz.
 # All rights reserved.
 # See LICENSE.txt for permissions.
 #++
@@ -15,12 +15,16 @@ namespace :notes do
       Project.notes.tags
     end
     regex = /^.*(?:#{tags.map { |e| Regexp.escape(e) }.join('|')}).*$/
+    count = 0
+    found = 0
     puts "Searching for tags #{tags.join(', ')}"
     Project.notes.include.each { |glob|
       Dir.glob(glob) { |file|
+        count += 1
         data   = File.read(file)
         header = false
         data.scan(regex) {
+          found += 1
           unless header then
             puts "#{file}:"
             header = true
@@ -29,6 +33,7 @@ namespace :notes do
         }
       }
     }
+    puts "Searched #{count} files and found nothing" if found.zero?
   end
 end # namespace :notes
 

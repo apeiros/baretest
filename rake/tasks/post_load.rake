@@ -1,5 +1,5 @@
 #--
-# Copyright 2007-2008 by Stefan Rusterholz.
+# Copyright 2007-2009 by Stefan Rusterholz.
 # All rights reserved.
 # See LICENSE.txt for permissions.
 #++

@@ -4,7 +4,7 @@
 
 require 'rake/initialize'
 
-task :default => 'test:run'
+task :default => 'test'
 
 
 
@@ -12,13 +12,14 @@ task :default => 'test:run'
 # task 'prerequisite' in each .task file. Further cleanup is done in post_load.rake)
 Project.meta.name             = 'baretest'
 Project.meta.version          = version_proc("Test::VERSION")
-p :summary => (Project.meta.summary          = extract_summary())
+Project.meta.summary          = extract_summary()
+Project.meta.description      = extract_description()
 Project.meta.website          = 'http://'
 Project.meta.bugtracker       = 'http://'
 Project.meta.feature_requests = 'http://'
 Project.meta.use_git          = true
 
-Project.manifest.ignore       = %w[web/**/*]
+Project.manifest.ignore       = %w[Rakefile beat/**/* dev/**/* pkg/**/* rake/**/* web/**/*]
 
 Project.rubyforge.project     = 'baretest'
 Project.rubyforge.path        = 'baretest'

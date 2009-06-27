@@ -1,3 +1,11 @@
+#--
+# Copyright 2007-2009 by Stefan Rusterholz.
+# All rights reserved.
+# See LICENSE.txt for permissions.
+#++
+
+
+
 namespace :gem do
   # Empty tasks for missing prerequisites.
   if !lib?(%w'rubyforge rake/contrib/sshpublisher') then
