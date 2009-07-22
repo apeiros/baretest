@@ -2,6 +2,9 @@
 .DS_Store
 ._*
 
+# BBedit Projectfile doesn't need versioning
+/baretest.bbprojectd
+
 # We don't care about build products
 /MANIFEST.txt
 /pkg/*
