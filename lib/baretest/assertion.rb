@@ -113,5 +113,15 @@ module Test
     def clean_copy(use_class=nil)
       (use_class || self.class).new(@suite, @description, &@block)
     end
+
+    # :nodoc:
+    def to_s
+      sprintf "%s %s", self.class, @description
+    end
+
+    # :nodoc:
+    def inspect
+      sprintf "#<%s:%08x @suite=%p %p>", self.class, object_id>>1, @suite, @description
+    end
   end
 end

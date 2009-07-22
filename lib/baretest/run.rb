@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
 
   # Run is the envorionment in which the suites and asserts are executed.
   # Prior to the execution, the Run instance extends itself with the

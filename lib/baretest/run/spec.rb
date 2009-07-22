@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
   class Run
     module Spec
       def run_all

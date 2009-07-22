@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
   class Run
     module Minimal
       def run_all(*args)

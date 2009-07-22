@@ -6,14 +6,14 @@
 
 
 
-module Test
+module BareTest
   class Run
     module XML
       def run_all
         @depth = 1
 
-        puts '<?xml version="1.0" encoding="utf-8"?>'
-        puts '<tests>'
+        puts '<?xml version="1.0" encoding="utf-8"?>',
+             '<tests>'
         start  = Time.now
         super
         stop   = Time.now
@@ -24,14 +24,14 @@ module Test
           when @count[:skipped] > 0 then 'incomplete'
           else 'success'
         end
-        puts %{</tests>}
-        puts %{<report>}
-        puts %{\t<duration>#{stop-start}</duration>}
+        puts %{</tests>},
+             %{<report>},
+             %{\t<duration>#{stop-start}</duration>}
         @count.each { |key, value|
           puts %{\t<count type="#{key}">#{value}</count>}
         }
-        puts %{</report>}
-        puts %{<status>#{status}</status>}
+        puts %{</report>},
+             %{<status>#{status}</status>}
       end
 
       def run_suite(suite)
@@ -44,10 +44,10 @@ module Test
 
       def run_test(assertion)
         rv = super
-        puts %{#{"\t"*@depth}<test>}
-        puts %{#{"\t"*@depth}\t<status>#{rv.status}</status>}
-        puts %{#{"\t"*@depth}\t<description>#{rv.description}</description>}
-        puts %{#{"\t"*@depth}</test>}
+        puts %{#{"\t"*@depth}<test>},
+             %{#{"\t"*@depth}\t<status>#{rv.status}</status>},
+             %{#{"\t"*@depth}\t<description>#{rv.description}</description>},
+             %{#{"\t"*@depth}</test>}
       end
     end
   end

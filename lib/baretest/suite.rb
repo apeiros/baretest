@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
 
   # A Suite is a container for multiple assertions.
   # You can give a suite a description, also a suite can contain
@@ -42,13 +42,15 @@ module Test
     end
 
     def initialize(description=nil, parent=nil, &block)
-      @description = description
-      @parent      = parent
-      @suites      = []
-      @tests       = []
-      @setup       = []
-      @teardown    = []
-      @ancestors   = [self] + (@parent ? @parent.ancestors : [])
+      @description           = description
+      @parent                = parent
+      @suites                = []
+      @tests                 = []
+      @setup                 = []
+      @teardown              = []
+      @suites_by_description = {}
+      @tests_by_description  = {}
+      @ancestors             = [self] + (@parent ? @parent.ancestors : [])
       instance_eval(&block) if block
     end
 
@@ -60,7 +62,11 @@ module Test
     # :   A list of files to require, if one of the requires fails, the suite
     #     will be skipped. Accepts a String or an Array
     def suite(description=nil, opts={}, &block)
-      @suites << self.class.create(description, self, opts, &block)
+      if suite = @suites_by_description[description] then
+        suite.append(&block)
+      else
+        @suites << self.class.create(description, self, opts, &block)
+      end
     end
 
     # All setups in the order of their nesting (outermost first, innermost last)
@@ -89,7 +95,17 @@ module Test
     # (anything but nil or false).
     # See Assertion for more info.
     def assert(description=nil, &block)
-      @tests << Assertion.new(self, description, &block)
+      @tests << Assertion.new(self, description, &block) then
+    end
+
+    # :nodoc:
+    def to_s
+      sprintf "%s %s", self.class, @description
+    end
+
+    # :nodoc:
+    def inspect
+      sprintf "#<%s:%08x %p>", self.class, object_id>>1, @description
     end
   end
 end

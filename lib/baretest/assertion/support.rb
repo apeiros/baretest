@@ -13,7 +13,7 @@ rescue LoadError; end # no thread support in this ruby
 
 
 
-module Test
+module BareTest
   @touch = {}
   # We don't want to litter in Assertion
   # Touches are associated with 
@@ -30,9 +30,7 @@ module Test
   def self.clean_touches(assertion)
     @touch.delete(assertion)
   end
-end
 
-module Test
   class Assertion
     module Support
       module SetupAndTeardown

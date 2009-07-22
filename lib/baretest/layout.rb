@@ -6,9 +6,8 @@
 
 
 
-module Test
-  class Assertion
-    class Failure < StandardError
-    end
-  end
+module BareTest
+  Layout = Struct.new(
+    :foo
+  )
 end

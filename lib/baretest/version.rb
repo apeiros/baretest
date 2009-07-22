@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
   module VERSION
     MAJOR = 0
     MINOR = 1

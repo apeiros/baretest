@@ -6,15 +6,16 @@
 
 
 
-require 'test/irb_mode'
-require 'test/run'
-require 'test/suite'
-require 'test/assertion'
+require 'baretest/irb_mode'
+require 'baretest/run'
+require 'baretest/suite'
+require 'baretest/assertion'
+require 'baretest/version'
 # See bottom for more requires
 
 
 
-module Test
+module BareTest
   class <<self
     # A hash of formatters (require-string => module) to be used with Test::Run.
     attr_reader :format
@@ -115,4 +116,4 @@ end
 
 
 # At bottom due to dependencies
-require 'test/assertion/support' # Needs Test.extender to be defined
+require 'baretest/assertion/support' # Needs Test.extender to be defined

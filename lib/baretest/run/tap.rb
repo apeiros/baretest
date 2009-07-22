@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
   class Run
     module TAP
       def run_all
