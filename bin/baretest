@@ -45,7 +45,8 @@ opts = OptionParser.new("", 24, '  ') do |opts|
   }
 
   opts.on("-d", "--debug", "set debugging flags (set $DEBUG to true)") {
-    $DEBUG = true
+    $DEBUG   = true
+    $VERBOSE = true
   }
 
   opts.on("-i", "--interactive", "drop into IRB on error or failure") {
@@ -74,9 +75,9 @@ end
 if ARGV.empty? then
   setup_path ||= 'test/setup.rb'
   load(setup_path) if File.exist?(setup_path)
-  Dir.glob('test/lib/**/*.rb') { |path|
-    helper_path = path.sub(%r{^test/lib/}, 'test/helper/')
-    puts "Loading helper file #{helper_path}" if $VERBOSE
+  Dir.glob('test/{suite,unit,integration,system}/lib/**/*.rb') { |path|
+    helper_path = path.sub(%r{^test/(suite|unit|integration|system)/lib/}, 'test/\1/helper/')
+    puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if $VERBOSE
     load(helper_path) if File.exist?(helper_path)
     puts "Loading test file #{path}" if $VERBOSE
     load(path)
@@ -95,4 +96,5 @@ end
 
 
 # Run the tests
-Test.run(:format => format, :interactive => interactive)
+puts if $VERBOSE
+BareTest.run(:format => format, :interactive => interactive)
