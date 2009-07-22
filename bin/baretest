@@ -8,19 +8,15 @@
 
 
 
-# Make sure the right libs are loaded, tries plain 'test' first, then a rubygem 'test', then
-# the relative path it'd be if it isn't installed at all and you're just testrunning it.
 require 'optparse'
 begin
-  require 'test'
+  # if baretest is installed as a gem, the executable is be wrapped by rubgems anyway, so we don't
+  # need to require rubygems ourself.
+  require 'baretest'
 rescue LoadError
-  begin
-    require 'rubygems'
-    require 'test'
-  rescue LoadError
-    $LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
-    require 'test'
-  end
+  # assume baretest is not installed and this is a cold-run from source
+  $LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
+  require 'baretest'
 end
 
 
