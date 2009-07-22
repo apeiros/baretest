@@ -19,7 +19,15 @@ Project.meta.bugtracker       = 'http://'
 Project.meta.feature_requests = 'http://'
 Project.meta.use_git          = true
 
-Project.manifest.ignore       = %w[Rakefile beat/**/* dev/**/* pkg/**/* rake/**/* web/**/*]
+Project.manifest.ignore       = %w[
+                                    Rakefile
+                                    beat/**/*
+                                    dev/**/*
+                                    pkg/**/*
+                                    rake/**/*
+                                    web/**/*
+                                    baretest.bbprojectd/**/*
+                                ]
 
 Project.rubyforge.project     = 'baretest'
 Project.rubyforge.path        = 'baretest'
