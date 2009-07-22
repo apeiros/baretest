@@ -6,7 +6,7 @@
 
 
 
-Test.define "Test" do
+BareTest.define "Test" do
   suite "Assertion" do
     suite "::new" do
       assert "Should return a ::Test::Assertion instance" do
@@ -136,6 +136,33 @@ Test.define "Test" do
         same(assertion1.description, assertion2.description, "description") &&
         same(assertion1.suite, assertion2.suite, "suite") &&
         same(assertion1.block, assertion2.block, "block")
+      end
+    end
+
+    suite "#to_s" do
+      assert "Assertion should have a to_s which contains the classname and the description" do
+        description  = "the description"
+        assertion    = Test::Assertion.new(nil, description)
+        print_string = assertion.to_s
+
+        print_string.include?(assertion.class.name) &&
+        print_string.include?(description)
+      end
+    end
+
+    suite "#inspect" do
+      assert "Assertion should have an inspect which contains the classname, the shifted object-id in zero-padded hex, the suite's inspect and the description's inspect" do
+        suite          = Test::Suite.new
+        description    = "the description"
+        assertion      = Test::Assertion.new(suite, description)
+        def suite.inspect; "<inspect of suite>"; end
+
+        inspect_string = assertion.inspect
+
+        inspect_string.include?(assertion.class.name) &&
+        inspect_string.include?("%08x" % (assertion.object_id >> 1)) &&
+        inspect_string.include?(suite.inspect) &&
+        inspect_string.include?(description.inspect)
       end
     end
   end

@@ -6,7 +6,7 @@
 
 
 
-Test.define "Test" do
+BareTest.define "Test" do
   suite "::extender" do
     assert "Should return an Array" do
       kind_of(Array, Test.extender)

@@ -271,5 +271,28 @@ Test.define "Test", :requires => 'test/debug' do
         )
       end
     end
+
+    suite "#to_s" do
+      assert "Suite should have a to_s which contains the classname and the description" do
+        description  = "the description"
+        suite        = Test::Suite.new(description)
+        print_string = suite.to_s
+
+        print_string.include?(suite.class.name) &&
+        print_string.include?(description)
+      end
+    end
+
+    suite "#inspect" do
+      assert "Suite should have an inspect which contains the classname, the shifted object-id in zero-padded hex and the description's inspect" do
+        description    = "the description"
+        suite          = Test::Suite.new(description)
+        inspect_string = suite.inspect
+
+        inspect_string.include?(suite.class.name) &&
+        inspect_string.include?("%08x" % (suite.object_id >> 1)) &&
+        inspect_string.include?(description.inspect)
+      end
+    end
   end
 end
