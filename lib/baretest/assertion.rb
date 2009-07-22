@@ -6,11 +6,11 @@
 
 
 
-require 'test/assertion/failure'
+require 'baretest/assertion/failure'
 
 
 
-module Test
+module BareTest
 
   # Defines an assertion
   # An assertion belongs to a suite and consists of a description and a block.
@@ -95,7 +95,7 @@ module Test
         # run the assertion
         begin
           @status = instance_eval(&@block) ? :success : :failure
-        rescue ::Test::Assertion::Failure => failure
+        rescue ::BareTest::Assertion::Failure => failure
           @status         = :failure
           @failure_reason = failure
         rescue => exception

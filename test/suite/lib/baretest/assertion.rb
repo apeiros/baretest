@@ -6,46 +6,46 @@
 
 
 
-BareTest.define "Test" do
+BareTest.define "BareTest" do
   suite "Assertion" do
     suite "::new" do
-      assert "Should return a ::Test::Assertion instance" do
-        ::Test::Assertion.new(nil, "description") { nil }.class ==
-        ::Test::Assertion
+      assert "Should return a ::BareTest::Assertion instance" do
+        ::BareTest::Assertion.new(nil, "description") { nil }.class ==
+        ::BareTest::Assertion
       end
 
       assert "Should expect exactly 2 arguments" do
-        raises(ArgumentError) { ::Test::Assertion.new() } &&
-        raises(ArgumentError) { ::Test::Assertion.new(nil) } &&
-        raises(ArgumentError) { ::Test::Assertion.new(nil, "foo", "bar") }
+        raises(ArgumentError) { ::BareTest::Assertion.new() } &&
+        raises(ArgumentError) { ::BareTest::Assertion.new(nil) } &&
+        raises(ArgumentError) { ::BareTest::Assertion.new(nil, "foo", "bar") }
       end
     end
 
     suite "#status" do
       assert "A new Assertion should have a status of nil" do
-        ::Test::Assertion.new(nil, "description") {}.status.nil?
+        ::BareTest::Assertion.new(nil, "description") {}.status.nil?
       end
 
       assert "Executing an assertion with a block that returns true should be :success" do
-        assertion_success = ::Test::Assertion.new(nil, "description") { true }
+        assertion_success = ::BareTest::Assertion.new(nil, "description") { true }
         assertion_success.execute
         assertion_success.status == :success
       end
 
       assert "Executing an assertion with a block that returns false should be :failure" do
-        assertion_success = ::Test::Assertion.new(nil, "description") { false }
+        assertion_success = ::BareTest::Assertion.new(nil, "description") { false }
         assertion_success.execute
         assertion_success.status == :failure
       end
 
       assert "Executing an assertion with a block that raises should be :error" do
-        assertion_success = ::Test::Assertion.new(nil, "description") { raise }
+        assertion_success = ::BareTest::Assertion.new(nil, "description") { raise }
         assertion_success.execute
         assertion_success.status == :error
       end
 
       assert "Executing an assertion without a block should be :pending" do
-        assertion_success = ::Test::Assertion.new(nil, "description")
+        assertion_success = ::BareTest::Assertion.new(nil, "description")
         assertion_success.execute
 
         same :expected => :pending, :actual => assertion_success.status
@@ -54,7 +54,7 @@ BareTest.define "Test" do
 
     suite "#exception" do
       assert "An assertion that doesn't raise should have nil as exception" do
-        assertion_success = ::Test::Assertion.new(nil, "description") { true }
+        assertion_success = ::BareTest::Assertion.new(nil, "description") { true }
         assertion_success.execute
         same :expected => nil, :actual => assertion_success.exception
       end
@@ -63,15 +63,15 @@ BareTest.define "Test" do
     suite "#description" do
       assert "An assertion should have a description" do
         description = "The assertion description"
-        assertion   = ::Test::Assertion.new(nil, description) { true }
+        assertion   = ::BareTest::Assertion.new(nil, description) { true }
         same :expected => description, :actual => assertion.description
       end
     end
 
     suite "#suite" do
       assert "An assertion can belong to a suite" do
-        suite     = ::Test::Suite.new
-        assertion = ::Test::Assertion.new(suite, "") { true }
+        suite     = ::BareTest::Suite.new
+        assertion = ::BareTest::Assertion.new(suite, "") { true }
         same :expected => suite, :actual => assertion.suite
       end
     end
@@ -79,7 +79,7 @@ BareTest.define "Test" do
     suite "#block" do
       assert "An assertion can have a block" do
         block     = proc { true }
-        assertion = ::Test::Assertion.new(nil, "", &block)
+        assertion = ::BareTest::Assertion.new(nil, "", &block)
         same :expected => block, :actual => assertion.block
       end
     end
@@ -89,9 +89,9 @@ BareTest.define "Test" do
         executed  = []
         block1    = proc { executed << :block1 }
         block2    = proc { executed << :block2 }
-        suite1    = ::Test::Suite.new("block1") do setup(&block1) end
-        suite2    = ::Test::Suite.new("suite2", suite1) do setup(&block2) end
-        assertion = ::Test::Assertion.new(suite2, "assertion")
+        suite1    = ::BareTest::Suite.new("block1") do setup(&block1) end
+        suite2    = ::BareTest::Suite.new("suite2", suite1) do setup(&block2) end
+        assertion = ::BareTest::Assertion.new(suite2, "assertion")
 
         raises_nothing do assertion.setup end &&
         equal([:block1, :block2], executed)
@@ -103,9 +103,9 @@ BareTest.define "Test" do
         executed  = []
         block1    = proc { executed << :block1 }
         block2    = proc { executed << :block2 }
-        suite1    = ::Test::Suite.new("block1") do teardown(&block1) end
-        suite2    = ::Test::Suite.new("suite2", suite1) do teardown(&block2) end
-        assertion = ::Test::Assertion.new(suite2, "assertion")
+        suite1    = ::BareTest::Suite.new("block1") do teardown(&block1) end
+        suite2    = ::BareTest::Suite.new("suite2", suite1) do teardown(&block2) end
+        assertion = ::BareTest::Assertion.new(suite2, "assertion")
 
         raises_nothing do assertion.teardown end &&
         equal([:block2, :block1], executed)
@@ -115,22 +115,22 @@ BareTest.define "Test" do
     suite "#execute" do
       assert "Execute will run the assertion's block" do
         this      = self # needed because touch is called in the block of another assertion, so otherwise it'd be local to that assertion
-        assertion = ::Test::Assertion.new(nil, "") { this.touch(:execute) }
+        assertion = ::BareTest::Assertion.new(nil, "") { this.touch(:execute) }
         assertion.execute
         touched(:execute)
       end
     end
 
     suite "#clean_copy" do
-      assert "Should return an instance of Test::Assertion" do
-        kind_of(::Test::Assertion, ::Test::Assertion.new("", nil).clean_copy)
+      assert "Should return an instance of BareTest::Assertion" do
+        kind_of(::BareTest::Assertion, ::BareTest::Assertion.new("", nil).clean_copy)
       end
 
       assert "Should have the same description, suite and block" do
         description = "description"
-        suite       = ::Test::Suite.new
+        suite       = ::BareTest::Suite.new
         block       = proc { true }
-        assertion1  = ::Test::Assertion.new(description, suite, &block)
+        assertion1  = ::BareTest::Assertion.new(description, suite, &block)
         assertion2  = assertion1.clean_copy
 
         same(assertion1.description, assertion2.description, "description") &&
@@ -142,7 +142,7 @@ BareTest.define "Test" do
     suite "#to_s" do
       assert "Assertion should have a to_s which contains the classname and the description" do
         description  = "the description"
-        assertion    = Test::Assertion.new(nil, description)
+        assertion    = ::BareTest::Assertion.new(nil, description)
         print_string = assertion.to_s
 
         print_string.include?(assertion.class.name) &&
@@ -152,9 +152,9 @@ BareTest.define "Test" do
 
     suite "#inspect" do
       assert "Assertion should have an inspect which contains the classname, the shifted object-id in zero-padded hex, the suite's inspect and the description's inspect" do
-        suite          = Test::Suite.new
+        suite          = ::BareTest::Suite.new
         description    = "the description"
-        assertion      = Test::Assertion.new(suite, description)
+        assertion      = ::BareTest::Assertion.new(suite, description)
         def suite.inspect; "<inspect of suite>"; end
 
         inspect_string = assertion.inspect

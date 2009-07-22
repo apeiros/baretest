@@ -28,5 +28,5 @@ module BareTest
     end
   end
 
-  @format["test/run/spec"] = Run::Spec
+  @format["baretest/run/spec"] = Run::Spec
 end

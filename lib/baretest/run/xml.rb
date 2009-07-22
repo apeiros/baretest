@@ -52,5 +52,5 @@ module BareTest
     end
   end
 
-  @format["test/run/xml"] = Run::XML
+  @format["baretest/run/xml"] = Run::XML
 end

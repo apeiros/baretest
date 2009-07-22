@@ -26,7 +26,7 @@ module BareTest
 
       def run_all(*args)
         @depth = 0
-        puts "Running all tests\n"
+        puts "Running all tests#{' verbosly' if $VERBOSE}"
         start = Time.now
         super # run all suites
         status = global_status
@@ -59,6 +59,7 @@ module BareTest
         if rv.status == :error then
           indent = '           '+'  '*@depth
           print(indent, rv.exception.message, "\n", indent, rv.exception.backtrace.first, "\n")
+          print(indent, rv.exception.backtrace[1..-1].join("\n"+indent), "\n") if $VERBOSE
         elsif rv.status == :failure && rv.failure_reason then
           print('           ', '  '*@depth, rv.failure_reason, "\n")
         end
@@ -75,5 +76,5 @@ module BareTest
     end
   end
 
-  @format["test/run/cli"] = Run::CLI # register the extender
+  @format["baretest/run/cli"] = Run::CLI # register the extender
 end

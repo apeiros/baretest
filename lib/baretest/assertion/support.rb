@@ -6,7 +6,7 @@
 
 
 
-require 'test/assertion/failure'
+require 'baretest/assertion/failure'
 begin
   require 'thread'
 rescue LoadError; end # no thread support in this ruby
@@ -37,12 +37,12 @@ module BareTest
         def self.extended(run_obj)
           run_obj.init do
             suite.teardown do
-              Test.clean_touches(self) # instance evaled, self is the assertion
+              ::BareTest.clean_touches(self) # instance evaled, self is the assertion
             end
           end
         end
 
-        Test.extender << self
+        ::BareTest.extender << self
       end
 
       # Will raise a Failure if the given block doesn't raise or raises a different
@@ -97,12 +97,12 @@ module BareTest
       #     touched(:executed)
       #   end
       def touch(thing=nil)
-        ::Test.touch(self, thing)
+        ::BareTest.touch(self, thing)
       end
 
       # See #touch
       def touched(thing=nil, times=nil)
-        touched_times = ::Test.touched(self, thing)
+        touched_times = ::BareTest.touched(self, thing)
         if times then
           unless touched_times == times then
             if thing then
@@ -239,7 +239,7 @@ module BareTest
       # Raises Test::Assertion::Failure and runs sprintf over message with *args
       # Particularly useful with %p and %s.
       def failure(message, *args)
-        raise Test::Assertion::Failure, sprintf(message, *args)
+        raise ::BareTest::Assertion::Failure, sprintf(message, *args)
       end
 
     private
@@ -254,7 +254,7 @@ module BareTest
 
     include Support
   end # Assertion
-end # Test
+end # BareTest
 
 module Enumerable
   def equal_unordered?(other)

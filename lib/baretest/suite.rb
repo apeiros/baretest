@@ -6,7 +6,7 @@
 
 
 
-module Test
+module BareTest
 
   # A Suite is a container for multiple assertions.
   # You can give a suite a description, also a suite can contain

@@ -6,10 +6,10 @@
 
 
 
+require 'baretest/assertion'
 require 'baretest/irb_mode'
 require 'baretest/run'
 require 'baretest/suite'
-require 'baretest/assertion'
 require 'baretest/version'
 # See bottom for more requires
 
@@ -73,7 +73,7 @@ module BareTest
   # See Skipped::Suite and Skipped::Assertion
   module Skipped
     # Like Test::Suite, but all Assertions are defined as Skipped::Assertion
-    class Suite < ::Test::Suite
+    class Suite < ::BareTest::Suite
       # :nodoc:
       # All Assertions use Skipped::Assertion instead of Test::Assertion.
       def assert(description=nil, &block)
@@ -107,7 +107,7 @@ module BareTest
 
     # Like Test::Assertion, but fakes execution and sets status always to
     # skipped.
-    class Assertion < ::Test::Assertion
+    class Assertion < ::BareTest::Assertion
       def execute() @status = :skipped and self end
     end
   end

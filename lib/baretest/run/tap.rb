@@ -28,5 +28,5 @@ module BareTest
     end
   end
 
-  @format["test/run/tap"] = Run::TAP
+  @format["baretest/run/tap"] = Run::TAP
 end

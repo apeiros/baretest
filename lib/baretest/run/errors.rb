@@ -38,5 +38,5 @@ module BareTest
     end
   end
 
-  @format["test/run/errors"] = Run::Errors # register the extender
+  @format["baretest/run/errors"] = Run::Errors # register the extender
 end

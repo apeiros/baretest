@@ -6,14 +6,14 @@
 
 
 
-module Test
+module BareTest
   class Assertion
     # used here to test for failure
     def fails # :nodoc:
       failed = false
       begin
         failed = !yield
-      rescue Test::Assertion::Failure
+      rescue ::BareTest::Assertion::Failure
         failed = true
       end
       unless failed then
@@ -25,7 +25,7 @@ module Test
   end
 end
 
-Test.define "Test" do
+BareTest.define "Test" do
   suite "Assertion" do
     suite "Support" do
       suite "#raises" do
@@ -40,7 +40,7 @@ Test.define "Test" do
         assert "Should fail when used without argument and the block doesn't raise." do
           begin
             raises do "nothing raised -> should fail" end
-          rescue ::Test::Assertion::Failure
+          rescue ::BareTest::Assertion::Failure
             true
           else
             false
@@ -50,7 +50,7 @@ Test.define "Test" do
         assert "Should fail when the block raises an exception not derived from the provided exception-class." do
           begin
             raises(TypeError) do raise ArgumentError, "different class -> should fail" end
-          rescue ::Test::Assertion::Failure
+          rescue ::BareTest::Assertion::Failure
             true
           else
             false
@@ -66,7 +66,7 @@ Test.define "Test" do
         assert "Should fail when the block raises." do
           begin
             raises_nothing do raise "anything" end
-          rescue ::Test::Assertion::Failure
+          rescue ::BareTest::Assertion::Failure
             true
           else
             false
@@ -209,32 +209,32 @@ Test.define "Test" do
       end
 
       suite "#failure_with_optional_message" do
-        assert "Should raise a Test::Assertion::Failure" do
-          raises(::Test::Assertion::Failure) do
+        assert "Should raise a BareTest::Assertion::Failure" do
+          raises(::BareTest::Assertion::Failure) do
             failure_with_optional_message "With %s", "Without message", "message"
           end
         end
 
         assert "Should use the string with message if message is given" do
-          raises(::Test::Assertion::Failure, :with_message => "With message") do
+          raises(::BareTest::Assertion::Failure, :with_message => "With message") do
             failure_with_optional_message "With %s", "Without message", "message"
           end
         end
 
         assert "Should use the string without message if no message is given" do
-          raises(::Test::Assertion::Failure, :with_message => "Without message") do
+          raises(::BareTest::Assertion::Failure, :with_message => "Without message") do
             failure_with_optional_message "With %s", "Without message", nil
           end
         end
       end
 
       suite "#failure" do
-        assert "Should raise a Test::Assertion::Failure." do
-          raises(::Test::Assertion::Failure) do
+        assert "Should raise a BareTest::Assertion::Failure." do
+          raises(::BareTest::Assertion::Failure) do
             failure "Should raise that exception."
           end
         end
       end
     end # Support
   end # Assertion
-end # Test
+end # BareTest

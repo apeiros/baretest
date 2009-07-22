@@ -11,7 +11,7 @@ module BareTest
     module Interactive
       def self.extended(obj)
         obj.init do
-          require "test/irb_mode"
+          require "baretest/irb_mode"
           extend(Test::IRBMode)
         end
       end
@@ -56,5 +56,5 @@ module BareTest
     end
   end
 
-  @format["test/run/interactive"] = Run::Interactive # register the extender
+  @format["baretest/run/interactive"] = Run::Interactive # register the extender
 end

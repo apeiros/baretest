@@ -6,15 +6,15 @@
 
 
 
-Test.define "Test", :requires => 'test/debug' do
+BareTest.define "BareTest" do
   suite "Assertion" do
     suite "::create" do
       assert "Should accept 0-3 arguments" do
-        raises_nothing { ::Test::Suite.create() } &&
-        raises_nothing { ::Test::Suite.create(nil) } &&
-        raises_nothing { ::Test::Suite.create(nil, nil) } &&
-        raises_nothing { ::Test::Suite.create(nil, nil, {}) } &&
-        raises(ArgumentError) { ::Test::Suite.create(nil, nil, {}, nil) }
+        raises_nothing { ::BareTest::Suite.create() } &&
+        raises_nothing { ::BareTest::Suite.create(nil) } &&
+        raises_nothing { ::BareTest::Suite.create(nil, nil) } &&
+        raises_nothing { ::BareTest::Suite.create(nil, nil, {}) } &&
+        raises(ArgumentError) { ::BareTest::Suite.create(nil, nil, {}, nil) }
       end
 
       assert "Should require a single file listed in :requires option." do
@@ -22,7 +22,7 @@ Test.define "Test", :requires => 'test/debug' do
         original_require = Kernel.instance_method(:require)
         file             = 'foo/bar'
         Kernel.send(:define_method, :require) do |file, *args| a.touch(file) end
-        ::Test::Suite.create(nil, nil, :requires => file)
+        ::BareTest::Suite.create(nil, nil, :requires => file)
         Kernel.send(:define_method, :require, original_require)
 
         touched file
@@ -33,47 +33,47 @@ Test.define "Test", :requires => 'test/debug' do
         original_require = Kernel.instance_method(:require)
         files            = %w[moo/bar moo/baz moo/quuz]
         Kernel.send(:define_method, :require) do |file, *args| a.touch(file) end
-        ::Test::Suite.create(nil, nil, :requires => files)
+        ::BareTest::Suite.create(nil, nil, :requires => files)
         Kernel.send(:define_method, :require, original_require)
 
         files.all? { |file| touched file }
       end
 
-      assert "Should return a ::Test::Suite instance." do
-        ::Test::Suite.create {}.class == ::Test::Suite
+      assert "Should return a ::BareTest::Suite instance." do
+        ::BareTest::Suite.create {}.class == ::BareTest::Suite
       end
 
-      assert "Should return a ::Test::Suite instance without a block." do
-        ::Test::Suite.create.class == ::Test::Skipped::Suite
+      assert "Should return a ::BareTest::Suite instance without a block." do
+        ::BareTest::Suite.create.class == ::BareTest::Skipped::Suite
       end
 
-      assert "Should return a ::Test::Skipped::Suite instance if a required file is not available." do
+      assert "Should return a ::BareTest::Skipped::Suite instance if a required file is not available." do
         original_require = Kernel.instance_method(:require)
         Kernel.send(:define_method, :require) do |*args| raise LoadError end # simulate that the required file was not found
-        return_value = ::Test::Suite.create(nil, nil, :requires => 'fake')
+        return_value = ::BareTest::Suite.create(nil, nil, :requires => 'fake')
         Kernel.send(:define_method, :require, original_require)
 
-        return_value.class == ::Test::Skipped::Suite
+        return_value.class == ::BareTest::Skipped::Suite
       end
     end
 
     suite "::new" do
-      assert "Should return a ::Test::Suite instance" do
-        ::Test::Suite.new(nil, nil).class == ::Test::Suite
+      assert "Should return a ::BareTest::Suite instance" do
+        ::BareTest::Suite.new(nil, nil).class == ::BareTest::Suite
       end
 
       assert "Should accept 0-2 arguments" do
-        raises_nothing { ::Test::Suite.new() } &&
-        raises_nothing { ::Test::Suite.new(nil) } &&
-        raises_nothing { ::Test::Suite.new(nil, nil) } &&
-        raises(ArgumentError) { ::Test::Suite.new(nil, nil, nil) }
+        raises_nothing { ::BareTest::Suite.new() } &&
+        raises_nothing { ::BareTest::Suite.new(nil) } &&
+        raises_nothing { ::BareTest::Suite.new(nil, nil) } &&
+        raises(ArgumentError) { ::BareTest::Suite.new(nil, nil, nil) }
       end
     end
 
     suite "#suites" do
       assert "Should return all the suites defined in the block." do
         expected_descriptions = %w[a b c]
-        suite = ::Test::Suite.new do
+        suite = ::BareTest::Suite.new do
           expected_descriptions.each { |desc|
             suite desc
           }
@@ -96,7 +96,7 @@ Test.define "Test", :requires => 'test/debug' do
     suite "#tests" do
       assert "Should return all the suites defined in the block." do
         expected_descriptions = %w[a b c]
-        suite = ::Test::Suite.new do
+        suite = ::BareTest::Suite.new do
           expected_descriptions.each { |desc|
             assert desc
           }
@@ -119,31 +119,31 @@ Test.define "Test", :requires => 'test/debug' do
     suite "#description" do
       assert "A suite should have a description" do
         description = "The suite description"
-        suite       = ::Test::Suite.new(description)
+        suite       = ::BareTest::Suite.new(description)
         equal :expected => description, :actual => suite.description, :message => 'suite description'
       end
     end
 
     suite "#parent" do
       assert "A suite can have a parent suite" do
-        parent = ::Test::Suite.new
-        suite  = ::Test::Suite.new("", parent)
+        parent = ::BareTest::Suite.new
+        suite  = ::BareTest::Suite.new("", parent)
         same :expected => suite.parent, :actual => parent, :message => "suite's parent"
       end
     end
 
     suite "#ancestors" do
       assert "A suite can have ancestors" do
-        grand_parent = ::Test::Suite.new("first")
-        parent       = ::Test::Suite.new("second", grand_parent)
-        suite        = ::Test::Suite.new("third", parent)
+        grand_parent = ::BareTest::Suite.new("first")
+        parent       = ::BareTest::Suite.new("second", grand_parent)
+        suite        = ::BareTest::Suite.new("third", parent)
         equal :expected => suite.ancestors, :actual => [suite, parent, grand_parent], :message => "suite's ancestors"
       end
     end
 
     suite "#suite" do
       assert "Should add new suites to a suite." do
-        suite = ::Test::Suite.new
+        suite = ::BareTest::Suite.new
         equal(
           :expected => 0,
           :actual   => suite.suites.size,
@@ -172,7 +172,7 @@ Test.define "Test", :requires => 'test/debug' do
       end
 
       assert "Added suites should have the receiving suite as parent." do
-        parent = ::Test::Suite.new
+        parent = ::BareTest::Suite.new
         parent.suite "a"
         child  = parent.suites.first
 
@@ -186,7 +186,7 @@ Test.define "Test", :requires => 'test/debug' do
 
     suite "#setup" do
       assert "Called with a block it should add a new setup block." do
-        suite  = ::Test::Suite.new
+        suite  = ::BareTest::Suite.new
         block  = proc {}
         before = suite.setup.dup
 
@@ -209,7 +209,7 @@ Test.define "Test", :requires => 'test/debug' do
 
     suite "#teardown" do
       assert "Called with a block it should add a new teardown block." do
-        suite  = ::Test::Suite.new
+        suite  = ::BareTest::Suite.new
         block  = proc {}
         before = suite.teardown.dup
 
@@ -231,7 +231,7 @@ Test.define "Test", :requires => 'test/debug' do
 
     suite "#assert" do
       assert "Should add new assertions to a suite." do
-        suite = ::Test::Suite.new
+        suite = ::BareTest::Suite.new
         equal(
           :expected => 0,
           :actual   => suite.tests.size,
@@ -260,7 +260,7 @@ Test.define "Test", :requires => 'test/debug' do
       end
 
       assert "Added tests should have the receiving suite as suite." do
-        suite     = ::Test::Suite.new
+        suite     = ::BareTest::Suite.new
         suite.assert "a"
         assertion = suite.tests.first
 
@@ -275,7 +275,7 @@ Test.define "Test", :requires => 'test/debug' do
     suite "#to_s" do
       assert "Suite should have a to_s which contains the classname and the description" do
         description  = "the description"
-        suite        = Test::Suite.new(description)
+        suite        = ::BareTest::Suite.new(description)
         print_string = suite.to_s
 
         print_string.include?(suite.class.name) &&
@@ -286,7 +286,7 @@ Test.define "Test", :requires => 'test/debug' do
     suite "#inspect" do
       assert "Suite should have an inspect which contains the classname, the shifted object-id in zero-padded hex and the description's inspect" do
         description    = "the description"
-        suite          = Test::Suite.new(description)
+        suite          = ::BareTest::Suite.new(description)
         inspect_string = suite.inspect
 
         inspect_string.include?(suite.class.name) &&

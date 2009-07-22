@@ -6,17 +6,12 @@
 
 
 
-require 'pp'
-require 'yaml'
-
-
-
 module BareTest
   module IRBMode
     module AssertionExtensions
     end
 
-    class AssertionContext < ::Test::Assertion
+    class AssertionContext < ::BareTest::Assertion
       attr_accessor :original_assertion
 
       def to_s
@@ -41,12 +36,9 @@ module BareTest
     def self.extended(by)
       by.init do
         require 'irb'
-        require 'test/debug'
+        require 'pp'
+        require 'yaml'
         IRB.setup(nil) # must only be called once
-        # HAX - cargo cult, taken from irb.rb, not yet really understood.
-        IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC] # loads the irbrc?
-        IRB.conf[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
-        # /HAX
       end
     end
 
@@ -86,6 +78,10 @@ module BareTest
       irb_context.setup
       @irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context.send(:binding)))
       irb  = @irb # for closure
+      # HAX - cargo cult, taken from irb.rb, not yet really understood.
+      IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC] # loads the irbrc?
+      IRB.conf[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
+      # /HAX
 
       trap("SIGINT") do
         irb.signal_handle

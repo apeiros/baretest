@@ -27,5 +27,5 @@ module BareTest
     end
   end
 
-  @format["test/run/minimal"] = Run::Minimal # register the extender
+  @format["baretest/run/minimal"] = Run::Minimal # register the extender
 end

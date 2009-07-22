@@ -55,18 +55,18 @@ module BareTest
       @options     = opts || {}
       @count       = @options[:count] || Hash.new(0)
 
-      (Test.extender+Array(@options[:extender])).each do |extender|
+      (BareTest.extender+Array(@options[:extender])).each do |extender|
         extend(extender)
       end
 
       # Extend with the output formatter
       if format = @options[:format] then
-        require "test/run/#{format}" if String === format
-        extend(String === format ? Test.format["test/run/#{format}"] : format)
+        require "baretest/run/#{format}" if String === format
+        extend(String === format ? BareTest.format["baretest/run/#{format}"] : format)
       end
 
       # Extend with irb dropout code
-      extend(Test::IRBMode) if @options[:interactive]
+      extend(BareTest::IRBMode) if @options[:interactive]
 
       # Initialize extenders
       @inits.each { |init| instance_eval(&init) }
@@ -101,8 +101,21 @@ module BareTest
       suite.tests.each do |test|
         run_test(test)
       end
-      suite.suites.each do |suite|
-        run_suite(suite)
+      if @options[:group_suites] then
+        names  = {}
+        suites = []
+        suite.suites.each do |suite|
+          index = (names[suite.description] ||= suites.size)
+          suites[index] ||= []
+          suites[index] << suite
+        end
+        suites.each do |suite|
+          run_suite(suite)
+        end
+      else
+        suite.suites.each do |suite|
+          run_suite(suite)
+        end
       end
       @count[:suite] += 1
     end
