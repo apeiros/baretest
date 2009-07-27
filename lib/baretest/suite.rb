@@ -15,11 +15,14 @@ module BareTest
   # Suites can also be nested. Nested suites will inherit setup and teardown.
   class Suite
 
-    # Nested suites
+    # Nested suites, in the order of definition
     attr_reader :suites
 
     # All assertions in this suite
-    attr_reader :tests
+    attr_reader :assertions
+
+    # All skipped assertions in this suite
+    attr_reader :skipped
 
     # This suites description. Toplevel suites usually don't have a description.
     attr_reader :description
@@ -44,8 +47,9 @@ module BareTest
     def initialize(description=nil, parent=nil, &block)
       @description = description
       @parent      = parent
-      @suites      = []
-      @tests       = []
+      @suites      = [] # [["description", subsuite, skipped], ["description2", ...], ...] - see Array#assoc
+      @assertions  = []
+      @skipped     = []
       @setup       = []
       @teardown    = []
       @ancestors   = [self] + (@parent ? @parent.ancestors : [])
@@ -60,7 +64,31 @@ module BareTest
     # :   A list of files to require, if one of the requires fails, the suite
     #     will be skipped. Accepts a String or an Array
     def suite(description=nil, opts={}, &block)
-      @suites << self.class.create(description, self, opts, &block)
+      suite = self.class.create(description, self, opts, &block)
+      if append_to = @suites.assoc(description) then
+        append_to.last.update(suite)
+      else
+        @suites << [description, suite]
+      end
+      suite
+    end
+
+    def update(with_suite)
+      if ::BareTest::Skipped::Suite === with_suite then
+        @skipped.concat(with_suite.skipped)
+      else
+        @assertions.concat(with_suite.assertions)
+        @setup.concat(with_suite.setup)
+        @teardown.concat(with_suite.teardown)
+        with_suite.suites.each { |description, suite|
+          if append_to = @suites.assoc(description) then
+            append_to.last.update(suite)
+          else
+            @suites << [description, suite]
+          end
+        }
+      end
+      self
     end
 
     # All setups in the order of their nesting (outermost first, innermost last)
@@ -89,7 +117,7 @@ module BareTest
     # (anything but nil or false).
     # See Assertion for more info.
     def assert(description=nil, &block)
-      @tests << Assertion.new(self, description, &block)
+      @assertions << Assertion.new(self, description, &block)
     end
 
     # :nodoc:
@@ -103,3 +131,7 @@ module BareTest
     end
   end
 end
+
+
+
+require 'baretest/skipped/suite'

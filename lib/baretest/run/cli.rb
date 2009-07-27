@@ -40,16 +40,29 @@ module BareTest
         return super unless suite.description
         #label, size = '  '*@depth+suite.description, suite.tests.size.to_s
         #printf "\n\e[1m%-*s\e[0m (%d tests)\n", 71-size.length, label, size
-        case size = suite.tests.size
+        skipped = suite.skipped.size
+        case size = suite.assertions.size
           when 0
-            puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m"
+            if skipped.zero? then
+              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m"
+            else
+              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{skipped} skipped)"
+            end
           when 1
-            puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test)"
+            if skipped.zero? then
+              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test)"
+            else
+              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test/#{skipped} skipped)"
+            end
           else
-            puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests)"
+            if skipped.zero? then
+              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests)"
+            else
+              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests/#{skipped} skipped)"
+            end
         end
         @depth += 1
-        super # run the suite
+        super(suite) # run the suite
         @depth -= 1
       end
 

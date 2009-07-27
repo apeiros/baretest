@@ -78,7 +78,7 @@ BareTest.define "BareTest" do
             suite desc
           }
         end
-        actual_descriptions = suite.suites.map { |child| child.description }
+        actual_descriptions = suite.suites.map { |description, child| description }
 
         equal(
           :expected => 3,
@@ -93,7 +93,7 @@ BareTest.define "BareTest" do
       end
     end
 
-    suite "#tests" do
+    suite "#assertions" do
       assert "Should return all the suites defined in the block." do
         expected_descriptions = %w[a b c]
         suite = ::BareTest::Suite.new do
@@ -101,12 +101,12 @@ BareTest.define "BareTest" do
             assert desc
           }
         end
-        actual_descriptions = suite.tests.map { |child| child.description }
+        actual_descriptions = suite.assertions.map { |child| child.description }
 
         equal(
           :expected => 3,
-          :actual   => suite.tests.size,
-          :message  => "number of defined tests"
+          :actual   => suite.assertions.size,
+          :message  => "number of defined assertions"
         ) &&
         equal_unordered(
           :expected => expected_descriptions,
@@ -166,7 +166,7 @@ BareTest.define "BareTest" do
 
         equal_unordered(
           :expected => ['a', 'b'],
-          :actual   => suite.suites.map { |child| child.description },
+          :actual   => suite.suites.map { |description, child| description },
           :message  => "the descriptions"
         )
       end
@@ -174,7 +174,7 @@ BareTest.define "BareTest" do
       assert "Added suites should have the receiving suite as parent." do
         parent = ::BareTest::Suite.new
         parent.suite "a"
-        child  = parent.suites.first
+        child  = parent.suites.first.last
 
         same(
           :expected => parent,
@@ -234,35 +234,35 @@ BareTest.define "BareTest" do
         suite = ::BareTest::Suite.new
         equal(
           :expected => 0,
-          :actual   => suite.tests.size,
-          :message  => "number of defined tests before adding any"
+          :actual   => suite.assertions.size,
+          :message  => "number of defined assertions before adding any"
         )
 
         suite.assert "a"
         equal(
           :expected => 1,
-          :actual   => suite.tests.size,
-          :message  => "number of defined tests after adding one"
+          :actual   => suite.assertions.size,
+          :message  => "number of defined assertions after adding one"
         )
 
         suite.assert "b"
         equal(
           :expected => 2,
-          :actual   => suite.tests.size,
-          :message  => "number of defined tests after adding two"
+          :actual   => suite.assertions.size,
+          :message  => "number of defined assertions after adding two"
         )
 
         equal_unordered(
           :expected => ['a', 'b'],
-          :actual   => suite.tests.map { |child| child.description },
+          :actual   => suite.assertions.map { |child| child.description },
           :message  => "the descriptions"
         )
       end
 
-      assert "Added tests should have the receiving suite as suite." do
+      assert "Added assertions should have the receiving suite as suite." do
         suite     = ::BareTest::Suite.new
         suite.assert "a"
-        assertion = suite.tests.first
+        assertion = suite.assertions.first
 
         same(
           :expected => suite,

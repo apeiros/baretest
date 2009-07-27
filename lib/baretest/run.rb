@@ -98,24 +98,11 @@ module BareTest
     # Gets the suite to run as single argument.
     # Runs all assertions and nested suites.
     def run_suite(suite)
-      suite.tests.each do |test|
+      suite.assertions.each do |test|
         run_test(test)
       end
-      if @options[:group_suites] then
-        names  = {}
-        suites = []
-        suite.suites.each do |suite|
-          index = (names[suite.description] ||= suites.size)
-          suites[index] ||= []
-          suites[index] << suite
-        end
-        suites.each do |suite|
-          run_suite(suite)
-        end
-      else
-        suite.suites.each do |suite|
-          run_suite(suite)
-        end
+      suite.suites.each do |(description, suite)|
+        run_suite(suite)
       end
       @count[:suite] += 1
     end

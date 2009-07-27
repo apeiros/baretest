@@ -100,22 +100,25 @@ BareTest.define "BareTest" do
         extender       = Module.new do |m|
           define_method :run_suite do |suite|
             invoked_suites << suite
+            p :run_suite => suite
             super(suite)
           end
         end
+
         suites = [
-          ::BareTest::Suite.new,
-          ::BareTest::Suite.new
+          ["desc1", ::BareTest::Suite.new],
+          ["desc2", ::BareTest::Suite.new]
         ]
         toplevel_suite = ::BareTest::Suite.new
         toplevel_suite.suites.concat(suites) # HAX, should have an API for this
-        suites.unshift(toplevel_suite)
+        expect = [toplevel_suite]+suites.map { |desc, suite| suite }
+
         $LOADED_FEATURES << 'baretest/run/test_init.rb' unless $LOADED_FEATURES.include?('baretest/run/test_init.rb') # suppress require
         ::BareTest.format['baretest/run/test_init'] = extender # provide the module as formatter
         run = ::BareTest::Run.new(toplevel_suite, :format => 'test_init')
         run.run_suite(toplevel_suite)
 
-        equal_unordered(suites, invoked_suites)
+        equal_unordered(expect, invoked_suites)
       end
 
       assert "Invokes #run_test with every suite in the given suite" do
@@ -130,7 +133,7 @@ BareTest.define "BareTest" do
           ::BareTest::Assertion.new(toplevel_suite, "assertion1"),
           ::BareTest::Assertion.new(toplevel_suite, "assertion2")
         ]
-        toplevel_suite.tests.concat(assertions) # HAX, should have an API for this
+        toplevel_suite.assertions.concat(assertions) # HAX, should have an API for this
         $LOADED_FEATURES << 'baretest/run/test_init.rb' unless $LOADED_FEATURES.include?('baretest/run/test_init.rb') # suppress require
         ::BareTest.format['baretest/run/test_init'] = extender # provide the module as formatter
         run = ::BareTest::Run.new(toplevel_suite, :format => 'test_init')

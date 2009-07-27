@@ -25,7 +25,7 @@ module BareTest
   end
 end
 
-BareTest.define "Test" do
+BareTest.define "BareTest" do
   suite "Assertion" do
     suite "Support" do
       suite "#raises" do

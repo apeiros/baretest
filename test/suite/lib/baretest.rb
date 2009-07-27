@@ -144,36 +144,36 @@ BareTest.define "BareTest" do
         assert "Should add new skipped assertions to a suite." do
           equal(
             :expected => 0,
-            :actual   => @suite.tests.size,
+            :actual   => @suite.assertions.size,
             :message  => "number of defined tests before adding any"
           )
 
           @suite.assert "a"
           equal(
             :expected => 1,
-            :actual   => @suite.tests.size,
+            :actual   => @suite.skipped.size,
             :message  => "number of defined tests after adding one"
           )
 
           @suite.assert "b"
           equal(
             :expected => 2,
-            :actual   => @suite.tests.size,
+            :actual   => @suite.skipped.size,
             :message  => "number of defined tests after adding two"
           )
 
           equal_unordered(
             :expected => ['a', 'b'],
-            :actual   => @suite.tests.map { |child| child.description },
+            :actual   => @suite.skipped.map { |child| child.description },
             :message  => "the descriptions"
           )
 
-          @suite.tests.all? { |test| kind_of(::BareTest::Skipped::Assertion, test) }
+          @suite.skipped.all? { |test| kind_of(::BareTest::Skipped::Assertion, test) }
         end
 
         assert "Added tests should have the receiving suite as suite." do
           @suite.assert "a"
-          assertion = @suite.tests.first
+          assertion = @suite.skipped.first
 
           same(
             :expected => @suite,
