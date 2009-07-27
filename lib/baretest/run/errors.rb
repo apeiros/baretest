@@ -19,7 +19,7 @@ module BareTest
 
       def run_suite(suite)
         return super unless suite.description
-        puts "#{'  '*@depth+suite.description} (#{suite.tests.size} tests)"
+        puts "#{'  '*@depth+suite.description} (#{suite.assertions.size} tests, #{suite.skipped.size} skipped)"
         @depth += 1
         super # run the suite
         @depth -= 1

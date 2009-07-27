@@ -11,7 +11,12 @@ module BareTest
     module TAP
       def run_all
         puts "TAP version 13"
-        count = proc { |acc,csuite| acc+csuite.tests.size+csuite.suites.inject(0, &count) }
+        count = proc { |acc,csuite|
+          acc+
+          csuite.assertions.size+
+          csuite.skipped.size+
+          csuite.suites.map { |d,suite| suite }.inject(0, &count)
+        }
         puts "1..#{count[0, suite]}"
         @current = 0
         super
