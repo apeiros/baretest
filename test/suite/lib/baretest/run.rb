@@ -100,7 +100,6 @@ BareTest.define "BareTest" do
         extender       = Module.new do |m|
           define_method :run_suite do |suite|
             invoked_suites << suite
-            p :run_suite => suite
             super(suite)
           end
         end
