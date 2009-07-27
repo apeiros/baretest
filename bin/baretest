@@ -38,7 +38,8 @@ opts = OptionParser.new("", 24, '  ') do |opts|
   }
 
   opts.on("-F", "--formats", "show available formats") { |use|
-    Dir.glob("{#{$LOAD_PATH.join(',')}}/test/run/*.rb") { |path|
+    puts "Available formats:"
+    Dir.glob("{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb") { |path|
       puts "- #{File.basename(path, '.rb')}"
     }
     exit
