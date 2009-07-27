@@ -51,7 +51,19 @@ Quick Try
 That's it. Alternatively you can run baretests own tests, and play with formatters:
 `./bin/baretest -f tap`
 
-Unfortunately the installer and gem installer aren't ready yet.
+
+
+Install
+-------
+
+1. run `gem install baretest`, alternatively run `sudo gem install baretest`
+2. There is no 2.
+
+An inofficial way to install it (may not work yet):
+
+1. Download from github and unpack (or clone)
+2. Change into the baretest directory: `cd the/baretest/directory`
+3. Run the installation task: `rake install:lib`
 
 
 
@@ -75,7 +87,6 @@ Executable
 Planned Features
 ----------------
 
-* --fail-all flag, to test/review diagnostics of tests
 * Word-wrapping for CLI runner
 * Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
 * Passing on flags/options for formatters
@@ -95,6 +106,7 @@ Planned Features
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
 * A redmine plugin
+* --fail-all flag, to test/review diagnostics of tests (no idea how to do that yet)
 
 
 

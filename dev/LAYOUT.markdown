@@ -23,11 +23,11 @@ The following is the standard layout:
     * helper:      files that are needed to support your tests.
                    The path is available via Test.layout.helper.
     * suite:       the directory for your assertions, this directory rebuilds the structure of the
-                   project-directory
-    * unit:        Where you put your unit tests
-    * integration: Where you put your integration tests
-    * system:      Where you put your system tests
-    * setup.rb:    this file is automatically required prior to loading all tests
-    * teardown.rb: this file is automatically required after all tests are run
+                   project-directory, basically unit, integration and system unified.
+    * unit:        Where you put your unit tests, same like suite.
+    * integration: Where you put your integration tests, same like suite.
+    * system:      Where you put your system tests, same like suite.
+    * setup.rb:    this file is automatically required prior to loading all tests.
+    * teardown.rb: this file is automatically required after all tests are run.
 
 All other 
