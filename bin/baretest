@@ -8,6 +8,10 @@
 
 
 
+Version = "0.3"
+
+
+
 require 'optparse'
 begin
   # if baretest is installed as a gem, the executable is be wrapped by rubgems anyway, so we don't
@@ -59,7 +63,7 @@ opts = OptionParser.new("", 24, '  ') do |opts|
   }
 
   opts.on("-v", "--version", "print the version and exit") {
-    puts "baretest version 0.2"
+    puts "baretest version #{Version}"
     exit
   }
 
