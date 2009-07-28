@@ -25,9 +25,8 @@ In order to do so it has a load of features:
 * Uncomplicated dependency testing and skipping
 * Helpers to deal painlessly with raising, throwing, float imprecision,
   unordered collections etc.
-* Ships with colored Shell formatter, Diagnostic-, Interactive-, XML- and TAP
-  formatter
-* Interactive formatter - drops you into an irb session within failed assertion
+* Ships with colored Shell formatter, Diagnostic-, XML- and TAP formatter
+* Interactive mode - drops you into an irb session within failed assertion
   with all setup methods executed, so you can inspect interactively why it
   failed.
 * Trivial to add new formatters (the standard formatters are only roughly 20-50
