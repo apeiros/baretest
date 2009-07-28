@@ -20,16 +20,24 @@ module BareTest
 
       def e!
         em!
-        bt!
+        bt!(caller.size+3)
       end
 
       def em!
-        puts @original_assertion.exception
+        if @original_assertion.exception then
+          puts @original_assertion.exception
+        else
+          puts "No exception occurred, therefore no error message available"
+        end
       end
 
-      def bt!
-        size = caller.size+3
-        puts @original_assertion.exception.backtrace[0..-size]
+      def bt!(size=nil)
+        if @original_assertion.exception then
+          size ||= caller.size+3
+          puts @original_assertion.exception.backtrace[0..-size]
+        else
+          puts "No exception occurred, therefore no backtrace available"
+        end
       end
     end
 
@@ -48,10 +56,15 @@ module BareTest
     def run_test(assertion)
       rv = super
       # drop into irb if assertion failed
-      if [:failure, :error].include?(rv.status) then
-        start_irb_mode(assertion)
-        irb_mode_for_assertion(assertion)
-        stop_irb_mode(assertion)
+      case rv.status
+        when :failure
+          start_irb_failure_mode(assertion)
+          irb_mode_for_assertion(assertion)
+          stop_irb_mode(assertion)
+        when :error
+          start_irb_error_mode(assertion)
+          irb_mode_for_assertion(assertion)
+          stop_irb_mode(assertion)
       end
 
       @count[:test]            += 1
@@ -59,15 +72,43 @@ module BareTest
       rv
     end
 
-    def start_irb_mode(assertion)
-      ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.name }
+    def start_irb_failure_mode(assertion)
+      ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
-      puts "#{assertion.status.to_s.capitalize} in #{ancestry.join(' > ')}"
-      puts "  #{assertion.description}"
-      puts "#{assertion.exception} - #{assertion.exception.backtrace.first}"
-      super
-    rescue NoMethodError # HAX, not happy about that. necessary due to order of extend
+      puts "#{assertion.status.to_s.capitalize} in:  #{ancestry.join(' > ')}"
+      puts "Description: #{assertion.description}"
+      if assertion.file then
+        code  = irb_code_reindented(assertion.file, assertion.line-1,20)
+        match = code.match(/\n^  [^ ]/)
+        code[-(match.post_match.size-3)..-1] = ""
+        puts "Code:", code
+      end
+    end
+
+    def start_irb_error_mode(assertion)
+      ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
+
+      puts
+      puts "#{assertion.status.to_s.capitalize} in:    #{ancestry.join(' > ')}"
+      puts "Description: #{assertion.description}"
+      puts "Exception:   #{assertion.exception} - #{assertion.exception.backtrace.first}"
+      if assertion.file && match = assertion.exception.backtrace.first.match(/^(.*):(\d+)$/) then
+        file, line = match.captures
+        file = File.expand_path(file)
+        if assertion.file == file then
+          puts "Code:", irb_code_reindented(file, (assertion.line-1)..(line.to_i))
+        end
+      end
+    end
+
+    def irb_code_reindented(file, from, to=nil)
+      lines  = File.readlines(file)
+      string = (to ? lines[from, to] : lines[from]).join("")
+      string.gsub!(/^\t+/) { |m| "  "*m.size }
+      indent = string[/^ +/]
+      string.gsub!(/^#{indent}/, '  ')
+      string
     end
 
     # This method is highlevel hax, try to add necessary API to

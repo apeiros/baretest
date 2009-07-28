@@ -61,6 +61,15 @@ module BareTest
     # The block specifying the assertion
     attr_reader :block
 
+    # The file this assertion is specified in. Not contructed by Assertion itself.
+    attr_accessor :file
+
+    # The line this assertion is specified on. Not contructed by Assertion itself.
+    attr_accessor :line
+
+    # The lines this assertion spans. Not contructed by Assertion itself.
+    attr_accessor :lines
+
     # suite
     # :   The suite the Assertion belongs to
     # description

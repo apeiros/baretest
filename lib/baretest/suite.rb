@@ -117,7 +117,16 @@ module BareTest
     # (anything but nil or false).
     # See Assertion for more info.
     def assert(description=nil, &block)
-      @assertions << Assertion.new(self, description, &block)
+      assertion = Assertion.new(self, description, &block)
+      if match = caller.first.match(/^(.*):(\d+)$/) then
+        file, line = match.captures
+        file = File.expand_path(file)
+        if File.exist?(file) then
+          assertion.file = file
+          assertion.line = line.to_i
+        end
+      end
+      @assertions << assertion
     end
 
     # :nodoc:
