@@ -35,7 +35,7 @@ Project = SilverPlatter::Project::Description.new
 # Gem Packaging
 Project.gem = SilverPlatter::Project::Description.new({
   :dependencies => nil,
-  :executables  => nil,
+  :executables  => FileList['bin/**'],
   :extensions   => FileList['ext/**/extconf.rb'],
   :files        => nil,
   :has_rdoc     => true,
