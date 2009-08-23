@@ -1,0 +1,29 @@
+Errors:
+  Show error message (boolean)
+  Show backtrace (no/1 line/n lines/all)
+  Show ancestry (boolean)
+  Show file (boolean)
+  Show line (boolean)
+  Show code (boolean)
+Failures:
+  Show diagnostic (boolean)
+  Show ancestry (boolean)
+  Show file (boolean)
+  Show line (boolean)
+  Show code (boolean)
+Colors:
+  Use colors (boolean)
+
+--[no]-colors
+--[no]-diagnostics
+--show-backtrace on|off|<n>
+--show-ancestry on|off|errors|failures
+--show-file on|off|errors|failures
+--show-line on|off|errors|failures
+--show-code on|off|errors|failures
+
+--backtrace-size n
+
+
+$VERBOSE (boolean (tristate? nil/false/true?)
+$DEBUG (boolean)
