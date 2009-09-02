@@ -10,7 +10,7 @@ module BareTest
   module VERSION
     MAJOR = 0
     MINOR = 1
-    TINY  = 1
+    TINY  = 2
 
     def self.to_s
       "#{MAJOR}.#{MINOR||0}.#{TINY||0}"
