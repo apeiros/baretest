@@ -80,7 +80,7 @@ end
 if ARGV.empty? then
   setup_path ||= 'test/setup.rb'
   load(setup_path) if File.exist?(setup_path)
-  Dir.glob('test/{suite,unit,integration,system}/lib/**/*.rb') { |path|
+  Dir.glob('test/{suite,unit,integration,system}/**/*.rb') { |path|
     helper_path = path.sub(%r{^test/(suite|unit|integration|system)/lib/}, 'test/\1/helper/')
     puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if $VERBOSE
     load(helper_path) if File.exist?(helper_path)
