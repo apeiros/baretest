@@ -8,7 +8,7 @@
 
 
 
-Version = "0.3"
+Version = "0.3.1"
 
 
 
@@ -63,7 +63,7 @@ opts = OptionParser.new("", 24, '  ') do |opts|
   }
 
   opts.on("-v", "--version", "print the version and exit") {
-    puts "baretest version #{Version}"
+    puts "baretest executable version #{Version}, library version #{BareTest::VERSION}"
     exit
   }
 
