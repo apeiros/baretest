@@ -67,8 +67,6 @@ module BareTest
           stop_irb_mode(assertion)
       end
 
-      @count[:test]            += 1
-      @count[assertion.status] += 1
       rv
     end
 
@@ -76,7 +74,7 @@ module BareTest
       ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
-      puts "#{assertion.status.to_s.capitalize} in:  #{ancestry.join(' > ')}"
+      puts "#{assertion.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
       if assertion.file then
         code  = irb_code_reindented(assertion.file, assertion.line-1,20)
@@ -90,9 +88,9 @@ module BareTest
       ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
-      puts "#{assertion.status.to_s.capitalize} in:    #{ancestry.join(' > ')}"
+      puts "#{assertion.status.to_s.capitalize} in:    #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
-      puts "Exception:   #{assertion.exception} - #{assertion.exception.backtrace.first}"
+      puts "Exception:   #{assertion.exception} in file #{assertion.exception.backtrace.first}"
       if assertion.file && match = assertion.exception.backtrace.first.match(/^(.*):(\d+)$/) then
         file, line = match.captures
         file = File.expand_path(file)
@@ -124,9 +122,7 @@ module BareTest
       IRB.conf[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
       # /HAX
 
-      trap("SIGINT") do
-        irb.signal_handle
-      end
+      trap("SIGINT") do irb.signal_handle end
       catch(:IRB_EXIT) do irb.eval_input end
 
       irb_context.teardown
