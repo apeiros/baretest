@@ -6,7 +6,7 @@
 
 
 
-BareTest.define "BareTest" do
+BareTest.suite "BareTest" do
   suite "Run" do
     suite "::new" do
       assert "Should return an instance of Run" do

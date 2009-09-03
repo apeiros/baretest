@@ -6,7 +6,7 @@
 
 
 
-BareTest.define "BareTest" do
+BareTest.suite "BareTest" do
   suite "Assertion" do
     suite "::new" do
       assert "Should return a ::BareTest::Assertion instance" do

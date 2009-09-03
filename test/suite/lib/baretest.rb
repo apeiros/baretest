@@ -6,7 +6,7 @@
 
 
 
-BareTest.define "BareTest" do
+BareTest.suite "BareTest" do
   suite "::extender" do
     assert "Should return an Array" do
       kind_of(Array, ::BareTest.extender)
@@ -24,11 +24,11 @@ BareTest.define "BareTest" do
       kind_of(::BareTest::Suite, ::BareTest.toplevel_suite)
     end
 
-    assert "Should be used by BareTest::define" do
+    assert "Should be used by BareTest::suite" do
       test = ::BareTest.clone # avoid interfering with the current run
       test.init
       suites_before = test.toplevel_suite.suites.size
-      test.define "A new suite" do end
+      test.suite "A new suite" do end
       suites_after = test.toplevel_suite.suites.size
 
       equal(suites_before+1, suites_after)
@@ -48,19 +48,19 @@ BareTest.define "BareTest" do
       this = self # needed because touch is called in the block of another assertion, so otherwise it'd be local to that assertion
       test = ::BareTest.clone # avoid interfering with the current run
       test.init
-      test.define "A new suite" do assert do this.touch(:assertion_executed) end end
+      test.suite "A new suite" do assert do this.touch(:assertion_executed) end end
       test.run
 
       touched(:assertion_executed)
     end
   end
 
-  suite "::define" do
+  suite "::suite" do
     assert "Should add the contained suites and asserts to BareTest::toplevel_suite" do
       test = ::BareTest.clone # avoid interfering with the current run
       test.init
       suites_before = test.toplevel_suite.suites.size
-      test.define "A new suite" do end
+      test.suite "A new suite" do end
       suites_after = test.toplevel_suite.suites.size
 
       equal(suites_before+1, suites_after)
@@ -98,7 +98,7 @@ BareTest.define "BareTest" do
       this = self # needed because touch is called in the block of another assertion, so otherwise it'd be local to that assertion
       test = ::BareTest.clone # avoid interfering with the current run
       test.init
-      test.define "A new suite" do assert do this.touch(:assertion_executed) end end
+      test.suite "A new suite" do assert do this.touch(:assertion_executed) end end
       test.run
 
       touched(:assertion_executed)

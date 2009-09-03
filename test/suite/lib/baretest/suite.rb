@@ -6,7 +6,7 @@
 
 
 
-BareTest.define "BareTest" do
+BareTest.suite "BareTest" do
   suite "Assertion" do
     suite "::create" do
       assert "Should accept 0-3 arguments" do
