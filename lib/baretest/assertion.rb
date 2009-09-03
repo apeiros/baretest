@@ -120,7 +120,11 @@ module BareTest
     end
 
     def clean_copy(use_class=nil)
-      (use_class || self.class).new(@suite, @description, &@block)
+      copy = (use_class || self.class).new(@suite, @description, &@block)
+      copy.file  = file
+      copy.line  = line
+      copy.lines = lines
+      copy
     end
 
     # :nodoc:

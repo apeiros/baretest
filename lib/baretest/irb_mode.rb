@@ -6,6 +6,15 @@
 
 
 
+require 'stringio' # for silencing HAX
+
+
+
+module Kernel
+  alias lv! local_variables
+  private :lv!
+end
+
 module BareTest
   module IRBMode
     module AssertionExtensions
@@ -14,8 +23,32 @@ module BareTest
     class AssertionContext < ::BareTest::Assertion
       attr_accessor :original_assertion
 
+      def help
+        puts "Available methods:",
+             "s!          - the original assertions' status",
+             "e!          - prints the error message and full backtrace",
+             "em!         - prints the error message",
+             "bt!         - prints the full backtrace",
+             "lv!         - lists all available local variables",
+             "iv!         - lists all available instance variables",
+             "cv!         - lists all available class variables",
+             "gv!         - lists all available global variables",
+             "file        - the file this assertion was defined in",
+             "line        - the line number in the file where this assertion's definition starts",
+             "nesting     - a >-separated list of suite descriptions this assertion is nested in",
+             "description - this assertion's description",
+             "code        - the code of this assertion",
+             #"restart! - Restart this irb session, resetting everything",
+             "irb_help    - irb's original help"
+             "help        - this text you're reading right now"
+      end
+
       def to_s
         "Assertion"
+      end
+
+      def s!
+        @original_assertion.status
       end
 
       def e!
@@ -27,7 +60,7 @@ module BareTest
         if @original_assertion.exception then
           puts @original_assertion.exception
         else
-          puts "No exception occurred, therefore no error message available"
+          puts "No exception occurred, therefore no error message is available"
         end
       end
 
@@ -38,6 +71,26 @@ module BareTest
         else
           puts "No exception occurred, therefore no backtrace available"
         end
+      end
+
+      def iv!
+        instance_variables.sort
+      end
+
+      def cv!
+        self.class.class_variables.sort
+      end
+
+      def gv!
+        global_variables.sort
+      end
+
+      def nesting
+        suite.ancestors[0..-2].reverse.map { |suite| suite.description }.join(' > ')
+      end
+
+      def code
+        puts(@code || "Code could not be extracted")
       end
     end
 
@@ -80,6 +133,7 @@ module BareTest
         code  = irb_code_reindented(assertion.file, assertion.line-1,20)
         match = code.match(/\n^  [^ ]/)
         code[-(match.post_match.size-3)..-1] = ""
+        assertion.instance_variable_set(:@code, code)
         puts "Code:", code
       end
     end
@@ -95,7 +149,9 @@ module BareTest
         file, line = match.captures
         file = File.expand_path(file)
         if assertion.file == file then
-          puts "Code:", irb_code_reindented(file, (assertion.line-1)..(line.to_i))
+          code = irb_code_reindented(file, (assertion.line-1)..(line.to_i))
+          assertion.instance_variable_set(:@code, code)
+          puts "Code:", code
         end
       end
     end
@@ -113,10 +169,17 @@ module BareTest
     # Test::Assertion
     def irb_mode_for_assertion(assertion)
       irb_context = assertion.clean_copy(AssertionContext)
+      if assertion.instance_variable_defined?(:@code) then
+        code = assertion.instance_variable_get(:@code)
+        irb_context.instance_variable_set(:@code, code)
+        Readline::HISTORY.push(*code.split("\n")[1..-2])
+      end
       irb_context.original_assertion = assertion
       irb_context.setup
-      @irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context.send(:binding)))
-      irb  = @irb # for closure
+
+      $stdout = StringIO.new # HAX - silencing 'irb: warn: can't alias help from irb_help.' - find a better way
+      irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context.send(:binding)))
+      $stdout = STDOUT # /HAX
       # HAX - cargo cult, taken from irb.rb, not yet really understood.
       IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC] # loads the irbrc?
       IRB.conf[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
