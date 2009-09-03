@@ -42,10 +42,12 @@ module BareTest
   end
   init
 
-  # Adds the contained assertions and suites to the toplevel suite
-  def self.define(name=nil, opts={}, &block)
+  # If no description was given, it adds the contained assertions and suites to the toplevel suite,
+  # if a description was given, a suite with the given description is created, added to the toplevel
+  # suite, and all the contained assertions and suites are added to the created suite.
+  def self.suite(description=nil, opts={}, &block)
     if name then
-      @toplevel_suite.suite(name, opts, &block)
+      @toplevel_suite.suite(description, opts, &block)
     elsif opts && !opts.empty?
       raise ArgumentError, "Suites with options must have names"
     else
@@ -58,8 +60,8 @@ module BareTest
   # (aka $0) is equal to __FILE__ (means the current file is the file directly
   # executed by ruby, and not just required/loaded/evaled by another file),
   # subsequently also runs that suite.
-  def self.run_if_mainfile(name=nil, opts={}, &block)
-    define(name, opts, &block)
+  def self.run_if_mainfile(description=nil, opts={}, &block)
+    suite(description, opts, &block)
     if caller.first[/^[^:]*/] == $0 then # if is mainfile
       run(:format => ENV['FORMAT'], :interactive => ENV['INTERACTIVE'])
     end
