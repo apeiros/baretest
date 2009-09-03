@@ -1,8 +1,4 @@
-require 'test'
-
-
-
-Test.run_if_mainfile do
+BareTest.suite do
   # assertions and refutations can be grouped in suites. They will share
   # setup and teardown
   # they don't have to be in suites, though
