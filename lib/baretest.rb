@@ -35,7 +35,7 @@ module BareTest
   def self.init
     @format         = {}
     @extender       = []
-    @toplevel_suite = Suite.new
+    @toplevel_suite = BareTest::Suite.new
     @required_file  = ["", *$LOAD_PATH].map { |path|
       File.expand_path(File.join(path, __FILE__))
     }.find { |full| File.exist?(full) }
@@ -68,7 +68,7 @@ module BareTest
   end
 
   def self.run(opts=nil)
-    Run.new(@toplevel_suite, opts).run_all
+    BareTest::Run.new(@toplevel_suite, opts).run_all
   end
 end
 
