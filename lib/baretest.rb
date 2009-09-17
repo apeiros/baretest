@@ -10,6 +10,7 @@ require 'baretest/assertion'
 require 'baretest/irb_mode'
 require 'baretest/run'
 require 'baretest/suite'
+require 'baretest/utilities'
 require 'baretest/version'
 # See bottom for more requires
 
