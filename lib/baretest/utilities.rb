@@ -11,7 +11,7 @@ module Kernel
 
   # Returns the path to the file require would load, also see Kernel#expanded_require_path
   def require_path(name, extensions=nil)
-    extensions = (::Kernel::RequireExtensions || ).join(',')
+    extensions = (extensions || ::Kernel::RequireExtensions).join(',')
     Dir.glob("{#{$LOAD_PATH.join(',')}}/#{name}{#{extensions}}") { |path|
       return path
     }
@@ -24,7 +24,7 @@ module Kernel
     path && File.expand_path(path)
   end
 
-  # Will load the given file like load (but accepts files without .rb in the end like require),
+  # Will load the given file like load (but accepts files without .rb in the end, like require),
   # but evaluate it into the module given with the second arg (defaulting to Module.new)
   # It uses Kernel#expanded_require_path with '' and '.rb' as extensions to determine the file to
   # load uses the returned path for error messages (second argument to Module#modul_eval)
