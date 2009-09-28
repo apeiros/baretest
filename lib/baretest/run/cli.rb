@@ -73,8 +73,11 @@ module BareTest
           indent = '           '+'  '*@depth
           print(indent, rv.exception.message, "\n", indent, rv.exception.backtrace.first, "\n")
           print(indent, rv.exception.backtrace[1..-1].join("\n"+indent), "\n") if $VERBOSE
-        elsif rv.status == :failure && rv.failure_reason then
-          print('           ', '  '*@depth, rv.failure_reason, "\n")
+        elsif rv.status == :failure
+          if rv.failure_reason then
+            print('           ', '  '*@depth, rv.failure_reason, "\n")
+          end
+          print('           ', '  '*(@depth+2), "(#{rv.file}:#{rv.line})", "\n")
         end
         rv
       end
