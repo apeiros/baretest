@@ -118,7 +118,7 @@ module BareTest
     # See Assertion for more info.
     def assert(description=nil, &block)
       assertion = Assertion.new(self, description, &block)
-      if match = caller.first.match(/^(.*):(\d+)$/) then
+      if match = caller.first.match(/^(.*):(\d+)(?::.+)?$/) then
         file, line = match.captures
         file = File.expand_path(file)
         if File.exist?(file) then
