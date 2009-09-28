@@ -52,6 +52,15 @@ BareTest.suite "BareTest" do
       end
     end
 
+    suite "meta information" do
+      assert "An assertion should have a valid line number and file" do
+        suite = ::BareTest::Suite.new
+        assertion = suite.assert do true end
+
+        assertion[0].line && assertion[0].file
+      end
+    end
+
     suite "#exception" do
       assert "An assertion that doesn't raise should have nil as exception" do
         assertion_success = ::BareTest::Assertion.new(nil, "description") { true }
