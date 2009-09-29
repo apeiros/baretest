@@ -45,8 +45,8 @@ module BareTest
       def run_test(assertion)
         rv = super
         puts %{#{"\t"*@depth}<test>},
-             %{#{"\t"*@depth}\t<file>#{rv.file}</status>},
-             %{#{"\t"*@depth}\t<line>#{rv.line}</status>},
+             %{#{"\t"*@depth}\t<file>#{rv.file}</file>},
+             %{#{"\t"*@depth}\t<line>#{rv.line}</line>},
              %{#{"\t"*@depth}\t<status>#{rv.status}</status>},
              %{#{"\t"*@depth}\t<description>#{rv.description}</description>},
              %{#{"\t"*@depth}</test>}
