@@ -227,10 +227,18 @@ From examples/test.rb:
 
 
 
+Credits & Contributions
+-----------------------
+
+* Dominikh (fixes & added line number on failures)
+
+
+
 Known bugs
 ----------
 
 Currently none.
+
 
 
 Foot Notes
