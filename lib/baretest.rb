@@ -17,7 +17,7 @@ require 'baretest/version'
 
 
 module BareTest
-  class <<self
+  class << self
     # A hash of formatters (require-string => module) to be used with Test::Run.
     attr_reader :format
 
@@ -47,7 +47,7 @@ module BareTest
   # if a description was given, a suite with the given description is created, added to the toplevel
   # suite, and all the contained assertions and suites are added to the created suite.
   def self.suite(description=nil, opts={}, &block)
-    if name then
+    if description then
       @toplevel_suite.suite(description, opts, &block)
     elsif opts && !opts.empty?
       raise ArgumentError, "Suites with options must have names"
