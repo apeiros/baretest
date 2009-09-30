@@ -1,0 +1,13 @@
+# Find all method calls on core that we need to harden against being mocked out:
+found = []
+mods  = Object.constants.select { |c| Object.const_get(c).kind_of?(Module) }.sort.join('|')
+calls = /(?:#{mods})\.\w+/
+Dir.glob('**/*.rb') { |path|
+  found.concat(File.read(path).scan(calls))
+}
+found.uniq
+# => ["Dir.glob", "File.exist", "File.expand_path", "File.join", "File.read", "File.readlines",
+      "Hash.new", "IRB.conf", "IRB.setup", "Module.new", "StringIO.new", "Struct.new", "Time.now"]
+
+Hardening:
+see lib/baretest/safe.rb
