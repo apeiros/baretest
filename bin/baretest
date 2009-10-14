@@ -8,7 +8,7 @@
 
 
 
-Version = "0.3.1"
+Version = "0.3.2"
 
 
 
@@ -78,15 +78,11 @@ end
 
 # Load the setup file, all helper files and all test files
 if ARGV.empty? then
-  setup_path ||= 'test/setup.rb'
-  load(setup_path) if File.exist?(setup_path)
-  Dir.glob('test/{suite,unit,integration,system}/**/*.rb') { |path|
-    helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
-    puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if $VERBOSE
-    load(helper_path) if File.exist?(helper_path)
-    puts "Loading test file #{path}" if $VERBOSE
-    load(path)
-  }
+  BareTest.load_standard_test_files(
+    :verbose    => $VERBOSE,
+    :setup_path => setup_path,
+    :chdir      => '.'
+  )
 else
   load(setup_path) if setup_path && File.exist?(setup_path)
   ARGV.each { |path|
