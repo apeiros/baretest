@@ -32,6 +32,29 @@ module BareTest
     attr_reader :required_file
   end
 
+  # Loads all files in a test directory in order to load the suites and
+  # assertions. Used by the 'baretest' executable and the standard rake task.
+  # Options:
+  # * :verbose:    Will print information about the load process (default: false)
+  # * :setup_path: The path to the setup file, the first loaded file (default: 'test/setup.rb')
+  # * :chdir:      The directory this routine chdirs before loading, will jump back to the original
+  #                directory after loading (default: '.')
+  def self.load_standard_test_files(opts={})
+    verbose    = opts.delete(:verbose)
+    setup_path = opts.delete(:setup_path) || 'test/setup.rb'
+    chdir      = opts.delete(:chdir) || '.'
+    Dir.chdir(chdir) do
+      load(setup_path) if File.exist?(setup_path)
+      Dir.glob('test/{suite,unit,integration,system}/**/*.rb') { |path|
+        helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
+        puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
+        load(helper_path) if File.exist?(helper_path)
+        puts "Loading test file #{path}" if verbose
+        load(path)
+      }
+    end
+  end
+
   # For bootstrapped selftest
   def self.init
     @format         = {}
