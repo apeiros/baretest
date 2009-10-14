@@ -233,7 +233,10 @@ From examples/test.rb:
 Credits & Contributions
 -----------------------
 
-* Dominikh (fixes & added line number on failures)
+* dominikh
+  * showing me every dirty little bit I did wrong
+  * fixes
+  * added line number on failures
 
 
 
