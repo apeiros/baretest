@@ -18,6 +18,7 @@ module BoneSplitter
   def self.find_executable(*names)
     path = ENV["PATH"].split(File::PATH_SEPARATOR)
     names.each { |name|
+      next unless name
       found = path.map { |path| File.join(path, name) }.find { |e| File.executable?(e) }
       return found if found
     }
@@ -30,7 +31,7 @@ module BoneSplitter
     :sudo => find_executable('sudo'),
     :rcov => find_executable('rcov', 'rcov.bat'),
     :rdoc => find_executable('rdoc', 'rdoc.bat'),
-    :gem  => find_executable('gem', 'gem.bat', 'gem1.8'),
+    :gem  => find_executable(ENV["GEM"], 'gem', 'gem.bat', 'gem1.8'),
     :git  => find_executable('git')
   )
 

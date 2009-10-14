@@ -1,8 +1,9 @@
+# encoding: utf-8
+
 #--
 # Copyright 2007-2009 by Stefan Rusterholz.
 # All rights reserved.
 # See LICENSE.txt for permissions.
-# encoding: utf-8
 #++
 
 

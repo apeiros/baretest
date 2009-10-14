@@ -45,6 +45,32 @@ module BareTest
         ::BareTest.extender << self
       end
 
+      def throws(symbol)
+        begin
+          passed = false
+          catch(sym) {
+            yield
+            passed = true
+            return false
+          }
+          passed = true
+          return true
+        rescue NameError => e
+          return false if e.message =~ 'uncaught throw'
+          raise
+        rescue Exception
+          passed = true
+          raise
+        ensure
+          raise ThrewSomethingElse unless passed
+        end
+      rescue ThrewSomethingElse => e
+        return false
+      end
+
+      def throws_nothing
+      end
+
       # Will raise a Failure if the given block doesn't raise or raises a different
       # exception than the one provided
       # You can optionally give an options :with_message, which is tested with === against

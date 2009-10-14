@@ -58,12 +58,15 @@ Install
 1. run `gem install baretest`, alternatively run `sudo gem install baretest`
 2. There is no 2.
 
-An inofficial way to install it (may not work yet):
+To get baretest edge, use:
 
 1. Download from github and unpack (or clone)
 2. Change into the baretest directory: `cd the/baretest/directory`
-3. Run the installation task: `rake install:lib`
+3. Run the installation task: `rake gem:install` (alternatively `rake install:lib`)
 
+If you have multiple ruby versions installed parallely, this might pick the wrong gem
+executable to install the gem. You can set the GEM env variable to ensure it uses the
+right one: `rake gem:install GEM=gem1.9`
 
 
 Executable
