@@ -6,5 +6,4 @@
 /baretest.bbprojectd
 
 # We don't care about build products
-/MANIFEST.txt
 /pkg/*
