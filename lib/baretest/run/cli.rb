@@ -67,30 +67,19 @@ module BareTest
       end
 
       def run_test(assertion)
-        rv = super # run the assertion
-        indent = '           '+'  '*@depth
-        message = nil
-        additional_lines = []
+        rv               = super # run the assertion
+        indent           = '           '+'  '*@depth
+        message          = []
+
         printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.description)
         if rv.status == :error then
-          message = rv.exception.message
-
-          additional_lines << [indent, rv.exception.backtrace.first]
-          additional_lines << [indent, rv.exception.backtrace[1..-1].join("\n"+indent)] if $VERBOSE
+          message  = rv.exception.message.split("\n")
+          message.concat($VERBOSE ? rv.exception.backtrace : rv.exception.backtrace.first(1))
         elsif rv.status == :failure
-          message = rv.failure_reason
-          additional_lines << [indent + "  ", "(#{rv.file}:#{rv.line})"]
+          message  = rv.failure_reason.split("\n")
+          message << "#{rv.file}:#{rv.line}"
         end
-
-        if message or !additional_lines.empty?
-          message.split("\n").each do |line|
-            print(indent, line, "\n")
-          end
-
-          additional_lines.each do |line|
-            print(*(line + ["\n"]))
-          end
-        end
+        message.each do |line| print(indent, line, "\n") end
 
         rv
       end
