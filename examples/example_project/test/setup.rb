@@ -35,7 +35,7 @@ class DemoMock
       when :fail
         recorder[:failures] << @message
       when :raise
-        raise Error, @message
+        raise @message
     end
   rescue Error => e
     recorder[:exceptions] << e
