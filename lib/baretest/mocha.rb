@@ -1,3 +1,7 @@
+# Created by dominikh
+
+# This file provides integration with the "mocha" mocking framework.
+
 require 'mocha'
 
 BareTest.extend Mocha::API
