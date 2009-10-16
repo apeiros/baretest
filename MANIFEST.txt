@@ -10,7 +10,6 @@ lib/baretest/assertion/support.rb
 lib/baretest/irb_mode.rb
 lib/baretest/layout.rb
 lib/baretest/mocha.rb
-lib/baretest/safe.rb
 lib/baretest/run.rb
 lib/baretest/run/cli.rb
 lib/baretest/run/errors.rb
