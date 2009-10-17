@@ -74,10 +74,10 @@ module BareTest
 
         printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.description)
         if rv.status == :error then
-          message = rv.exception.message.split("\n")
+          message = (rv.exception.message || "no error message given").split("\n")
           deeper  = $VERBOSE ? rv.exception.backtrace : rv.exception.backtrace.first(1)
         elsif rv.status == :failure
-          message = rv.failure_reason.split("\n")
+          message = (rv.failure_reason || "no failure reason given").split("\n")
           deeper  = ["#{rv.file}:#{rv.line}"]
         end
         message.each do |line| print(indent, line, "\n") end
