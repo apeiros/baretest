@@ -105,6 +105,16 @@ BareTest.suite "BareTest" do
         raises_nothing do assertion.setup end &&
         equal([:block1, :block2], executed)
       end
+
+      assert "Should fail if setup raises an exception" do
+        block     = proc { raise "Some error" }
+        suite     = ::BareTest::Suite.new("block") do setup(&block) end
+        assertion = ::BareTest::Assertion.new(suite, "assertion") do true end
+
+        assertion.execute
+
+        assertion.status == :error
+      end
     end
 
     suite "#teardown" do
@@ -118,6 +128,16 @@ BareTest.suite "BareTest" do
 
         raises_nothing do assertion.teardown end &&
         equal([:block2, :block1], executed)
+      end
+
+      assert "Should fail if teardown raises an exception" do
+        block     = proc { raise "Some error" }
+        suite     = ::BareTest::Suite.new("block") do teardown(&block) end
+        assertion = ::BareTest::Assertion.new(suite, "assertion") do true end
+
+        assertion.execute
+
+        assertion.status == :error
       end
     end
 

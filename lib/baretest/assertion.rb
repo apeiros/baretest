@@ -28,6 +28,7 @@ module BareTest
   # * Kernel#equal_unordered(a,b)
   # * Enumerable#equal_unordered(other)
   class Assertion
+    PassthroughExceptions = [NoMemoryError, SignalException, Interrupt, SystemExit]
 
     # An assertion has 5 possible states:
     # :success
@@ -100,19 +101,39 @@ module BareTest
     def execute
       @exception = nil
       if @block then
-        setup
-        # run the assertion
         begin
-          @status = instance_eval(&@block) ? :success : :failure
-        rescue ::BareTest::Assertion::Failure => failure
-          @status         = :failure
-          @failure_reason = failure
-        rescue => exception
-          @failure_reason = "An error occurred"
+          setup
+        rescue *PassthroughExceptions
+          raise # pass through exceptions must be passed through
+        rescue Exception => exception
+          @failure_reason = "An error occurred during setup"
+          @exception      = exception
+          @status         = :error
+        else
+          # run the assertion
+          begin
+            @status         = instance_eval(&@block) ? :success : :failure
+            @failure_reason = "Assertion failed" if @status == :failure
+          rescue *PassthroughExceptions
+            raise # pass through exceptions must be passed through
+          rescue ::BareTest::Assertion::Failure => failure
+            @status         = :failure
+            @failure_reason = failure
+          rescue Exception => exception
+            @failure_reason = "An error occurred during execution"
+            @exception      = exception
+            @status         = :error
+          end
+        end
+        begin
+          teardown
+        rescue *PassthroughExceptions
+          raise # pass through exceptions must be passed through
+        rescue Exception => exception
+          @failure_reason = "An error occurred during setup"
           @exception      = exception
           @status         = :error
         end
-        teardown
       else
         @status = :pending
       end
