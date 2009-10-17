@@ -7,7 +7,7 @@ Summary
 -------
 
 A minimal Testframework.
-Three methods to use it, Twenty to master it, about hundred lines of code[^foot].
+Two methods to use it, Twenty to master it, about two-hundred lines of code[^foot].
 Bare Test, try it and you'll love it.
 
 
