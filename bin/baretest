@@ -57,6 +57,7 @@ opts = OptionParser.new("", 24, '  ') do |opts|
       END_OF_SETUP
     }
 
+    puts "Creating all directories and files needed in #{File.expand_path('.')}"
     core.each do |dir|
       if File.exist?(dir) then
         puts "Directory #{dir} exists already -- skipping"
