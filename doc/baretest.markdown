@@ -1,0 +1,99 @@
+The baretest executable
+=======================
+
+
+
+1. Contents
+-----------
+
+  2. Usage
+  3. Options
+  4. Writing a formatter
+
+
+
+2. Usage
+--------
+
+`baretest [options] [glob, ...]"`
+
+Either you provide a `glob` (or a directory, which is equivalent to DIRECTORY/\*\*/\*.rb),
+then baretest will load all the files it matches and invoke BareTest.run in the end. Or you
+use the standard way and let baretest use convention. For that you should run baretest within
+the project, preferably the toplevel.
+Baretest will then search the directory tree upwards until it finds 'test/setup.rb'. It
+will then use the default layout of a project, which should look roughly like this:
+
+    |-- bin
+    |   `-- ...
+    |-- doc
+    |   `-- ...
+    |-- examples
+    |   `-- ...
+    |-- lib
+    |   `-- ...
+    |-- rake
+    |   `-- ...
+    `-- test
+        |-- external
+        |   `-- ...
+        |-- helper
+        |   `-- ...
+        |-- setup.rb
+        `-- suite
+            |-- bin
+            |   `-- ...
+            `-- lib
+                `-- ...
+
+The important part are the directories under 'test'. The directory 'test/suite' should mirror your
+project, but instead of the real files contain the files that test their counterparts. For example,
+the file 'YOURPROJECT/lib/yourproject.rb' has its tests in
+'YOURPROJECT/test/suite/lib/yourproject.rb'.
+Additionally, baretest will in that mode look for a file
+'YOURPROJECT/test/helper/suite/lib/yourproject.rb' and load it if found.
+
+
+
+3. Options
+----------
+
+Getting information about baretest:
+-F --formats
+: Lists the available output formatters
+
+-v
+: Prints the baretest executables and the libs version number
+
+Running tests:
+-i --interactive
+: drop into IRB on error or failure
+  This flag will make baretest stop execution when an error or a failure is hit. It then
+  prints out the status, the assertions description, its code and then drops you into an
+  irb-shell in the context of the failed assertion, with setup already executed.
+  You can then try out what caused the assertion to fail.
+  Be aware that printing the code relies on your indentation.
+
+-d --debug
+: Set debugging flags. This sets $DEBUG to true, same as rubys -d switch.
+
+-f --format FORMAT
+: Use the formatter specified in FORMAT, defaults to 'cli'
+
+-s --setup FILE
+: specify setup file
+  This option allows you to tell baretest where it finds the setup.rb file, which is normally
+  found in test/setup.rb.
+
+-w --warn
+: Turn warnings on for your script. This sets $VERBOSE to true, same as rubys -w switch.
+  Additionally, some formatters will provide more information (e.g. full backtraces on errors)
+  when $VERBOSE is set.
+
+
+
+4. Writing a formatter
+----------------------
+
+This section will follow. For now, just take a look at the existing formatters.
+They are pretty simple.
