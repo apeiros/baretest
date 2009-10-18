@@ -12,6 +12,13 @@ Bare Test, try it and you'll love it.
 
 
 
+Also See
+--------
+
+* Executable Docs: baretest.markdown
+
+
+
 Description
 -----------
 
@@ -92,6 +99,7 @@ Planned Features
 * Word-wrapping for CLI runner
 * Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
 * Passing on flags/options for formatters
+* baretest --init [LAYOUT], to create the necessary directory structure
 * Alternative CLI runner with status implicit via colored/bg-colored descriptions
 * Alternative CLI runner which prints the name of the test prior the label and rewrites
   the line when the test has executed to add status & coloring.
