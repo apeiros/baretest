@@ -3,16 +3,7 @@ The baretest executable
 
 
 
-1. Contents
------------
-
-  2. Usage
-  3. Options
-  4. Writing a formatter
-
-
-
-2. Usage
+1. Usage
 --------
 
 `baretest [options] [glob, ...]"`
@@ -55,44 +46,46 @@ Additionally, baretest will in that mode look for a file
 
 
 
-3. Options
+2. Options
 ----------
 
-Getting information about baretest:
--F --formats
-: Lists the available output formatters
+### Getting information about baretest:
 
--v
-: Prints the baretest executables and the libs version number
+* -F --formats:
+  Lists the available output formatters
 
-Running tests:
--i --interactive
-: drop into IRB on error or failure
+* -v:
+  Prints the baretest executables and the libs version number
+
+### Running tests:
+
+* -i --interactive:
+  drop into IRB on error or failure
   This flag will make baretest stop execution when an error or a failure is hit. It then
   prints out the status, the assertions description, its code and then drops you into an
   irb-shell in the context of the failed assertion, with setup already executed.
   You can then try out what caused the assertion to fail.
   Be aware that printing the code relies on your indentation.
 
--d --debug
-: Set debugging flags. This sets $DEBUG to true, same as rubys -d switch.
+* -d --debug:
+  Set debugging flags. This sets $DEBUG to true, same as rubys -d switch.
 
--f --format FORMAT
-: Use the formatter specified in FORMAT, defaults to 'cli'
+* -f --format FORMAT:
+  Use the formatter specified in FORMAT, defaults to 'cli'
 
--s --setup FILE
-: specify setup file
+* -s --setup FILE:
+  specify setup file
   This option allows you to tell baretest where it finds the setup.rb file, which is normally
   found in test/setup.rb.
 
--w --warn
-: Turn warnings on for your script. This sets $VERBOSE to true, same as rubys -w switch.
+* -w --warn:
+  Turn warnings on for your script. This sets $VERBOSE to true, same as rubys -w switch.
   Additionally, some formatters will provide more information (e.g. full backtraces on errors)
   when $VERBOSE is set.
 
 
 
-4. Writing a formatter
+3. Writing a formatter
 ----------------------
 
 This section will follow. For now, just take a look at the existing formatters.
