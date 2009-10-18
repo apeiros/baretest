@@ -15,7 +15,10 @@ Bare Test, try it and you'll love it.
 Also See
 --------
 
-* Executable Docs: baretest.markdown
+* Executable Docs: doc/baretest.markdown
+* #ruby-lang on irc.freenode.org, I'm there under the nick apeiros. Beware, I'm
+  idling there 24/7, so my nick being in there doesn't mean I'm in front of the
+  computer.
 
 
 
@@ -100,6 +103,8 @@ Planned Features
 * Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
 * Passing on flags/options for formatters
 * baretest --init [LAYOUT], to create the necessary directory structure
+* Detect whether baretest is run from an interactive terminal or not and adjust
+  defaults (no-color e.g.)
 * Alternative CLI runner with status implicit via colored/bg-colored descriptions
 * Alternative CLI runner which prints the name of the test prior the label and rewrites
   the line when the test has executed to add status & coloring.
