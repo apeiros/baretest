@@ -33,7 +33,7 @@ setup_path  = nil
 opts = OptionParser.new("", 24, '  ') do |opts|
   opts.banner = "Usage: baretest [options] [glob, ...]"
 
-  opts.separator "Glob defaults to 'test/**/*.rb'"
+  opts.separator "Glob defaults to 'test/{suite,unit,integration,system}/**/*.rb'"
   opts.separator "Providing a directory as glob is equivalent to dir/**/*.rb\n"
   opts.separator "Options:"
 
