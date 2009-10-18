@@ -90,26 +90,32 @@ module BareTest
     # Run all setups in the order of their nesting (outermost first, innermost last)
     def setup
       @suite.ancestry_setup.each { |setup| instance_eval(&setup) } if @suite
+      true
+    rescue *PassthroughExceptions
+      raise # pass through exceptions must be passed through
+    rescue Exception => exception
+      @failure_reason = "An error occurred during setup"
+      @exception      = exception
+      @status         = :error
+      false
     end
 
     # Run all teardowns in the order of their nesting (innermost first, outermost last)
     def teardown
       @suite.ancestry_teardown.each { |setup| instance_eval(&setup) } if @suite
+    rescue *PassthroughExceptions
+      raise # pass through exceptions must be passed through
+    rescue Exception => exception
+      @failure_reason = "An error occurred during setup"
+      @exception      = exception
+      @status         = :error
     end
 
     # Runs the assertion and sets the status and exception
     def execute
       @exception = nil
       if @block then
-        begin
-          setup
-        rescue *PassthroughExceptions
-          raise # pass through exceptions must be passed through
-        rescue Exception => exception
-          @failure_reason = "An error occurred during setup"
-          @exception      = exception
-          @status         = :error
-        else
+        if setup then
           # run the assertion
           begin
             @status         = instance_eval(&@block) ? :success : :failure
@@ -125,15 +131,7 @@ module BareTest
             @status         = :error
           end
         end
-        begin
-          teardown
-        rescue *PassthroughExceptions
-          raise # pass through exceptions must be passed through
-        rescue Exception => exception
-          @failure_reason = "An error occurred during setup"
-          @exception      = exception
-          @status         = :error
-        end
+        teardown
       else
         @status = :pending
       end
