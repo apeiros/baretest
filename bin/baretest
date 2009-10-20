@@ -154,4 +154,8 @@ end
 
 # Run the tests
 puts if $VERBOSE
-BareTest.run(:format => format, :interactive => interactive)
+if BareTest.run(:format => format, :interactive => interactive).global_status == :success then
+  exit 0
+else
+  exit 1
+end

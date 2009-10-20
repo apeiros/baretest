@@ -97,8 +97,12 @@ module BareTest
 
   # Runs the toplevel suite (which usually contains all suites and assertions
   # defined in all loaded test files).
+  #
+  # Returns the Run instance.
   def self.run(opts=nil)
-    BareTest::Run.new(@toplevel_suite, opts).run_all
+    runner = BareTest::Run.new(@toplevel_suite, opts)
+    runner.run_all
+    runner
   end
 end
 
