@@ -16,9 +16,9 @@ Also See
 --------
 
 * Executable Docs: doc/baretest.markdown
-* #ruby-lang on irc.freenode.org, I'm there under the nick apeiros. Beware, I'm
-  idling there 24/7, so my nick being in there doesn't mean I'm in front of the
-  computer.
+* In the channel #ruby-lang on irc.freenode.org, I'm there under the nick apeiros.
+  Beware, I'm idling there 24/7, so my nick being in there doesn't mean I'm in front
+  of the computer.
 
 
 
@@ -79,6 +79,7 @@ executable to install the gem. You can set the GEM env variable to ensure it use
 right one: `rake gem:install GEM=gem1.9`
 
 
+
 Executable
 ----------
 
@@ -102,7 +103,7 @@ Planned Features
 * Word-wrapping for CLI runner
 * Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
 * Passing on flags/options for formatters
-* baretest --init [LAYOUT], to create the necessary directory structure
+* baretest --init \[LAYOUT], to create the necessary directory structure
 * Detect whether baretest is run from an interactive terminal or not and adjust
   defaults (no-color e.g.)
 * Alternative CLI runner with status implicit via colored/bg-colored descriptions
