@@ -7,7 +7,9 @@
 
 
 module BareTest
+  # :stopdoc:
   Layout = Struct.new(
     :foo
   )
+  # :startdoc:
 end

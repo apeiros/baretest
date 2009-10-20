@@ -16,13 +16,21 @@ module Kernel
 end
 
 module BareTest
-  module IRBMode
-    module AssertionExtensions
-    end
 
+  # For internal use only.
+  # This module extends BareTest::Run if --interactive is used
+  # See BareTest::IRBMode::AssertionContext for some methods IRBMode adds to Assertion for
+  # use within the irb session.
+  module IRBMode # :nodoc:
+
+    # The class used to recreate the failed/errored assertion's context.
+    # Adds several methods over plain Assertion.
     class AssertionContext < ::BareTest::Assertion
+
+      # The original assertion (the one that failed or errored)
       attr_accessor :original_assertion
 
+      # Prints a list of available helper methods
       def help
         puts "Available methods:",
              "s!          - the original assertions' status",
@@ -43,19 +51,22 @@ module BareTest
              "help        - this text you're reading right now"
       end
 
-      def to_s
+      def to_s # :nodoc:
         "Assertion"
       end
 
+      # Returns the original assertion's status
       def s!
         @original_assertion.status
       end
 
+      # Prints the original assertion's error message and backtrace
       def e!
         em!
         bt!(caller.size+3)
       end
 
+      # Prints the original assertion's error message
       def em!
         if @original_assertion.exception then
           puts @original_assertion.exception
@@ -64,6 +75,7 @@ module BareTest
         end
       end
 
+      # Prints the original assertion's backtrace
       def bt!(size=nil)
         if @original_assertion.exception then
           size ||= caller.size+3
@@ -73,28 +85,35 @@ module BareTest
         end
       end
 
+      # Returns an array of all instance variable names
       def iv!
         instance_variables.sort
       end
 
+      # Returns an array of all class variable names
       def cv!
         self.class.class_variables.sort
       end
 
+      # Returns an array of all global variable names
       def gv!
         global_variables.sort
       end
 
+      # Returns a string of the original assertion's nesting within suites
       def nesting
         suite.ancestors[0..-2].reverse.map { |suite| suite.description }.join(' > ')
       end
 
+      # Prints the code of the assertion
+      # Be aware that this relies on your code being properly indented.
       def code
         puts(@code || "Code could not be extracted")
       end
     end
 
-    def self.extended(by)
+    # Install the init handler
+    def self.extended(by) # :nodoc:
       by.init do
         require 'irb'
         require 'pp'
@@ -123,7 +142,8 @@ module BareTest
       rv
     end
 
-    def start_irb_failure_mode(assertion)
+    # Invoked when we have to drop into irb mode due to a failure
+    def start_irb_failure_mode(assertion) # :nodoc:
       ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
@@ -138,7 +158,8 @@ module BareTest
       end
     end
 
-    def start_irb_error_mode(assertion)
+    # Invoked when we have to drop into irb mode due to an error
+    def start_irb_error_mode(assertion) # :nodoc:
       ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
@@ -156,7 +177,8 @@ module BareTest
       end
     end
 
-    def irb_code_reindented(file, from, to=nil)
+    # Nicely reformats the assertion's code
+    def irb_code_reindented(file, from, to=nil) # :nodoc:
       lines  = File.readlines(file)
       string = (to ? lines[from, to] : lines[from]).join("")
       string.gsub!(/^\t+/) { |m| "  "*m.size }
@@ -165,9 +187,11 @@ module BareTest
       string
     end
 
-    # This method is highlevel hax, try to add necessary API to
-    # Test::Assertion
-    def irb_mode_for_assertion(assertion)
+    # This method is highlevel hax, try to add necessary API to Test::Assertion
+    # Drop into an irb shell in the context of the assertion passed as an argument.
+    # Uses Assertion#clean_copy(AssertionContext) to create the context.
+    # Adds the code into irb's history.
+    def irb_mode_for_assertion(assertion) # :nodoc:
       irb_context = assertion.clean_copy(AssertionContext)
       if assertion.instance_variable_defined?(:@code) then
         code = assertion.instance_variable_get(:@code)
@@ -191,7 +215,8 @@ module BareTest
       irb_context.teardown
     end
 
-    def stop_irb_mode(assertion)
+    # Invoked when we leave the irb session
+    def stop_irb_mode(assertion) # :nodoc:
       puts
       super
     rescue NoMethodError # HAX, not happy about that. necessary due to order of extend

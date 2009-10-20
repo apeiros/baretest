@@ -34,6 +34,13 @@ module BareTest
     # parent suite, then that suite's parent and so on
     attr_reader :ancestors
 
+    # Create a new suite.
+    # The arguments 'description', 'parent' and '&block' are the same as on Suite::new,
+    # 'opts' is an additional options hash.
+    # Keys the options hash accepts:
+    # :requires:: A string or array of strings with requires that have to be done in order to run
+    #             this suite. If a require fails, the suite is created as a Skipped::Suite instead.
+    #
     def self.create(description=nil, parent=nil, opts={}, &block)
       Array(opts[:requires]).each { |file| require file } if opts[:requires]
     rescue LoadError
@@ -44,6 +51,13 @@ module BareTest
       (block ? self : Skipped::Suite).new(description, parent, &block)
     end
 
+    # Create a new suite.
+    # Arguments:
+    # description:: A string with a human readable description of this suite, preferably
+    #               less than 60 characters and without newlines
+    # parent::      The suite that nests this suite. Ancestry plays a role in execution of setup
+    #               and teardown blocks (all ancestors setups and teardowns are executed too).
+    # &block::      The given block is instance evaled.
     def initialize(description=nil, parent=nil, &block)
       @description = description
       @parent      = parent
@@ -60,9 +74,8 @@ module BareTest
     # Nested suites inherit setup & teardown methods.
     # Also if an outer suite is skipped, all inner suites are skipped too.
     # Valid values for opts:
-    # requires
-    # :   A list of files to require, if one of the requires fails, the suite
-    #     will be skipped. Accepts a String or an Array
+    # :requires:: A list of files to require, if one of the requires fails,
+    #               the suite will be skipped. Accepts a String or an Array
     def suite(description=nil, opts={}, &block)
       suite = self.class.create(description, self, opts, &block)
       if append_to = @suites.assoc(description) then
@@ -73,6 +86,8 @@ module BareTest
       suite
     end
 
+    # Performs a recursive merge with the given suite.
+    # Used to merge suites with the same description.
     def update(with_suite)
       if ::BareTest::Skipped::Suite === with_suite then
         @skipped.concat(with_suite.skipped)
@@ -129,13 +144,11 @@ module BareTest
       @assertions << assertion
     end
 
-    # :nodoc:
-    def to_s
+    def to_s #:nodoc:
       sprintf "%s %s", self.class, @description
     end
 
-    # :nodoc:
-    def inspect
+    def inspect #:nodoc:
       sprintf "#<%s:%08x %p>", self.class, object_id>>1, @description
     end
   end
@@ -143,4 +156,4 @@ end
 
 
 
-require 'baretest/skipped/suite'
+require 'baretest/skipped/suite' # TODO: determine why this require is on the bottom and document it.

@@ -15,26 +15,40 @@ rescue LoadError; end # no thread support in this ruby
 
 module BareTest
   @touch = {}
+
   # We don't want to litter in Assertion
   # Touches are associated with 
-  def self.touch(assertion, thing=nil)
+  # Used by BareTest::Assertion::Support#touch
+  def self.touch(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)
     @touch[assertion][thing] += 1
   end
 
-  def self.touched(assertion, thing=nil)
+  # Used by BareTest::Assertion::Support#touched
+  def self.touched(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)
     @touch[assertion][thing]
   end
 
-  def self.clean_touches(assertion)
+  # Used by BareTest::Assertion::Support
+  def self.clean_touches(assertion) # :nodoc:
     @touch.delete(assertion)
   end
 
   class Assertion
+
+    # BareTest::Assertion::Support is per default included into BareTest::Assertion.
+    # It provides several methods to make it easier to write assertions.
+    #
     module Support
+
+      # Creates global setup and teardown callbacks that are needed by some of
+      # BareTest::Assertion::Support's methods.
+      #
       module SetupAndTeardown
-        def self.extended(run_obj)
+
+        # Install the setup and teardown callbacks.
+        def self.extended(run_obj) # :nodoc:
           run_obj.init do
             suite.teardown do
               ::BareTest.clean_touches(self) # instance evaled, self is the assertion
@@ -45,7 +59,8 @@ module BareTest
         ::BareTest.extender << self
       end
 
-      def throws(symbol)
+      # FIXME: incomplete and untested
+      def throws(symbol) # :nodoc:
         begin
           passed = false
           catch(sym) {
@@ -68,7 +83,8 @@ module BareTest
         return false
       end
 
-      def throws_nothing
+      # FIXME: incomplete and untested
+      def throws_nothing # :nodoc:
       end
 
       # Will raise a Failure if the given block doesn't raise or raises a different
@@ -126,6 +142,8 @@ module BareTest
         ::BareTest.touch(self, thing)
       end
 
+      # Used to verify that something was touched. You can also verify that something was touched
+      # a specific amount of times.
       # See #touch
       def touched(thing=nil, times=nil)
         touched_times = ::BareTest.touched(self, thing)
@@ -147,6 +165,7 @@ module BareTest
         true
       end
 
+      # Used to verify that something was not touched.
       # See #touch
       def not_touched(thing=nil)
         touched(thing, 0)
@@ -254,6 +273,7 @@ module BareTest
         true
       end
 
+      # A method to make raising failures that only optionally have a message easier.
       def failure_with_optional_message(with_message, without_message, message, *args)
         if message then
           failure(with_message, message, *args)
@@ -269,6 +289,18 @@ module BareTest
       end
 
     private
+      # extract arg allows to use named or positional args
+      # Example:
+      #   extract_args([1,2,3], :foo, :bar, :baz) # => [1,2,3]
+      #   extract_args({:foo => 1,:bar => 2, :baz => 3}, :foo, :bar, :baz) # => [1,2,3]
+      #
+      # Usage:
+      #   def foo(*args)
+      #     x,y,z = extract_args(args, :x, :y, :z)
+      #   end
+      #   foo(1,2,3)
+      #   foo(:x => 1, :y => 2, :z => 3) # equivalent to the one above
+      #
       def extract_args(args, *named)
         if args.size == 1 && Hash === args.first then
           args.first.values_at(*named)
@@ -283,6 +315,14 @@ module BareTest
 end # BareTest
 
 module Enumerable
+
+  # Part of BareTest - require 'baretest/assertion/support'
+  #
+  # Returns true if all elements of self occur the same amount of times in other, regardless
+  # of order. Uses +eql?+ to determine equality.
+  #
+  # Example:
+  #   [2,1,3,2].equal_unordered?([3,2,2,1]) # => true
   def equal_unordered?(other)
     count = Hash.new(0)
     other.each { |element| count[element] += 1 }

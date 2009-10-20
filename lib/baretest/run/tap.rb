@@ -8,7 +8,14 @@
 
 module BareTest
   class Run
-    module TAP
+
+    # TAP runner is invoked with `-f tap` or `--format tap`.
+    # TAP (Test Anything Protocol) output is intended as a universal, machine readable
+    # output format of test frameworks. The are various tools that can further process
+    # that information and leverage it in various ways of automation.
+    # This runner currently implements the TA Protocol in version 13.
+    #
+    module TAP # :nodoc:
       def run_all
         puts "TAP version 13"
         count = proc { |acc,csuite|

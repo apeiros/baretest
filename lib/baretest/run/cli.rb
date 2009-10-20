@@ -8,7 +8,13 @@
 
 module BareTest
   class Run
-    module CLI
+
+    # CLI runner is invoked with `-f cli` or `--format cli`.
+    # It is intended for use with an interactive shell, to provide a comfortable, human
+    # readable output.
+    # It prints colored output (requires ANSI colors compatible terminal).
+    #
+    module CLI # :nodoc:
       Formats = {
         :pending => "\e[43m%9s\e[0m  %s%s\n",
         :skipped => "\e[43m%9s\e[0m  %s%s\n",

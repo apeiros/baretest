@@ -8,7 +8,12 @@
 
 module BareTest
   class Run
-    module Minimal
+
+    # Minimal runner is invoked with `-f minimal` or `--format minimal`.
+    # This runner is mainly written as an example. It will provide the final
+    # statistics (number of tests, successes, etc.).
+    #
+    module Minimal # :nodoc:
       def run_all(*args)
         start  = Time.now
         super              # run all suites

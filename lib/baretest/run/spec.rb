@@ -8,7 +8,13 @@
 
 module BareTest
   class Run
-    module Spec
+
+    # Spec runner is invoked with `-f spec` or `--format spec`.
+    # This runner will not actually run the tests. It only extracts the descriptions and
+    # prints them. Handy if you just want an overview over what a library is supposed to do
+    # and be capable of.
+    #
+    module Spec # :nodoc:
       def run_all
         @depth = 0
         super

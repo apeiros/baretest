@@ -29,7 +29,8 @@ module BareTest
     attr_reader :toplevel_suite
 
     # The full path to this file
-    attr_reader :required_file
+    # Needed to test baretest itself using baretest
+    attr_reader :required_file # :nodoc:
   end
 
   # Loads all files in a test directory in order to load the suites and
@@ -55,8 +56,9 @@ module BareTest
     end
   end
 
-  # For bootstrapped selftest
-  def self.init
+  # Initializes BareTest, is automatically called
+  # Needed for bootstrapped selftest
+  def self.init # :nodoc:
     @format         = {}
     @extender       = []
     @toplevel_suite = BareTest::Suite.new
@@ -81,7 +83,7 @@ module BareTest
 
   # Creates a Test::Run instance, adds the assertions and suites defined in its
   # own block to that Test::Run instance's toplevel suite and if $PROGRAM_NAME
-  # (aka $0) is equal to __FILE__ (means the current file is the file directly
+  # (aka $0) is equal to \_\_FILE__ (means the current file is the file directly
   # executed by ruby, and not just required/loaded/evaled by another file),
   # subsequently also runs that suite.
   def self.run_if_mainfile(description=nil, opts={}, &block)
@@ -91,6 +93,8 @@ module BareTest
     end
   end
 
+  # Runs the toplevel suite (which usually contains all suites and assertions
+  # defined in all loaded test files).
   def self.run(opts=nil)
     BareTest::Run.new(@toplevel_suite, opts).run_all
   end

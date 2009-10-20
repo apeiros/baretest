@@ -20,7 +20,7 @@ module BareTest
   #
   # An assertion has 5 possible states, see Assertion#status for a list of them.
   #
-  # There are various helper methods in lib/test/support.rb which help you
+  # There are various helper methods in BareTest::Assertion::Support which help you
   # defining nicer diagnostics or just easier ways to test common scenarios.
   # The following are test helpers:
   # * Kernel#raises(exception_class=StandardError)
@@ -28,6 +28,9 @@ module BareTest
   # * Kernel#equal_unordered(a,b)
   # * Enumerable#equal_unordered(other)
   class Assertion
+
+    # The exceptions baretest will not rescue (NoMemoryError, SignalException, Interrupt
+    # and SystemExit)
     PassthroughExceptions = [NoMemoryError, SignalException, Interrupt, SystemExit]
 
     # An assertion has 5 possible states:
@@ -138,6 +141,7 @@ module BareTest
       self
     end
 
+    # Create a pristine copy (as if it had not been run) of this Assertion
     def clean_copy(use_class=nil)
       copy = (use_class || self.class).new(@suite, @description, &@block)
       copy.file  = file
@@ -146,13 +150,11 @@ module BareTest
       copy
     end
 
-    # :nodoc:
-    def to_s
+    def to_s # :nodoc:
       sprintf "%s %s", self.class, @description
     end
 
-    # :nodoc:
-    def inspect
+    def inspect # :nodoc:
       sprintf "#<%s:%08x @suite=%p %p>", self.class, object_id>>1, @suite, @description
     end
   end

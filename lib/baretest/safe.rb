@@ -7,6 +7,7 @@
 
 
 module BareTest
+  # :stopdoc:
   module Safe
     @safe = {}
 
@@ -40,4 +41,5 @@ module BareTest
       "Time.now"         => 'time_now',
     }.each do |call, as| save(call, as) end
   end
+  # :startdoc:
 end

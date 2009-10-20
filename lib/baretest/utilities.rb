@@ -7,6 +7,8 @@
 
 
 module Kernel
+  # All extensions Kernel#require_path and Kernel#expanded_require_path will try
+  # for a given filename
   RequireExtensions = %w[.rb .so .dll .bundle .dylib]
 
   # Returns the path to the file require would load, also see Kernel#expanded_require_path

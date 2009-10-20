@@ -8,7 +8,29 @@
 
 module BareTest
   class Run
-    module XML
+
+    # XML runner is invoked with `-f xml` or `--format xml`.
+    # This runner provides xml output as a simple machine readable format.
+    # The schema is relatively simple:
+    #   <tests>
+    #     <suite description="the suites description">
+    #       <test>
+    #         <file>the file the test was defined in</file>
+    #         <line>the line the assertion starts on</line>
+    #         <status>one of: success, pending, skipped, failure, error</status>
+    #         <description>the description of the test</test>
+    #       </test>
+    #       ...many tests and/or suites
+    #     </suite>
+    #   </tests>
+    #   <report>
+    #     <duration>the duration in seconds as a float</duration>
+    #     <count type="the counters name, see BareTest::Run#count">integer</count>
+    #     ...many counts
+    #   </report>
+    #   <status>The final status, one of: success, incomplete, failure, error</status>
+    #
+    module XML # :nodoc:
       def run_all
         @depth = 1
 

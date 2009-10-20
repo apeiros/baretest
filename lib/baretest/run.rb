@@ -8,13 +8,16 @@
 
 module BareTest
 
-  # Run is the envorionment in which the suites and asserts are executed.
+  # Run is the environment in which the suites and asserts are executed.
   # Prior to the execution, the Run instance extends itself with the
   # formatter given.
   # Your formatter can override:
-  # * run_all
+  # * run_all: Invoked once
   # * run_suite
   # * run_test
+  #
+  # Don't forget to call super within your overrides, or the tests won't be
+  # executed.
   class Run
     # The toplevel suite.
     attr_reader :suite
@@ -38,12 +41,12 @@ module BareTest
     # suite).
     # Options accepted:
     # * :extenders:   An Array of Modules, will be used as argument to self.extend, useful e.g. for
-    #                 mock integration
+    #   mock integration
     # * :format:      A string with the basename (without suffix) of the formatter to use - or a
-    #                 Module
+    #   Module
     # * :interactive: true/false, will switch this Test::Run instance into IRB mode, where an error
-    #                 will cause an irb session to be started in the context of a clean copy of
-    #                 the assertion with all setup callbacks invoked
+    #   will cause an irb session to be started in the context of a clean copy of
+    #   the assertion with all setup callbacks invoked
     #
     # The order of extensions is:
     # * :extender

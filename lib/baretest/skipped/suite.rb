@@ -11,45 +11,39 @@ require 'baretest/skipped/assertion'
 
 
 module BareTest
-  # Skipped contains variants of Suite and Assertion.
-  # See Skipped::Suite and Skipped::Assertion
+
   module Skipped
+
     # Like Test::Suite, but all Assertions are defined as Skipped::Assertion
     class Suite < ::BareTest::Suite
-      def self.create(description=nil, parent=nil, opts={}, &block)
+      def self.create(description=nil, parent=nil, opts={}, &block) # :nodoc:
         new(description, parent, &block) # Skipped::Suite always
       end
 
-      # :nodoc:
       # All Assertions use Skipped::Assertion instead of Test::Assertion.
-      def assert(description=nil, &block)
+      def assert(description=nil, &block) # :nodoc:
         @skipped << Skipped::Assertion.new(self, description, &block)
       end
 
-      # :nodoc:
       # All setup blocks are disabled
-      def ancestry_setup
+      def ancestry_setup # :nodoc:
         []
       end
 
-      # :nodoc:
       # All teardown blocks are disabled
-      def ancestry_teardown
+      def ancestry_teardown # :nodoc:
         []
       end
 
-      # :nodoc:
       # All setup blocks are disabled
-      def setup(&block)
+      def setup(&block) # :nodoc:
         []
       end
 
-      # :nodoc:
       # All teardown blocks are disabled
-      def teardown(&block)
+      def teardown(&block) # :nodoc:
         []
       end
     end
-
   end
 end

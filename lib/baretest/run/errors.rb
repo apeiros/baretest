@@ -8,7 +8,12 @@
 
 module BareTest
   class Run
-    module Errors
+
+    # Errors runner is invoked with `-f errors` or `--format errors`.
+    # This runner is specifically built to provide the most possible information about
+    # errors in the suite.
+    #
+    module Errors # :nodoc:
       def run_all
         @depth = 0
         puts "Running all tests, reporting errors"
