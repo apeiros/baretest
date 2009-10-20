@@ -1,29 +1,28 @@
-Bare Test
-=========
+= Bare Test
 
 
 
-Summary
--------
+== Summary
 
 A minimal Testframework.
-Two methods to use it, Twenty to master it, about two-hundred lines of code[^foot].
+Two methods to use it, Twenty to master it, about two-hundred lines of code<sup>1</sup>.
 Bare Test, try it and you'll love it.
 
 
 
-Also See
---------
+== Also See
 
-* Executable Docs: doc/baretest.markdown
-* In the channel #ruby-lang on irc.freenode.org, I'm there under the nick apeiros.
-  Beware, I'm idling there 24/7, so my nick being in there doesn't mean I'm in front
-  of the computer.
+Executable Docs:: doc/baretest.rdoc
+IRC::             The channel #ruby-lang on irc.freenode.org
+                  
+                  I'm there under the nick apeiros.
+                  
+                  Beware, I'm idling there 24/7, so my nick being in there doesn't
+                  mean I'm in front of the computer.
 
 
 
-Description
------------
+== Description
 
 Baretest is a Testframework that tries to stay out of your way, but support you when you want it.
 In order to do so it has a load of features:
@@ -50,8 +49,7 @@ In order to do so it has a load of features:
 
 
 
-Quick Try
----------
+== Quick Try
 
 1. Download from github and unpack (or clone)
 2. Change into the baretest directory: `cd the/baretest/directory`
@@ -62,8 +60,7 @@ That's it. Alternatively you can run baretests own tests, and play with formatte
 
 
 
-Install
--------
+== Install
 
 1. run `gem install baretest`, alternatively run `sudo gem install baretest`
 2. There is no 2.
@@ -80,25 +77,26 @@ right one: `rake gem:install GEM=gem1.9`
 
 
 
-Executable
-----------
+== Executable
 
-    Usage: baretest [options] [glob, ...]
-    Glob defaults to 'test/**/*.rb'
-    Providing a directory as glob is equivalent to dir/**/*.rb
-    Options:
-      -f, --format FORMAT      use FORMAT for output
-      -F, --formats            show available formats
-      -d, --debug              set debugging flags (set $DEBUG to true)
-      -i, --interactive        drop into IRB on error or failure
-      -s, --setup FILE         specify setup file
-      -v, --version            print the version and exit
-      -w, --warn               turn warnings on for your script
+Usage:
+
+  baretest [options] [glob, ...]
+
+  Glob defaults to 'test/**/*.rb'
+  Providing a directory as glob is equivalent to dir/**/*.rb
+  Options:
+    -f, --format FORMAT      use FORMAT for output
+    -F, --formats            show available formats
+    -d, --debug              set debugging flags (set $DEBUG to true)
+    -i, --interactive        drop into IRB on error or failure
+    -s, --setup FILE         specify setup file
+    -v, --version            print the version and exit
+    -w, --warn               turn warnings on for your script
 
 
 
-Planned Features
-----------------
+== Planned Features
 
 * Word-wrapping for CLI runner
 * Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
@@ -111,13 +109,13 @@ Planned Features
   the line when the test has executed to add status & coloring.
 * Simple stubbing with automatic cleanup at teardown. Example:
 
-        assert "Should require a single file listed in :requires option." do |a|
-          file = 'foo/bar'
-          stub(Kernel, :require) do |file, *args| a.touch(file) end
-          ::Test::Suite.create(nil, nil, :requires => file)
-        
-          touched file
-        end
+    assert "Should require a single file listed in :requires option." do |a|
+      file = 'foo/bar'
+      stub(Kernel, :require) do |file, *args| a.touch(file) end
+      ::Test::Suite.create(nil, nil, :requires => file)
+    
+      touched file
+    end
 
 * Inline tests via Module#describe (basically the same as Test::Suite#suite)
 * YARD code to extract the specifications without running the code
@@ -126,14 +124,12 @@ Planned Features
 
 
 
-Rejected Features
------------------
+== Rejected Features
 
 * Currently none
 
 
-A Bit of Background
--------------------
+== A Bit of Background
 
 Originally, bare-test started out as a project for shits & giggles on the flight
 back from vegas (railsconf09), to prove that it is possible to have a fully
@@ -147,106 +143,103 @@ not found in other projects.
 
 
 
-Example Testsuite
------------------
+== Example Testsuite
 
 From examples/test.rb:
 
-    BareTest.suite do
-      # assertions and refutations can be grouped in suites. They will share
-      # setup and teardown
-      # they don't have to be in suites, though
-      suite "Success" do
-        assert "An assertion returning a trueish value (non nil/false) is a success" do
-          true
+  BareTest.suite do
+    # assertions and refutations can be grouped in suites. They will share
+    # setup and teardown
+    # they don't have to be in suites, though
+    suite "Success" do
+      assert "An assertion returning a trueish value (non nil/false) is a success" do
+        true
+      end
+    end
+  
+    suite "Failure" do
+      assert "An assertion returning a falsish value (nil/false) is a failure" do
+        false
+      end
+    end
+  
+    suite "Pending" do
+      assert "An assertion without a block is pending"
+    end
+  
+    suite "Error" do
+      assert "Uncaught exceptions in an assertion are an error" do
+        raise "Error!"
+      end
+    end
+  
+    suite "Special assertions" do
+      assert "Assert a block to raise" do
+        raises do
+          sleep(rand()/3+0.05)
+          raise "If this raises then the assertion is a success"
         end
       end
-    
-      suite "Failure" do
-        assert "An assertion returning a falsish value (nil/false) is a failure" do
-          false
-        end
+  
+      assert "Assert a float to be close to another" do
+        a = 0.18 - 0.01
+        b = 0.17
+        within_delta a, b, 0.001
       end
-    
-      suite "Pending" do
-        assert "An assertion without a block is pending"
-      end
-    
-      suite "Error" do
-        assert "Uncaught exceptions in an assertion are an error" do
-          raise "Error!"
-        end
-      end
-    
-      suite "Special assertions" do
-        assert "Assert a block to raise" do
-          raises do
-            sleep(rand()/3+0.05)
-            raise "If this raises then the assertion is a success"
-          end
-        end
-    
-        assert "Assert a float to be close to another" do
-          a = 0.18 - 0.01
-          b = 0.17
-          within_delta a, b, 0.001
-        end
-    
-        suite "Nested suite" do
-          assert "Assert two randomly ordered arrays to contain the same values" do
-            a = [*"A".."Z"] # an array with values from A to Z
-            b = a.sort_by { rand }
-            equal_unordered(a, b) # can be used with any Enumerable, uses hash-key identity
-          end
-        end
-      end
-    
-      suite "Setup & Teardown" do
-        setup do
-          @foo = "foo"
-          @bar = "bar"
-        end
-    
-        assert "@foo should be set" do
-          @foo == "foo"
-        end
-    
-        suite "Nested suite" do
-          setup do
-            @bar = "inner bar"
-            @baz = "baz"
-          end
-    
-          assert "@foo is inherited" do
-            @foo == "foo"
-          end
-    
-          assert "@bar is overridden" do
-            @bar == "inner bar"
-          end
-    
-          assert "@baz is defined only for inner" do
-            @baz == "baz"
-          end
-        end
-    
-        teardown do
-          @foo = nil # not that it'd make much sense, just to demonstrate
-        end
-      end
-    
-      suite "Dependencies", :requires => ['foo', 'bar'] do
-        assert "Will be skipped, due to unsatisfied dependencies" do
-          failure "Why the heck do you have a 'foo/bar' file?"
+  
+      suite "Nested suite" do
+        assert "Assert two randomly ordered arrays to contain the same values" do
+          a = [*"A".."Z"] # an array with values from A to Z
+          b = a.sort_by { rand }
+          equal_unordered(a, b) # can be used with any Enumerable, uses hash-key identity
         end
       end
     end
+  
+    suite "Setup & Teardown" do
+      setup do
+        @foo = "foo"
+        @bar = "bar"
+      end
+  
+      assert "@foo should be set" do
+        @foo == "foo"
+      end
+  
+      suite "Nested suite" do
+        setup do
+          @bar = "inner bar"
+          @baz = "baz"
+        end
+  
+        assert "@foo is inherited" do
+          @foo == "foo"
+        end
+  
+        assert "@bar is overridden" do
+          @bar == "inner bar"
+        end
+  
+        assert "@baz is defined only for inner" do
+          @baz == "baz"
+        end
+      end
+  
+      teardown do
+        @foo = nil # not that it'd make much sense, just to demonstrate
+      end
+    end
+  
+    suite "Dependencies", :requires => ['foo', 'bar'] do
+      assert "Will be skipped, due to unsatisfied dependencies" do
+        failure "Why the heck do you have a 'foo/bar' file?"
+      end
+    end
+  end
 
 
 
-
-Credits & Contributions
------------------------
+== Credits & Contributions
 
 * dominikh
   * adding mocha integration
@@ -256,14 +249,12 @@ Credits & Contributions
 
 
 
-Known bugs
-----------
+== Known bugs
 
 Currently none.
 
 
 
-Foot Notes
-----------
-[^foot]: The abbreviated form without support code and output formatters.
-         The normal code is expanded to more lines for readability.
+== Foot Notes
+<sup>1</sup>:: The abbreviated form without support code and output formatters.
+               The normal code is expanded to more lines for readability.

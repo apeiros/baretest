@@ -31,3 +31,5 @@ Project.manifest.ignore       = %w[
 
 Project.rubyforge.project     = 'baretest'
 Project.rubyforge.path        = 'baretest'
+
+Project.rdoc.include         << 'doc/*.rdoc'
