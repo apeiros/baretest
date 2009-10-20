@@ -6,7 +6,9 @@
 
 
 
+require 'rdoc'
 require 'rake/rdoctask'
+require 'rake/lib/rdocmarkdown'
 
 
 
@@ -37,14 +39,14 @@ namespace :doc do
     Project.rdoc.files    += FileList.new(Project.rdoc.include || %w[lib/**/* *.{txt markdown rdoc}])
     Project.rdoc.files    -= FileList.new(Project.rdoc.exclude) if Project.rdoc.exclude
     Project.rdoc.files.reject! { |f| File.directory?(f) }
+    Project.meta.__finalize__ # convert the name/version procs to strings
     Project.rdoc.title   ||= "#{Project.meta.name}-#{Project.meta.version} Documentation"
     Project.rdoc.options ||= []
     Project.rdoc.options.push('-t', Project.rdoc.title)
-    Project.rdoc.main    ||= Project.meta.readme
     Project.rdoc.__finalize__
 
     Rake::RDocTask.new do |rd|
-      rd.main       = Project.rdoc.main
+      rd.main       = Project.rdoc.main if Project.rdoc.main
       rd.rdoc_files = Project.rdoc.files
       rd.rdoc_dir   = Project.rdoc.output_dir
       rd.template   = Project.rdoc.template if Project.rdoc.template
