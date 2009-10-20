@@ -35,8 +35,8 @@ module BareTest
         puts('  '*@depth+rv.description)
         if rv.exception then
           size = caller.size+5
-          puts((['-'*80, rv.exception]+rv.exception.backtrace[0..-size]+['-'*80, '']).map { |l|
-          	('  '*(@depth+1))+l
+          puts((['-'*80, rv.exception.message]+rv.exception.backtrace[0..-size]+['-'*80, '']).map { |l|
+            ('  '*(@depth+1))+l
           })
         end
       end
