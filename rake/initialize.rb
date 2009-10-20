@@ -103,7 +103,7 @@ Project.rdoc = SilverPlatter::Project::Description.new({
 
 # Rubyforge
 Project.rubyforge = SilverPlatter::Project::Description.new({
-  :project    => nil, # The rubyforge projectname
+  :project    => nil, # The rubyforge projectname
 })
 
 # Specs (bacon)
