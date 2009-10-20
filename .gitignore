@@ -6,4 +6,5 @@
 /baretest.bbprojectd
 
 # We don't care about build products
+/docs/*
 /pkg/*
