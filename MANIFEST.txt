@@ -1,6 +1,8 @@
 MANIFEST.txt
-README.markdown
+README.rdoc
 bin/baretest
+doc/baretest.rdoc
+doc/mocking_stubbing_test_doubles.rdoc
 examples/test.rake
 examples/test.rb
 lib/baretest.rb
