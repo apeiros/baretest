@@ -9,7 +9,9 @@
 require 'stringio'
 require 'ostruct'
 require 'silverplatter/project/version'
-
+begin
+  require 'rbconfig' # used to determine the correct gem executable
+rescue LoadError; end
 
 
 # The module BoneSplitter offers various helpful methods for rake tasks.
@@ -26,12 +28,19 @@ module BoneSplitter
   end
 
   @libs = {}
+
+  # we assume that the gem executable name follows the same pattern as the ruby executable name,
+  # e.g. if you run ruby1.9, you want gem1.9, if you run jruby, you want jgem, macruby is macgem
+  # etc.
+  ruby_install_name = defined?(Config::CONFIG["RUBY_INSTALL_NAME"]) && Config::CONFIG["RUBY_INSTALL_NAME"]
+  guessed_gem_name  = ruby_install_name && ruby_install_name.sub(/ruby/,'gem')
+
   @bin = OpenStruct.new(
     :diff => find_executable('diff', 'gdiff', 'diff.exe'),
     :sudo => find_executable('sudo'),
     :rcov => find_executable('rcov', 'rcov.bat'),
     :rdoc => find_executable('rdoc', 'rdoc.bat'),
-    :gem  => find_executable(ENV["GEM"], 'gem', 'gem.bat', 'gem1.8'),
+    :gem  => find_executable(ENV["GEM"], guessed_gem_name, 'gem', 'gem1.9', 'gem1.8', 'gem.bat'),
     :git  => find_executable('git')
   )
 
