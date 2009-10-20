@@ -1,0 +1,5 @@
+= Mocking, Stubbing and TestDoubles
+
+BareTest off-the-shelf provides currently only integration with mocha.
+You can use mocha (assuming you have installed the mocha gem) by requiring 'baretest/mocha'.
+Best you add that to your setup.rb.
