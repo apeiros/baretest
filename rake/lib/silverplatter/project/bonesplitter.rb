@@ -96,16 +96,23 @@ module BoneSplitter
   end
 
   # same as lib? but aborts if a dependency isn't met
-  def dependency(names, warn_message=nil)
-    abort unless lib?(names, warn_message)
+  def dependency(names, version=nil, warn_message=nil)
+    abort unless lib?(names, version, warn_message)
   end
   alias dependencies dependency
 
-  def lib?(names, warn_message=nil)
-    Array(names).map { |name|
+  def lib?(names, version=nil, warn_message=nil)
+    if Hash === names then
+      warn_message = version
+    else
+      names        = Array(names).map { |name| [name, version] }
+    end
+
+    names.map { |name, version|
       next true if BoneSplitter.libs[name] # already been required earlier
       begin
-        silenced do
+        gem name, version if version
+        silenced do # squelch warnings some 'nice' libs generate
           require name
         end
         BoneSplitter.libs[name] = true
@@ -158,13 +165,13 @@ module BoneSplitter
   # requires that 'readme' is a file in markdown format and that Markdown exists
   def extract_summary(file=Project.meta.readme)
     return nil unless File.readable?(file)
-    return nil unless lib?('nokogiri', "Requires %s to extract the summary")
+    return nil unless lib?('nokogiri', nil, "Requires %s to extract the summary")
     html = case File.extname(file)
       when '.rdoc'
-        return nil unless lib?('rdoc/markup/to_html', "Requires %s to extract the summary")
+        return nil unless lib?('rdoc/markup/to_html', nil, "Requires %s to extract the summary")
         RDoc::Markup::ToHtml.new.convert(File.read('README.rdoc'))
       when '.markdown'
-        return nil unless lib?('markdown', "Requires %s to extract the summary")
+        return nil unless lib?('markdown', nil, "Requires %s to extract the summary")
         Markdown.new(File.read(file)).to_html
     end
     sibling = (Nokogiri.HTML(html)/"h2[text()=Summary]").first.next_sibling
@@ -178,13 +185,13 @@ module BoneSplitter
   # requires that 'readme' is a file in markdown format and that Markdown exists
   def extract_description(file=Project.meta.readme)
     return nil unless File.readable?(file)
-    return nil unless lib?('nokogiri', "Requires %s to extract the summary")
+    return nil unless lib?('nokogiri', nil, "Requires %s to extract the summary")
     html = case File.extname(file)
       when '.rdoc'
-        return nil unless lib?('rdoc/markup/to_html', "Requires %s to extract the summary")
+        return nil unless lib?('rdoc/markup/to_html', nil, "Requires %s to extract the summary")
         RDoc::Markup::ToHtml.new.convert(File.read('README.rdoc'))
       when '.markdown'
-        return nil unless lib?('markdown', "Requires %s to extract the summary")
+        return nil unless lib?('markdown', nil, "Requires %s to extract the summary")
         Markdown.new(File.read(file)).to_html
     end
     sibling = (Nokogiri.HTML(html)/"h2[text()=Description]").first.next_sibling

@@ -9,7 +9,7 @@
 namespace :spec do
   desc 'Run all specs with basic output'
   task :run do
-    dependency(%w'bacon flexmock', 'Requires %s to run')
+    dependency(%w'bacon flexmock', nil, 'Requires %s to run')
 
     Bacon.extend Bacon.const_get('TestUnitOutput') rescue abort "No such formatter: #{output}"
     Bacon.summary_on_exit

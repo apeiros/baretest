@@ -56,7 +56,7 @@ namespace :gem do
     Project.gem.spec = gem_spec(Project.gem)
 
     # task gem:package
-    dependency 'rake/gempackagetask', 'Requires rake/gempackagetask'
+    dependency 'rake/gempackagetask', nil, 'Requires rake/gempackagetask'
     pkg = Rake::PackageTask.new(Project.gem.name, Project.gem.version) do |pkg|
       pkg.need_tar      = Project.gem.need_tar
       pkg.need_zip      = Project.gem.need_zip
