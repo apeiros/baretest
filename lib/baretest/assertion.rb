@@ -14,7 +14,7 @@ module BareTest
 
   # Defines an assertion
   # An assertion belongs to a suite and consists of a description and a block.
-  # The verify the assertion, the suite's (and its ancestors) setup blocks are
+  # To verify the assertion, the suite's (and its ancestors) setup blocks are
   # executed, then the assertions block is executed and after that, the suite's
   # (and ancestors) teardown blocks are invoked.
   #
@@ -34,19 +34,14 @@ module BareTest
     PassthroughExceptions = [NoMemoryError, SignalException, Interrupt, SystemExit]
 
     # An assertion has 5 possible states:
-    # :success
-    # :    The assertion passed. This means the block returned a trueish value.
-    # :failure
-    # :    The assertion failed. This means the block returned a falsish value.
-    #      Alternatively it raised a Test::Failure (NOT YET IMPLEMENTED).
-    #      The latter has the advantage that it can provide nicer diagnostics.
-    # :pending
-    # :    No block given to the assertion to be run
-    # :skipped
-    # :    If one of the parent suites is missing a dependency, its assertions
-    #      will be skipped
-    # :error
-    # :    The assertion errored out. This means the block raised an exception
+    # :success:: The assertion passed. This means the block returned a trueish value.
+    # :failure:: The assertion failed. This means the block returned a falsish value.
+    #            Alternatively it raised a Test::Failure (NOT YET IMPLEMENTED).
+    #            The latter has the advantage that it can provide nicer diagnostics.
+    # :pending:: No block given to the assertion to be run
+    # :skipped:: If one of the parent suites is missing a dependency, its assertions
+    #            will be skipped
+    # :error::   The assertion errored out. This means the block raised an exception
     attr_reader :status
 
     # If an exception occured in Assertion#execute, this will contain the
@@ -74,13 +69,10 @@ module BareTest
     # The lines this assertion spans. Not contructed by Assertion itself.
     attr_accessor :lines
 
-    # suite
-    # :   The suite the Assertion belongs to
-    # description
-    # :   A descriptive string about what this Assertion tests.
-    # &block
-    # :   The block definition. Without one, the Assertion will have a :pending
-    #     status.
+    # suite::       The suite the Assertion belongs to
+    # description:: A descriptive string about what this Assertion tests.
+    # &block::      The block definition. Without one, the Assertion will have a
+    #               :pending status.
     def initialize(suite, description, &block)
       @suite          = suite
       @status         = nil

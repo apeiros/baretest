@@ -91,6 +91,7 @@ module BareTest
       # exception than the one provided
       # You can optionally give an options :with_message, which is tested with === against
       # the exception message.
+      #
       # Examples:
       #   raises do raise "will work" end # => true
       #   raises SomeException do raise SomeException end # => true
@@ -132,6 +133,7 @@ module BareTest
 
       # Use this method to test whether certain code (e.g. a callback) was reached.
       # touch marks that it was reached, #touched tests for whether it was reached.
+      #
       # Example:
       #   assert "Code in a Proc object is executed when invoking #call on it." do
       #     a_proc = proc { touch :executed }
@@ -144,6 +146,7 @@ module BareTest
 
       # Used to verify that something was touched. You can also verify that something was touched
       # a specific amount of times.
+      #
       # See #touch
       def touched(thing=nil, times=nil)
         touched_times = ::BareTest.touched(self, thing)
@@ -166,14 +169,17 @@ module BareTest
       end
 
       # Used to verify that something was not touched.
+      #
       # See #touch
       def not_touched(thing=nil)
         touched(thing, 0)
       end
 
       # Uses equal? to test whether the objects are the same
-      # same expected, actual
-      # same :expected => expected, :actual => actual
+      #
+      # Can be used in either of the following ways:
+      #   same expected, actual
+      #   same :expected => expected, :actual => actual
       def same(*args)
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
@@ -188,6 +194,8 @@ module BareTest
       end
 
       # Uses eql? to test whether the objects are equal
+      #
+      # Can be used in either of the following ways:
       # equal expected, actual
       # equal :expected => expected, :actual => actual
       def hash_key_equal(*args)
@@ -204,6 +212,8 @@ module BareTest
       end
 
       # Uses == to test whether the objects are equal
+      #
+      # Can be used in either of the following ways:
       # equal expected, actual
       # equal :expected => expected, :actual => actual
       def order_equal(*args)

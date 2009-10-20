@@ -27,9 +27,9 @@ module Kernel
   end
 
   # Will load the given file like load (but accepts files without .rb in the end, like require),
-  # but evaluate it into the module given with the second arg (defaulting to Module.new)
+  # but evaluate it into the module given with the second arg (defaulting to Module.new).
   # It uses Kernel#expanded_require_path with '' and '.rb' as extensions to determine the file to
-  # load uses the returned path for error messages (second argument to Module#modul_eval)
+  # load uses the returned path for error messages (second argument to Module#modul_eval).
   def load_into(name, mod=nil)
     mod ||= Module.new
     path  = expanded_require_path(name, ['', '.rb'])

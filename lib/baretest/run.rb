@@ -12,9 +12,9 @@ module BareTest
   # Prior to the execution, the Run instance extends itself with the
   # formatter given.
   # Your formatter can override:
-  # * run_all: Invoked once
-  # * run_suite
-  # * run_test
+  # :run_all::   Invoked once, before the first run_suite is ran. No arguments.
+  # :run_suite:: Invoked per suite. Takes the suite to run as argument.
+  # :run_test::  Invoked per assertion. Takes the assertion to execute as argument.
   #
   # Don't forget to call super within your overrides, or the tests won't be
   # executed.

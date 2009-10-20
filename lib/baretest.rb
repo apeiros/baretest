@@ -35,11 +35,12 @@ module BareTest
 
   # Loads all files in a test directory in order to load the suites and
   # assertions. Used by the 'baretest' executable and the standard rake task.
+  #
   # Options:
-  # * :verbose:    Will print information about the load process (default: false)
-  # * :setup_path: The path to the setup file, the first loaded file (default: 'test/setup.rb')
-  # * :chdir:      The directory this routine chdirs before loading, will jump back to the original
-  #                directory after loading (default: '.')
+  # :verbose::    Will print information about the load process (default: false)
+  # :setup_path:: The path to the setup file, the first loaded file (default: 'test/setup.rb')
+  # :chdir::      The directory this routine chdirs before loading, will jump back to the original
+  #               directory after loading (default: '.')
   def self.load_standard_test_files(opts={})
     verbose    = opts.delete(:verbose)
     setup_path = opts.delete(:setup_path) || 'test/setup.rb'
@@ -57,6 +58,7 @@ module BareTest
   end
 
   # Initializes BareTest, is automatically called
+  #
   # Needed for bootstrapped selftest
   def self.init # :nodoc:
     @format         = {}

@@ -18,7 +18,9 @@ end
 module BareTest
 
   # For internal use only.
-  # This module extends BareTest::Run if --interactive is used
+  #
+  # This module extends BareTest::Run if --interactive/-i is used
+  #
   # See BareTest::IRBMode::AssertionContext for some methods IRBMode adds to Assertion for
   # use within the irb session.
   module IRBMode # :nodoc:
