@@ -196,8 +196,8 @@ module BareTest
       # Uses eql? to test whether the objects are equal
       #
       # Can be used in either of the following ways:
-      # equal expected, actual
-      # equal :expected => expected, :actual => actual
+      #   equal expected, actual
+      #   equal :expected => expected, :actual => actual
       def hash_key_equal(*args)
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
@@ -214,8 +214,8 @@ module BareTest
       # Uses == to test whether the objects are equal
       #
       # Can be used in either of the following ways:
-      # equal expected, actual
-      # equal :expected => expected, :actual => actual
+      #   equal expected, actual
+      #   equal :expected => expected, :actual => actual
       def order_equal(*args)
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
@@ -231,8 +231,10 @@ module BareTest
       alias equal order_equal
 
       # Uses === to test whether the objects are equal
-      # equal expected, actual
-      # equal :expected => expected, :actual => actual
+      #
+      # Can be used in either of the following ways:
+      #   equal expected, actual
+      #   equal :expected => expected, :actual => actual
       def case_equal(*args)
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
@@ -300,6 +302,7 @@ module BareTest
 
     private
       # extract arg allows to use named or positional args
+      #
       # Example:
       #   extract_args([1,2,3], :foo, :bar, :baz) # => [1,2,3]
       #   extract_args({:foo => 1,:bar => 2, :baz => 3}, :foo, :bar, :baz) # => [1,2,3]
