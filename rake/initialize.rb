@@ -96,7 +96,7 @@ Project.rdoc = SilverPlatter::Project::Description.new({
   :exclude    => %w[**/*/extconf.rb Manifest.txt],             # globs
   :main       => nil,                                          # path
   :output_dir => 'docs',                                       # path
-  :remote_dir => 'irc/docs',
+  :remote_dir => 'docs',
   #:template   => lib?(:allison) && Gem.searcher.find("allison").full_gem_path+"/lib/allison",
   # 'Allison gem, tasks: doc:html, creates nicer html rdoc output'
 })
