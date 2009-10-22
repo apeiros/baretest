@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: BareTest::Assertion</title>
+
+	<link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="../lib/baretest/assertion/failure_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/assertion/failure.rb">lib/baretest/assertion/failure.rb</a></li>
+					
+						<li><a href="../lib/baretest/assertion/support_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/assertion/support.rb">lib/baretest/assertion/support.rb</a></li>
+					
+						<li><a href="../lib/baretest/assertion_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/assertion.rb">lib/baretest/assertion.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">Object</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+			<div id="namespace-list-section" class="section">
+				<h3 class="section-header">Namespace</h3>
+				<ul class="link-list">
+					
+					<li><span class="type">MODULE</span> <a href="Assertion/Support.html">BareTest::Assertion::Support</a></li>
+					
+					<li><span class="type">CLASS</span> <a href="Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#M000008">::new</a></li>
+					
+					<li><a href="#M000018">#clean_copy</a></li>
+					
+					<li><a href="#M000015">#execute</a></li>
+					
+					<li><a href="#M000012">#setup</a></li>
+					
+					<li><a href="#M000013">#teardown</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+			<div id="includes-section" class="section">
+				<h3 class="section-header">Included Modules</h3>
+				<ul class="link-list">
+				
+				
+					<li><a class="include" href="Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
+				
+				
+				</ul>
+			</div>
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
+				
+					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/baretest_rdoc.html">baretest.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../BareTest.html">BareTest</a></li>
+				
+					<li><a href="../BareTest/Assertion.html">BareTest::Assertion</a></li>
+				
+					<li><a href="../BareTest/Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
+				
+					<li><a href="../BareTest/IRBMode/AssertionContext.html">BareTest::IRBMode::AssertionContext</a></li>
+				
+					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
+				
+					<li><a href="../BareTest/Skipped.html">BareTest::Skipped</a></li>
+				
+					<li><a href="../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
+				
+					<li><a href="../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+				
+					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
+				
+					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
+				
+					<li><a href="../Enumerable.html">Enumerable</a></li>
+				
+					<li><a href="../Kernel.html">Kernel</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">BareTest::Assertion</h1>
+
+		<div id="description">
+			<p>
+Defines an assertion An assertion belongs to a suite and consists of a
+description and a block. To verify the assertion, the suite&#8217;s (and
+its ancestors) setup blocks are executed, then the assertions block is
+executed and after that, the suite&#8217;s (and ancestors) teardown blocks
+are invoked.
+</p>
+<p>
+An assertion has 5 possible states, see <a
+href="Assertion.html#status">Assertion#status</a> for a list of them.
+</p>
+<p>
+There are various helper methods in <a
+href="Assertion/Support.html">BareTest::Assertion::Support</a> which help
+you defining nicer diagnostics or just easier ways to test common
+scenarios. The following are test helpers:
+</p>
+<ul>
+<li>Kernel#raises(exception_class=StandardError)
+
+</li>
+<li>Kernel#within_delta(a, b, delta)
+
+</li>
+<li>Kernel#equal_unordered(a,b)
+
+</li>
+<li>Enumerable#equal_unordered(other)
+
+</li>
+</ul>
+
+		</div>
+
+		<!-- Constants -->
+		
+		<div id="constants-list" class="section">
+			<h3 class="section-header">Constants</h3>
+			<dl>
+			
+				<dt><a name="PassthroughExceptions">PassthroughExceptions</a></dt>
+				
+				<dd class="description"><p>
+The exceptions baretest will not rescue (NoMemoryError, SignalException,
+Interrupt and SystemExit)
+</p></dd>
+				
+			
+			</dl>
+		</div>
+		
+
+		<!-- Attributes -->
+		
+		<div id="attribute-method-details" class="method-section section">
+			<h3 class="section-header">Attributes</h3>
+
+			
+			<div id="status-attribute-method" class="method-detail">
+				<a name="status"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">status</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+An assertion has 5 possible states:
+</p>
+<table>
+<tr><td valign="top">:success:</td><td>The assertion passed. This means the block returned a trueish value.
+
+</td></tr>
+<tr><td valign="top">:failure:</td><td>The assertion failed. This means the block returned a falsish value.
+Alternatively it raised a Test::Failure (NOT YET IMPLEMENTED). The latter
+has the advantage that it can provide nicer diagnostics.
+
+</td></tr>
+<tr><td valign="top">:pending:</td><td>No block given to the assertion to be run
+
+</td></tr>
+<tr><td valign="top">:skipped:</td><td>If one of the parent suites is missing a dependency, its assertions will be
+skipped
+
+</td></tr>
+<tr><td valign="top">:error:</td><td>The assertion errored out. This means the block raised an exception
+
+</td></tr>
+</table>
+				
+				</div>
+			</div>
+			
+			<div id="exception-attribute-method" class="method-detail">
+				<a name="exception"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">exception</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+If an exception occured in <a
+href="Assertion.html#M000015">Assertion#execute</a>, this will contain the
+Exception object raised.
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="description-attribute-method" class="method-detail">
+				<a name="description"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">description</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The description of this assertion.
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="failure-reason-attribute-method" class="method-detail">
+				<a name="failure_reason"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">failure_reason</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The failure reason.
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="suite-attribute-method" class="method-detail">
+				<a name="suite"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">suite</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The suite this assertion belongs to
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="block-attribute-method" class="method-detail">
+				<a name="block"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">block</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The block specifying the assertion
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="file-attribute-method" class="method-detail">
+				<a name="file"></a>
+				
+				<a name="file="></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">file</span><span
+						class="attribute-access-type">[RW]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The file this assertion is specified in. Not contructed by <a
+href="Assertion.html">Assertion</a> itself.
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="line-attribute-method" class="method-detail">
+				<a name="line"></a>
+				
+				<a name="line="></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">line</span><span
+						class="attribute-access-type">[RW]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The line this assertion is specified on. Not contructed by <a
+href="Assertion.html">Assertion</a> itself.
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="lines-attribute-method" class="method-detail">
+				<a name="lines"></a>
+				
+				<a name="lines="></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">lines</span><span
+						class="attribute-access-type">[RW]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The lines this assertion spans. Not contructed by <a
+href="Assertion.html">Assertion</a> itself.
+</p>
+				
+				</div>
+			</div>
+			
+		</div>
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="new-method" class="method-detail ">
+				<a name="M000008"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">new</span><span
+						class="method-args">(suite, description, &block)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<table>
+<tr><td valign="top">suite:</td><td>The suite the <a href="Assertion.html">Assertion</a> belongs to
+
+</td></tr>
+<tr><td valign="top">description:</td><td>A descriptive string about what this <a href="Assertion.html">Assertion</a>
+tests.
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>The block definition. Without one, the <a
+href="Assertion.html">Assertion</a> will have a :pending status.
+
+</td></tr>
+</table>
+					
+
+					
+					<div class="method-source-code"
+						id="new-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 76</span>
+76:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">suite</span>, <span class="ruby-identifier">description</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+77:       <span class="ruby-ivar">@suite</span>          = <span class="ruby-identifier">suite</span>
+78:       <span class="ruby-ivar">@status</span>         = <span class="ruby-keyword kw">nil</span>
+79:       <span class="ruby-ivar">@failure_reason</span> = <span class="ruby-keyword kw">nil</span>
+80:       <span class="ruby-ivar">@exception</span>      = <span class="ruby-keyword kw">nil</span>
+81:       <span class="ruby-ivar">@description</span>    = <span class="ruby-identifier">description</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;No description given&quot;</span>
+82:       <span class="ruby-ivar">@block</span>          = <span class="ruby-identifier">block</span>
+83:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="clean-copy-method" class="method-detail ">
+				<a name="M000018"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">clean_copy</span><span
+						class="method-args">(use_class=nil)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Create a pristine copy (as if it had not been run) of this <a
+href="Assertion.html">Assertion</a>
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="clean-copy-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 137</span>
+137:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clean_copy</span>(<span class="ruby-identifier">use_class</span>=<span class="ruby-keyword kw">nil</span>)
+138:       <span class="ruby-identifier">copy</span> = (<span class="ruby-identifier">use_class</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>).<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@suite</span>, <span class="ruby-ivar">@description</span>, <span class="ruby-operator">&amp;</span><span class="ruby-ivar">@block</span>)
+139:       <span class="ruby-identifier">copy</span>.<span class="ruby-identifier">file</span>  = <span class="ruby-identifier">file</span>
+140:       <span class="ruby-identifier">copy</span>.<span class="ruby-identifier">line</span>  = <span class="ruby-identifier">line</span>
+141:       <span class="ruby-identifier">copy</span>.<span class="ruby-identifier">lines</span> = <span class="ruby-identifier">lines</span>
+142:       <span class="ruby-identifier">copy</span>
+143:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="execute-method" class="method-detail ">
+				<a name="M000015"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">execute</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Runs the assertion and sets the status and exception
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="execute-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 110</span>
+110:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>
+111:       <span class="ruby-ivar">@exception</span> = <span class="ruby-keyword kw">nil</span>
+112:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@block</span> <span class="ruby-keyword kw">then</span>
+113:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">setup</span> <span class="ruby-keyword kw">then</span>
+114:           <span class="ruby-comment cmt"># run the assertion</span>
+115:           <span class="ruby-keyword kw">begin</span>
+116:             <span class="ruby-ivar">@status</span>         = <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-ivar">@block</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">:success</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:failure</span>
+117:             <span class="ruby-ivar">@failure_reason</span> = <span class="ruby-value str">&quot;Assertion failed&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:failure</span>
+118:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">*</span><span class="ruby-constant">PassthroughExceptions</span>
+119:             <span class="ruby-identifier">raise</span> <span class="ruby-comment cmt"># pass through exceptions must be passed through</span>
+120:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">failure</span>
+121:             <span class="ruby-ivar">@status</span>         = <span class="ruby-identifier">:failure</span>
+122:             <span class="ruby-ivar">@failure_reason</span> = <span class="ruby-identifier">failure</span>
+123:           <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+124:             <span class="ruby-ivar">@failure_reason</span> = <span class="ruby-value str">&quot;An error occurred during execution&quot;</span>
+125:             <span class="ruby-ivar">@exception</span>      = <span class="ruby-identifier">exception</span>
+126:             <span class="ruby-ivar">@status</span>         = <span class="ruby-identifier">:error</span>
+127:           <span class="ruby-keyword kw">end</span>
+128:         <span class="ruby-keyword kw">end</span>
+129:         <span class="ruby-identifier">teardown</span>
+130:       <span class="ruby-keyword kw">else</span>
+131:         <span class="ruby-ivar">@status</span> = <span class="ruby-identifier">:pending</span>
+132:       <span class="ruby-keyword kw">end</span>
+133:       <span class="ruby-keyword kw">self</span>
+134:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="setup-method" class="method-detail ">
+				<a name="M000012"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">setup</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+<a href="Run.html">Run</a> all setups in the order of their nesting
+(outermost first, innermost last)
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="setup-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 86</span>
+86:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup</span>
+87:       <span class="ruby-ivar">@suite</span>.<span class="ruby-identifier">ancestry_setup</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">setup</span><span class="ruby-operator">|</span> <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">setup</span>) } <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@suite</span>
+88:       <span class="ruby-keyword kw">true</span>
+89:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">*</span><span class="ruby-constant">PassthroughExceptions</span>
+90:       <span class="ruby-identifier">raise</span> <span class="ruby-comment cmt"># pass through exceptions must be passed through</span>
+91:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+92:       <span class="ruby-ivar">@failure_reason</span> = <span class="ruby-value str">&quot;An error occurred during setup&quot;</span>
+93:       <span class="ruby-ivar">@exception</span>      = <span class="ruby-identifier">exception</span>
+94:       <span class="ruby-ivar">@status</span>         = <span class="ruby-identifier">:error</span>
+95:       <span class="ruby-keyword kw">false</span>
+96:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="teardown-method" class="method-detail ">
+				<a name="M000013"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">teardown</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+<a href="Run.html">Run</a> all teardowns in the order of their nesting
+(innermost first, outermost last)
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="teardown-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 99</span>
+ 99:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">teardown</span>
+100:       <span class="ruby-ivar">@suite</span>.<span class="ruby-identifier">ancestry_teardown</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">setup</span><span class="ruby-operator">|</span> <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">setup</span>) } <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@suite</span>
+101:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">*</span><span class="ruby-constant">PassthroughExceptions</span>
+102:       <span class="ruby-identifier">raise</span> <span class="ruby-comment cmt"># pass through exceptions must be passed through</span>
+103:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+104:       <span class="ruby-ivar">@failure_reason</span> = <span class="ruby-value str">&quot;An error occurred during setup&quot;</span>
+105:       <span class="ruby-ivar">@exception</span>      = <span class="ruby-identifier">exception</span>
+106:       <span class="ruby-ivar">@status</span>         = <span class="ruby-identifier">:error</span>
+107:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+
