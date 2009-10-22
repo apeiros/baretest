@@ -9,7 +9,7 @@
 namespace :loc do
   desc 'Assess the number of code and comment lines'
   task :assess do
-    next unless lib('assesscode', 'Requires AssessCode lib to count lines of code and comment.')
+    next unless lib?('assesscode', nil, 'Requires AssessCode lib to count lines of code and comment.')
     a = AssessCode.new(
       '.',
       'lib/**/*.rb',
