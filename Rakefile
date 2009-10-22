@@ -12,6 +12,7 @@ task :default => 'test'
 # task 'prerequisite' in each .task file. Further cleanup is done in post_load.rake)
 Project.meta.name             = 'baretest'
 Project.meta.version          = version_proc("BareTest::VERSION")
+Project.meta.readme           = 'README.rdoc'
 Project.meta.summary          = extract_summary()
 Project.meta.description      = extract_description()
 Project.meta.website          = 'http://'
