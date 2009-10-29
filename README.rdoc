@@ -27,7 +27,7 @@ IRC::             The channel #ruby-lang on irc.freenode.org
 Baretest is a Testframework that tries to stay out of your way, but support you when you want it.
 In order to do so it has a load of features:
 
-* Strightforward and terse assertions (just a block whose return value defines
+* Straightforward and terse assertions (just a block whose return value defines
   success/failure)
 * Easy grouping of assertions into suites
 * BDD style specifications/test descriptions (NOT code), also extractable
