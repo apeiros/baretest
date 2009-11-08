@@ -70,7 +70,7 @@ opts = OptionParser.new("", 24, '  ') do |opts|
       if File.exist?(path) then
         destinations.each do |destination|
           destination = File.join(destination,path)
-          if File.exist?(dir) then
+          if File.exist?(destination) then
             puts "Mirror #{destination} of #{path} exists already -- skipping"
           else
             puts "Mirroring #{path} in #{destination}"
