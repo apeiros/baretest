@@ -13,7 +13,7 @@ module BareTest
     # skipped.
     class Assertion < ::BareTest::Assertion
       def execute() # :nodoc:
-        @status = :skipped and self
+        @__assertion__[:status] = :skipped and self
       end
     end
   end
