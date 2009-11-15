@@ -6,7 +6,8 @@
 
 The first step is of course the project. Baretest was written with the
 assumption of a standard project layout (should work fine without too,
-though - might just require a bit more work on your part):
+though - might just require a bit more work on your part).
+The standard directory layout looks like this:
 
   |-- bin (executables)
   |-- doc (additional documentation)
@@ -51,12 +52,20 @@ However, suites with the same name are considered the same. Just like ruby's
 namespacing works. That is, if you twice do `module X; class Y; ...; end; end`,
 it will both times open the same class X::Y.
 
+Lets assume 'lib/foo.rb' contains the following code:
+
+  class Foo
+    def bar
+      "bar"
+    end
+  end
+
 Then follows the next step, we write the first assertion:
 
   BareTest.suite do
     suite "class Foo" do
-      assert "::new returns an instance of Foo" do
-        Foo.new.is_a?(Foo)
+      assert "bar returns 'bar'" do
+        Foo.new.bar == 'bar'
       end
     end
   end
@@ -77,3 +86,46 @@ file, it'll see if there's also a file 'test/helpers/suite/lib/foo.rb'. If
 there was, it'd load that first. After that, it loads the
 'test/suite/lib/foo.rb' file. When all testfiles are discovered and loaded,
 it'll run the tests.
+
+
+
+== 4. Separating parts of the test
+
+A classical test consists of four phases:
+
+1. setup
+2. exercise
+3. validate
+4. teardown
+
+Baretest has setup and teardown on suites, they will be run for every assertion
+the suite contains.
+Exercise and validate is currently combined in the 'assert' method.
+
+So let's make use of that and rewrite our previous test:
+
+  BareTest.suite do
+    suite "class Foo" do
+      setup do
+        @foo = Foo.new
+      end
+
+      assert "bar returns 'bar'" do
+        @foo.bar == 'bar'
+      end
+    end
+  end
+
+In this simplistic example, this may seem like wasted time. The more complex the
+setup becomes and the more assertions need the same setup, the more time a
+separate setup phase saves.
+It additionally helps in making intent clear: this is setup, and this is test.
+
+
+
+== Things left to be written out
+* toplevel suite may have a name/description too, it'll act the same as if
+  there was a suite in an unnamed toplevel suite
+* [setup] They will also be run for every nested suite's assertion,
+  where the outermost setup is run first, the innermost last.
+* using stubs & mocks
