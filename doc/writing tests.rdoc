@@ -1,0 +1,79 @@
+= Writing Tests
+
+
+
+== 1. In the beginning there was the project
+
+The first step is of course the project. Baretest was written with the
+assumption of a standard project layout (should work fine without too,
+though - might just require a bit more work on your part):
+
+  |-- bin (executables)
+  |-- doc (additional documentation)
+  |-- ext (native extension code will be here)
+  |-- examples (for the users of the lib)
+  |-- lib (contains the library)
+  |-- rake (contains rake relevant stuff)
+  `-- Rakefile
+
+In your project directory, you can invoke `baretest --init`, this will
+create the 'test' directory. It will mirror your project directory. That is,
+it will recreate all directories nested in bin and lib.
+The directory layout of 'test' is as follows:
+
+  `-- test
+      |-- external (baretest ignores this directory)
+      |-- helper (baretest loads helper/lib/foo.rb when loading suite/lib/foo.rb)
+      |-- setup.rb (setup.rb is loaded as the first file when running baretest)
+      `-- suite (in here are the tests itself)
+          |-- bin (the tests for bin)
+          `-- lib (the tests for lib)
+
+
+
+== 2. Writing the tests
+
+Assume you have `lib/foo.rb` containing the class 'Foo'. To test it, you create
+the file `test/suite/lib/foo.rb`. You start out by creating the top-level suite:
+
+  BareTest.suite do
+  end
+
+Within that suite, you now create the suite for the class 'Foo':
+
+  BareTest.suite do
+    suite "class Foo" do
+    end
+  end
+
+You're in no way limited in how you name the suites. It's an arbitrary String.
+However, suites with the same name are considered the same. Just like ruby's
+namespacing works. That is, if you twice do `module X; class Y; ...; end; end`,
+it will both times open the same class X::Y.
+
+Then follows the next step, we write the first assertion:
+
+  BareTest.suite do
+    suite "class Foo" do
+      assert "::new returns an instance of Foo" do
+        Foo.new.is_a?(Foo)
+      end
+    end
+  end
+
+As you can see, the assertion is plain ruby code. The return value of the block
+decides whether the assertion is considered a success (trueish value, that is
+all but false and nil) or a failure (falseish value, that is false or nil).
+
+
+
+== 3. Running the tests
+
+First you change the directory to your projects root directory.
+There you run `baretest`. That's it.
+Baretest will now load the 'test/setup.rb' file, then it'll search in
+'test/suite' for files and find 'test/suite/lib/foo.rb'. Before loading that
+file, it'll see if there's also a file 'test/helpers/suite/lib/foo.rb'. If
+there was, it'd load that first. After that, it loads the
+'test/suite/lib/foo.rb' file. When all testfiles are discovered and loaded,
+it'll run the tests.
