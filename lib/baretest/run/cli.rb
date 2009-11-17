@@ -44,8 +44,6 @@ module BareTest
 
       def run_suite(suite)
         return super unless suite.description
-        #label, size = '  '*@depth+suite.description, suite.tests.size.to_s
-        #printf "\n\e[1m%-*s\e[0m (%d tests)\n", 71-size.length, label, size
         skipped = suite.skipped.size
         case size = suite.assertions.size
           when 0
