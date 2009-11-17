@@ -1,8 +1,10 @@
+LICENSE.txt
 MANIFEST.txt
 README.rdoc
 bin/baretest
 doc/baretest.rdoc
 doc/mocking_stubbing_test_doubles.rdoc
+doc/writing tests.rdoc
 examples/test.rake
 examples/test.rb
 lib/baretest.rb
@@ -16,6 +18,7 @@ lib/baretest/run.rb
 lib/baretest/run/cli.rb
 lib/baretest/run/errors.rb
 lib/baretest/run/minimal.rb
+lib/baretest/run/profile.rb
 lib/baretest/run/spec.rb
 lib/baretest/run/tap.rb
 lib/baretest/run/xml.rb
