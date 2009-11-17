@@ -110,7 +110,7 @@ module BareTest
       # Prints the code of the assertion
       # Be aware that this relies on your code being properly indented.
       def code
-        puts(@code || "Code could not be extracted")
+        puts(@__assertion__[:code] || "Code could not be extracted")
       end
     end
 
@@ -152,11 +152,11 @@ module BareTest
       puts "#{assertion.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
       if assertion.file then
-        code  = irb_code_reindented(assertion.file, assertion.line-1,20)
+        code  = irb_code_reindented(assertion.file, true, assertion.line-1,20)
         match = code.match(/\n^  [^ ]/)
         code[-(match.post_match.size-3)..-1] = ""
-        assertion.instance_variable_set(:@code, code)
-        puts "Code:", code
+        assertion.instance_variable_get(:@__assertion__)[:code] = code
+        puts "Code (#{file}):", code
       end
     end
 
@@ -168,24 +168,39 @@ module BareTest
       puts "#{assertion.status.to_s.capitalize} in:    #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
       puts "Exception:   #{assertion.exception} in file #{assertion.exception.backtrace.first}"
-      if assertion.file && match = assertion.exception.backtrace.first.match(/^(.*):(\d+)$/) then
+      if assertion.file && match = assertion.exception.backtrace.first.match(/^([^:]+):(\d+)(?:$|:in .*)/) then
         file, line = match.captures
         file = File.expand_path(file)
         if assertion.file == file then
-          code = irb_code_reindented(file, (assertion.line-1)..(line.to_i))
-          assertion.instance_variable_set(:@code, code)
-          puts "Code:", code
+          code = irb_code_reindented(file, true, (assertion.line-1)..(line.to_i))
+          assertion.instance_variable_get(:@__assertion__)[:code] = code
+          puts "Code (#{file}):", code
         end
       end
     end
 
     # Nicely reformats the assertion's code
-    def irb_code_reindented(file, from, to=nil) # :nodoc:
+    def irb_code_reindented(file, show_lines, *slice) # :nodoc:
       lines  = File.readlines(file)
-      string = (to ? lines[from, to] : lines[from]).join("")
+      string = lines[*slice].join("").sub(/[\r\n]*\z/, '')
+      if Range === slice.first
+        from = slice.first.begin
+      else
+        from = slice.first
+      end
+      from = lines.length+from if from < 0
+
       string.gsub!(/^\t+/) { |m| "  "*m.size }
       indent = string[/^ +/]
-      string.gsub!(/^#{indent}/, '  ')
+      if show_lines then
+        digits       = Math.log10(from+string.count("\n")).floor+1
+        current_line = from-1
+        string.gsub!(/^#{indent}/) do
+          sprintf '  %0*d  ', digits, current_line+=1
+        end
+      else
+        string.gsub!(/^#{indent}/, '  ')
+      end
       string
     end
 
@@ -195,9 +210,8 @@ module BareTest
     # Adds the code into irb's history.
     def irb_mode_for_assertion(assertion) # :nodoc:
       irb_context = assertion.clean_copy(AssertionContext)
-      if assertion.instance_variable_defined?(:@code) then
-        code = assertion.instance_variable_get(:@code)
-        irb_context.instance_variable_set(:@code, code)
+      if code = assertion.instance_variable_get(:@__assertion__)[:code] then
+        irb_context.instance_variable_get(:@__assertion__)[:code] = code
         Readline::HISTORY.push(*code.split("\n")[1..-2])
       end
       irb_context.original_assertion = assertion
