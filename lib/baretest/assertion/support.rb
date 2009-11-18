@@ -59,6 +59,16 @@ module BareTest
         ::BareTest.extender << self
       end
 
+      # FIXME: undocumented and untested
+      # It's really ugly. You should use a mock instead.
+      def yields(subject, meth, args, *expected)
+        Object.instance_method(:__send__).bind(subject).call(meth, *args) do |*actual|
+          current = expected.shift
+          return false unless actual == current
+        end
+        return expected.empty?
+      end
+
       # FIXME: incomplete and untested
       def throws(symbol) # :nodoc:
         begin
