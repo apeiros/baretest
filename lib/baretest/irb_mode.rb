@@ -39,7 +39,6 @@ module BareTest
              "e!          - prints the error message and full backtrace",
              "em!         - prints the error message",
              "bt!         - prints the full backtrace",
-             "lv!         - lists all available local variables",
              "iv!         - lists all available instance variables",
              "cv!         - lists all available class variables",
              "gv!         - lists all available global variables",
@@ -59,7 +58,7 @@ module BareTest
 
       # Returns the original assertion's status
       def s!
-        @original_assertion.status
+        p @original_assertion.status
       end
 
       # Prints the original assertion's error message and backtrace
@@ -71,7 +70,7 @@ module BareTest
       # Prints the original assertion's error message
       def em!
         if @original_assertion.exception then
-          puts @original_assertion.exception
+          puts @original_assertion.exception.message
         else
           puts "No exception occurred, therefore no error message is available"
         end
@@ -83,28 +82,28 @@ module BareTest
           size ||= caller.size+3
           puts @original_assertion.exception.backtrace[0..-size]
         else
-          puts "No exception occurred, therefore no backtrace available"
+          puts "No exception occurred, therefore no backtrace is available"
         end
       end
 
       # Returns an array of all instance variable names
       def iv!
-        instance_variables.sort
+        puts *instance_variables.sort
       end
 
       # Returns an array of all class variable names
       def cv!
-        self.class.class_variables.sort
+        puts *self.class.class_variables.sort
       end
 
       # Returns an array of all global variable names
       def gv!
-        global_variables.sort
+        puts *global_variables.sort
       end
 
       # Returns a string of the original assertion's nesting within suites
       def nesting
-        suite.ancestors[0..-2].reverse.map { |suite| suite.description }.join(' > ')
+        puts suite.ancestors[0..-2].reverse.map { |suite| suite.description }.join(' > ')
       end
 
       # Prints the code of the assertion
