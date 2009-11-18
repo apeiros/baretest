@@ -1,0 +1,1 @@
+* Are raises_nothing and throws_nothing really meaningful?
