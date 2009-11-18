@@ -1,0 +1,218 @@
+= BareTest Quick Reference
+
+This is a very condensed overview over baretest. If you're new to testing and
+new to baretest, you may be more interested into doc/writing_tests.rdoc
+Also look into the examples and baretests own test directory.
+
+
+
+== Setup baretest
+
+1. Install baretest
+  a) official release: `sudo gem install baretest`
+  b) edge:
+    1. clone git://github.com/apeiros/baretest.git
+    2. cd baretest
+    3. rake gem:install
+2. Change into the project directory
+3. `baretest --init` to create the basic test-directory layout
+
+
+
+== Location of testfiles
+
+Your tests for PROJECT/lib/foo.rb belong into PROJECT/test/suite/lib/foo.rb.
+Your tests for PROJECT/bin/bar belong into PROJECT/test/suite/bin/bar.
+In other words, for every path, insert /test/suite after PROJECT to get the
+path to the corresponding testfile.
+
+
+
+== Writing tests
+
+A testfile commonly looks like this:
+
+  BareTest.suite "module ModuleName" do
+    setup do
+      # things used by most nested suites
+    end
+
+    teardown do
+      # clean up after this suite and all nested suites have run
+    end
+
+    suite "Class methods" do
+      setup do
+        # things used by most nested suites
+      end
+      
+      suite "ModuleName::class_method_name" do
+        assert "does this" do
+          ...
+        end
+
+        assert "does that" do
+        end
+      end
+
+    suite "Instance methods" do
+      suite "ModuleName#instance_method_name" do
+        ...
+      end
+    end
+    
+    suite "class ClassName" do # this is class ModuleName::ClassName
+      suite "Class methods" do
+        ...
+      end
+
+      suite "Instance methods" do
+        ...
+      end
+    end
+  end
+
+This layout makes it easy to figure where tests for something are, and thus
+makes maintaining the test-code base easier.
+
+== Skipping Tests and Suites
+
+A test is skipped if it does not have a block or calls 'skip'
+
+== Assertion helper methods
+
+See BareTest::Assertion::Support
+All methods that have the method signature foo(expected, actual, message=nil)
+can alternatively be used with named arguments:
+  foo a, b, "message" # is equivalent to:
+  foo :expected => a, :actual => b, :message => "message"
+
+* skip(message, *args)
+  Description: Skips the assertion, uses sprintf with message and *args
+  Success:     not possible
+  Failure:     not possible
+
+* failure(message, *args)
+  Description: Lets the assertion fail, uses sprintf with message and *args
+  Success:     not possible
+  Failure:     failure("%p was not the inverse of %p", 2, 5)
+
+* same(expected, actual, message=nil)
+  Description: Uses expected.equal?(actual), which tests for object identity
+  Success:     same(:foo, :foo)
+  Failure:     same("foo", "foo")
+
+* hash_key_equal(expected, actual, message=nil)
+  Description: Uses expected.eql?(actual), which is used for hash key equality.
+  Success:     hash_key_equal("foo", "foo")
+  Failure:     hash_key_equal(1.0, 1)
+
+* equal(expected, actual, message=nil) (alias: order_equal)
+  Description: Uses expected == actual, which is used for order-equality.
+  Success:     equal(1.0, 1)
+  Failure:     equal(1, "1")
+
+* case_equal(expected, actual, message=nil)
+  Description: Uses expected === actual, which is used in case/whens.
+  Success:     case_equal(String, "foo")
+  Failure:     case_equal(String, 1)
+
+* equal_unordered(expected, actual, message=nil)
+  Description: Compares unordered enumerables, on the enumerable it uses each, 
+               on the items it uses hash and eql?
+  Success:     equal_unordered([1,2], [2,1])
+  Failure:     equal_unordered([1,2], [2,1,2])
+
+* within_delta(a, b, delta)
+  Description: Tests whether the difference between a and b is less than delta
+  Success:     within_delta(0.5, Math.sin(Math::PI/6), 1e-6)
+               # equal(0.5, Math.sin(Math::PI/6)) would fail
+  Failure:     within_delta(0.5, 0.6, 0.05)
+
+* kind_of(expected, actual, message=nil) (alias: is_a)
+  Description: Uses actual.kind_of?(expected)
+  Success:     kind_of(String, "foo")
+  Failure:     kind_of(String, 1)
+
+* throws(symbol)
+  Description: Test whether the block throws the given symbol
+  Success:     throws(:foo) do throw(:foo) end
+  Failure:     throws(:foo) do throw(:bar) end
+               throws(:foo) do nil end
+
+* throws_nothing
+  Description: Test whether a piece of code really throws nothing
+  Success:     throws_nothing do nil end
+  Failure:     throws_nothing do throw(:foo) end
+
+* raises(exception_class=StandardError, opts={})
+  Description: Test whether the block raises
+  Success:     raises do raise "foo" end
+               raises ArgumentError do "12".to_i(10, :superfluous) end
+  Failure:     raises do nil end
+               raises ArgumentError do "12".to_i(10) end
+
+* raises_nothing
+  Description: Test whether the block doesn't raise
+  Success:     raise_nothing do nil end
+  Failure:     raise_nothing do raise "foo" end
+
+* touch(thing=nil)
+  Description: Mark reaching a point in code, e.g. that a block was invoked
+  Success:     -> see touched
+  Failure:     -> see touched
+
+* touched(thing=nil, times=nil)
+  Description: test whether a mark for reached code was set, optionally test
+               whether it was set the expected number of times
+  Success:     touch; touched
+               touch :thing; touched :thing
+               touch :thing; touch :thing; touched :thing, 2
+  Failure:     touched
+               touch :thing; touched :something
+               touch :thing; touched :thing, 2
+
+* not_touched(thing=nil)
+  Description: same as touched(thing, 0)
+  Success:     see touched
+  Failure:     see touched
+
+
+
+== Running tests
+
+baretests test-cycle is:
+
+1. Create Run instance and the toplevel suite
+2. Load everything as required by the command line flags
+3. Load PROJECT/test/setup.rb
+4. Find PROJECT/test/suite/**/*.rb
+5. Load each file found in 2., but for every file, see whether
+   PROJECT/test/helpers/suite/**/*.rb exists and load that first if it does
+6. Invoke run on the Run instance
+
+From there on it depends on the loaded formatters and extenders, what really
+will happen. But the norm is, that suites and assertions will be executed in
+order of definition.
+
+
+
+== Debugging tests
+
+Use `baretest -i` to run baretest in interactive mode. When a failure or an
+error occurs, you have access to the following commands:
+
+* s!          - original assertions' status
+* e!          - error message and full backtrace
+* em!         - error message
+* bt!         - full backtrace
+* iv!         - all available instance variables
+* cv!         - all available class variables
+* gv!         - all available global variables
+* file        - file this assertion was defined in
+* line        - line number in the file where this assertion's definition starts
+* nesting     - a '>'-separated list of suite descriptions this assertion is
+                nested in
+* description - this assertion's description
+* code        - code of this assertion
+* help        - overview over all the commands
