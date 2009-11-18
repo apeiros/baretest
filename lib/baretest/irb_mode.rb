@@ -49,7 +49,7 @@ module BareTest
              "description - this assertion's description",
              "code        - the code of this assertion",
              #"restart! - Restart this irb session, resetting everything",
-             "irb_help    - irb's original help"
+             "irb_help    - irb's original help",
              "help        - this text you're reading right now"
       end
 
