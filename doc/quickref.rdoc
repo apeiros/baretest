@@ -34,11 +34,11 @@ A testfile commonly looks like this:
 
   BareTest.suite "module ModuleName" do
     setup do
-      # things used by most nested suites
+      # This is run before each assert, that is in this suite or a nested suite
     end
 
     teardown do
-      # clean up after this suite and all nested suites have run
+      # This is run after each assert, that is in this suite or a nested suite
     end
 
     suite "Class methods" do
@@ -74,6 +74,49 @@ A testfile commonly looks like this:
 
 This layout makes it easy to figure where tests for something are, and thus
 makes maintaining the test-code base easier.
+
+Setup callbacks are invoked from outermost suite to innermost suite, and
+within the same suite, in the order of definition.
+
+Teardown callbacks are invoked from innermost suite to outermost suite, and
+within the same suite, in the order of definition.
+
+  BareTest.suite do
+    setup do puts 1 end
+    setup do puts 2 end
+    teardown do puts 7 end
+    teardown do puts 8 end
+
+    suite "Inner" do
+      setup do puts 3 end
+      setup do puts 4 end
+      teardown do puts 5 end
+      teardown do puts 6 end
+
+      assert "Inner - assert" do puts "Inner - assert" end
+    end
+
+    assert "Outer - assert" do puts "Outer - assert" end
+  end
+
+Running this suite will print:
+
+  1
+  2
+  3
+  4
+  Inner - assert
+  5
+  6
+  7
+  8
+  1
+  2
+  Outer - assert
+  7
+  8
+
+
 
 == Skipping Tests and Suites
 
