@@ -24,6 +24,7 @@ Project.manifest.ignore       = %w[
                                     Rakefile
                                     beat/**/*
                                     dev/**/*
+                                    doc/announcements/**/*
                                     pkg/**/*
                                     rake/**/*
                                     web/**/*
