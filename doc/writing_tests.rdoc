@@ -76,7 +76,7 @@ all but false and nil) or a failure (falseish value, that is false or nil).
 
 == 3. Running the tests
 
-First you change the directory to your projects root directory.
+First you change the directory to your project's root directory.
 There you run `baretest`. That's it.
 Baretest will now load the 'test/setup.rb' file, then it'll search in
 'test/suite' for files and find 'test/suite/lib/foo.rb'. Before loading that
@@ -96,7 +96,7 @@ A classical test consists of four phases:
 3. validate
 4. teardown
 
-Baretest has setup and teardown on suites, they will be run for every assertion
+Baretest has setup and teardown on suites, which will be run for every assertion
 the suite contains.
 Exercise and validate is currently combined in the 'assert' method.
 

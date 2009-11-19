@@ -11,7 +11,7 @@ Also look into the examples and baretests own test directory.
 1. Install baretest
   a) official release: `sudo gem install baretest`
   b) edge:
-    1. clone git://github.com/apeiros/baretest.git
+    1. git clone git://github.com/apeiros/baretest.git
     2. cd baretest
     3. rake gem:install
 2. Change into the project directory
@@ -224,7 +224,7 @@ can alternatively be used with named arguments:
 
 == Running tests
 
-baretests test-cycle is:
+baretest's test-cycle is:
 
 1. Create Run instance and the toplevel suite
 2. Load everything as required by the command line flags
