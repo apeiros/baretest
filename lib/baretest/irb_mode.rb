@@ -150,8 +150,8 @@ module BareTest
       puts
       puts "#{assertion.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
-      if assertion.file then
-        code  = irb_code_reindented(assertion.file, true, assertion.line-1,20)
+      if file = assertion.file then
+        code  = irb_code_reindented(file, true, assertion.line-1,20)
         match = code.match(/\n^  [^ ]/)
         code[-(match.post_match.size-3)..-1] = ""
         assertion.instance_variable_get(:@__assertion__)[:code] = code
