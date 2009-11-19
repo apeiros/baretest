@@ -4,7 +4,8 @@ README.rdoc
 bin/baretest
 doc/baretest.rdoc
 doc/mocking_stubbing_test_doubles.rdoc
-doc/writing tests.rdoc
+doc/quickref.rdoc
+doc/writing_tests.rdoc
 examples/test.rake
 examples/test.rb
 lib/baretest.rb
