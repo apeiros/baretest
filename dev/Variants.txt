@@ -1,0 +1,67 @@
+## Test, variant 1
+BareTest.suite "String" do
+  suite "String#numeric?" do
+    suite "With numeric input" do
+      setup :input, "123" do
+        @number = "123"
+      end
+
+      setup :input, "1.23" do
+        @number = "1.23"
+      end
+
+      setup :input, "1e3" do
+        @number = "1e3"
+      end
+
+      assert "Returns true for :input" do
+        @number.numeric?
+      end
+    end
+  end
+end
+
+## Test, variant 2, only useful with static data
+BareTest.suite "String" do
+  suite "String#numeric?" do
+    suite "With numeric input" do
+       # uses item.to_s for :input substitution
+       # uses item for |variant
+      setup :input, %w[123 1.23 1e3] do |variant|
+        @number = variant
+      end
+
+      assert "Returns true for :input" do
+        @number.numeric?
+      end
+    end
+  end
+end
+
+## Test, variant 3, only useful with static data
+# better than variant 2 for data with an unsuitable to_s as it will use the key
+# for the :input substitution
+BareTest.suite "String" do
+  suite "String#numeric?" do
+    suite "With numeric input" do
+      # uses the key for :input replacement,
+      # uses the value for |variant|
+      setup :input, "123" => "123", "1.23" => "1.23", "1e3" => "1e3" do |variant|
+        @number = variant
+      end
+
+      assert "Returns true for :input" do
+        @number.numeric?
+      end
+    end
+  end
+end
+
+## Output: [plain_text]
+
+        String
+          String#numeric?
+            With numeric input
+Success       Returns true for 123
+Success       Returns true for 1.23
+Success       Returns true for 1e3
