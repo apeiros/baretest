@@ -9,6 +9,12 @@
 module BareTest
   class Assertion
     class Context
+      attr_reader :__assertion__
+      alias assertion __assertion__
+
+      def initialize(assertion)
+        @__assertion__ = assertion
+      end
     end
   end
 end
