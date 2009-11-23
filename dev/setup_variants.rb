@@ -64,24 +64,11 @@ class Suite
       yield(base) unless base.empty?
     else
       setup_in_order = @setup.values_at(*@components)
-      process        = Array.new(@components.size, 0)
       maximums       = setup_in_order.map { |i| i.size }
       iterations     = maximums.inject { |r,f| r*f } || 0
-      process[0]     = -1
-  
-      #p :process => process, :maximums => maximums, :iterations => iterations,
-      #  :setup_in_order => setup_in_order, :components => @components
-  
-      iterations.times do
-        pos = 0
-        process[pos] += 1
-        while process[pos] == maximums[pos]
-          process[pos]  = 0
-          pos          += 1
-          break if pos == process.size
-          process[pos] += 1
-        end
 
+      iterations.times do |i|
+        process = maximums.map { |e| i,e=i.divmod(e); e }
         yield base+setup_in_order.zip(process).map { |variants, current|
           variants[current]
         }
