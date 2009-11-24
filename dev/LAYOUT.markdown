@@ -30,4 +30,4 @@ The following is the standard layout:
     * setup.rb:    this file is automatically required prior to loading all tests.
     * teardown.rb: this file is automatically required after all tests are run.
 
-All other 
+All other

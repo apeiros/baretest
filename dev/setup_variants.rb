@@ -30,13 +30,13 @@ class Run
     end
     @count[:suite] += 1
   end
-  
+
   def run_test_variants(test)
     test.suite.each_component_variant do |setups|
       run_test(test, setups)
     end
   end
-  
+
   def run_test(assertion, setup)
     rv = assertion.execute
     @count[:test]            += 1
