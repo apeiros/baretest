@@ -4,9 +4,8 @@
 
 == Summary
 
-A minimal Testframework.
-Two methods to use it, Twenty to master it, about two-hundred lines of code<sup>1</sup>.
-Bare Test, try it and you'll love it.
+A testframework that doesn't stand in your way or forces you to learn a new
+language. Two methods is all that is required to know.
 
 
 
