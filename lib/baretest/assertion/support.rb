@@ -333,7 +333,9 @@ module BareTest
       end
     end # Support
 
-    include Support
+    class Context
+      include ::BareTest::Assertion::Support
+    end
   end # Assertion
 end # BareTest
 

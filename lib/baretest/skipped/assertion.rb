@@ -12,8 +12,8 @@ module BareTest
     # Like Test::Assertion, but fakes execution and sets status always to
     # skipped.
     class Assertion < ::BareTest::Assertion
-      def execute() # :nodoc:
-        @__assertion__[:status] = :skipped and self
+      def execute(setup=nil) # :nodoc:
+        @status = :skipped and self
       end
     end
   end

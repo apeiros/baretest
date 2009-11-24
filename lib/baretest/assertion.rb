@@ -6,6 +6,7 @@
 
 
 
+require 'baretest/assertion/context'
 require 'baretest/assertion/failure'
 
 
@@ -42,165 +43,109 @@ module BareTest
     # :skipped:: If one of the parent suites is missing a dependency, its assertions
     #            will be skipped
     # :error::   The assertion errored out. This means the block raised an exception
-    def status
-      @__assertion__[:status]
-    end
+    attr_reader :status
 
     # If an exception occured in Assertion#execute, this will contain the
     # Exception object raised.
-    def exception
-      @__assertion__[:exception]
-    end
+    attr_reader :exception
 
     # The description of this assertion.
-    def description
-      @__assertion__[:description]
-    end
+    attr_reader :description
 
     # The failure reason.
-    def failure_reason
-      @__assertion__[:failure_reason]
-    end
+    attr_reader :failure_reason
 
     # The suite this assertion belongs to
-    def suite
-      @__assertion__[:suite]
-    end
+    attr_reader :suite
 
     # The block specifying the assertion
-    def block
-      @__assertion__[:block]
-    end
+    attr_reader :block
 
     # The file this assertion is specified in. Not contructed by Assertion itself.
-    def file
-      @__assertion__[:file]
-    end
-
-    def file=(value)
-      @__assertion__[:file] = value
-    end
+    attr_accessor :file
 
     # The line this assertion is specified on. Not contructed by Assertion itself.
-    def line
-      @__assertion__[:line]
-    end
-
-    def line=(value)
-      @__assertion__[:line] = value
-    end
+    attr_accessor :line
 
     # The lines this assertion spans. Not contructed by Assertion itself.
-    def lines
-      @__assertion__[:lines]
-    end
-
-    def lines=(value)
-      @__assertion__[:lines] = value
-    end
+    attr_accessor :lines
 
     # suite::       The suite the Assertion belongs to
     # description:: A descriptive string about what this Assertion tests.
     # &block::      The block definition. Without one, the Assertion will have a
     #               :pending status.
     def initialize(suite, description, &block)
-      @__assertion__ = {
-        :suite          => suite,
-        :description    => (description || "No description given"),
-        :status         => nil,
-        :failure_reason => nil,
-        :exception      => nil,
-        :block          => block
-      }
-    end
-
-    # Cleans the assertion so it is pristine again and can be rerun
-    def clean
-      # backup @__assertion__
-      assertion = @__assertion__
-
-      # remove execute-results from @__assertion__
-      assertion.update(
-        :status         => nil,
-        :failure_reason => nil,
-        :exception      => nil
-      )
-
-      # remove all instance variables
-      instance_variables.each do |ivar|
-        remove_instance_variable(ivar)
-      end
-
-      # recreate @__assertion__
-      @__assertion__ = assertion
+      @suite          = suite
+      @description    = (description || "No description given")
+      @setup          = nil
+      @status         = nil
+      @failure_reason = nil
+      @exception      = nil
+      @block          = block
     end
 
     # Run all setups in the order of their nesting (outermost first, innermost last)
     def setup
-      @__assertion__[:suite].ancestry_setup.each { |setup| instance_eval(&setup) } if @__assertion__[:suite]
+      @context   = ::BareTest::Assertion::Context.new(self)
+      @setup   ||= @suite ? @suite.ancestry_setup : []
+      @setup.each do |setup| @context.instance_eval(&setup) end
       true
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
     rescue Exception => exception
-      @__assertion__[:failure_reason] = "An error occurred during setup"
-      @__assertion__[:exception]      = exception
-      @__assertion__[:status]         = :error
+      @failure_reason = "An error occurred during setup"
+      @exception      = exception
+      @status         = :error
       false
     end
 
     # Run all teardowns in the order of their nesting (innermost first, outermost last)
     def teardown
-      @__assertion__[:suite].ancestry_teardown.each { |teardown| instance_eval(&teardown) } if @__assertion__[:suite]
+      @suite.ancestry_teardown.each do |teardown|
+        @context.instance_eval(&teardown)
+      end if @suite
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
     rescue Exception => exception
-      @__assertion__[:failure_reason] = "An error occurred during setup"
-      @__assertion__[:exception]      = exception
-      @__assertion__[:status]         = :error
+      @failure_reason = "An error occurred during setup"
+      @exception      = exception
+      @status         = :error
     end
 
     # Runs the assertion and sets the status and exception
-    def execute
-      @__assertion__[:exception] = nil
-      if @__assertion__[:block] then
-        if setup then
+    def execute(setup=nil)
+      @setup     = setup if setup
+      @exception = nil
+      if @block then
+        if setup() then
           # run the assertion
           begin
-            @__assertion__[:status]         = instance_eval(&@__assertion__[:block]) ? :success : :failure
-            @__assertion__[:failure_reason] = "Assertion failed" if @__assertion__[:status] == :failure
+            @status         = @context.instance_eval(&@block) ? :success : :failure
+            @failure_reason = "Assertion failed" if @status == :failure
           rescue *PassthroughExceptions
             raise # pass through exceptions must be passed through
           rescue ::BareTest::Assertion::Failure => failure
-            @__assertion__[:status]         = :failure
-            @__assertion__[:failure_reason] = failure.message
+            @status         = :failure
+            @failure_reason = failure.message
           rescue Exception => exception
-            @__assertion__[:failure_reason] = "An error occurred during execution"
-            @__assertion__[:exception]      = exception
-            @__assertion__[:status]         = :error
+            @failure_reason = "An error occurred during execution"
+            @exception      = exception
+            @status         = :error
           end
         end
         teardown
       else
-        @__assertion__[:status] = :pending
+        @status = :pending
       end
       self
     end
 
-    # Create a pristine copy (as if it had not been run) of this Assertion
-    def clean_copy(use_class=nil)
-      copy = (use_class || self.class).new(@__assertion__[:suite], @__assertion__[:description], &@__assertion__[:block])
-      copy.file  = file
-      copy.line  = line
-      copy.lines = lines
-      copy
-    end
-
     def to_s # :nodoc:
-      sprintf "%s %s", self.class, @__assertion__[:description]
+      sprintf "%s %s", self.class, @description
     end
 
     def inspect # :nodoc:
-      sprintf "#<%s:%08x suite=%p %p>", self.class, object_id>>1, @__assertion__[:suite], @__assertion__[:description]
+      sprintf "#<%s:%08x suite=%p %p>", self.class, object_id>>1, @suite, @description
     end
   end
 end
