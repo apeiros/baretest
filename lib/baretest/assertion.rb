@@ -85,7 +85,7 @@ module BareTest
     end
 
     def interpolated_description
-      if @setup then
+      if @setup && @setup.size > 1 then
         substitutes = {}
         @setup.each do |setup| substitutes[setup.substitute] = setup.value end
         substitutes.delete(nil)
