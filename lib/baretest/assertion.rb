@@ -84,11 +84,24 @@ module BareTest
       @block          = block
     end
 
+    def interpolated_description
+      if @setup then
+        substitutes = {}
+        @setup.each do |setup| substitutes[setup.substitute] = setup.value end
+        substitutes.delete(nil)
+        @description.gsub(/:(?:#{substitutes.keys.join('|')})\b/) { |m|
+          substitutes[m[1..-1].to_sym]
+        }
+      else
+        @description
+      end
+    end
+
     # Run all setups in the order of their nesting (outermost first, innermost last)
     def setup
       @context   = ::BareTest::Assertion::Context.new(self)
       @setup   ||= @suite ? @suite.ancestry_setup : []
-      @setup.each do |setup| @context.instance_eval(&setup) end
+      @setup.each do |setup| @context.instance_eval(&setup.block) end
       true
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through

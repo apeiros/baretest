@@ -8,19 +8,21 @@
 
 module BareTest
   class Assertion
-    # used here to test for failure
-    def fails # :nodoc:
-      failed = false
-      begin
-        failed = !yield
-      rescue ::BareTest::Assertion::Failure
-        failed = true
+    class Context
+      # used here to test for failure
+      def fails # :nodoc:
+        failed = false
+        begin
+          failed = !yield
+        rescue ::BareTest::Assertion::Failure
+          failed = true
+        end
+        unless failed then
+          failure "Expected the block to fail, but it returned a true value."
+        end
+  
+        true
       end
-      unless failed then
-        failure "Expected the block to fail, but it returned a true value."
-      end
-
-      true
     end
   end
 end

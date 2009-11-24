@@ -150,24 +150,6 @@ BareTest.suite "BareTest" do
       end
     end
 
-    suite "#clean_copy" do
-      assert "Should return an instance of BareTest::Assertion" do
-        kind_of(::BareTest::Assertion, ::BareTest::Assertion.new("", nil).clean_copy)
-      end
-
-      assert "Should have the same description, suite and block" do
-        description = "description"
-        suite       = ::BareTest::Suite.new
-        block       = proc { true }
-        assertion1  = ::BareTest::Assertion.new(description, suite, &block)
-        assertion2  = assertion1.clean_copy
-
-        same(assertion1.description, assertion2.description, "description") &&
-        same(assertion1.suite, assertion2.suite, "suite") &&
-        same(assertion1.block, assertion2.block, "block")
-      end
-    end
-
     suite "#to_s" do
       assert "Assertion should have a to_s which contains the classname and the description" do
         description  = "the description"

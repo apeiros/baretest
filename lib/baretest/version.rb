@@ -18,7 +18,7 @@ module BareTest
     MINOR = 2
 
     # The tiny version number
-    TINY  = 1
+    TINY  = 2
 
     # The version as a string
     def self.to_s

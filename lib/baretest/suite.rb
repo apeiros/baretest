@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/setup'
+
+
+
 module BareTest
 
   # A Suite is a container for multiple assertions.
@@ -68,7 +72,8 @@ module BareTest
       @suites      = [] # [["description", subsuite, skipped], ["description2", ...], ...] - see Array#assoc
       @assertions  = []
       @skipped     = []
-      @setup       = []
+      @setup       = {nil => []}
+      @components  = []
       @teardown    = []
       @ancestors   = [self] + (@parent ? @parent.ancestors : [])
       instance_eval(&block) if block
@@ -100,7 +105,7 @@ module BareTest
         @skipped.concat(with_suite.skipped)
       else
         @assertions.concat(with_suite.assertions)
-        @setup.concat(with_suite.setup)
+        @setup.update(with_suite.setup) do |k,v1,v2| v1+v2 end
         @teardown.concat(with_suite.teardown)
         with_suite.suites.each { |description, suite|
           if append_to = @suites.assoc(description) then
@@ -113,9 +118,18 @@ module BareTest
       self
     end
 
-    # All setups in the order of their nesting (outermost first, innermost last)
+    # All setups in the order of their definition and nesting (outermost first,
+    # innermost last)
     def ancestry_setup
-      ancestors.map { |suite| suite.setup }.flatten.reverse
+      @parent ? @parent.ancestry_setup.merge(@setup) { |k,v1,v2|
+        v1+v2
+      } : @setup
+    end
+
+    # All setup-components in the order of their definition and nesting
+    # (outermost first, innermost last)
+    def ancestry_components
+      @parent ? @parent.ancestry_components|@components : @components
     end
 
     # All teardowns in the order of their nesting (innermost first, outermost last)
@@ -125,14 +139,43 @@ module BareTest
 
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
-    def setup(&block)
-      block ? @setup << block : @setup
+    def setup(component=nil, multiplexed=nil, &block)
+      if block then
+        @components << component unless @setup.has_key?(component)
+        @setup[component] ||= []
+        @setup[component] << ::BareTest::Setup.new(component, multiplexed, block)
+      end
+
+      @setup
     end
 
     # Define a teardown block for this suite. The block will be ran after every
     # assertion once, even for nested suites.
     def teardown(&block)
       block ? @teardown << block : @teardown
+    end
+
+    def each_component_variant
+      setups     = ancestry_setup
+      components = ancestry_components
+      base       = setups[nil]
+
+      if components.empty?
+        yield(base)
+      else
+        setup_in_order = setups.values_at(*components)
+        maximums       = setup_in_order.map { |i| i.size }
+        iterations     = maximums.inject { |r,f| r*f } || 0
+
+        iterations.times do |i|
+          process = maximums.map { |e| i,e=i.divmod(e); e }
+          yield base+setup_in_order.zip(process).map { |variants, current|
+            variants[current]
+          }
+        end
+      end
+
+      self
     end
 
     # Define an assertion. The block is supposed to return a trueish value

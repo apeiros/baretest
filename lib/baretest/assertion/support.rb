@@ -17,7 +17,7 @@ module BareTest
   @touch = {}
 
   # We don't want to litter in Assertion
-  # Touches are associated with 
+  # Touches are associated with
   # Used by BareTest::Assertion::Support#touch
   def self.touch(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)

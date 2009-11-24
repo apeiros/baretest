@@ -102,7 +102,7 @@ module BareTest
     # Runs all assertions and nested suites.
     def run_suite(suite)
       suite.assertions.each do |test|
-        run_test(test)
+        run_test_variants(test)
       end
       suite.suites.each do |(description, suite)|
         run_suite(suite)
@@ -110,11 +110,20 @@ module BareTest
       @count[:suite] += 1
     end
 
-    # Formatter callback.
     # Invoked once for every assertion.
+    # Iterates over all variants of an assertion and invokes run_test
+    # for each.
+    def run_test_variants(test)
+      test.suite.each_component_variant do |setups|
+        run_test(test, setups)
+      end
+    end
+
+    # Formatter callback.
+    # Invoked once for every variation of an assertion.
     # Gets the assertion to run as single argument.
-    def run_test(assertion)
-      rv = assertion.execute
+    def run_test(assertion, setup)
+      rv = assertion.execute(setup)
       @count[:test]            += 1
       @count[assertion.status] += 1
       rv

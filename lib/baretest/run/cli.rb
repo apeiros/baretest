@@ -70,13 +70,13 @@ module BareTest
         @depth -= 1
       end
 
-      def run_test(assertion)
+      def run_test(assertion, setup)
         rv               = super # run the assertion
         indent           = '           '+'  '*@depth
         message          = []
         deeper           = []
 
-        printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.description)
+        printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.interpolated_description)
         if rv.status == :error then
           message = (rv.exception.message || "no error message given").split("\n")
           deeper  = $VERBOSE ? rv.exception.backtrace : rv.exception.backtrace.first(1)

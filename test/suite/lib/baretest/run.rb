@@ -123,7 +123,7 @@ BareTest.suite "BareTest" do
       assert "Invokes #run_test with every suite in the given suite" do
         invoked_tests = []
         extender       = Module.new do |m|
-          define_method :run_test do |test|
+          define_method :run_test do |test, setup|
             invoked_tests << test
           end
         end
@@ -158,7 +158,7 @@ BareTest.suite "BareTest" do
         # should implement this with a mock, expecting #execute to be called
         assertion = ::BareTest::Assertion.new(nil, nil) do true end
         run       = ::BareTest::Run.new(::BareTest::Suite.new)
-        run.run_test(assertion)
+        run.run_test(assertion, [])
 
         equal(:success, assertion.status)
       end
@@ -167,7 +167,7 @@ BareTest.suite "BareTest" do
         assertion = ::BareTest::Assertion.new(nil, "") do true end
         run       = ::BareTest::Run.new(::BareTest::Suite.new)
         count_before = run.count[:test]
-        run.run_test(assertion)
+        run.run_test(assertion, [])
         count_after = run.count[:test]
 
         equal(count_before+1, count_after)
@@ -178,7 +178,7 @@ BareTest.suite "BareTest" do
           assertion = ::BareTest::Assertion.new(nil, "") do true end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:success]
-          run.run_test(assertion)
+          run.run_test(assertion, [])
           count_after = run.count[:success]
 
           equal(count_before+1, count_after)
@@ -190,7 +190,7 @@ BareTest.suite "BareTest" do
           assertion = ::BareTest::Assertion.new(nil, "")
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:pending]
-          run.run_test(assertion)
+          run.run_test(assertion, [])
           count_after = run.count[:pending]
 
           equal(count_before+1, count_after)
@@ -202,7 +202,7 @@ BareTest.suite "BareTest" do
           assertion = ::BareTest::Skipped::Assertion.new(nil, "")
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:skipped]
-          run.run_test(assertion)
+          run.run_test(assertion, [])
           count_after = run.count[:skipped]
 
           equal(count_before+1, count_after)
@@ -214,7 +214,7 @@ BareTest.suite "BareTest" do
           assertion = ::BareTest::Assertion.new(nil, "") do false end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:failure]
-          run.run_test(assertion)
+          run.run_test(assertion, [])
           count_after = run.count[:failure]
 
           equal(count_before+1, count_after)
@@ -226,7 +226,7 @@ BareTest.suite "BareTest" do
           assertion = ::BareTest::Assertion.new(nil, "") do raise end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:error]
-          run.run_test(assertion)
+          run.run_test(assertion, [])
           count_after = run.count[:error]
 
           equal(count_before+1, count_after)
