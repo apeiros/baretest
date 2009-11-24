@@ -71,7 +71,7 @@ module BareTest
         @depth -= 1
       end
 
-      def run_test(assertion)
+      def run_test(assertion, setup)
         start            = Time.now
         rv               = super # run the assertion
         times            = [Time.now-start]

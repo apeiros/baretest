@@ -30,7 +30,7 @@ module BareTest
         @depth -= 1
       end
 
-      def run_test(assertion)
+      def run_test(assertion, setup)
         rv = super # run the assertion
         puts('  '*@depth+rv.description)
         if rv.exception then

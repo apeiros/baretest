@@ -28,7 +28,7 @@ module BareTest
         @depth -= 1
       end
 
-      def run_test(assertion)
+      def run_test(assertion, setup)
         puts('  '*@depth+assertion.description)
       end
     end

@@ -29,7 +29,7 @@ module BareTest
         super
       end
 
-      def run_test(assertion)
+      def run_test(assertion, setup)
         rv = super
         printf "%sok %d - %s%s\n",
           rv.status == :success ? '' : 'not ',
