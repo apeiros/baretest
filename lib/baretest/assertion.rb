@@ -58,8 +58,18 @@ module BareTest
     # The suite this assertion belongs to
     attr_reader :suite
 
+    # The Context-instance the assertions setup, assert and teardown are run
+    attr_reader :context
+
+    # The Setup instances whose #block is to be executed before this assertion
+    # is ran
+    attr_accessor :setups
+
     # The block specifying the assertion
     attr_reader :block
+
+    # The file this assertion is specified in. Not contructed by Assertion itself.
+    attr_accessor :code
 
     # The file this assertion is specified in. Not contructed by Assertion itself.
     attr_accessor :file
@@ -77,17 +87,22 @@ module BareTest
     def initialize(suite, description, &block)
       @suite          = suite
       @description    = (description || "No description given")
-      @setup          = nil
+      @setups         = nil
+      @block          = block
+      reset
+    end
+
+    def reset
       @status         = nil
       @failure_reason = nil
       @exception      = nil
-      @block          = block
+      @context        = ::BareTest::Assertion::Context.new(self)
     end
 
     def interpolated_description
-      if @setup && @setup.size > 1 then
+      if @setups && @setups.size > 1 then
         substitutes = {}
-        @setup.each do |setup| substitutes[setup.substitute] = setup.value end
+        @setups.each do |setup| substitutes[setup.substitute] = setup.value end
         substitutes.delete(nil)
         @description.gsub(/:(?:#{substitutes.keys.join('|')})\b/) { |m|
           substitutes[m[1..-1].to_sym]
@@ -99,9 +114,8 @@ module BareTest
 
     # Run all setups in the order of their nesting (outermost first, innermost last)
     def setup
-      @context   = ::BareTest::Assertion::Context.new(self)
-      @setup   ||= @suite ? @suite.ancestry_setup : []
-      @setup.each do |setup| @context.instance_eval(&setup.block) end
+      @setups  ||= @suite ? @suite.first_component_variant : []
+      @setups.each do |setup| @context.instance_eval(&setup.block) end
       true
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
@@ -126,8 +140,8 @@ module BareTest
     end
 
     # Runs the assertion and sets the status and exception
-    def execute(setup=nil)
-      @setup     = setup if setup
+    def execute(setups=nil)
+      @setups    = setups if setups
       @exception = nil
       if @block then
         if setup() then
