@@ -24,6 +24,15 @@ module BareTest
   # See BareTest::IRBMode::AssertionContext for some methods IRBMode adds to Assertion for
   # use within the irb session.
   module IRBMode # :nodoc:
+    @irb_setup = false
+
+    def self.irb_setup! # :nodoc:
+      @irb_setup = true
+    end
+
+    def self.irb_setup? # :nodoc:
+      @irb_setup
+    end
 
     # The class used to recreate the failed/errored assertion's context.
     # Adds several methods over plain Assertion.
@@ -135,7 +144,8 @@ module BareTest
         require 'irb'
         require 'pp'
         require 'yaml'
-        IRB.setup(nil) # must only be called once
+        IRB.setup(nil) unless ::BareTest::IRBMode.irb_setup? # must only be called once
+        ::BareTest::IRBMode.irb_setup!
       end
     end
 
@@ -221,10 +231,6 @@ module BareTest
       irb_context = assertion.context
       irb_context.extend IRBContext
       irb_context.__original__ = original_assertion
-      if code = assertion.code then
-        #irb_context.code = code
-        Readline::HISTORY.push(*code.split("\n")[1..-2])
-      end
       assertion.setup
 
       $stdout = StringIO.new # HAX - silencing 'irb: warn: can't alias help from irb_help.' - find a better way
@@ -236,6 +242,12 @@ module BareTest
       # /HAX
 
       trap("SIGINT") do irb.signal_handle end
+
+      if code = original_assertion.code then
+        #irb_context.code = code
+        Readline::HISTORY.push(*code.split("\n")[1..-2])
+      end
+
       catch(:IRB_EXIT) do irb.eval_input end
 
       assertion.teardown
