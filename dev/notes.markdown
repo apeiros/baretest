@@ -11,13 +11,17 @@ initialize
     :   specific init to initialize the formatter
 run
 :   You should not touch this. Bare-Test prepares there for running the tests.
-run_all
-:   Outermost call. Invokes run_suite on toplevel suite. Invoked once per
+run\_all
+:   Outermost call. Invokes run\_suite on toplevel suite. Invoked once per
     running all tests.
-run_suite
-:   Run once per suite per running all tests. Invokes run_suite per contained
-    suite and run_test per contained assertion.
+run\_suite
+:   Run once per suite per running all tests. Invokes run\_suite per contained
+    suite and run\_test per contained assertion.
     Increments @count[:suite] by 1 after having run.
+run\_test\_variants
+:   Iterates over all setup variants of the suite and yields a set of setups
+    to run_test
+
 run_test
 :   Run once per test.
     Increments @count[:test] and @count[status] by 1 after having run.
