@@ -7,5 +7,9 @@
 
 
 module BareTest
-  Setup = Struct.new(:substitute, :value, :block)
+  Setup = Struct.new(:substitute, :value, :block) do
+    def inspect
+      sprintf "#<Setup substitute=%p value=%p>", substitute, value
+    end
+  end
 end
