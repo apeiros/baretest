@@ -178,6 +178,14 @@ module BareTest
       self
     end
 
+    def first_component_variant
+      setups, *comps = ancestry_setup.values_at(nil, *ancestry_components)
+      setups = setups+comps.map { |comp| comp.first }
+      yield(setups) if block_given?
+
+      setups
+    end
+
     # Define an assertion. The block is supposed to return a trueish value
     # (anything but nil or false).
     #
