@@ -27,10 +27,9 @@ module BareTest
 
     # The class used to recreate the failed/errored assertion's context.
     # Adds several methods over plain Assertion.
-    class AssertionContext < ::BareTest::Assertion
+    module IRBContext
 
-      # The original assertion (the one that failed or errored)
-      attr_accessor :original_assertion
+      attr_accessor :__original__
 
       # Prints a list of available helper methods
       def help
@@ -53,12 +52,12 @@ module BareTest
       end
 
       def to_s # :nodoc:
-        "Assertion"
+        "Context"
       end
 
       # Returns the original assertion's status
       def s!
-        p @original_assertion.status
+        p @__original__.status
       end
 
       # Prints the original assertion's error message and backtrace
@@ -69,8 +68,10 @@ module BareTest
 
       # Prints the original assertion's error message
       def em!
-        if @original_assertion.exception then
-          puts @original_assertion.exception.message
+        if @__original__.exception then
+          puts @__original__.exception.message
+        elsif @__original__.failure_reason
+          puts @__original__.failure_reason
         else
           puts "No exception occurred, therefore no error message is available"
         end
@@ -78,9 +79,9 @@ module BareTest
 
       # Prints the original assertion's backtrace
       def bt!(size=nil)
-        if @original_assertion.exception then
+        if @__assertion__.exception then
           size ||= caller.size+3
-          puts @original_assertion.exception.backtrace[0..-size]
+          puts @__assertion__.exception.backtrace[0..-size]
         else
           puts "No exception occurred, therefore no backtrace is available"
         end
@@ -101,15 +102,30 @@ module BareTest
         puts *global_variables.sort
       end
 
-      # Returns a string of the original assertion's nesting within suites
+      # Prints a string of the original assertion's nesting within suites
+      def description
+        puts @__assertion__.description
+      end
+
+      # Prints a string of the original assertion's nesting within suites
       def nesting
-        puts suite.ancestors[0..-2].reverse.map { |suite| suite.description }.join(' > ')
+        puts @__assertion__.suite.ancestors[0..-2].reverse.map { |s| s.description }.join(' > ')
       end
 
       # Prints the code of the assertion
       # Be aware that this relies on your code being properly indented.
-      def code
-        puts(@__assertion__[:code] || "Code could not be extracted")
+      def code!
+        if code = @__assertion__.code then
+          puts(insert_line_numbers(code, @__assertion__.line-1))
+        else
+          puts "Code could not be extracted"
+        end
+      end
+
+      def insert_line_numbers(code, start_line=1)
+        digits       = Math.log10(start_line+code.count("\n")).floor+1
+        current_line = start_line-1
+        code.gsub(/^/) { sprintf '  %0*d  ', digits, current_line+=1 }
       end
     end
 
@@ -126,7 +142,7 @@ module BareTest
     # Formatter callback.
     # Invoked once for every assertion.
     # Gets the assertion to run as single argument.
-    def run_test(assertion)
+    def run_test(assertion, setup)
       rv = super
       # drop into irb if assertion failed
       case rv.status
@@ -151,11 +167,11 @@ module BareTest
       puts "#{assertion.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
       if file = assertion.file then
-        code  = irb_code_reindented(file, true, assertion.line-1,20)
+        code  = irb_code_reindented(file, assertion.line-1,20)
         match = code.match(/\n^  [^ ]/)
         code[-(match.post_match.size-3)..-1] = ""
-        assertion.instance_variable_get(:@__assertion__)[:code] = code
-        puts "Code (#{file}):", code
+        assertion.code = code
+        puts "Code (#{file}):", insert_line_numbers(code, assertion.line-1)
       end
     end
 
@@ -171,53 +187,48 @@ module BareTest
         file, line = match.captures
         file = File.expand_path(file)
         if assertion.file == file then
-          code = irb_code_reindented(file, true, (assertion.line-1)..(line.to_i))
-          assertion.instance_variable_get(:@__assertion__)[:code] = code
-          puts "Code (#{file}):", code
+          code = irb_code_reindented(file, (assertion.line-1)..(line.to_i))
+          assertion.code = code
+          puts "Code (#{file}):", insert_line_numbers(code, assertion.line-1)
         end
       end
     end
 
     # Nicely reformats the assertion's code
-    def irb_code_reindented(file, show_lines, *slice) # :nodoc:
+    def irb_code_reindented(file, *slice) # :nodoc:
       lines  = File.readlines(file)
       string = lines[*slice].join("").sub(/[\r\n]*\z/, '')
-      if Range === slice.first
-        from = slice.first.begin
-      else
-        from = slice.first
-      end
-      from = lines.length+from if from < 0
-
       string.gsub!(/^\t+/) { |m| "  "*m.size }
       indent = string[/^ +/]
-      if show_lines then
-        digits       = Math.log10(from+string.count("\n")).floor+1
-        current_line = from-1
-        string.gsub!(/^#{indent}/) do
-          sprintf '  %0*d  ', digits, current_line+=1
-        end
-      else
-        string.gsub!(/^#{indent}/, '  ')
-      end
+      string.gsub!(/^#{indent}/, '  ')
+
       string
+    end
+
+    def insert_line_numbers(code, start_line=1)
+      digits       = Math.log10(start_line+code.count("\n")).floor+1
+      current_line = start_line-1
+      code.gsub(/^/) { sprintf '  %0*d  ', digits, current_line+=1 }
     end
 
     # This method is highlevel hax, try to add necessary API to Test::Assertion
     # Drop into an irb shell in the context of the assertion passed as an argument.
     # Uses Assertion#clean_copy(AssertionContext) to create the context.
     # Adds the code into irb's history.
-    def irb_mode_for_assertion(assertion) # :nodoc:
-      irb_context = assertion.clean_copy(AssertionContext)
-      if code = assertion.instance_variable_get(:@__assertion__)[:code] then
-        irb_context.instance_variable_get(:@__assertion__)[:code] = code
+    def irb_mode_for_assertion(original_assertion) # :nodoc:
+      assertion = original_assertion.clone
+      assertion.reset
+      irb_context = assertion.context
+      irb_context.extend IRBContext
+      irb_context.__original__ = original_assertion
+      if code = assertion.code then
+        #irb_context.code = code
         Readline::HISTORY.push(*code.split("\n")[1..-2])
       end
-      irb_context.original_assertion = assertion
-      irb_context.setup
+      assertion.setup
 
       $stdout = StringIO.new # HAX - silencing 'irb: warn: can't alias help from irb_help.' - find a better way
-      irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context.send(:binding)))
+      irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context))
       $stdout = STDOUT # /HAX
       # HAX - cargo cult, taken from irb.rb, not yet really understood.
       IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC] # loads the irbrc?
@@ -227,7 +238,7 @@ module BareTest
       trap("SIGINT") do irb.signal_handle end
       catch(:IRB_EXIT) do irb.eval_input end
 
-      irb_context.teardown
+      assertion.teardown
     end
 
     # Invoked when we leave the irb session
