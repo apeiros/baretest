@@ -85,7 +85,7 @@ module BareTest
         end
 
         iters.times do
-          assertion.clean
+          assertion.reset
           start = Time.now
           assertion.execute
           times << (Time.now-start)
