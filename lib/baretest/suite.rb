@@ -140,10 +140,26 @@ module BareTest
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
     def setup(component=nil, multiplexed=nil, &block)
-      if block then
+      if component.nil? && block then
+        @setup[nil] << ::BareTest::Setup.new(nil, nil, nil, block)
+      elsif block then
         @components << component unless @setup.has_key?(component)
         @setup[component] ||= []
-        @setup[component] << ::BareTest::Setup.new(component, multiplexed, block)
+
+        case multiplexed
+          when String
+            @setup[component] << ::BareTest::Setup.new(component, multiplexed, nil, block)
+          when Array
+            multiplexed.each do |substitute|
+              @setup[component] << BareTest::Setup.new(component, substitute.to_s, substitute, block)
+            end
+          when Hash
+            multiplexed.each do |substitute, value|
+              @setup[component] << BareTest::Setup.new(component, substitute, value, block)
+            end
+        end
+      elsif component || multiplexed
+        raise ArgumentError, "With component or multiplexed given, a block must be provided too."
       end
 
       @setup

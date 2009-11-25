@@ -100,22 +100,22 @@ module BareTest
     end
 
     def interpolated_description
-      if @setups && @setups.size > 1 then
+      setups = @setups ? @setups.select { |s| s.component } : []
+      if setups.empty? then
+        @description
+      else
         substitutes = {}
-        @setups.each do |setup| substitutes[setup.substitute] = setup.value end
-        substitutes.delete(nil)
+        setups.each do |setup| substitutes[setup.component] = setup.substitute end
         @description.gsub(/:(?:#{substitutes.keys.join('|')})\b/) { |m|
           substitutes[m[1..-1].to_sym]
         }
-      else
-        @description
       end
     end
 
     # Run all setups in the order of their nesting (outermost first, innermost last)
     def setup
       @setups  ||= @suite ? @suite.first_component_variant : []
-      @setups.each do |setup| @context.instance_eval(&setup.block) end
+      @setups.each do |setup| @context.instance_exec(setup.value, &setup.block) end
       true
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
