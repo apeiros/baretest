@@ -1,0 +1,33 @@
+VERSIONS:
+0.3:
+  * setup-variations (done)
+  * skip-method and Skip < StandardError
+  * ~/.baretestrc
+  * configuration system
+  * formatter specific options
+
+0.4:
+  * continuous testing on OS X (fsevents+growl)
+  * full ruby-debug integration
+  * full ir integration
+  * tag/focus
+
+0.5:
+  * forked suite execution
+
+0.6:
+  * rails integration (controllers, models, views, helpers)
+
+PROGRESSIVE
+* TestGuide - How to use BareTest
+* TestGuide - How to test X
+  * FileSystem
+  * IO (User-interaction, Sockets)
+  * WebServices (Rails, ...)
+  * Media (images, audio, video)
+
+UNASSIGNED
+* assert_flow - for complex unit tests where reaching a certain state
+  takes a lot of time and successive asserts depend on previous ones
+  abort flow assertion upon first failure.
+* auto-require corresponding lib-files
