@@ -281,6 +281,14 @@ BareTest.suite "BareTest" do
           end
         end
       end
+
+      suite "#skip" do
+        assert "Should raise a BareTest::Assertion::Skip." do
+          raises(::BareTest::Assertion::Skip) do
+            skip "Should raise that exception."
+          end
+        end
+      end
     end # Support
   end # Assertion
 end # BareTest

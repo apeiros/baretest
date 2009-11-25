@@ -8,6 +8,7 @@
 
 require 'baretest/assertion/context'
 require 'baretest/assertion/failure'
+require 'baretest/assertion/skip'
 
 
 
@@ -52,8 +53,8 @@ module BareTest
     # The description of this assertion.
     attr_reader :description
 
-    # The failure reason.
-    attr_reader :failure_reason
+    # The failure/error/skipping/pending reason.
+    attr_reader :reason
 
     # The suite this assertion belongs to
     attr_reader :suite
@@ -93,10 +94,10 @@ module BareTest
     end
 
     def reset
-      @status         = nil
-      @failure_reason = nil
-      @exception      = nil
-      @context        = ::BareTest::Assertion::Context.new(self)
+      @status    = nil
+      @reason    = nil
+      @exception = nil
+      @context   = ::BareTest::Assertion::Context.new(self)
     end
 
     def interpolated_description
@@ -120,9 +121,9 @@ module BareTest
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
     rescue Exception => exception
-      @failure_reason = "An error occurred during setup"
-      @exception      = exception
-      @status         = :error
+      @reason    = "An error occurred during setup"
+      @exception = exception
+      @status    = :error
       false
     end
 
@@ -134,9 +135,9 @@ module BareTest
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
     rescue Exception => exception
-      @failure_reason = "An error occurred during setup"
-      @exception      = exception
-      @status         = :error
+      @reason    = "An error occurred during setup"
+      @exception = exception
+      @status    = :error
     end
 
     # Runs the assertion and sets the status and exception
@@ -147,17 +148,20 @@ module BareTest
         if setup() then
           # run the assertion
           begin
-            @status         = @context.instance_eval(&@block) ? :success : :failure
-            @failure_reason = "Assertion failed" if @status == :failure
+            @status = @context.instance_eval(&@block) ? :success : :failure
+            @reason = "Assertion failed" if @status == :failure
           rescue *PassthroughExceptions
             raise # pass through exceptions must be passed through
           rescue ::BareTest::Assertion::Failure => failure
-            @status         = :failure
-            @failure_reason = failure.message
+            @status = :failure
+            @reason = failure.message
+          rescue ::BareTest::Assertion::Skip => skip
+            @status = :skipped
+            @reason = skip.message
           rescue Exception => exception
-            @failure_reason = "An error occurred during execution"
-            @exception      = exception
-            @status         = :error
+            @reason    = "An error occurred during execution"
+            @exception = exception
+            @status    = :error
           end
         end
         teardown

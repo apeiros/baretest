@@ -7,6 +7,7 @@
 
 
 require 'baretest/assertion/failure'
+require 'baretest/assertion/skip'
 begin
   require 'thread'
 rescue LoadError; end # no thread support in this ruby
@@ -341,10 +342,18 @@ module BareTest
         end
       end
 
-      # Raises Test::Assertion::Failure and runs sprintf over message with *args
+      # Raises Test::Assertion::Failure, which causes the Assertion to get the
+      # status :failure. Runs sprintf over message with *args
       # Particularly useful with %p and %s.
-      def failure(message, *args)
+      def failure(message="Assertion failed", *args)
         raise ::BareTest::Assertion::Failure, sprintf(message, *args)
+      end
+
+      # Raises Test::Assertion::Skip, which causes the Assertion to get the
+      # status :skipped. Runs sprintf over message with *args
+      # Particularly useful with %p and %s.
+      def skip(message="Assertion was skipped", *args)
+        raise ::BareTest::Assertion::Skip, sprintf(message, *args)
       end
 
     private

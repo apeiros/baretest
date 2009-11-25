@@ -38,6 +38,12 @@ BareTest.suite "BareTest" do
         assertion_success.status == :failure
       end
 
+      assert "Executing an assertion with a block that raises a Failure should be :failure" do
+        assertion_success = ::BareTest::Assertion.new(nil, "description") { raise ::BareTest::Assertion::Failure, "just fail" }
+        assertion_success.execute
+        assertion_success.status == :failure
+      end
+
       assert "Executing an assertion with a block that raises should be :error" do
         assertion_success = ::BareTest::Assertion.new(nil, "description") { raise }
         assertion_success.execute
@@ -49,6 +55,12 @@ BareTest.suite "BareTest" do
         assertion_success.execute
 
         same :expected => :pending, :actual => assertion_success.status
+      end
+
+      assert "Executing an assertion with a block that raises a Skip should be :skipped" do
+        assertion_success = ::BareTest::Assertion.new(nil, "description") { raise ::BareTest::Assertion::Skip, "just skip" }
+        assertion_success.execute
+        assertion_success.status == :skipped
       end
     end
 
