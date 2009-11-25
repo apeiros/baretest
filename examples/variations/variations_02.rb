@@ -8,7 +8,7 @@ end
 
 BareTest.suite do
   suite "Variations 02" do
-    setup :number, %w[123 -123 1.23 x -1.23 1e3 -1e3 1e-3 -1e-3] do |number|
+    setup :number, %w[123 -123 1.23 -1.23 1e3 -1e3 1e-3 -1e-3] do |number|
       @number = number
     end
 
