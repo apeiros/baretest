@@ -6,7 +6,7 @@
 
 
 
-BareTest.define "Failure" do
+BareTest.suite "Failure" do
   setup do
     @a = 1
     @b = 2
