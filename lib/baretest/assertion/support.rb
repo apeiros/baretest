@@ -17,7 +17,7 @@ module BareTest
   @touch = {}
 
   # We don't want to litter in Assertion
-  # Touches are associated with
+  # Touches are associated withx
   # Used by BareTest::Assertion::Support#touch
   def self.touch(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)
@@ -109,26 +109,28 @@ module BareTest
       #   raises SomeException, :with_message => "bar"; raise SomeException, "bar" end # => true
       #   raises :with_message => /\Aknown \w+\z/; raise "known unknown" end # => true
       def raises(exception_class=StandardError, opts={})
-        begin
-          yield
-        rescue exception_class => exception
-          if opts[:with_message] && !(opts[:with_message] === exception.message) then
-            failure "Expected block to raise with the message %p, but the message was %p",
-                    exception.message, opts[:with_message]
-          else
-            true
-          end
-        rescue => exception
-          failure "Expected block to raise #{exception_class}, but it raised #{exception.class}."
+        yield
+      rescue exception_class => exception
+        if opts[:with_message] && !(opts[:with_message] === exception.message) then
+          failure "Expected block to raise with the message %p, but the message was %p",
+                  exception.message, opts[:with_message]
         else
-          failure "Expected block to raise #{exception_class}, but nothing was raised."
+          true
         end
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue => exception
+        failure "Expected block to raise #{exception_class}, but it raised #{exception.class}."
+      else
+        failure "Expected block to raise #{exception_class}, but nothing was raised."
       end
 
       # Will raise a Failure if the given block raises.
       def raises_nothing
         yield
-      rescue => exception
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => exception
         failure "Expected block to raise nothing, but it raised #{exception.class}."
       else
         true
@@ -139,6 +141,10 @@ module BareTest
       # of the possible rounding differences.
       def within_delta(a, b, delta)
         (a-b).abs < delta
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not compare %p with %p due to %s", a, b, e
       end
 
       # Use this method to test whether certain code (e.g. a callback) was reached.
@@ -201,6 +207,11 @@ module BareTest
           end
         end
         true
+
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # Uses eql? to test whether the objects are equal
@@ -219,6 +230,11 @@ module BareTest
           end
         end
         true
+
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # Uses == to test whether the objects are equal
@@ -237,6 +253,11 @@ module BareTest
           end
         end
         true
+
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not compare %p with %p due to %s", expected, actual, e
       end
       alias equal order_equal
 
@@ -255,6 +276,11 @@ module BareTest
             message, expected, actual
         end
         true
+
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # To compare two collections (which must implement #each)
@@ -266,6 +292,7 @@ module BareTest
         count = Hash.new(0)
         expected.each { |element| count[element] += 1 }
         actual.each   { |element| count[element] -= 1 }
+
         unless count.all? { |key, value| value.zero? } then
           only_in_expected = count.select { |ele, n| n > 0 }.map { |ele, n| ele }
           only_in_actual   = count.select { |ele, n| n < 0 }.map { |ele, n| ele }
@@ -280,6 +307,11 @@ module BareTest
           end
         end
         true
+
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # Raises a Failure if the given object is not an instance of the given class
@@ -293,6 +325,11 @@ module BareTest
             message, expected, actual, actual.class
         end
         true
+
+      rescue *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not test whether %p is a child of %p due to %s", actual, expected, e
       end
 
       # A method to make raising failures that only optionally have a message easier.

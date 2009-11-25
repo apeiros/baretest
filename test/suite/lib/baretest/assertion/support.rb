@@ -125,6 +125,12 @@ BareTest.suite "BareTest" do
             within_delta(3.0, 3.03, 0.02)
           end
         end
+
+        assert "Should fail with invalid input." do
+          fails do
+            within_delta(nil, nil, 0.02)
+          end
+        end
       end # within_delta
 
       suite "#equal_unordered" do
@@ -143,6 +149,12 @@ BareTest.suite "BareTest" do
             equal_unordered([1,2,3], [3,1,2,2])
           end
         end
+
+        assert "Should fail with invalid input." do
+          fails do
+            equal_unordered(nil, nil)
+          end
+        end
       end # equal_unordered
 
       suite "#same" do
@@ -154,6 +166,14 @@ BareTest.suite "BareTest" do
         assert "Should fail when the values are not the same object." do
           fails do
             same("a", "b")
+          end
+        end
+
+        assert "Should fail with invalid input." do
+          fails do
+            x = Class.new do undef equal? end # really, who does that?
+            y = x.new
+            equal_unordered(y, y)
           end
         end
       end # same
@@ -168,6 +188,14 @@ BareTest.suite "BareTest" do
             order_equal(1, 1.1)
           end
         end
+
+        assert "Should fail with invalid input." do
+          fails do
+            x = Class.new do undef == end
+            y = x.new
+            order_equal(y, y)
+          end
+        end
       end # order_equal
 
       suite "#hash_key_equal" do
@@ -180,6 +208,14 @@ BareTest.suite "BareTest" do
             hash_key_equal("foo", "bar")
           end
         end
+
+        assert "Should fail with invalid input." do
+          fails do
+            x = Class.new do undef eql? end
+            y = x.new
+            hash_key_equal(y, y)
+          end
+        end
       end # hash_key_equal
 
       suite "#case_equal" do
@@ -190,6 +226,14 @@ BareTest.suite "BareTest" do
         assert "Should fail when the values are not the same object." do
           fails do
             case_equal(String, [])
+          end
+        end
+
+        assert "Should fail with invalid input." do
+          fails do
+            x = Class.new do undef === end
+            y = x.new
+            case_equal(y, y)
           end
         end
       end # case_equal
