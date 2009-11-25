@@ -113,7 +113,7 @@ BareTest.suite "BareTest" do
 
         assertion.execute
 
-        assertion.status == :error
+        equal(:error, assertion.status, "assertion.status")
       end
     end
 
