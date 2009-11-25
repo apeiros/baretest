@@ -79,8 +79,8 @@ module BareTest
       def em!
         if @__original__.exception then
           puts @__original__.exception.message
-        elsif @__original__.failure_reason
-          puts @__original__.failure_reason
+        elsif @__original__.reason
+          puts @__original__.reason
         else
           puts "No exception occurred, therefore no error message is available"
         end

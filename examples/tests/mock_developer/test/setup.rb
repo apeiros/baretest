@@ -13,13 +13,13 @@ BareTest.toplevel_suite.teardown do
     mock.teardown(@_mymockname)
   }
   unless @_mymockname[:exceptions].empty? then
-    @failure_reason = "An error occurred"
-    @exception      = @_mymockname[:exceptions].first
-    @status         = :error
+    @reason    = "An error occurred"
+    @exception = @_mymockname[:exceptions].first
+    @status    = :error
   end
   unless @status == :error || @_mymockname[:failures].empty?
-    @failure_reason = @_mymockname[:failures].first
-    @status         = :failure
+    @reason = @_mymockname[:failures].first
+    @status = :failure
   end
 end
 
