@@ -123,7 +123,8 @@ module BareTest
     # Invoked once for every variation of an assertion.
     # Gets the assertion to run as single argument.
     def run_test(assertion, setup)
-      rv = assertion.execute(setup)
+      assertion.setups = setup
+      rv = assertion.execute
       @count[:test]            += 1
       @count[assertion.status] += 1
       rv
