@@ -10,6 +10,7 @@ examples/test.rake
 examples/test.rb
 lib/baretest.rb
 lib/baretest/assertion.rb
+lib/baretest/assertion/context.rb
 lib/baretest/assertion/failure.rb
 lib/baretest/assertion/support.rb
 lib/baretest/irb_mode.rb
@@ -23,6 +24,7 @@ lib/baretest/run/profile.rb
 lib/baretest/run/spec.rb
 lib/baretest/run/tap.rb
 lib/baretest/run/xml.rb
+lib/baretest/setup.rb
 lib/baretest/skipped.rb
 lib/baretest/skipped/assertion.rb
 lib/baretest/skipped/suite.rb
