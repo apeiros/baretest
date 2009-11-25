@@ -188,10 +188,10 @@ BareTest.suite "BareTest" do
       assert "Called with a block it should add a new setup block." do
         suite  = ::BareTest::Suite.new
         block  = proc {}
-        before = suite.setup.dup
+        before = suite.first_component_variant.dup
 
         suite.setup(&block)
-        after  = suite.setup.dup
+        after  = suite.first_component_variant.dup
 
         equal(
           :expected => 1,
@@ -199,7 +199,7 @@ BareTest.suite "BareTest" do
           :message  => "number of new setup blocks after adding one"
         ) &&
         same(
-          :expected => (after-before).first,
+          :expected => (after-before).first.block,
           :actual   => block,
           :message  => "the new block"
         )
