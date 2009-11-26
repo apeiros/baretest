@@ -19,6 +19,7 @@ lib/baretest.rb
 lib/baretest/assertion.rb
 lib/baretest/assertion/context.rb
 lib/baretest/assertion/failure.rb
+lib/baretest/assertion/skip.rb
 lib/baretest/assertion/support.rb
 lib/baretest/irb_mode.rb
 lib/baretest/layout.rb
