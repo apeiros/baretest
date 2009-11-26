@@ -1,7 +1,7 @@
 VERSIONS:
 0.3:
   * setup-variations (done)
-  * skip-method and Skip < StandardError
+  * skip-method and Skip < StandardError (done)
   * ~/.baretestrc
   * configuration system
   * formatter specific options
