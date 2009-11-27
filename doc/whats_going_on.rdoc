@@ -1,0 +1,35 @@
+With the following test definition:
+  BareTest.suite "A"
+    setup do
+      @x = 1
+    end
+  
+    suite "B" do
+      setup do
+        @y = 2
+      end
+      
+      assert "Foo" do
+        @x == foo(@y)
+      end
+    end
+  end
+
+Is this approximately as if you'd execute following code:
+  context = Assertion::Context.new
+  context.instance_eval do @x = 1 end # setup of suite A
+  context.instance_eval do @y = 1 end # setup of suite B
+  # execute assertion
+  success = false
+  begin
+    success = context.instance_eval do @x = foo(@y) end # assertion
+    status  = success ? :success : :failure
+  rescue *PassthroughExceptions
+    Kernel.raise # let those exceptions pass unhandled
+  rescue Assertion::Failure
+    status  = :failure
+  rescue Assertion::Skip
+    status  = :skipped
+  rescue Exception # catch-all for the rest
+    status  = :error
+  end
