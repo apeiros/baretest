@@ -15,9 +15,9 @@ Project.meta.version          = version_proc("BareTest::VERSION")
 Project.meta.readme           = 'README.rdoc'
 Project.meta.summary          = extract_summary()
 Project.meta.description      = extract_description()
-Project.meta.website          = 'http://'
-Project.meta.bugtracker       = 'http://'
-Project.meta.feature_requests = 'http://'
+Project.meta.website          = 'http://baretest.rubyforge.org'
+Project.meta.bugtracker       = 'http://projects.sr.brightlight.ch/projects/baretest/issues'
+Project.meta.feature_requests = 'http://projects.sr.brightlight.ch/projects/baretest/issues'
 Project.meta.use_git          = true
 
 Project.manifest.ignore       = %w[
