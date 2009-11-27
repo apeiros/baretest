@@ -1,0 +1,63 @@
+module S
+  def self.a(str)
+    str.upcase
+  end
+
+  def self.b(str)
+    str+str
+  end
+end
+
+# Doesn't work - due to permutations
+BareTest.suite do
+  setup :input, %w[a b c] do |variant|
+    @input = variant
+  end
+
+  suite "S.a" do
+    setup :result, %w[A B C] do |variant|
+      @result = variant
+    end
+
+    assert "returns :result for :input" do
+      equal(@result, S.a(@input))
+    end
+  end
+
+  suite "S.b" do
+    setup :result, %w[aa bb cc] do |variant|
+      @result = variant
+    end
+
+    assert "returns :result for :input" do
+      equal(@result, S.b(@input))
+    end
+  end
+end
+
+
+BareTest.suite do
+  setup :input => 1, %w[a b c] do |variant|
+    @input = variant
+  end
+
+  suite "S.a" do
+    setup :input => 1, %w[A B C] do |variant|
+      @result = variant
+    end
+
+    assert "returns :result for :input" do
+      equal(@result, S.a(@input))
+    end
+  end
+
+  suite "S.b" do
+    setup :result => 1, %w[aa bb cc] do |variant|
+      @result = variant
+    end
+
+    assert "returns :result for :input" do
+      equal(@result, S.b(@input))
+    end
+  end
+end
