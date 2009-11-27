@@ -1,0 +1,12 @@
+Steps:
+* Verify MANIFEST
+* Verify CHANGELOG is updated (change: CHANGELOG=false)
+* Verify NEWS is updated (change: NEWS=false)
+* Verify all tests pass in 1.8 and 1.9 (change: TEST=1.8, 1.9, none)
+* Verify git-branch (must be 'master' or 'release')
+* Verify git tag is set
+* Verify version is updated (rake release VERSION=1.2.3
+  validate against Project::VERSION and git tag)
+* package gem
+* push gem
+* announce (ruby-talk, tweet, irc, rubyflow)
