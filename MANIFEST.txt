@@ -37,8 +37,8 @@ lib/baretest/skipped.rb
 lib/baretest/skipped/assertion.rb
 lib/baretest/skipped/suite.rb
 lib/baretest/suite.rb
-lib/baretest/utilities.rb
 lib/baretest/version.rb
+lib/ruby/kernel.rb
 test/external/bootstraptest.rb
 test/external/bootstrapwrap.rb
 test/helper/mocks.rb
