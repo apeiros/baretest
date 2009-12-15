@@ -88,9 +88,9 @@ module BareTest
 
       # Prints the original assertion's backtrace
       def bt!(size=nil)
-        if @__assertion__.exception then
+        if @__original__.exception then
           size ||= caller.size+3
-          puts @__assertion__.exception.backtrace[0..-size]
+          puts @__original__.exception.backtrace[0..-size]
         else
           puts "No exception occurred, therefore no backtrace is available"
         end
@@ -113,19 +113,19 @@ module BareTest
 
       # Prints a string of the original assertion's nesting within suites
       def description
-        puts @__assertion__.description
+        puts @__original__.description
       end
 
       # Prints a string of the original assertion's nesting within suites
       def nesting
-        puts @__assertion__.suite.ancestors[0..-2].reverse.map { |s| s.description }.join(' > ')
+        puts @__original__.suite.ancestors[0..-2].reverse.map { |s| s.description }.join(' > ')
       end
 
       # Prints the code of the assertion
       # Be aware that this relies on your code being properly indented.
       def code!
-        if code = @__assertion__.code then
-          puts(insert_line_numbers(code, @__assertion__.line-1))
+        if code = @__original__.code then
+          puts(insert_line_numbers(code, @__original__.line-1))
         else
           puts "Code could not be extracted"
         end
