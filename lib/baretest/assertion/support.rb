@@ -118,7 +118,7 @@ module BareTest
         else
           true
         end
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue => exception
         failure "Expected block to raise #{exception_class}, but it raised #{exception.class}."
@@ -129,7 +129,7 @@ module BareTest
       # Will raise a Failure if the given block raises.
       def raises_nothing
         yield
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
         failure "Expected block to raise nothing, but it raised #{exception.class}."
@@ -142,7 +142,7 @@ module BareTest
       # of the possible rounding differences.
       def within_delta(a, b, delta)
         (a-b).abs < delta
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not compare %p with %p due to %s", a, b, e
@@ -209,7 +209,7 @@ module BareTest
         end
         true
 
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not compare %p with %p due to %s", expected, actual, e
@@ -232,7 +232,7 @@ module BareTest
         end
         true
 
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not compare %p with %p due to %s", expected, actual, e
@@ -255,7 +255,7 @@ module BareTest
         end
         true
 
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not compare %p with %p due to %s", expected, actual, e
@@ -278,7 +278,7 @@ module BareTest
         end
         true
 
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not compare %p with %p due to %s", expected, actual, e
@@ -309,7 +309,7 @@ module BareTest
         end
         true
 
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not compare %p with %p due to %s", expected, actual, e
@@ -327,7 +327,7 @@ module BareTest
         end
         true
 
-      rescue *::BareTest::Assertion::PassthroughExceptions
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         failure "Could not test whether %p is a child of %p due to %s", actual, expected, e

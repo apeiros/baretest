@@ -16,29 +16,31 @@ module BareTest
     module Errors # :nodoc:
       def run_all
         @depth = 0
-        puts "Running all tests, reporting errors"
-        super
+        puts "Running all tests, reporting only errors and failures"
         start = Time.now
-        puts "\nDone, #{@count[:error]} errors encountered."
-      end
-
-      def run_suite(suite)
-        return super unless suite.description
-        puts "#{'  '*@depth+suite.description} (#{suite.assertions.size} tests, #{suite.skipped.size} skipped)"
-        @depth += 1
-        super # run the suite
-        @depth -= 1
+        super
+        stop = Time.now
+        printf "\Ran #{@count[:test]} tests (#{@count[:pending]} pending) in %.1fs\n" \
+               "#{@count[:failure]} failures and #{@count[:error]} errors encountered.\n",
+               (stop-start)
       end
 
       def run_test(assertion, setup)
         rv = super # run the assertion
-        puts('  '*@depth+rv.description)
-        if rv.exception then
-          size = caller.size+5
-          puts((['-'*80, rv.exception.message]+rv.exception.backtrace[0..-size]+['-'*80, '']).map { |l|
-            ('  '*(@depth+1))+l
-          })
+        if rv.status == :failure then
+          head    = "FAILURE in #{rv.description}"
+          message = rv.reason || "no failure reason given"
+          stack   = "#{rv.file}:#{rv.line}"
+        elsif rv.exception then
+          size    = caller.size+5
+          head    = "ERROR in #{rv.description}"
+          message = rv.exception.message || "no exception message given"
+          stack   = rv.exception.backtrace[0..-size].join("\n  ")
+        else
+          return
         end
+
+        puts head, "  "+message.gsub(/\n/, "\n  "), "  "+stack, ""
       end
     end
   end
