@@ -2,11 +2,9 @@
 
 require 'rr'
 
-module RR::Adapters::RRMethods
-  extend self
+class BareTest::Assertion::Context
+  include RR::Adapters::RRMethods
 end
-
-BareTest.extend RR::Adapters::RRMethods
 
 BareTest.toplevel_suite.teardown do
   begin
