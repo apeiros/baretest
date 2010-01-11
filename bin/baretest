@@ -132,22 +132,12 @@ end
 
 
 # Load the setup file, all helper files and all test files
-if ARGV.empty? then
-  BareTest.load_standard_test_files(
-    :verbose    => $VERBOSE,
-    :setup_path => setup_path,
-    :chdir      => '.'
-  )
-else
-  load(setup_path) if setup_path && File.exist?(setup_path)
-  ARGV.each { |path|
-    if File.directory?(path) then
-      Dir.glob("#{path}/**/*.rb") { load(path) }
-    else
-      Dir.glob(path) { load(path) }
-    end
-  }
-end
+BareTest.load_standard_test_files(
+  :verbose    => $VERBOSE,
+  :setup_path => setup_path,
+  :files      => (ARGV.empty? ? nil : ARGV),
+  :chdir      => '.'
+)
 
 
 

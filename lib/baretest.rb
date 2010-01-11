@@ -45,15 +45,19 @@ module BareTest
     verbose    = opts.delete(:verbose)
     setup_path = opts.delete(:setup_path) || 'test/setup.rb'
     chdir      = opts.delete(:chdir) || '.'
+    files      = opts.delete(:files) || ['test/{suite,unit,integration,system}/**/*.rb']
     Dir.chdir(chdir) do
       load(setup_path) if File.exist?(setup_path)
-      Dir.glob('test/{suite,unit,integration,system}/**/*.rb') { |path|
-        helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
-        puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
-        load(helper_path) if File.exist?(helper_path)
-        puts "Loading test file #{path}" if verbose
-        load(path)
-      }
+      files.each do |glob|
+        glob = "#{glob}/**/*.rb" if File.directory?(glob)
+        Dir.glob(glob) { |path|
+          helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
+          puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
+          load(helper_path) if File.exist?(helper_path)
+          puts "Loading test file #{path}" if verbose
+          load(path)
+        }
+      end
     end
   end
 
