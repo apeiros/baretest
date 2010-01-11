@@ -147,7 +147,7 @@ module BareTest
         @setup[component] ||= []
 
         case multiplexed
-          when String
+          when nil, String
             @setup[component] << ::BareTest::Setup.new(component, multiplexed, nil, block)
           when Array
             multiplexed.each do |substitute|
@@ -157,6 +157,8 @@ module BareTest
             multiplexed.each do |substitute, value|
               @setup[component] << BareTest::Setup.new(component, substitute, value, block)
             end
+          else
+            raise TypeError, "multiplexed must be an instance of NilClass, String, Array or Hash, but #{multiplexed.class} given."
         end
       elsif component || multiplexed
         raise ArgumentError, "With component or multiplexed given, a block must be provided too."
