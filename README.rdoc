@@ -246,8 +246,9 @@ From examples/test.rb:
   * showing me every dirty little bit I did wrong
   * fixes
   * added line number on failures
-
-
+* Tass
+  * adding rr integration
+  * reporting bugs
 
 == Known bugs
 
