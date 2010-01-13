@@ -5,7 +5,9 @@ bin/baretest
 doc/baretest.rdoc
 doc/mocking_stubbing_test_doubles.rdoc
 doc/quickref.rdoc
+doc/whats_going_on.rdoc
 doc/writing_tests.rdoc
+examples/test.rake
 examples/tests/irb_mode/failures.rb
 examples/tests/mock_developer/test/helper/mocks.rb
 examples/tests/mock_developer/test/setup.rb
@@ -14,7 +16,6 @@ examples/tests/overview/test.rb
 examples/tests/variations/variations_01.rb
 examples/tests/variations/variations_02.rb
 examples/tests/variations/variations_03.rb
-examples/test.rake
 lib/baretest.rb
 lib/baretest/assertion.rb
 lib/baretest/assertion/context.rb
@@ -24,6 +25,7 @@ lib/baretest/assertion/support.rb
 lib/baretest/irb_mode.rb
 lib/baretest/layout.rb
 lib/baretest/mocha.rb
+lib/baretest/rr.rb
 lib/baretest/run.rb
 lib/baretest/run/cli.rb
 lib/baretest/run/errors.rb
