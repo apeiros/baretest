@@ -8,9 +8,10 @@
 
 namespace :copyright do
   task :update do
+    year = Time.now.year
     manifest().each { |file|
       data = File.read(file).gsub(/(copyright \d+)(?:(\s*-\s*)\d+)?( by)/i) {
-        copyright = "#{$1}#{$2 || '-'}#{Time.now.year}#{$3}"
+        copyright = "#{$1}#{$2 || '-'}#{year}#{$3}"
         puts "#{file}: replacing #{$&.inspect} with #{copyright.inspect}"
         copyright
       }
