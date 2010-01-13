@@ -161,7 +161,7 @@ can alternatively be used with named arguments:
   Failure:     case_equal(String, 1)
 
 * equal_unordered(expected, actual, message=nil)
-  Description: Compares unordered enumerables, on the enumerable it uses each, 
+  Description: Compares unordered enumerables, on the enumerable it uses each,
                on the items it uses hash and eql?
   Success:     equal_unordered([1,2], [2,1])
   Failure:     equal_unordered([1,2], [2,1,2])

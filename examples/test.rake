@@ -41,18 +41,18 @@ namespace :test do
       }.find { |path|
         File.directory?(path)
       }
-  
+
       # Verify that the test directory exists
       raise "Could not determine test directory, please adapt this rake task to " \
             "your directory structure first (see rake test:structure)." unless test_dir
-  
+
       # Load all test definitions
       BareTest.load_standard_test_files(
         :verbose    => $VERBOSE,
         :setup_file => 'test/setup.rb',
         :chdir      => File.dirname(test_dir) # must chdir to 1 above the 'test' dir
       )
-  
+
       # Run all tests
       format      = ENV["FORMAT"] || 'cli'
       interactive = ENV["INTERACTIVE"] == 'true'

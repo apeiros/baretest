@@ -24,7 +24,7 @@ BareTest.suite 'Syntax' do
         assert "Is at end_of_buffer" do
           @parser.end_of_buffer?
         end
-  
+
         assert "Is a NilToken" do
           equal :nil_token, @parser.root.children.first.class.node_id
         end

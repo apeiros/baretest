@@ -20,7 +20,7 @@ module BareTest
         unless failed then
           failure "Expected the block to fail, but it returned a true value."
         end
-  
+
         true
       end
     end

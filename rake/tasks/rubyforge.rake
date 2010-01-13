@@ -30,25 +30,25 @@ namespace :gem do
       v = ENV['VERSION'] or abort 'Must supply VERSION=x.y.z'
       abort "Versions don't match #{v} vs #{PROJ.version}" if v != Project.meta.version.to_s
       pkg = "pkg/#{Project.gem.spec.full_name}"
-  
+
       if $DEBUG then
         puts "release_id = rf.add_release #{Project.rubyforge.name.inspect}, #{Project.rubyforge.name.inspect}, #{Project.rubyforge.version.inspect}, \"#{pkg}.tgz\""
         puts "rf.add_file #{Project.rubyforge.name.inspect}, #{Project.meta.name.inspect}, release_id, \"#{pkg}.gem\""
       end
-  
+
       rf = RubyForge.new
       puts 'Logging in'
       rf.login
-  
+
       c = rf.userconfig
       c['release_notes']   = Project.rubyforge.description if Project.rubyforge.description
       c['release_changes'] = Project.rubyforge.changes if Project.rubyforge.changes
       c['preformatted']    = true
-  
+
       files = [(Project.gem.need_tar ? "#{pkg}.tgz" : nil),
                (Project.gem.need_zip ? "#{pkg}.zip" : nil),
                "#{pkg}.gem"].compact
-  
+
       puts "Releasing #{Project.rubyforge.name} v. #{Project.rubyforge.version}"
       rf.add_release Project.rubyforge.name, Project.meta.name, Project.rubyforge.version, *files
     end
@@ -68,7 +68,7 @@ namespace :doc do
       remote_dir  = "/var/www/gforge-projects/#{Project.rubyforge.name}/"
       remote_dir << Project.rdoc.remote_dir if Project.rdoc.remote_dir
       local_dir   = Project.rdoc.dir
-  
+
       Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
     end
   end

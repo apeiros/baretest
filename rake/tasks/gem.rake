@@ -13,7 +13,7 @@ namespace :gem do
     task :missing_project do
       abort("No instructions in Project to run the gem tasks")
     end
-    
+
     task :package   => :missing_project
     task :info      => :missing_project
     task :install   => :missing_project
@@ -26,7 +26,7 @@ namespace :gem do
     task :missing_rubygems do
       abort("Requires rubygems to run")
     end
-    
+
     task :package   => :missing_rubygems
     task :info      => :missing_rubygems
     task :install   => :missing_rubygems
@@ -48,7 +48,7 @@ namespace :gem do
     Project.gem.executables           ||= Array(Project.gem.executable)
     Project.gem.extensions            ||= Project.gem.files.grep %r/extconf\.rb$/
     Project.gem.bin_dir               ||= "bin"
-  
+
     Project.gem.rdoc_options          ||= Project.rdoc && Project.rdoc.options
     Project.gem.extra_rdoc_files      ||= Project.rdoc && Project.rdoc.extra_files
     Project.gem.rdoc_options          ||= Project.rdoc && Project.rdoc.options
@@ -63,19 +63,19 @@ namespace :gem do
       pkg.package_files = Project.gem.files if Project.gem.files
     end
     # Rake::Task['gem:package'].instance_variable_set(:@full_comment, nil)
-  
+
     Project.gem.gem_file ||= gem_file(Project.gem.spec, pkg.package_name)
-  
+
     desc 'Show information about the gem'
     task :info do
       puts "package_files:"
       puts Project.gem.files
       puts Project.gem.spec.to_ruby
     end
-  
+
     desc "Build the gem file #{Project.gem.gem_file}"
     task :package => %W[#{pkg.package_dir}/#{Project.gem.gem_file}]
-  
+
     file "#{pkg.package_dir}/#{Project.gem.gem_file}" => [pkg.package_dir, *Project.gem.files] do
       when_writing("Creating GEM") {
         Gem::Builder.new(Project.gem.spec).build
@@ -84,15 +84,15 @@ namespace :gem do
         }
       }
     end
-  
+
     desc 'Install the gem'
     task :install => [:clobber, 'gem:package'] do
       sh "#{bin.sudo} #{bin.gem} install --format-executable --no-update-sources pkg/#{Project.gem.spec.full_name}"
     end
-  
+
     desc 'Reinstall the gem'
     task :reinstall => [:uninstall, :install]
-  
+
     desc 'Uninstall the gem'
     task :uninstall do
       if installed_list = Gem.source_index.find_name(Project.gem.name) then
@@ -102,7 +102,7 @@ namespace :gem do
         end
       end
     end
-  
+
     desc 'Cleanup the gem'
     task :cleanup do
       abort("Gem name not set in Project.gem") unless Project.gem.name

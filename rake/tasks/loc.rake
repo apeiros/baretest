@@ -18,7 +18,7 @@ namespace :loc do
     )
     puts "Code"
     a.put_assessment
-    
+
     a = AssessCode.new(
       '.',
       'spec/**/*.rb',
