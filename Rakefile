@@ -25,6 +25,7 @@ Project.manifest.ignore       = %w[
                                     beat/**/*
                                     dev/**/*
                                     doc/announcements/**/*
+                                    docs/**/*
                                     pkg/**/*
                                     rake/**/*
                                     web/**/*
