@@ -19,6 +19,12 @@ module BareTest
   # It in fact even is what the baretest executable itself uses.
   module CommandLine
 
+    def load_formatter(format)
+      require "baretest/run/#{format}" if String === format
+      BareTest.format["baretest/run/#{format}"]
+    end
+    module_function :load_formatter
+
     # Run unit tests
     # * arguments: array of dirs/globs of files to load and run as tests
     # * options: a hash with options (all MUST be provided)
@@ -29,10 +35,6 @@ module BareTest
     def run(arguments, options)
       setup_path  = nil
       files       = arguments.empty? ? nil : arguments # (ARGV.empty? ? nil : ARGV)
-      run_options = {
-        :format      => options[:format],
-        :interactive => options[:interactive]
-      }
 
       # Load the setup file, all helper files and all test files
       BareTest.load_standard_test_files(
@@ -45,7 +47,7 @@ module BareTest
       # Run the tests
       puts if options[:verbose]
       ARGV.clear # IRB is being stupid
-      BareTest.run(run_options).global_status == :success
+      BareTest.run(options).global_status == :success
     end
     module_function :run
 
