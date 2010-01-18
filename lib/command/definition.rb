@@ -12,7 +12,13 @@ module Command
     OptionArgument         = /\[#{RequiredOptionArgument}\]|#{RequiredOptionArgument}/
     ShortOption            = /\A-[A-Za-z](?: #{OptionArgument})?\z/
     NegationSequence       = /\[(?:no-|with-|without-)\]/
-    LongOption             = /\A--[A-Za-z0-9][A-Za-z0-9_-]*(?: #{OptionArgument})?\z/
+    LongOption             = /\A--
+      (?:
+        #{NegationSequence}?[A-Za-z][A-Za-z0-9_-]* |
+        [A-Za-z][A-Za-z0-9_-]*#{NegationSequence}[A-Za-z0-9][A-Za-z0-9_-]
+      )
+      (?:\x20#{OptionArgument})?\z
+    /x
 
     def self.create_argument(*args)
       name        = Symbol === args.first && args.shift
@@ -141,6 +147,8 @@ module Command
       @env_by_variable   = DecoratingHash.new(@parent && @parent.env_by_variable)
       @argument_position = {}
       @text              = []
+      @placeholders      = {}
+      @content_for       = [@elements]
       instance_eval(&block) if block
     end
 
@@ -148,27 +156,34 @@ module Command
       command ? @commands_by_name[command] : self
     end
 
-    def usage_text
-      longest_arg_bare = @elements.grep(Argument).max { |a,b|
+    def content_for(placeholder)
+      @placeholders[placeholder] ||= []
+      @content_for << @placeholders[placeholder]
+      yield(self)
+      @content_for.pop
+    end
+
+    def usage_text(elements=@elements)
+      longest_arg_bare = elements.grep(Argument).max { |a,b|
         a.bare.size <=> b.bare.size
       }
-      longest_option = @elements.grep(Option).max { |a,b|
+      longest_option = elements.grep(Option).max { |a,b|
         a.declaration.size <=> b.declaration.size
       }
-      longest_env_name = @elements.grep(Env).max { |a,b|
+      longest_env_name = elements.grep(Env).max { |a,b|
         a.variable.size <=> b.variable.size
       }
       longest_arg_bare = longest_arg_bare && longest_arg_bare.bare.size
       longest_option   = longest_option && longest_option.declaration.size
       longest_env_name = longest_env_name && longest_env_name.variable.size
-      arguments = @elements.grep(Argument)
+      arguments = elements.grep(Argument)
 
-      @elements.map { |e|
+      elements.map { |e|
         case e
           when :usage
             "Usage: #{File.basename($0)} #{arguments.map{|a|a.usage}.join(' ')}\n"
-          when Symbol
-            "  #{e.inspect}\n"
+          when Symbol # placeholder
+            usage_text(@placeholders[e])
           when Option
             sprintf "  %*s%s\n",
                     -(longest_option+2),
@@ -195,7 +210,7 @@ module Command
     end
 
     def usage
-      @elements << :usage
+      @content_for.last << :usage
     end
 
     def argument(*args)
@@ -210,7 +225,7 @@ module Command
         argument    = self.class.create_argument(*args)
         @arguments_by_name[argument.name] = argument
       end
-      @elements << argument
+      @content_for.last << argument
 
       argument
     end
@@ -224,7 +239,7 @@ module Command
         @arguments_by_name[argument.name] = argument
       end
 
-      @elements << argument
+      @content_for.last << argument
       argument
     end
 
@@ -232,7 +247,7 @@ module Command
       if args.size == 1 then
         inherited_option = @options_by_name[args.first]
         raise ArgumentError, "No inherited option #{args.first.inspect}" unless inherited_option
-        @elements << inherited_option
+        @content_for.last << inherited_option
 
         inherited_option
       else
@@ -242,7 +257,7 @@ module Command
         @options_by_flag[option.short]   = option
         @options_by_flag[option.long]    = option
         @options_by_flag[option.negated] = option
-        @elements << option
+        @content_for.last << option
 
         option
       end
@@ -256,24 +271,24 @@ module Command
       else
         text = args.first
       end
-      @text     << text
-      @elements << text
+      @text             << text
+      @content_for.last << text
     end
 
     def placeholder(identifier)
-      @elements << identifier
+      @content_for.last << identifier
     end
 
     def env_option(name, variable)
       env = Env.new(name, variable)
       @env_by_variable[variable] = env
-      @elements << env
+      @content_for.last << env
     end
 
     def command(*args, &block)
       definition = Definition.new(self, *args, &block)
       @commands_by_name[args.first] = definition
-      @elements << definition
+      @content_for.last << definition
     end
   end
 end
