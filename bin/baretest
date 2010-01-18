@@ -101,7 +101,14 @@ Command.with(ARGV) do
     run_command = command
   end
   if %w[run help].include?(command) then
-    #BareTest::CommandLine.load_formatter(options[:format])
+    formatter = BareTest::CommandLine.load_formatter(options[:format])
+
+    definition[command].content_for :format_options do |d|
+      d.default_options.update(formatter.command[:option_defaults]) do |k,v1,v2| v2 end
+      formatter.command[:elements].each do |key, args|
+        d.send(key, *args)
+      end
+    end
   end
 
   options = options! # reparse with new information
@@ -119,13 +126,13 @@ Command.with(ARGV) do
     when "version" # show version information about baretest
       BareTest::CommandLine.version
     when "help"
-      puts @definition[command].usage_text
+      puts definition[command].usage_text
     when "commands"
       puts "Available commands:"
-      puts @definition[command].commands_by_name.keys.sort
+      puts definition[command].commands_by_name.keys.sort
     else
       puts "Unknown command '#{command}'"
       puts "Available commands:"
-      puts @definition[command].commands_by_name.keys.sort
+      puts definition[command].commands_by_name.keys.sort
   end
 end
