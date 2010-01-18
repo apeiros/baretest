@@ -8,6 +8,7 @@
 
 require 'baretest/assertion'
 require 'baretest/commandline'
+require 'baretest/formatter'
 require 'baretest/irb_mode'
 require 'baretest/run'
 require 'baretest/suite'
