@@ -15,6 +15,21 @@ module BareTest
     # It prints colored output (requires ANSI colors compatible terminal).
     #
     module CLI # :nodoc:
+      extend Formatter
+
+      option_defaults :color   => true,
+                      :profile => false
+
+      text "Options for 'CLI' formatter:\n"
+
+      option          :color,   '-c', '--[no-]color',   :Boolean, 'Enable/disable output coloring'
+      option          :profile, '-p', '--[no-]profile', :Boolean, 'Enable/disable profiling assertions'
+
+      text "\nEnvironment variables for 'CLI' formatter:\n"
+
+      env_option      :color,   'COLOR'
+      env_option      :profile, 'PROFILE'
+
       Formats = {
         :pending => "\e[43m%9s\e[0m  %s%s\n",
         :skipped => "\e[43m%9s\e[0m  %s%s\n",
