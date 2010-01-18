@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>File: quickref.rdoc [baretest-0.2.3 Documentation]</title>
+
+	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+</head>
+
+<body class="file">
+	<div id="metadata">
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
+				
+					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/baretest_rdoc.html">baretest.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../BareTest.html">BareTest</a></li>
+				
+					<li><a href="../BareTest/Assertion.html">BareTest::Assertion</a></li>
+				
+					<li><a href="../BareTest/Assertion/Context.html">BareTest::Assertion::Context</a></li>
+				
+					<li><a href="../BareTest/Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+				
+					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
+				
+					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
+				
+					<li><a href="../BareTest/Skipped.html">BareTest::Skipped</a></li>
+				
+					<li><a href="../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
+				
+					<li><a href="../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+				
+					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
+				
+					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
+				
+					<li><a href="../Enumerable.html">Enumerable</a></li>
+				
+					<li><a href="../Kernel.html">Kernel</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1><a href="../BareTest.html">BareTest</a> Quick Reference</h1>
+<p>
+This is a very condensed overview over baretest. If you&#8217;re new to
+testing and new to baretest, you may be more interested into <a
+href="writing_tests_rdoc.html">doc/writing_tests.rdoc</a> Also look into
+the examples and baretests own test directory.
+</p>
+<h2>Setup baretest</h2>
+<ol>
+<li>Install baretest
+
+</li>
+</ol>
+<pre>
+  a) official release: `sudo gem install baretest`
+  b) edge:
+    1. git clone git://github.com/apeiros/baretest.git
+    2. cd baretest
+    3. rake gem:install
+</pre>
+<ol>
+<li>Change into the project directory
+
+</li>
+<li>`baretest &#8212;init` to create the basic test-directory layout
+
+</li>
+</ol>
+<h2>Location of testfiles</h2>
+<p>
+Your tests for PROJECT/lib/foo.rb belong into
+PROJECT/test/suite/lib/foo.rb. Your tests for PROJECT/bin/bar belong into
+PROJECT/test/suite/bin/bar. In other words, for every path, insert
+/test/suite after PROJECT to get the path to the corresponding testfile.
+</p>
+<h2>Writing tests</h2>
+<p>
+A testfile commonly looks like this:
+</p>
+<pre>
+  BareTest.suite &quot;module ModuleName&quot; do
+    setup do
+      # This is run before each assert, that is in this suite or a nested suite
+    end
+
+    teardown do
+      # This is run after each assert, that is in this suite or a nested suite
+    end
+
+    suite &quot;Class methods&quot; do
+      setup do
+        # things used by most nested suites
+      end
+
+      suite &quot;ModuleName::class_method_name&quot; do
+        assert &quot;does this&quot; do
+          ...
+        end
+
+        assert &quot;does that&quot; do
+        end
+      end
+
+    suite &quot;Instance methods&quot; do
+      suite &quot;ModuleName#instance_method_name&quot; do
+        ...
+      end
+    end
+
+    suite &quot;class ClassName&quot; do # this is class ModuleName::ClassName
+      suite &quot;Class methods&quot; do
+        ...
+      end
+
+      suite &quot;Instance methods&quot; do
+        ...
+      end
+    end
+  end
+</pre>
+<p>
+This layout makes it easy to figure where tests for something are, and thus
+makes maintaining the test-code base easier.
+</p>
+<p>
+Setup callbacks are invoked from outermost suite to innermost suite, and
+within the same suite, in the order of definition.
+</p>
+<p>
+Teardown callbacks are invoked from innermost suite to outermost suite, and
+within the same suite, in the order of definition.
+</p>
+<pre>
+  BareTest.suite do
+    setup do puts 1 end
+    setup do puts 2 end
+    teardown do puts 7 end
+    teardown do puts 8 end
+
+    suite &quot;Inner&quot; do
+      setup do puts 3 end
+      setup do puts 4 end
+      teardown do puts 5 end
+      teardown do puts 6 end
+
+      assert &quot;Inner - assert&quot; do puts &quot;Inner - assert&quot; end
+    end
+
+    assert &quot;Outer - assert&quot; do puts &quot;Outer - assert&quot; end
+  end
+</pre>
+<p>
+Running this suite will print:
+</p>
+<pre>
+  1
+  2
+  3
+  4
+  Inner - assert
+  5
+  6
+  7
+  8
+  1
+  2
+  Outer - assert
+  7
+  8
+</pre>
+<h2>Skipping Tests and Suites</h2>
+<p>
+A test is skipped if it does not have a block or calls &#8216;skip&#8217;
+</p>
+<h2>Assertion helper methods</h2>
+<p>
+See <a
+href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a>
+All methods that have the method signature foo(expected, actual,
+message=nil) can alternatively be used with named arguments:
+</p>
+<pre>
+  foo a, b, &quot;message&quot; # is equivalent to:
+  foo :expected =&gt; a, :actual =&gt; b, :message =&gt; &quot;message&quot;
+</pre>
+<ul>
+<li>skip(message, *args) Description: Skips the assertion, uses sprintf with
+message and *args Success: not possible Failure: not possible
+
+</li>
+<li>failure(message, *args) Description: Lets the assertion fail, uses sprintf
+with message and *args Success: not possible Failure: failure(&#8220;%p was
+not the inverse of %p&#8221;, 2, 5)
+
+</li>
+<li>same(expected, actual, message=nil) Description: Uses
+expected.equal?(actual), which tests for object identity Success:
+same(:foo, :foo) Failure: same(&#8220;foo&#8221;, &#8220;foo&#8221;)
+
+</li>
+<li>hash_key_equal(expected, actual, message=nil) Description: Uses
+expected.eql?(actual), which is used for hash key equality. Success:
+hash_key_equal(&#8220;foo&#8221;, &#8220;foo&#8221;) Failure:
+hash_key_equal(1.0, 1)
+
+</li>
+<li>equal(expected, actual, message=nil) (alias: order_equal) Description: Uses
+expected == actual, which is used for order-equality. Success: equal(1.0,
+1) Failure: equal(1, &#8220;1&#8221;)
+
+</li>
+<li>case_equal(expected, actual, message=nil) Description: Uses expected ===
+actual, which is used in case/whens. Success: case_equal(String,
+&#8220;foo&#8221;) Failure: case_equal(String, 1)
+
+</li>
+<li>equal_unordered(expected, actual, message=nil) Description: Compares
+unordered enumerables, on the enumerable it uses each,
+
+<pre>
+             on the items it uses hash and eql?
+</pre>
+<p>
+Success: equal_unordered([1,2], [2,1]) Failure: equal_unordered([1,2],
+[2,1,2])
+</p>
+</li>
+<li>within_delta(a, b, delta) Description: Tests whether the difference between
+a and b is less than delta Success: within_delta(0.5, Math.sin(Math::PI/6),
+1e-6)
+
+<pre>
+             # equal(0.5, Math.sin(Math::PI/6)) would fail
+</pre>
+<p>
+Failure: within_delta(0.5, 0.6, 0.05)
+</p>
+</li>
+<li>kind_of(expected, actual, message=nil) (alias: is_a) Description: Uses
+actual.kind_of?(expected) Success: kind_of(String, &#8220;foo&#8221;)
+Failure: kind_of(String, 1)
+
+</li>
+<li>throws(symbol) Description: Test whether the block throws the given symbol
+Success: throws(:foo) do throw(:foo) end Failure: throws(:foo) do
+throw(:bar) end
+
+<pre>
+             throws(:foo) do nil end
+</pre>
+</li>
+<li>throws_nothing Description: Test whether a piece of code really throws
+nothing Success: throws_nothing do nil end Failure: throws_nothing do
+throw(:foo) end
+
+</li>
+<li>raises(exception_class=StandardError, opts={}) Description: Test whether
+the block raises Success: raises do raise &#8220;foo&#8221; end
+
+<pre>
+             raises ArgumentError do &quot;12&quot;.to_i(10, :superfluous) end
+</pre>
+<p>
+Failure: raises do nil end
+</p>
+<pre>
+             raises ArgumentError do &quot;12&quot;.to_i(10) end
+</pre>
+</li>
+<li>raises_nothing Description: Test whether the block doesn&#8217;t raise
+Success: raise_nothing do nil end Failure: raise_nothing do raise
+&#8220;foo&#8221; end
+
+</li>
+<li>touch(thing=nil) Description: Mark reaching a point in code, e.g. that a
+block was invoked Success: -> see touched Failure: -> see touched
+
+</li>
+<li>touched(thing=nil, times=nil) Description: test whether a mark for reached
+code was set, optionally test
+
+<pre>
+             whether it was set the expected number of times
+</pre>
+<p>
+Success: touch; touched
+</p>
+<pre>
+             touch :thing; touched :thing
+             touch :thing; touch :thing; touched :thing, 2
+</pre>
+<p>
+Failure: touched
+</p>
+<pre>
+             touch :thing; touched :something
+             touch :thing; touched :thing, 2
+</pre>
+</li>
+<li>not_touched(thing=nil) Description: same as touched(thing, 0) Success: see
+touched Failure: see touched
+
+</li>
+</ul>
+<h2>Running tests</h2>
+<p>
+baretest&#8217;s test-cycle is:
+</p>
+<ol>
+<li>Create Run instance and the toplevel suite
+
+</li>
+<li>Load everything as required by the command line flags
+
+</li>
+<li>Load PROJECT/test/setup.rb
+
+</li>
+<li>Find PROJECT/test/suite/*<b>/</b>.rb
+
+</li>
+<li>Load each file found in 2., but for every file, see whether
+PROJECT/test/helpers/suite/*<b>/</b>.rb exists and load that first if it
+does
+
+</li>
+<li>Invoke run on the Run instance
+
+</li>
+</ol>
+<p>
+From there on it depends on the loaded formatters and extenders, what
+really will happen. But the norm is, that suites and assertions will be
+executed in order of definition.
+</p>
+<h2>Debugging tests</h2>
+<p>
+Use `baretest -i` to run baretest in interactive mode. When a failure or an
+error occurs, you have access to the following commands:
+</p>
+<ul>
+<li>s! - original assertions&#8217; status
+
+</li>
+<li>e! - error message and full backtrace
+
+</li>
+<li>em! - error message
+
+</li>
+<li>bt! - full backtrace
+
+</li>
+<li>iv! - all available instance variables
+
+</li>
+<li>cv! - all available class variables
+
+</li>
+<li>gv! - all available global variables
+
+</li>
+<li>file - file this assertion was defined in
+
+</li>
+<li>line - line number in the file where this assertion&#8217;s definition
+starts
+
+</li>
+<li>nesting - a &#8217;>&#8217;-separated list of suite descriptions this
+assertion is
+
+<pre>
+              nested in
+</pre>
+</li>
+<li>description - this assertion&#8217;s description
+
+</li>
+<li>code - code of this assertion
+
+</li>
+<li>help - overview over all the commands
+
+</li>
+</ul>
+
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+</body>
+</html>
+

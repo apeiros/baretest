@@ -1,0 +1,30 @@
+Usage: baretest [command] [options] *glob
+  command: The command to run. See `baretest commands`
+  options: The flags and options, see in the "Options" section.
+  glob:    The testfiles to run.
+           Defaults to 'test/{suite,unit,integration,system}/**/*.rb'
+           Providing a directory is equivalent to dir/**/*.rb
+
+Default command is 'run', which runs the testsuite or the provided testfiles.
+
+Options:
+
+      --commands       overview over the commands
+  -d, --debug          set debugging flags (set $DEBUG to true)
+  -i, --interactive    drop into IRB on error or failure
+  -f, --format FORMAT  use FORMAT for output, see `baretest formats`
+  -s, --setup FILE     specify setup file
+  -w, --warn           turn warnings on for your script
+  -h, --help           help for usage and flags
+  -v, --version        print the version and exit
+
+CLI-Format specific options:
+
+      --[no-]color    Use colored output (defaults to auto)
+      --[no-]profile  Profile assertion runtime (defaults to true)
+
+Environment variables:
+
+* FORMAT      string - use FORMAT for output
+* VERBOSE     true/false - turn warnings on for your script
+* INTERACTIVE true/false - drop into IRB on error or failure

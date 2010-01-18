@@ -10,24 +10,27 @@
 
 Version = "0.4.0" # Executable version
 
-# assume baretest is not installed and this is a cold-run from source
-lib_dir = File.expand_path("#{__FILE__}/../../lib")
-$LOAD_PATH.unshift(lib_dir) if File.directory?(lib_dir)
-lib_dir = File.expand_path("#{__FILE__}/../../../command/lib")
-$LOAD_PATH.unshift(lib_dir) if File.directory?(lib_dir)
 
 
-
-require 'command'
-require 'baretest'
+begin
+  # if baretest is installed as a gem, the executable is be wrapped by rubgems anyway, so we don't
+  # need to require rubygems ourself.
+  require 'command'
+  require 'baretest'
+rescue LoadError
+  # assume baretest is not installed and this is a cold-run from source
+  $LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
+  require 'command'
+  require 'baretest'
+end
 
 
 
 # Specify commands and options
 Command "run" do
   # global arguments
-  virtual_argument :command, '[command]', "The command to run. See `baretest commands`"
-  virtual_argument :options, '[options]', "The flags and options, see in the \"Options\" section."
+  argument :command, '[command]', :Virtual, "The command to run. See `baretest commands`"
+  argument :options, '[options]', :Virtual, "The flags and options, see in the \"Options\" section."
 
   # global options
   o :commands,    nil,  '--commands', :Boolean, "overview over the commands"
@@ -38,12 +41,11 @@ Command "run" do
   command "run", :format => 'cli', :interactive => false, :verbose => false do
     usage
 
-    virtual_argument :command
-    virtual_argument :options
-    virtual_argument :glob, '*glob', File,
-      "The testfiles to run.\n" \
-      "Defaults to 'test/{suite,unit,integration,system}/**/*.rb'\n" \
-      "Providing a directory is equivalent to dir/**/*.rb"
+    argument :command
+    argument :options
+    argument '*glob', File, "The testfiles to run.\n" \
+                            "Defaults to 'test/{suite,unit,integration,system}/**/*.rb'\n" \
+                            "Providing a directory is equivalent to dir/**/*.rb"
 
     text "\nDefault command is 'run', which runs the testsuite or the provided testfiles.\n\nOptions:\n"
 
@@ -68,12 +70,7 @@ Command "run" do
   end
 
   command "init" do
-    usage
-
-    virtual_argument :command
-    virtual_argument :options
-    text "\n  Create the necessary directories and files"
-
+    text '  Create the necessary directories and files'
     o :help
   end
 
@@ -95,37 +92,32 @@ Command.with(ARGV) do
 
   # some options are equivalent to commands - if they are set, change the
   # command
-  if set = [:help, :commands, :version].find { |flag| options[flag] } then
-    run_command = set.to_s
-  else
-    run_command = command
+  if set = [:help, :commands].find { |flag| options[flag] } then
+    command = set
   end
   if %w[run help].include?(command) then
-    #BareTest::CommandLine.load_formatter(options[:format])
+    BareTest::CommandLine.load_formatter(options[:format])
   end
 
   options = options! # reparse with new information
 
-  case run_command
+  case command
     when "run" # run the testsuite/-file
-      success = BareTest::CommandLine.run(arguments, options)
-      exit(success ? 0 : 1)
+      BareTest::CommandLine.run(options)
     when "init" # create the test directory
-      BareTest::CommandLine.init(arguments, options)
+      BareTest::CommandLine.init(options)
     when "formats" # list available formats
-      BareTest::CommandLine.formats(arguments, options)
+      BareTest::CommandLine.formats(options)
     when "env" # show information about baretest (config, version, paths, ...)
-      BareTest::CommandLine.env(arguments, options)
+      BareTest::CommandLine.env(options)
     when "version" # show version information about baretest
-      BareTest::CommandLine.version
-    when "help"
-      puts @definition[command].usage_text
+      puts "baretest executable version #{Version}",
+           "library version #{BareTest::VERSION}",
+           "ruby version #{RUBY_VERSION}",
+           ""
     when "commands"
-      puts "Available commands:"
-      puts @definition[command].commands_by_name.keys.sort
-    else
-      puts "Unknown command '#{command}'"
-      puts "Available commands:"
-      puts @definition[command].commands_by_name.keys.sort
+      print_commands
+    when "help"
+      print_help(command)
   end
 end

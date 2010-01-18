@@ -7,6 +7,7 @@
 
 
 require 'baretest/assertion'
+require 'baretest/commandline'
 require 'baretest/irb_mode'
 require 'baretest/run'
 require 'baretest/suite'
@@ -52,8 +53,9 @@ module BareTest
         glob = "#{glob}/**/*.rb" if File.directory?(glob)
         Dir.glob(glob) { |path|
           helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
-          puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
-          load(helper_path) if File.exist?(helper_path)
+          exists = (helper_path != path && File.exist?(helper_path))
+          puts(exists ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
+          load(helper_path) if exists
           puts "Loading test file #{path}" if verbose
           load(path)
         }

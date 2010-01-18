@@ -6,6 +6,8 @@
 
 A testframework that doesn't stand in your way or forces you to learn a new
 language. Two methods is all that is required to know.
+If you need it, it provides you with all kinds of features to support you
+writing your tests.
 
 
 
