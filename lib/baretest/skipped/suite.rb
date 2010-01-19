@@ -11,7 +11,6 @@ require 'baretest/skipped/assertion'
 
 
 module BareTest
-
   module Skipped
 
     # Like Test::Suite, but all Assertions are defined as Skipped::Assertion
