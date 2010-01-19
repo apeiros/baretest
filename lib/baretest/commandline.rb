@@ -69,7 +69,7 @@ module BareTest
           $LOAD_PATH.unshift(File.expand_path("\#{__FILE__}/../../lib")) # Add PROJECT/lib to $LOAD_PATH
         END_OF_SETUP
       }
-  
+
       puts "Creating all directories and files needed in #{File.expand_path('.')}"
       core.each do |dir|
         if File.exist?(dir) then
