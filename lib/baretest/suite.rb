@@ -232,5 +232,5 @@ module BareTest
 end
 
 
-
-require 'baretest/skipped/suite' # TODO: determine why this require is on the bottom and document it.
+# At bottom because Skipped::Suite inherits from Suite
+require 'baretest/skipped/suite'
