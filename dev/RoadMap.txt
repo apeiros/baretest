@@ -3,17 +3,19 @@ VERSIONS:
   * setup-variations (done)
   * skip-method and Skip < StandardError (done)
   * ~/.baretestrc
-  * configuration system
-  * formatter specific options
+  * formatter specific options (done)
 
 0.4:
+  * :use (:use => :rails, :rr, :mocha, ... packages that provide integration)
+  * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
+    :integer_addition)
   * continuous testing on OS X (fsevents+growl)
-  * full ruby-debug integration
-  * full ir integration
   * tag/focus
 
 0.5:
-  * forked suite execution
+  * forked suite execution - auto-isolation
+  * full ruby-debug integration
+  * full ir integration
 
 0.6:
   * rails integration (controllers, models, views, helpers)
@@ -31,3 +33,7 @@ UNASSIGNED
   takes a lot of time and successive asserts depend on previous ones
   abort flow assertion upon first failure.
 * auto-require corresponding lib-files
+
+REJECTED
+* configuration system
+  -> Configure what and why?
