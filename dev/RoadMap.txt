@@ -14,11 +14,13 @@ VERSIONS:
 
 0.5:
   * forked suite execution - auto-isolation
-  * full ruby-debug integration
-  * full ir integration
+  * parallel suite execution
 
 0.6:
   * rails integration (controllers, models, views, helpers)
+  * full ruby-debug integration
+  * full rcov integration
+  * full ir integration
 
 PROGRESSIVE
 * TestGuide - How to use BareTest
