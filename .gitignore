@@ -3,3 +3,6 @@
 
 # Keeping 'command' gem currently inlined - this task facilitates synchronization
 /rake/tasks/sync.rake
+
+# The locale baretest id is not of interest to others
+/.baretest_id_*
