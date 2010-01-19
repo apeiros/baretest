@@ -2,7 +2,10 @@ VERSIONS:
 0.3:
   * setup-variations (done)
   * skip-method and Skip < StandardError (done)
-  * ~/.baretestrc
+  * Persist data in ~/.baretest/
+    rc
+    suites/
+    (done)
   * formatter specific options (done)
 
 0.4:
@@ -10,7 +13,7 @@ VERSIONS:
   * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
     :integer_addition)
   * continuous testing on OS X (fsevents+growl)
-  * tag/focus
+  * tag/focus/failures-only
 
 0.5:
   * forked suite execution - auto-isolation

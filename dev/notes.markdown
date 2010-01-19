@@ -38,3 +38,16 @@ Interactive Formatter
   That way the code piece that failed could be displayed (trimmed and unindented
   text between line of definition of the current assertion and line of
   definition of closest assertion/suite/eof)
+
+
+
+Rationales
+----------
+
+Q: Why is persistence data stored in ~/.baretest rathern than within the test
+   directory?
+A: Test run data is something that is machine bound. If many sources access
+   the same test directory, they should still keep their separate persistence
+   data.
+   It might be that I enable choosing between project-resident and user-
+   resident.
