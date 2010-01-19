@@ -15,10 +15,10 @@ module BareTest
     MAJOR = 0
 
     # The minor version number
-    MINOR = 2
+    MINOR = 3
 
     # The tiny version number
-    TINY  = 4
+    TINY  = 0
 
     # The version as a string
     def self.to_s
