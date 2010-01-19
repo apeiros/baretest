@@ -12,7 +12,6 @@ VERSIONS:
   * :use (:use => :rails, :rr, :mocha, ... packages that provide integration)
   * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
     :integer_addition)
-  * continuous testing on OS X (fsevents+growl)
   * tag/focus/failures-only
 
 0.5:
@@ -24,6 +23,10 @@ VERSIONS:
   * full ruby-debug integration
   * full rcov integration
   * full ir integration
+
+0.7:
+  * continuous testing on OS X (fsevents+growl)
+
 
 PROGRESSIVE
 * TestGuide - How to use BareTest
