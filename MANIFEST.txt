@@ -26,8 +26,7 @@ lib/baretest/commandline.rb
 lib/baretest/formatter.rb
 lib/baretest/irb_mode.rb
 lib/baretest/layout.rb
-lib/baretest/mocha.rb
-lib/baretest/rr.rb
+lib/baretest/persistence.rb
 lib/baretest/run.rb
 lib/baretest/run/cli.rb
 lib/baretest/run/errors.rb
@@ -41,6 +40,9 @@ lib/baretest/skipped.rb
 lib/baretest/skipped/assertion.rb
 lib/baretest/skipped/suite.rb
 lib/baretest/suite.rb
+lib/baretest/uid.rb
+lib/baretest/use/mocha.rb
+lib/baretest/use/rr.rb
 lib/baretest/version.rb
 lib/command.rb
 lib/command/argument.rb
