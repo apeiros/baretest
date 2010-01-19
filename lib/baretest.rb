@@ -20,6 +20,10 @@ require 'ruby/kernel'
 
 module BareTest
   class << self
+    # A hash of components - available via BareTest::use(name) and
+    # Suite#suite :use => name
+    attr_reader :components
+
     # A hash of formatters (require-string => module) to be used with Test::Run.
     attr_reader :format
 
@@ -68,6 +72,7 @@ module BareTest
   #
   # Needed for bootstrapped selftest
   def self.init # :nodoc:
+    @components     = {}
     @format         = {}
     @extender       = []
     @toplevel_suite = BareTest::Suite.new
@@ -110,6 +115,16 @@ module BareTest
     runner = BareTest::Run.new(@toplevel_suite, opts)
     runner.run_all
     runner
+  end
+
+  def self.new_component(name, &block)
+    name = name.to_sym
+    raise ArgumentError, "Component named #{name.inspect} already exists" if @components.has_key?(name)
+    @components[name] = block
+  end
+
+  def self.use(component)
+    @toplevel_suite.use(component)
   end
 end
 

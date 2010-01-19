@@ -39,6 +39,24 @@ BareTest.suite "BareTest" do
         files.all? { |file| touched file }
       end
 
+      suite ":use option" do
+        setup do
+          a         = self # ruby1.9 fix, no longer yields self with instance_eval
+          @setup    = proc { :a }
+          @teardown = proc { :b }
+          ::BareTest.new_component :test_component do
+            a.touch :component
+            setup(&@setup)
+            teardown(&@teardown)
+          end
+        end
+
+        assert "Should activate the components listed in :use option." do
+          ::BareTest::Suite.create(nil, nil, :use => :test_component)
+          touched :component
+        end
+      end
+
       assert "Should return a ::BareTest::Suite instance." do
         ::BareTest::Suite.create {}.class == ::BareTest::Suite
       end

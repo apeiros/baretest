@@ -55,7 +55,11 @@ module BareTest
       Skipped::Suite.new(description, parent, &block)
     else
       # All suites within Skipped::Suite are Skipped::Suite
-      (block ? self : Skipped::Suite).new(description, parent, &block)
+      suite = (block ? self : Skipped::Suite).new(description, parent, &block)
+      Array(opts[:use]).each { |component|
+        suite.instance_eval(&::BareTest.components[component])
+      } if opts[:use]
+      suite
     end
 
     # Create a new suite.
