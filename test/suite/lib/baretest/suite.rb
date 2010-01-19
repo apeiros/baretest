@@ -44,16 +44,25 @@ BareTest.suite "BareTest" do
           a         = self # ruby1.9 fix, no longer yields self with instance_eval
           @setup    = proc { :a }
           @teardown = proc { :b }
+          setup     = @setup
+          teardown  = @teardown
           ::BareTest.new_component :test_component do
             a.touch :component
-            setup(&@setup)
-            teardown(&@teardown)
+            setup(&setup)
+            teardown(&teardown)
           end
         end
 
         assert "Should activate the components listed in :use option." do
           ::BareTest::Suite.create(nil, nil, :use => :test_component)
           touched :component
+        end
+        
+        assert "Should add the setup routines"
+        assert "Should add the teardown routines"
+
+        teardown do
+          ::BareTest.components.delete(:component)
         end
       end
 
