@@ -333,6 +333,24 @@ module BareTest
         failure "Could not test whether %p is a child of %p due to %s", actual, expected, e
       end
 
+      # Raises a Failure if the given object does not respond to all of the given
+      # method names. The method names may be specified as String or Symbol.
+      def respond_to(obj, *methods)
+        not_responded_to = methods.reject { |method_name| obj.respond_to?(method_name) }
+        unless not_responded_to.empty? then
+          must_respond_to  = methods.map { |m| m.to_sym.inspect }.join(', ')
+          not_responded_to = not_responded_to.map { |m| m.to_sym.inspect }.join(', ')
+          failure "Expected %1$s to respond to all of %2$s, but it did not respond to %3$s",
+             obj, must_respond_to, not_responded_to
+        end
+        true
+
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not test whether %p responds to %p due to %s", obj, methods, e
+      end
+
       # A method to make raising failures that only optionally have a message easier.
       def failure_with_optional_message(with_message, without_message, message, *args)
         if message then
