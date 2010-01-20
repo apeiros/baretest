@@ -104,9 +104,13 @@ Command.with(ARGV) do
     formatter = BareTest::CommandLine.load_formatter(options[:format])
 
     definition[command].content_for :format_options do |d|
-      d.default_options.update(formatter.command[:option_defaults]) do |k,v1,v2| v2 end
-      formatter.command[:elements].each do |key, args|
-        d.send(key, *args)
+      if d.is_a?(BareTest::Formatter) then
+        d.default_options.update(formatter.command[:option_defaults]) do |k,v1,v2| v2 end
+        formatter.command[:elements].each do |key, args|
+          d.send(key, *args)
+        end
+      else
+        d.text "Formatter '#{options[:format]}' does not specify any custom options."
       end
     end
   end
