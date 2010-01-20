@@ -254,6 +254,23 @@ BareTest.suite "BareTest" do
         end
       end
 
+      suite "#respond_to" do
+        assert "Should not fail when the object responds to all methods required" do
+          obj = Object.new
+          def obj.foo; end
+          def obj.bar; end
+          respond_to(obj, :foo, :bar)
+        end
+
+        assert "Should fail when the object doesn't respond to all methods required" do
+          fails do
+            obj = Object.new
+            def obj.foo; end
+            respond_to(obj, :foo, :bar)
+          end
+        end
+      end
+
       suite "#failure_with_optional_message" do
         assert "Should raise a BareTest::Assertion::Failure" do
           raises(::BareTest::Assertion::Failure) do
