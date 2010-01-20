@@ -65,7 +65,7 @@ module BareTest
         'rake' => %w[test/helper/suite test/suite],
       }
       files = {
-        'test/setup.rb' => <<-END_OF_SETUP.gsub(/^ {8}/, '')
+        'test/setup.rb' => <<-END_OF_SETUP.gsub(/^ {10}/, '')
           $LOAD_PATH.unshift(File.expand_path("\#{__FILE__}/../../lib")) # Add PROJECT/lib to $LOAD_PATH
         END_OF_SETUP
       }
