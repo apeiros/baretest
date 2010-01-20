@@ -9,14 +9,26 @@ VERSIONS:
   * formatter specific options (done)
 
 0.4:
-  * :use (:use => :rails, :rr, :mocha, ... packages that provide integration)
+  * :use (:use => :rails, :rr, :mocha, ... packages that provide integration) (done)
   * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
     :integer_addition)
   * tag/focus/failures-only
+    --only <refs>
+    --except <refs>
+    --include <refs>
+    Where revs identifies assertions/suites
+    only/except/include are set operations, only defaulting to ALL, except to
+    NONE, include to NONE.
+    Order is: only - except + include
+    Tags: @tag
+    Specials: #failure, #error, #pending
+    
+    suite :tags => 'tag1 tag2 tag3'
+    baretest tag <ref> <*tags>
 
 0.5:
   * forked suite execution - auto-isolation
-  * parallel suite execution
+  * forked suite execution - parallel execution
 
 0.6:
   * rails integration (controllers, models, views, helpers)
