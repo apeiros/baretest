@@ -1,13 +1,3 @@
-VERSIONS:
-0.3:
-  * setup-variations (done)
-  * skip-method and Skip < StandardError (done)
-  * Persist data in ~/.baretest/
-    rc
-    suites/
-    (done)
-  * formatter specific options (done)
-
 0.4:
   * :use (:use => :rails, :rr, :mocha, ... packages that provide integration) (done)
   * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
@@ -16,7 +6,7 @@ VERSIONS:
     --only <refs>
     --except <refs>
     --include <refs>
-    Where revs identifies assertions/suites
+    Where refs identifies assertions/suites
     only/except/include are set operations, only defaulting to ALL, except to
     NONE, include to NONE.
     Order is: only - except + include
@@ -31,12 +21,16 @@ VERSIONS:
   * forked suite execution - parallel execution
 
 0.6:
+  * rack-test port or integration (http://github.com/brynary/rack-test)
+
+0.7:
   * rails integration (controllers, models, views, helpers)
   * full ruby-debug integration
   * full rcov integration
   * full ir integration
 
-0.7:
+0.8:
+  * dependency resolving for :provides & :depends_on
   * continuous testing on OS X (fsevents+growl)
 
 
