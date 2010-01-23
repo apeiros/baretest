@@ -21,7 +21,10 @@ BareTest.suite "BareTest" do
       end
 
       assert "Should accept an option ':format'" do
+        $LOADED_FEATURES << 'baretest/run/spec'
         raises_nothing do ::BareTest::Run.new(::BareTest::Suite.new, :format => 'spec') end
+        $LOADED_FEATURES.delete 'baretest/run/spec'
+        true
       end
 
       assert "Should use the formatter specified in the :format option" do
@@ -125,6 +128,7 @@ BareTest.suite "BareTest" do
         extender       = Module.new do |m|
           define_method :run_test do |test, setup|
             invoked_tests << test
+            super
           end
         end
         toplevel_suite = ::BareTest::Suite.new
@@ -150,6 +154,25 @@ BareTest.suite "BareTest" do
         count_after = run.count[:suite]
 
         equal(count_before+1, count_after)
+      end
+
+      suite "With no assertions or suites in it" do
+        assert "It sets the suites' status to :pending"
+      end
+      suite "With a succeeding assertion in it" do
+        assert "It sets the suites' status to :success"
+      end
+      suite "With a failing assertion in it" do
+        assert "It sets the suites' status to :failure"
+      end
+      suite "With a erroring assertion in it" do
+        assert "It sets the suites' status to :error"
+      end
+      suite "With a pending assertion in it" do
+        assert "It sets the suites' status to :pending"
+      end
+      suite "With a skipped assertion in it" do
+        assert "It sets the suites' status to :skipped"
       end
     end
 
@@ -199,7 +222,7 @@ BareTest.suite "BareTest" do
 
       suite "The given test was skipped" do
         assert "Increments the counter ':skipped' at the end" do
-          assertion = ::BareTest::Skipped::Assertion.new(nil, "")
+          assertion = ::BareTest::Assertion.new(nil, "", :skip => true) do true end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:skipped]
           run.run_test(assertion, [])

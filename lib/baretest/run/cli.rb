@@ -49,58 +49,47 @@ module BareTest
         @depth = 0
         puts "Running all tests#{' verbosly' if $VERBOSE}"
         start = Time.now
-        super # run all suites
+        rv = super # run all suites
         status = global_status
         printf "\n%2$d tests run in %1$.1fs\n%3$d successful, %4$d pending, %5$d failures, %6$d errors\n",
           Time.now-start, *@count.values_at(:test, :success, :pending, :failure, :error)
         print "Final status: "
         printf FooterFormats[status], status_label(status)
+
+        rv
       end
 
       def run_suite(suite)
         return super unless suite.description
-        skipped = suite.skipped.size
         case size = suite.assertions.size
           when 0
-            if skipped.zero? then
-              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m"
-            else
-              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{skipped} skipped)"
-            end
+            puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m"
           when 1
-            if skipped.zero? then
-              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test)"
-            else
-              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test/#{skipped} skipped)"
-            end
+            puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test)"
           else
-            if skipped.zero? then
-              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests)"
-            else
-              puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests/#{skipped} skipped)"
-            end
+            puts "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests)"
         end
         @depth += 1
-        super(suite) # run the suite
+        rv = super(suite) # run the suite
         @depth -= 1
+
+        rv
       end
 
       def run_test(assertion, setup)
-        rv               = super # run the assertion
-        indent           = '           '+'  '*@depth
-        message          = []
-        deeper           = []
+        rv        = super # run the assertion
+        indent    = '           '+'  '*@depth
+        backtrace = []
+        reason    = rv.reason(:default => "no failure reason given", :indent => indent)
 
         printf(Formats[rv.status], status_label(rv.status), '  '*@depth, rv.interpolated_description)
         if rv.status == :error then
-          message = (rv.exception.message || "no error message given").split("\n")
-          deeper  = $VERBOSE ? rv.exception.backtrace : rv.exception.backtrace.first(1)
+          backtrace = $VERBOSE ? rv.exception.backtrace : rv.exception.backtrace.first(1)
         elsif rv.status == :failure
-          message = (rv.reason || "no failure reason given").split("\n")
-          deeper  = ["#{rv.file}:#{rv.line}"]
+          backtrace = ["#{rv.file}:#{rv.line}"]
         end
-        message.each do |line| print(indent, line, "\n") end
-        deeper.each do |line| print(indent, '  ', line, "\n") end
+        puts reason if reason
+        backtrace.each do |line| print(indent, '  ', line, "\n") end
 
         rv
       end

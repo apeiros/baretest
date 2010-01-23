@@ -177,9 +177,10 @@ module BareTest
       puts "#{assertion.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
       if file = assertion.file then
-        code  = irb_code_reindented(file, assertion.line-1,20)
+        code  = irb_code_reindented(file, assertion.line-1,25)
         match = code.match(/\n^  [^ ]/)
-        code[-(match.post_match.size-3)..-1] = ""
+        code[-(match.post_match.size-3)..-1] = "" if match
+        code << "\n... (only showing first 25 lines)" unless match
         assertion.code = code
         puts "Code (#{file}):", insert_line_numbers(code, assertion.line-1)
       end

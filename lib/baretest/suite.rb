@@ -21,66 +21,161 @@ module BareTest
   class Suite
 
     # Nested suites, in the order of definition
-    attr_reader :suites
+    attr_reader   :suites
 
     # All assertions in this suite
-    attr_reader :assertions
+    attr_reader   :assertions
 
     # All skipped assertions in this suite
-    attr_reader :skipped
+    attr_reader   :skipped
 
     # This suites description. Toplevel suites usually don't have a description.
-    attr_reader :description
+    attr_reader   :description
 
     # This suites direct parent. Nil if toplevel suite.
-    attr_reader :parent
+    attr_reader   :parent
 
     # An Array containing the suite itself (first element), then its direct
     # parent suite, then that suite's parent and so on
-    attr_reader :ancestors
+    attr_reader   :ancestors
 
-    # Create a new suite.
-    #
-    # The arguments 'description', 'parent' and '&block' are the same as on Suite::new,
-    # 'opts' is an additional options hash.
-    #
-    # Keys the options hash accepts:
-    # :requires:: A string or array of strings with requires that have to be done in order to run
-    #             this suite. If a require fails, the suite is created as a Skipped::Suite instead.
-    #
-    def self.create(description=nil, parent=nil, opts={}, &block)
-      Array(opts[:requires]).each { |file| require file } if opts[:requires]
-    rescue LoadError
-      # A suite is skipped if requirements are not met
-      Skipped::Suite.new(description, parent, &block)
-    else
-      # All suites within Skipped::Suite are Skipped::Suite
-      suite = (block ? self : Skipped::Suite).new(description, parent, &block)
-      Array(opts[:use]).each { |component|
-        suite.instance_eval(&::BareTest.components[component])
-      } if opts[:use]
-      suite
-    end
+    attr_reader   :depends_on
+    attr_reader   :provides
+    attr_reader   :tags
+    attr_accessor :status
+
+    ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
 
     # Create a new suite.
     #
     # Arguments:
-    # description:: A string with a human readable description of this suite, preferably
-    #               less than 60 characters and without newlines
-    # parent::      The suite that nests this suite. Ancestry plays a role in execution of setup
-    #               and teardown blocks (all ancestors setups and teardowns are executed too).
+    # description:: A string with a human readable description of this suite,
+    #               preferably less than 60 characters and without newlines
+    # parent::      The suite that nests this suite. Ancestry plays a role in
+    #               execution of setup and teardown blocks (all ancestors setups
+    #               and teardowns are executed too).
+    # opts::        An additional options hash.
+    #
+    # Keys the options hash accepts:
+    # :skip::       Skips the suite if true or a String is passed. If a String
+    #               is passed, it is used as the reason.
+    # :requires::   A string or array of strings with requires that have to be
+    #               done in order to run this suite. If a require fails, the
+    #               assertions will all be skipped with reason "Missing
+    #               dependency".
+    # :use::        A symbol or array of symbols with components this suite
+    #               should load prior to running.
+    # :provides::   A symbol or array of symbols with dependencies this suite
+    #               resolves, see 'depends_on'.
+    # :depends_on:: A symbol or array of symbols with dependencies of this
+    #               suite, see 'provides'.
+    # :tags::       A symbol or array of symbols with dependencies of this
+    #               suite, see 'provides'.
+    #
+    #
     # &block::      The given block is instance evaled.
-    def initialize(description=nil, parent=nil, &block)
+    def initialize(description=nil, parent=nil, opts=nil, &block)
       @description = description
       @parent      = parent
       @suites      = [] # [["description", subsuite, skipped], ["description2", ...], ...] - see Array#assoc
       @assertions  = []
-      @skipped     = []
+      @skipped     = false
       @setup       = {nil => []}
       @components  = []
       @teardown    = []
-      @ancestors   = [self] + (@parent ? @parent.ancestors : [])
+      if @parent then
+        @ancestors   = [self, *@parent.ancestors]
+        @depends_on  = @parent.depends_on
+        @tags        = @parent.tags
+      else
+        @ancestors   = [self]
+        @depends_on  = []
+        @tags        = []
+      end
+      @provides    = []
+      @reason      = [] # skip reason
+      if opts then
+        raise ArgumentError, "Invalid option(s): #{(opts.keys - ValidOptions).inspect}" unless (opts.keys - ValidOptions).empty?
+        skip, requires, use, provides, depends_on, tags = opts.values_at(*ValidOptions)
+        skip(skip == true ? nil : skip) if skip
+        use(*use) if use
+        requires(*requires) if requires
+        @depends_on |= Array(depends_on) if depends_on
+        @provides   |= Array(provides) if provides
+        @tags       |= tags if tags
+      end
       instance_eval(&block) if block
+    end
+
+    # Skips the suite unless dependencies are satisfied
+    def verify_dependencies!(provided)
+      skip("Missing dependencies: #{(@depends_on-provided).join(', ')}") unless (@depends_on-provided).empty?
+    end
+
+    def verify_tags!(tags)
+      skip("Missing tags: #{(tags-@tags).join(', ')}") unless (tags-@tags).empty?
+    end
+
+    # Instruct this suite to use the given components.
+    # The suite is skipped if a component is not available.
+    def use(*components)
+      components.each do |name|
+        component = BareTest.components[name]
+        if component then
+          instance_eval(&component)
+        else
+          skip("Missing component: #{name.inspect}")
+        end
+      end
+    end
+
+    # Instruct this suite to require the given files.
+    # The suite is skipped if a file can't be loaded.
+    def requires(*paths)
+      paths.each do |file|
+        begin
+          require file
+        rescue LoadError => e
+          skip("Missing source file: #{file} (#{e})")
+        end
+      end
+    end
+
+    def tagged?(tags)
+      (@tags-tags).empty?
+    end
+
+    def skip(reason=nil)
+      @skipped = true
+      @reason << (reason || 'Manually skipped')
+      true
+    end
+
+    def skipped?
+      @skipped
+    end
+
+    # The failure/error/skipping/pending reason.
+    # Returns nil if there's no reason, a string otherwise
+    # Options:
+    # :default::     Reason to return if no reason is present
+    # :separator::   String used to separate multiple reasons
+    # :indent::      A String, the indentation to use. Prefixes every line.
+    # :first_indent: A String, used to indent the first line only (replaces indent).
+    def reason(opt=nil)
+      if opt then
+        default, separator, indent, first_indent = 
+          *opt.values_at(:default, :separator, :indent, :first_indent)
+        reason = @reason
+        reason = Array(default) if reason.empty? && default
+        return nil if reason.empty?
+        reason = reason.join(separator || "\n")
+        reason = reason.gsub(/^/, indent) if indent
+        reason = reason.gsub(/^#{Regexp.escape(indent)}/, first_indent) if first_indent
+        reason
+      else
+        @reason.empty? ? nil : @reason.join("\n")
+      end
     end
 
     # Define a nested suite.
@@ -88,13 +183,13 @@ module BareTest
     # Nested suites inherit setup & teardown methods.
     # Also if an outer suite is skipped, all inner suites are skipped too.
     #
-    # Valid values for opts:
-    # :requires:: A list of files to require, if one of the requires fails,
-    #               the suite will be skipped. Accepts a String or an Array
-    def suite(description=nil, opts={}, &block)
-      suite = self.class.create(description, self, opts, &block)
-      if append_to = @suites.assoc(description) then
-        append_to.last.update(suite)
+    # See Suite::new - all arguments are passed to it verbatim, and self is
+    # added as parent.
+    def suite(description=nil, *args, &block)
+      suite          = self.class.new(description, self, *args, &block)
+      existing_suite = @suites.assoc(description)
+      if existing_suite then
+        existing_suite.last.update(suite)
       else
         @suites << [description, suite]
       end
@@ -105,20 +200,23 @@ module BareTest
     #
     # Used to merge suites with the same description.
     def update(with_suite)
-      if ::BareTest::Skipped::Suite === with_suite then
-        @skipped.concat(with_suite.skipped)
-      else
-        @assertions.concat(with_suite.assertions)
-        @setup.update(with_suite.setup) do |k,v1,v2| v1+v2 end
-        @teardown.concat(with_suite.teardown)
-        with_suite.suites.each { |description, suite|
-          if append_to = @suites.assoc(description) then
-            append_to.last.update(suite)
-          else
-            @suites << [description, suite]
-          end
-        }
-      end
+      assertions, setup, teardown, provides, depends_on, skipped, reason, suites =
+        *with_suite.merge_attributes
+      @assertions.concat(assertions)
+      @setup.update(setup) do |k,v1,v2| v1+v2 end
+      @teardown.concat(teardown)
+      @provides   |= provides
+      @depends_on |= depends_on
+      @skipped   ||= skipped
+      @reason.concat(reason)
+      suites.each { |description, suite|
+        if append_to = @suites.assoc(description) then
+          append_to.last.update(suite)
+        else
+          @suites << [description, suite]
+        end
+      }
+
       self
     end
 
@@ -232,9 +330,18 @@ module BareTest
     def inspect #:nodoc:
       sprintf "#<%s:%08x %p>", self.class, object_id>>1, @description
     end
+
+  protected
+    # All attributes that are required when merging two suites
+    def merge_attributes
+      return @assertions,
+             @setup,
+             @teardown,
+             @provides,
+             @depends_on,
+             @skipped,
+             @reason,
+             @suites
+    end
   end
 end
-
-
-# At bottom because Skipped::Suite inherits from Suite
-require 'baretest/skipped/suite'

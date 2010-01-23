@@ -57,6 +57,8 @@ module BareTest
       @inits       = []
       @options     = opts || {}
       @count       = @options[:count] || Hash.new(0)
+      @provided    = []
+      @tags        = @options[:tags] || []
 
       (BareTest.extender+Array(@options[:extender])).each do |extender|
         extend(extender)
@@ -101,22 +103,43 @@ module BareTest
     # Gets the suite to run as single argument.
     # Runs all assertions and nested suites.
     def run_suite(suite)
+      suite.verify_dependencies!(@provided)
+      suite.verify_tags!(@tags)
+
+      if suite.skipped? then
+        suite.assertions.each do |test|
+          test.skip(suite.reason)
+        end
+        suite.suites.each do |(description, suite)|
+          suite.skip(suite.reason)
+        end
+      end
+      states = []
       suite.assertions.each do |test|
-        run_test_variants(test)
+        states.concat(run_test_variants(test))
       end
       suite.suites.each do |(description, suite)|
-        run_suite(suite)
+        states << run_suite(suite)
       end
       @count[:suite] += 1
+      final_status = most_important_status(states.uniq)
+      suite.status = final_status || :pending # || in case the suite contains no tests or suites
+
+      @provided |= suite.provides if final_status == :success
+
+      final_status
     end
 
     # Invoked once for every assertion.
     # Iterates over all variants of an assertion and invokes run_test
     # for each.
     def run_test_variants(test)
+      states = []
       test.suite.each_component_variant do |setups|
-        run_test(test, setups)
+        rv = run_test(test, setups)
+        states << rv.status
       end
+      states
     end
 
     # Formatter callback.
@@ -128,6 +151,12 @@ module BareTest
       @count[:test]            += 1
       @count[assertion.status] += 1
       rv
+    end
+
+    def most_important_status(states)
+      [:error, :failure, :pending, :skipped, :success].find { |state|
+        states.include?(state)
+      }
     end
 
     # Status over all tests ran up to now

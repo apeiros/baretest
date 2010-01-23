@@ -7,22 +7,14 @@
 
 
 BareTest.suite "BareTest" do
-  suite "Assertion" do
-    suite "::create" do
-      assert "Should accept 0-3 arguments" do
-        raises_nothing { ::BareTest::Suite.create() } &&
-        raises_nothing { ::BareTest::Suite.create(nil) } &&
-        raises_nothing { ::BareTest::Suite.create(nil, nil) } &&
-        raises_nothing { ::BareTest::Suite.create(nil, nil, {}) } &&
-        raises(ArgumentError) { ::BareTest::Suite.create(nil, nil, {}, nil) }
-      end
-
+  suite "Suite" do
+    suite "::new" do
       assert "Should require a single file listed in :requires option." do
         a = self # ruby1.9 fix, no longer yields self with instance_eval
         original_require = Kernel.instance_method(:require)
         file             = 'foo/bar'
         Kernel.send(:define_method, :require) do |file, *args| a.touch(file) end
-        ::BareTest::Suite.create(nil, nil, :requires => file)
+        ::BareTest::Suite.new(nil, nil, :requires => file)
         Kernel.send(:define_method, :require, original_require)
 
         touched file
@@ -33,7 +25,7 @@ BareTest.suite "BareTest" do
         original_require = Kernel.instance_method(:require)
         files            = %w[moo/bar moo/baz moo/quuz]
         Kernel.send(:define_method, :require) do |file, *args| a.touch(file) end
-        ::BareTest::Suite.create(nil, nil, :requires => files)
+        ::BareTest::Suite.new(nil, nil, :requires => files)
         Kernel.send(:define_method, :require, original_require)
 
         files.all? { |file| touched file }
@@ -54,7 +46,7 @@ BareTest.suite "BareTest" do
         end
 
         assert "Should activate the components listed in :use option." do
-          ::BareTest::Suite.create(nil, nil, :use => :test_component)
+          ::BareTest::Suite.new(nil, nil, :use => :test_component)
           touched :component
         end
         
@@ -66,35 +58,47 @@ BareTest.suite "BareTest" do
         end
       end
 
-      assert "Should return a ::BareTest::Suite instance." do
-        ::BareTest::Suite.create {}.class == ::BareTest::Suite
+      suite ":provides option" do
+        assert "Should list all added items"
+        assert "Should add items only once"
       end
 
-      assert "Should return a ::BareTest::Suite instance without a block." do
-        ::BareTest::Suite.create.class == ::BareTest::Skipped::Suite
+      suite ":depends_on option" do
+        assert "Should list all added items"
+        assert "Should add items only once"
       end
 
-      assert "Should return a ::BareTest::Skipped::Suite instance if a required file is not available." do
-        original_require = Kernel.instance_method(:require)
-        Kernel.send(:define_method, :require) do |*args| raise LoadError end # simulate that the required file was not found
-        return_value = ::BareTest::Suite.create(nil, nil, :requires => 'fake')
-        Kernel.send(:define_method, :require, original_require)
-
-        return_value.class == ::BareTest::Skipped::Suite
+      assert "Should accept 0-3 arguments" do
+        raises_nothing { ::BareTest::Suite.new() } &&
+        raises_nothing { ::BareTest::Suite.new(nil) } &&
+        raises_nothing { ::BareTest::Suite.new(nil, nil) } &&
+        raises_nothing { ::BareTest::Suite.new(nil, nil, nil) } &&
+        raises(ArgumentError) { ::BareTest::Suite.new(nil, nil, nil, nil) }
       end
-    end
 
-    suite "::new" do
       assert "Should return a ::BareTest::Suite instance" do
         ::BareTest::Suite.new(nil, nil).class == ::BareTest::Suite
       end
 
-      assert "Should accept 0-2 arguments" do
-        raises_nothing { ::BareTest::Suite.new() } &&
-        raises_nothing { ::BareTest::Suite.new(nil) } &&
-        raises_nothing { ::BareTest::Suite.new(nil, nil) } &&
-        raises(ArgumentError) { ::BareTest::Suite.new(nil, nil, nil) }
+      assert "Should be skipped if a required file is not available." do
+        original_require = Kernel.instance_method(:require)
+        Kernel.send(:define_method, :require) do |*args| raise LoadError end # simulate that the required file was not found
+        return_value = ::BareTest::Suite.new(nil, nil, :requires => 'fake')
+        Kernel.send(:define_method, :require, original_require)
+
+        return_value.skipped?
       end
+    end
+
+    suite "#verify_dependencies!" do
+      assert "Should not make the suite skipped if it depends_on nothing"
+      assert "Should not make the suite skipped if everything it depends_on is provided"
+      assert "Should not make the suite skipped if more than everything it depends_on is provided"
+      assert "Should make the suite skipped if not everything it depends_on is provided"
+    end
+
+    suite "#status" do
+      assert "Suite should respond to 'status'"
     end
 
     suite "#suites" do

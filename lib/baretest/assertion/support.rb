@@ -132,7 +132,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
-        failure "Expected block to raise nothing, but it raised #{exception.class}."
+        failure "Expected block to raise nothing, but it raised #{exception.class} (#{exception.message})."
       else
         true
       end

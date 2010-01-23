@@ -111,33 +111,9 @@ BareTest.suite "BareTest" do
         parent = ::BareTest::Suite.new
         parent.setup do end
         parent.teardown do end
-        @suite = ::BareTest::Skipped::Suite.new("None", parent)
+        @suite = ::BareTest::Suite.new("None", parent, :skip => true)
         @suite.setup do end
         @suite.teardown do end
-      end
-
-      suite "#ancestry_setup" do
-        assert "Should always be an empty array." do
-          equal([], @suite.ancestry_setup)
-        end
-      end
-
-      suite "#setup" do
-        assert "Should always be an empty array." do
-          equal([], @suite.setup)
-        end
-      end
-
-      suite "#ancestry_teardown" do
-        assert "Should always be an empty array." do
-          equal([], @suite.ancestry_teardown)
-        end
-      end
-
-      suite "#teardown" do
-        assert "Should always be an empty array." do
-          equal([], @suite.teardown)
-        end
       end
 
       suite "#assert" do
@@ -151,29 +127,29 @@ BareTest.suite "BareTest" do
           @suite.assert "a"
           equal(
             :expected => 1,
-            :actual   => @suite.skipped.size,
+            :actual   => @suite.assertions.size,
             :message  => "number of defined tests after adding one"
           )
 
           @suite.assert "b"
           equal(
             :expected => 2,
-            :actual   => @suite.skipped.size,
+            :actual   => @suite.assertions.size,
             :message  => "number of defined tests after adding two"
           )
 
           equal_unordered(
             :expected => ['a', 'b'],
-            :actual   => @suite.skipped.map { |child| child.description },
+            :actual   => @suite.assertions.map { |child| child.description },
             :message  => "the descriptions"
           )
 
-          @suite.skipped.all? { |test| kind_of(::BareTest::Skipped::Assertion, test) }
+          @suite.assertions.all? { |test| test.skipped? }
         end
 
         assert "Added tests should have the receiving suite as suite." do
           @suite.assert "a"
-          assertion = @suite.skipped.first
+          assertion = @suite.assertions.first
 
           same(
             :expected => @suite,
@@ -188,7 +164,7 @@ BareTest.suite "BareTest" do
       suite "#execute" do
         suite "Given a test that succeeds" do
           assert "Should have status :skipped" do
-            assertion = ::BareTest::Skipped::Assertion.new(nil, "") do true end
+            assertion = ::BareTest::Assertion.new(nil, "", :skip => true) do true end
             assertion.execute
 
             equal(:skipped, assertion.status)
@@ -197,7 +173,7 @@ BareTest.suite "BareTest" do
 
         suite "Given a test that is pending" do
           assert "Should have status :skipped" do
-            assertion = ::BareTest::Skipped::Assertion.new(nil, "")
+            assertion = ::BareTest::Assertion.new(nil, "", :skip => true) do true end
             assertion.execute
 
             equal(:skipped, assertion.status)
@@ -206,7 +182,7 @@ BareTest.suite "BareTest" do
 
         suite "Given a test that fails" do
           assert "Should have status :skipped" do
-            assertion = ::BareTest::Skipped::Assertion.new(nil, "") do false end
+            assertion = ::BareTest::Assertion.new(nil, "", :skip => true) do false end
             assertion.execute
 
             equal(:skipped, assertion.status)
@@ -215,7 +191,7 @@ BareTest.suite "BareTest" do
 
         suite "Given a test that errors" do
           assert "Should have status :skipped" do
-            assertion = ::BareTest::Skipped::Assertion.new(nil, "") do raise end
+            assertion = ::BareTest::Assertion.new(nil, "", :skip => true) do raise end
             assertion.execute
 
             equal(:skipped, assertion.status)

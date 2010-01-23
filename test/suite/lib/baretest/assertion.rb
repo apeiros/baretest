@@ -14,10 +14,10 @@ BareTest.suite "BareTest" do
         ::BareTest::Assertion
       end
 
-      assert "Should expect exactly 2 arguments" do
+      assert "Should expect 2-3 arguments" do
         raises(ArgumentError) { ::BareTest::Assertion.new() } &&
         raises(ArgumentError) { ::BareTest::Assertion.new(nil) } &&
-        raises(ArgumentError) { ::BareTest::Assertion.new(nil, "foo", "bar") }
+        raises(ArgumentError) { ::BareTest::Assertion.new(nil, "foo", "bar", "baz") }
       end
     end
 

@@ -53,9 +53,6 @@ module BareTest
     # The description of this assertion.
     attr_reader :description
 
-    # The failure/error/skipping/pending reason.
-    attr_reader :reason
-
     # The suite this assertion belongs to
     attr_reader :suite
 
@@ -85,19 +82,61 @@ module BareTest
     # description:: A descriptive string about what this Assertion tests.
     # &block::      The block definition. Without one, the Assertion will have a
     #               :pending status.
-    def initialize(suite, description, &block)
+    def initialize(suite, description, opt=nil, &block)
       @suite          = suite
       @description    = (description || "No description given")
       @setups         = nil
       @block          = block
+      @skipped        = false
       reset
+      if opt then
+        skip = opt[:skip]
+        skip(skip == true ? nil : skip) if skip
+      end
+      unless @block
+        skip("Pending")
+        @status = :pending
+      end
     end
 
     def reset
       @status    = nil
-      @reason    = nil
+      @reason    = []
       @exception = nil
       @context   = ::BareTest::Assertion::Context.new(self)
+    end
+
+    # The failure/error/skipping/pending reason.
+    # Returns nil if there's no reason, a string otherwise
+    # Options:
+    # :default::     Reason to return if no reason is present
+    # :separator::   String used to separate multiple reasons
+    # :indent::      A String, the indentation to use. Prefixes every line.
+    # :first_indent: A String, used to indent the first line only (replaces indent).
+    def reason(opt=nil)
+      if opt then
+        default, separator, indent, first_indent = 
+          *opt.values_at(:default, :separator, :indent, :first_indent)
+        reason = @reason
+        reason = Array(default) if reason.empty? && default
+        return nil if reason.empty?
+        reason = reason.join(separator || "\n")
+        reason = reason.gsub(/^/, indent) if indent
+        reason = reason.gsub(/^#{Regexp.escape(indent)}/, first_indent) if first_indent
+        reason
+      else
+        @reason.empty? ? nil : @reason.join("\n")
+      end
+    end
+
+    def skipped?
+      @skipped
+    end
+
+    def skip(reason=nil)
+      @skipped = true
+      @reason << (reason || 'Manually skipped')
+      true
     end
 
     def interpolated_description
@@ -121,7 +160,7 @@ module BareTest
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
     rescue Exception => exception
-      @reason    = "An error occurred during setup"
+      @reason   << "An error occurred during setup: #{exception}"
       @exception = exception
       @status    = :error
       false
@@ -135,39 +174,44 @@ module BareTest
     rescue *PassthroughExceptions
       raise # pass through exceptions must be passed through
     rescue Exception => exception
-      @reason    = "An error occurred during setup"
+      @reason   << "An error occurred during teardown: #{exception}"
       @exception = exception
       @status    = :error
     end
 
     # Runs the assertion and sets the status and exception
     def execute(setups=nil)
-      @setups    = setups if setups
-      @exception = nil
-      if @block then
-        if setup() then
-          # run the assertion
-          begin
-            @status = @context.instance_eval(&@block) ? :success : :failure
-            @reason = "Assertion failed" if @status == :failure
-          rescue *PassthroughExceptions
-            raise # pass through exceptions must be passed through
-          rescue ::BareTest::Assertion::Failure => failure
-            @status = :failure
-            @reason = failure.message
-          rescue ::BareTest::Assertion::Skip => skip
-            @status = :skipped
-            @reason = skip.message
-          rescue Exception => exception
-            @reason    = "An error occurred during execution"
-            @exception = exception
-            @status    = :error
-          end
-        end
-        teardown
+      if @skipped then
+        @status = :skipped unless @status == :pending
       else
-        @status = :pending
+        @setups    = setups if setups
+        @exception = nil
+        if @block then
+          if setup() then
+            # run the assertion
+            begin
+              @status  = @context.instance_eval(&@block) ? :success : :failure
+              @reason << "Assertion failed" if @status == :failure
+            rescue *PassthroughExceptions
+              raise # pass through exceptions must be passed through
+            rescue ::BareTest::Assertion::Failure => failure
+              @status  = :failure
+              @reason << failure.message
+            rescue ::BareTest::Assertion::Skip => skip
+              @status  = :skipped
+              @reason << skip.message
+            rescue Exception => exception
+              @reason    << "An error occurred during execution: #{exception}"
+              @exception  = exception
+              @status     = :error
+            end
+          end
+          teardown
+        else
+          @status = :pending
+        end
       end
+
       self
     end
 
