@@ -82,6 +82,17 @@ module BareTest
   end
   init
 
+  def self.component(name)
+    component = @components[name]
+    begin
+      require "baretest/use/#{name}"
+    rescue LoadError
+    else
+      component = @components[name]
+    end
+    component
+  end
+
   # If no description was given, it adds the contained assertions and suites to the toplevel suite,
   # if a description was given, a suite with the given description is created, added to the toplevel
   # suite, and all the contained assertions and suites are added to the created suite.

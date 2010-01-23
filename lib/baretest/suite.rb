@@ -120,7 +120,7 @@ module BareTest
     # The suite is skipped if a component is not available.
     def use(*components)
       components.each do |name|
-        component = BareTest.components[name]
+        component = BareTest.component(name)
         if component then
           instance_eval(&component)
         else
