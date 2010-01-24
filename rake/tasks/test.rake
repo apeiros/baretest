@@ -17,7 +17,7 @@ namespace :test do
     puts "rake test:run expects to the directory test (#{File.expand_path(project_dir)}/test) to exist."
   end
 
-  desc "Run testsuite. Set FORMAT env variable to change the formatter used, INTERACTIVE to have irb mode."
+  desc "Run testsuite. Set FORMAT env variable to change the formatter used, INTERACTIVE to 'true' to have irb mode."
   task :run do
     begin
       require 'baretest'
@@ -27,7 +27,7 @@ namespace :test do
       # Options can only be supplied via ENV
       options     = {
         :format      => (ENV["FORMAT"] || 'cli'),
-        :interactive => (ENV["INTERACTIVE"] == 'true'),
+        :interactive => (ENV["INTERACTIVE"] =~ /^[ty]/i), # true, TRUE, yes, YES or abbreviated
       }
 
       # Run all tests
