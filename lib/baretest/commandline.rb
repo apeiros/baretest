@@ -34,24 +34,29 @@ module BareTest
     # :verbose     => Boolean - provide verbose output
     def run(arguments, options)
       setup_path  = nil
-      files       = arguments.empty? ? nil : arguments # (ARGV.empty? ? nil : ARGV)
+      selectors   = BareTest.process_selectors(arguments)
+      options     = selectors.merge(options)
 
       # Load the setup file, all helper files and all test files
       BareTest.load_standard_test_files(
         :verbose    => options[:verbose],
         :setup_path => options[:setup_path],
-        :files      => files,
+        :files      => options[:files],
         :chdir      => '.'
       )
 
       # Run the tests
       puts if options[:verbose]
       ARGV.clear # IRB is being stupid
-      BareTest.run(options).global_status == :success
+      runner = BareTest::Run.new(BareTest.toplevel_suite, options)
+      runner.run_all
+
+      # Return whether all tests ran successful
+      runner.global_status == :success
     end
     module_function :run
 
-    def init *a
+    def init(arguments, options)
       core = %w[
         test
         test/external
@@ -105,16 +110,106 @@ module BareTest
     end
     module_function :init
 
-    def formats *a
+    def formats(arguments, options)
       puts "Available formats:"
       Dir.glob("{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb") { |path|
         puts "- #{File.basename(path, '.rb')}"
       }
-      exit
     end
     module_function :formats
 
-    def env *a
+    def commands(arguments, options)
+      colors = $stdout.tty?
+
+      description = <<-END_OF_DESCRIPTION.gsub(/^ {8}/, '') #                           |<- 80 cols ends here
+        \e[1mCOMMANDS\e[0m
+
+        The following commands are available in baretest:
+
+        \e[1mcommands\e[0m
+            List the available commands.
+
+        \e[1menv\e[0m
+            Show the baretest environment. This contains all data that influences
+            baretests behaviour. That is: ruby version, ruby engine, determined
+            test directory, stored data about this suite etc.
+
+        \e[1mformats\e[0m
+            Shows all formats available in \e[34mrun\e[0m's -f/--format option.
+
+        \e[1mhelp\e[0m
+            Provides help for all commands. Describes options, arguments and env
+            variables each command accepts.
+
+        \e[1minit\e[0m
+            Create a basic skeleton of directories and files to contain baretests test-
+            suite. Non-destructive (existing files won't be overriden or deleted).
+
+        \e[1mrun\e[0m (default command)
+            Run the tests and display information about them.
+
+        \e[1mselectors\e[0m
+            Detailed information about the selectors available to \e[34mrun\e[0m's
+            arguments.
+
+        \e[1mversion\e[0m
+            Show the baretest executable and library versions.
+
+      END_OF_DESCRIPTION
+      #'#                                                                               |<- 80 cols ends here
+      description.gsub!(/\e.*?m/, '') unless colors
+
+      puts description
+    end
+    module_function :commands
+
+    def selectors(arguments, options)
+      colors = $stdout.tty?
+
+      description = <<-END_OF_DESCRIPTION.gsub(/^ {8}/, '') #                           |<- 80 cols ends here
+        \e[1mSELECTORS\e[0m
+
+        \e[1mDescription\e[0m
+            Selectors are used to identify what tests to run. Baretest knows 3 kinds of
+            selectors: globs, tags and last-run-states. All of these can be preceeded with a
+            minus sign (-), to negate the expression.
+        
+        \e[1mExample\e[0m
+            `baretest test/suite -test/suite/foo @a -@b #failure -#pending`
+
+            This will run all tests that
+            * Are in the directory test/suite or any of its subdirectories
+            * Are NOT in the directory test/suite/foo, or any of its subdirectories
+            * Have the tag 'a'
+            * Do NOT have the tag 'b'
+            * Terminated with a failure status on the last run
+            * Did NOT terminate with a pending status on the last run
+        
+        \e[1mGlobs\e[0m
+            * '**' recursively matches all files and directories
+            * '*' wildcard, matches any amount of any character
+            * '?' wildcard, matches one character 
+            * '{a,b,c}' alternation, matches any pattern in the comma separated list
+            * Directories are equivalent to `directory/**/*` patterns
+
+        \e[1mTags\e[0m
+            Tags are preceeded with an @.
+
+        \e[1mLast-run-status\e[0m
+            Last run states are preceeded with a #.
+            * #success, #failure, #error, #skipped, #pending
+            * #error, #skipped and #pending are a subset of #failure
+            * #pending is a subset of #skipped
+
+      END_OF_DESCRIPTION
+
+      description.gsub!(/\e.*?m/, '') unless colors
+
+      puts description
+    end
+    module_function :selectors
+
+    def env(arguments, options)
       puts "Versions:",
            "* executable: #{Version}",
            "* library: #{BareTest::VERSION}",
@@ -123,7 +218,7 @@ module BareTest
     end
     module_function :env
 
-    def version *a
+    def version(arguments, options)
       puts "baretest executable version #{Version}",
            "library version #{BareTest::VERSION}",
            "ruby version #{RUBY_VERSION}",
