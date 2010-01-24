@@ -53,12 +53,13 @@ module BareTest
     # * :format (extends with the formatter module)
     # * :interactive (extends with IRBMode)
     def initialize(suite, opts=nil)
-      @suite       = suite
-      @inits       = []
-      @options     = opts || {}
-      @count       = @options[:count] || Hash.new(0)
-      @provided    = []
-      @tags        = @options[:tags] || []
+      @suite        = suite
+      @inits        = []
+      @options      = opts || {}
+      @count        = @options[:count] || Hash.new(0)
+      @provided     = []
+      @include_tags = @options[:include_tags] # nil is ok here
+      @exclude_tags = @options[:exclude_tags] # nil is ok here
 
       (BareTest.extender+Array(@options[:extender])).each do |extender|
         extend(extender)
@@ -104,22 +105,25 @@ module BareTest
     # Runs all assertions and nested suites.
     def run_suite(suite)
       suite.verify_dependencies!(@provided)
-      suite.verify_tags!(@tags)
+      suite.verify_tags!(@include_tags, @exclude_tags)
 
       if suite.skipped? then
+        reason = suite.reason
         suite.assertions.each do |test|
-          test.skip(suite.reason)
+          test.skip(reason)
         end
-        suite.suites.each do |(description, suite)|
-          suite.skip(suite.reason)
+        if suite.skip_descendants then
+          suite.suites.each do |(description, subsuite)|
+            subsuite.skip(reason)
+          end
         end
       end
       states = []
       suite.assertions.each do |test|
         states.concat(run_test_variants(test))
       end
-      suite.suites.each do |(description, suite)|
-        states << run_suite(suite)
+      suite.suites.each do |(description, subsuite)|
+        states << run_suite(subsuite)
       end
       @count[:suite] += 1
       final_status = most_important_status(states.uniq)
@@ -150,6 +154,7 @@ module BareTest
       rv = assertion.execute
       @count[:test]            += 1
       @count[assertion.status] += 1
+
       rv
     end
 

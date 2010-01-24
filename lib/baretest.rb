@@ -19,6 +19,9 @@ require 'ruby/kernel'
 
 
 module BareTest
+  # :nodoc:
+  DefaultInitialPositiveGlob = 'test/{suite,unit,integration,system}/**/*.rb'
+
   class << self
     # A hash of components - available via BareTest::use(name) and
     # Suite#suite :use => name
@@ -51,7 +54,8 @@ module BareTest
     verbose    = opts.delete(:verbose)
     setup_path = opts.delete(:setup_path) || 'test/setup.rb'
     chdir      = opts.delete(:chdir) || '.'
-    files      = opts.delete(:files) || ['test/{suite,unit,integration,system}/**/*.rb']
+    files      = opts.delete(:files)
+    files      = [DefaultInitialPositiveGlob] if (files.nil? || files.empty?)
     Dir.chdir(chdir) do
       load(setup_path) if File.exist?(setup_path)
       files.each do |glob|
@@ -66,6 +70,42 @@ module BareTest
         }
       end
     end
+  end
+
+  def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
+    files           = []
+    include_tags    = []
+    exclude_tags    = []
+    include_states  = []
+    exclude_states  = []
+    default_initial_positive_glob ||= DefaultInitialPositiveGlob
+    Dir.chdir(base_directory) do
+      selectors.each do |selector|
+        case selector
+          when /-#(.*)/ then exclude_states << $1.to_sym
+          when /-@(.*)/ then exclude_tags << $1.to_sym
+          when /#(.*)/  then include_states << $1.to_sym
+          when /@(.*)/  then include_tags << $1.to_sym
+          when /-(.*)/  then
+            files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
+            glob   = File.directory?($1) ? "#{$1}/**/*.rb" : $1
+            files -= Dir[glob]
+          else
+            glob   = File.directory?(selector) ? "#{selector}/**/*.rb" : selector
+            files |= Dir[glob]
+        end
+      end
+      files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
+      files.map! do |path| File.expand_path(path) end
+    end
+
+    return {
+      :files          => files,
+      :include_tags   => include_tags,
+      :exclude_tags   => exclude_tags,
+      :include_states => include_states,
+      :exclude_states => exclude_states
+    }
   end
 
   # Initializes BareTest, is automatically called
@@ -104,28 +144,6 @@ module BareTest
     else
       @toplevel_suite.instance_eval(&block)
     end
-  end
-
-  # Creates a Test::Run instance, adds the assertions and suites defined in its
-  # own block to that Test::Run instance's toplevel suite and if $PROGRAM_NAME
-  # (aka $0) is equal to \_\_FILE__ (means the current file is the file directly
-  # executed by ruby, and not just required/loaded/evaled by another file),
-  # subsequently also runs that suite.
-  def self.run_if_mainfile(description=nil, opts={}, &block)
-    suite(description, opts, &block)
-    if caller.first[/^[^:]*/] == $0 then # if is mainfile
-      run(:format => ENV['FORMAT'], :interactive => ENV['INTERACTIVE'])
-    end
-  end
-
-  # Runs the toplevel suite (which usually contains all suites and assertions
-  # defined in all loaded test files).
-  #
-  # Returns the Run instance.
-  def self.run(opts=nil)
-    runner = BareTest::Run.new(@toplevel_suite, opts)
-    runner.run_all
-    runner
   end
 
   def self.new_component(name, &block)

@@ -135,7 +135,8 @@ module BareTest
 
     def skip(reason=nil)
       @skipped = true
-      @reason << (reason || 'Manually skipped')
+      reason ||= 'Manually skipped'
+      @reason << reason unless @reason.include?(reason)
       true
     end
 

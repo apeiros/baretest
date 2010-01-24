@@ -28,6 +28,7 @@ module BareTest
 
     # All skipped assertions in this suite
     attr_reader   :skipped
+    attr_reader   :skip_descendants
 
     # This suites description. Toplevel suites usually don't have a description.
     attr_reader   :description
@@ -80,6 +81,7 @@ module BareTest
       @suites      = [] # [["description", subsuite, skipped], ["description2", ...], ...] - see Array#assoc
       @assertions  = []
       @skipped     = false
+      @skip_descendants = false
       @setup       = {nil => []}
       @components  = []
       @teardown    = []
@@ -102,7 +104,7 @@ module BareTest
         requires(*requires) if requires
         @depends_on |= Array(depends_on) if depends_on
         @provides   |= Array(provides) if provides
-        @tags       |= tags if tags
+        @tags       |= Array(tags) if tags
       end
       instance_eval(&block) if block
     end
@@ -112,8 +114,10 @@ module BareTest
       skip("Missing dependencies: #{(@depends_on-provided).join(', ')}") unless (@depends_on-provided).empty?
     end
 
-    def verify_tags!(tags)
-      skip("Missing tags: #{(tags-@tags).join(', ')}") unless (tags-@tags).empty?
+    def verify_tags!(include_tags, exclude_tags=nil)
+      return true unless (include_tags || exclude_tags)
+      skip("Missing tags: #{(include_tags-@tags).join(', ')}", false)        if include_tags && !(include_tags - @tags).empty?
+      skip("Has excluded tags: #{(exclude_tags & @tags).join(', ')}", false) if exclude_tags && !(exclude_tags & @tags).empty?
     end
 
     # Instruct this suite to use the given components.
@@ -145,9 +149,11 @@ module BareTest
       (@tags-tags).empty?
     end
 
-    def skip(reason=nil)
-      @skipped = true
-      @reason << (reason || 'Manually skipped')
+    def skip(reason=nil, deep=true)
+      @skipped          = true
+      @skip_descendants = true if deep
+      reason          ||= 'Manually skipped'
+      @reason << reason unless @reason.include?(reason)
       true
     end
 
