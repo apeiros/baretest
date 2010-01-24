@@ -40,10 +40,11 @@ Command "run" do
 
     virtual_argument :command
     virtual_argument :options
-    virtual_argument :glob, '*glob', File,
-      "The testfiles to run.\n" \
-      "Defaults to 'test/{suite,unit,integration,system}/**/*.rb'\n" \
-      "Providing a directory is equivalent to dir/**/*.rb"
+    virtual_argument :selector, '*(selector | -selector)', File,
+      "The tests to run. Example:\n" \
+      "  baretest -- test/suite/a -test/suite/a/x @tag -@other #failure -#pending\n" \
+      "Defaults to 'test/{suite,unit,integration,system}\n" \
+      "See `baretest selectors` to get more information"
 
     text "\nDefault command is 'run', which runs the testsuite or the provided testfiles.\n\nOptions:\n"
 
@@ -81,6 +82,7 @@ Command "run" do
   command "env"
   command "version"
   command "commands"
+  command "selectors"
   command "help"
 end
 
@@ -129,11 +131,12 @@ Command.with(ARGV) do
       BareTest::CommandLine.env(arguments, options)
     when "version" # show version information about baretest
       BareTest::CommandLine.version
+    when "selectors" # show version information about selectors baretest recognizes
+      BareTest::CommandLine.selectors
     when "help"
       puts definition[command].usage_text
     when "commands"
-      puts "Available commands:"
-      puts definition[command].commands_by_name.keys.sort
+      BareTest::CommandLine.commands(arguments, options)
     else
       puts "Unknown command '#{command}'"
       puts "Available commands:"
