@@ -152,29 +152,30 @@ module BareTest
     # Formatter callback.
     # Invoked once for every assertion.
     # Gets the assertion to run as single argument.
-    def run_test(assertion, setup)
+    def run_test(assertion, with_setup)
       rv = super
       # drop into irb if assertion failed
       case rv.status
         when :failure
-          start_irb_failure_mode(assertion)
-          irb_mode_for_assertion(assertion)
-          stop_irb_mode(assertion)
+          start_irb_failure_mode(assertion, rv)
+          irb_mode_for_assertion(assertion, rv, with_setup)
+          stop_irb_mode
         when :error
-          start_irb_error_mode(assertion)
-          irb_mode_for_assertion(assertion)
-          stop_irb_mode(assertion)
+          start_irb_error_mode(assertion, rv)
+          irb_mode_for_assertion(assertion, rv, with_setup)
+          stop_irb_mode
+        # with other states, irb-mode is not started
       end
 
       rv
     end
 
     # Invoked when we have to drop into irb mode due to a failure
-    def start_irb_failure_mode(assertion) # :nodoc:
+    def start_irb_failure_mode(assertion, status) # :nodoc:
       ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
-      puts "#{assertion.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
+      puts "#{status.status.to_s.capitalize} in:  #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
       if file = assertion.file then
         code  = irb_code_reindented(file, assertion.line-1,25)
@@ -187,14 +188,14 @@ module BareTest
     end
 
     # Invoked when we have to drop into irb mode due to an error
-    def start_irb_error_mode(assertion) # :nodoc:
+    def start_irb_error_mode(assertion, status) # :nodoc:
       ancestry = assertion.suite.ancestors.reverse.map { |suite| suite.description }
 
       puts
-      puts "#{assertion.status.to_s.capitalize} in:    #{ancestry[1..-1].join(' > ')}"
+      puts "#{status.status.to_s.capitalize} in:    #{ancestry[1..-1].join(' > ')}"
       puts "Description: #{assertion.description}"
-      puts "Exception:   #{assertion.exception} in file #{assertion.exception.backtrace.first}"
-      if assertion.file && match = assertion.exception.backtrace.first.match(/^([^:]+):(\d+)(?:$|:in .*)/) then
+      puts "Exception:   #{status.exception} in file #{status.exception.backtrace.first}"
+      if assertion.file && match = status.exception.backtrace.first.match(/^([^:]+):(\d+)(?:$|:in .*)/) then
         file, line = match.captures
         file = File.expand_path(file)
         if assertion.file == file then
@@ -226,13 +227,11 @@ module BareTest
     # Drop into an irb shell in the context of the assertion passed as an argument.
     # Uses Assertion#clean_copy(AssertionContext) to create the context.
     # Adds the code into irb's history.
-    def irb_mode_for_assertion(original_assertion) # :nodoc:
-      assertion = original_assertion.clone
-      assertion.reset
-      irb_context = assertion.context
+    def irb_mode_for_assertion(assertion, status, with_setup) # :nodoc:
+      irb_context = ::BareTest::Assertion::Context.new(assertion)
       irb_context.extend IRBContext
-      irb_context.__original__ = original_assertion
-      assertion.setup
+      irb_context.__original__ = assertion
+      assertion.execute_phase(:setup, irb_context, with_setup.map { |s| s.block })
 
       $stdout = StringIO.new # HAX - silencing 'irb: warn: can't alias help from irb_help.' - find a better way
       irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context))
@@ -244,21 +243,19 @@ module BareTest
 
       trap("SIGINT") do irb.signal_handle end
 
-      if code = original_assertion.code then
+      if code = assertion.code then
         #irb_context.code = code
         Readline::HISTORY.push(*code.split("\n")[1..-2])
       end
 
       catch(:IRB_EXIT) do irb.eval_input end
 
-      assertion.teardown
+      assertion.execute_phase(:teardown, irb_context, assertion.suite.ancestry_teardown)
     end
 
     # Invoked when we leave the irb session
-    def stop_irb_mode(assertion) # :nodoc:
+    def stop_irb_mode # :nodoc:
       puts
-      super
-    rescue NoMethodError # HAX, not happy about that. necessary due to order of extend
     end
   end
 end
