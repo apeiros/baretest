@@ -1,0 +1,8 @@
+NAME
+SUMMARY (what is it? what does it to? in 3 sentences)
+NEWS (what changed in this version?)
+MOTIVATION (why did I write it? why not use the others?)
+DESCRIPTION (features)
+INSTALLATION (gem, test drive)
+USAGE
+LINKS

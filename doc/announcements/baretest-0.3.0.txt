@@ -1,0 +1,107 @@
+SUBJECT: [ANN] BareTest 0.3 released
+
+I'm pleased to announce BareTest 0.3.
+
+BareTest is a test framework.
+<Insert what makes baretest great and why you'd use it, SHORT>
+
+Installation:
+
+  gem install baretest
+
+Test drive:
+  1. git clone git://github.com/apeiros/baretest/.git (or download from
+     http://github.com/apeiros/baretest)
+  2. cd into/the/repository
+  3. ./bin/baretest
+
+You can
+* build the docs locally using `rake doc`
+* install the checked out version as a gem using `rake gem:install`
+* install the checked out version as a lib using `rake lib:install`
+
+Learning how to use the executable: guides.apeiros.me/baretest/executable
+Learning how to write baretest suites: guides.apeiros.me/baretest/tests
+
+Example Testsuite:
+
+
+Features:
+By this version, baretest has gotten some - to my knowledge - unique or at least
+rare features. Those include:
+
+* Very straightforward and terse assertions (just a block whose return value
+  defines success/failure).
+* Various helpers to write assertions with better diagnostic messages and
+  more complex tasks like raising, throwing, float imprecision, unordered
+  collections etc.
+* Easy grouping of assertions into suites.
+* BDD style specifications/test descriptions (NOT code) that can be extracted
+  without running the testcode.
+* An interactive mode, letting you examine what went wrong in a failing/erroring
+  test within an irb session, bound to the context of the assertion that failed,
+  showing you the full code of the assertion, even including it in the readline-
+  history of that irb session.
+* An uncomplicated way to write pending assertions, have dependency testing and
+  skip certain suites/assertions.
+* A colored shell formatter, diagnostic-, XML- and TAP formatter.
+* Adding your own formatters is trivial - a module with 4 methods to wrap. The
+  average formatter shipped with baretest is between 20 and 50 lines.
+* An API to use it from code, such as rake tasks (includes an example rake-task)
+* A 'baretest' executable to run tests on multiple files at once, using a test-
+  layout convention to reduce require- and setup-path-manipulation-orgies
+
+
+
+Links:
+Home:      http://projects.sr.brightlight.ch/projects/show/baretest
+Github:    http://github.com/apeiros/baretest
+Rubyforge: http://baretest.rubyforge.org
+API:       http://baretest.rubyforge.org/docs-0.2.0/
+
+
+
+
+How to quickly try baretest without installing it:
+
+1. Download from github and unpack (or clone) - download link:
+   http://github.com/apeiros/baretest/tarball/8954b17def1899a10b0e6fff39ced07f6eb722ef
+2. Change into the baretest directory: `cd the/baretest/directory`
+3. Run the examples: `./bin/baretest examples/test.rb`
+
+That's it. Alternatively you can run baretest's own tests, and/or play with
+formatters: `./bin/baretest -f tap`
+
+
+
+Installing baretest
+
+1. run `gem install baretest` (you may have to run `sudo gem install baretest`)
+2. There is no 2.
+
+
+
+Installing baretest edge
+
+1. Download from github (or clone)
+2. Run `rake gem:install` (you may have to run `sudo rake gem:install`)
+
+Note for users with multiple ruby installations: the rake task will try to use
+the right gem executable. You can force it to use a specific one by setting
+the GEM env variable, e.g.: `rake gem:install GEM='gem1.9'`
+
+
+
+Using baretest
+
+1. In your project directory, run `baretest --init`, which will create a 'tests'
+   directory with all the basic stuff already in it.
+2. Write your tests
+3. Run them using `baretest` in the toplevel directory of your project.
+
+
+That's all folks.
+Looking forward to your feedback and hope you enjoy baretest :)
+
+Regards
+Stefan Rusterholz, aka apeiros

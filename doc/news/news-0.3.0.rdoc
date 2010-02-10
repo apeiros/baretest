@@ -1,0 +1,7 @@
+NEWS
+
+For baretest version 0.3.0
+* Setup-variations
+* skip-method and Skip < StandardError
+* Persist data (independently of the test directory) over multiple runs
+* Formatter specific options
