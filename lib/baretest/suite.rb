@@ -26,9 +26,9 @@ module BareTest
     # All assertions in this suite
     attr_reader   :assertions
 
-    # All skipped assertions in this suite
+    # Whether this suite has been manually skipped (either via
+    # Suite.new(..., :skip => reason) or via Suite#skip)
     attr_reader   :skipped
-    attr_reader   :skip_descendants
 
     # This suites description. Toplevel suites usually don't have a description.
     attr_reader   :description
@@ -40,11 +40,16 @@ module BareTest
     # parent suite, then that suite's parent and so on
     attr_reader   :ancestors
 
+    # All things this suite depends on, see Suite::new for more information
     attr_reader   :depends_on
-    attr_reader   :provides
-    attr_reader   :tags
-    attr_accessor :status
 
+    # All things this suite provides, see Suite::new for more information
+    attr_reader   :provides
+
+    # All things this suite is tagged with, see Suite::new for more information
+    attr_reader   :tags
+
+    # A list of valid options Suite::new accepts
     ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
 
     # Create a new suite.
@@ -70,18 +75,18 @@ module BareTest
     #               resolves, see 'depends_on'.
     # :depends_on:: A symbol or array of symbols with dependencies of this
     #               suite, see 'provides'.
-    # :tags::       A symbol or array of symbols with dependencies of this
-    #               suite, see 'provides'.
+    # :tags::       A symbol or array of symbols, useful to run only suites
+    #               having/not having specific tags
     #
-    #
-    # &block::      The given block is instance evaled.
+    # &block::      The given block is instance evaled and can contain further
+    #               definition of this assertion. See Suite#suite and
+    #               Suite#assert.
     def initialize(description=nil, parent=nil, opts=nil, &block)
       @description = description
       @parent      = parent
       @suites      = [] # [["description", subsuite, skipped], ["description2", ...], ...] - see Array#assoc
       @assertions  = []
       @skipped     = false
-      @skip_descendants = false
       @setup       = {nil => []}
       @components  = []
       @teardown    = []
@@ -109,15 +114,9 @@ module BareTest
       instance_eval(&block) if block
     end
 
-    # Skips the suite unless dependencies are satisfied
-    def verify_dependencies!(provided)
-      skip("Missing dependencies: #{(@depends_on-provided).join(', ')}") unless (@depends_on-provided).empty?
-    end
-
-    def verify_tags!(include_tags, exclude_tags=nil)
-      return true unless (include_tags || exclude_tags)
-      skip("Missing tags: #{(include_tags-@tags).join(', ')}", false)        if include_tags && !(include_tags - @tags).empty?
-      skip("Has excluded tags: #{(exclude_tags & @tags).join(', ')}", false) if exclude_tags && !(exclude_tags & @tags).empty?
+    # An ID, usable for persistence
+    def id
+      @id ||= ancestors.map { |suite| suite.description }.join("\f")
     end
 
     # Instruct this suite to use the given components.
@@ -149,11 +148,9 @@ module BareTest
       (@tags-tags).empty?
     end
 
-    def skip(reason=nil, deep=true)
-      @skipped          = true
-      @skip_descendants = true if deep
-      reason          ||= 'Manually skipped'
-      @reason << reason unless @reason.include?(reason)
+    def skip(reason=nil)
+      @skipped  = true
+      @reason  |= reason ? Array(reason) : ['Manually skipped']
       true
     end
 
@@ -279,6 +276,10 @@ module BareTest
     # assertion once, even for nested suites.
     def teardown(&block)
       block ? @teardown << block : @teardown
+    end
+
+    def component_variant_count
+      ancestry_setup.values_at(*ancestry_components).inject(1) { |r,f| r*f.size }
     end
 
     def each_component_variant

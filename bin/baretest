@@ -40,9 +40,9 @@ Command "run" do
 
     virtual_argument :command
     virtual_argument :options
-    virtual_argument :selector, '*(selector | -selector)', File,
+    virtual_argument :selector, '*(selector | -selector)', :String,
       "The tests to run. Example:\n" \
-      "  baretest -- test/suite/a -test/suite/a/x @tag -@other #failure -#pending\n" \
+      "  baretest -- test/suite/a -test/suite/a/x @tag -@other %failure -%pending\n" \
       "Defaults to 'test/{suite,unit,integration,system}\n" \
       "See `baretest selectors` to get more information"
 
@@ -106,7 +106,7 @@ Command.with(ARGV) do
     formatter = BareTest::CommandLine.load_formatter(options[:format])
 
     definition[command].content_for :format_options do |d|
-      if d.is_a?(BareTest::Formatter) then
+      if formatter.is_a?(BareTest::Formatter) then
         d.default_options.update(formatter.command[:option_defaults]) do |k,v1,v2| v2 end
         formatter.command[:elements].each do |key, args|
           d.send(key, *args)

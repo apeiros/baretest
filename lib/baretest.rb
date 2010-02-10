@@ -19,8 +19,35 @@ require 'ruby/kernel'
 
 
 module BareTest
+  # A lookup table to test which of two states is more important
+  # (MoreImportantStatus[[a,b]] # => a or b)
+  MoreImportantStatus = {}
+
+  # All states in the order of relevance, more relevant states first
+  StatusOrder         = :error,
+                        :failure,
+                        :pending,
+                        :manually_skipped,
+                        :dependency_missing,
+                        :library_missing,
+                        :component_missing,
+                        :ignored,
+                        :success
+
+  StatusOrder.combination(2) do |x,y|
+    more_important = StatusOrder.index(x) < StatusOrder.index(y) ? x : y
+    MoreImportantStatus[[x,y]] = more_important
+    MoreImportantStatus[[y,x]] = more_important
+  end
+  StatusOrder.each do |status|
+    MoreImportantStatus[[status,status]] = status
+    MoreImportantStatus[[nil,status]]    = status
+    MoreImportantStatus[[status,nil]]    = status
+  end
+
+  # The standard glob used by baretest to load test files
   # :nodoc:
-  DefaultInitialPositiveGlob = 'test/{suite,unit,integration,system}/**/*.rb'
+  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb'
 
   class << self
     # A hash of components - available via BareTest::use(name) and
@@ -72,6 +99,12 @@ module BareTest
     end
   end
 
+  # Determine which of the named states is the most important one (see
+  # StatusOrder)
+  def self.most_important_status(states)
+    (StatusOrder & states).first # requires Array#& to be stable (keep order of first operand)
+  end
+
   def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
     files           = []
     include_tags    = []
@@ -82,17 +115,19 @@ module BareTest
     Dir.chdir(base_directory) do
       selectors.each do |selector|
         case selector
-          when /-#(.*)/ then exclude_states << $1.to_sym
-          when /-@(.*)/ then exclude_tags << $1.to_sym
-          when /#(.*)/  then include_states << $1.to_sym
-          when /@(.*)/  then include_tags << $1.to_sym
+          when /-%(.*)/ then exclude_states << $1.to_sym
+          when /-:(.*)/ then exclude_tags << $1.to_sym
+          when /\+?%(.*)/  then include_states << $1.to_sym
+          when /\+?:(.*)/  then include_tags << $1.to_sym
           when /-(.*)/  then
             files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
             glob   = File.directory?($1) ? "#{$1}/**/*.rb" : $1
             files -= Dir[glob]
-          else
+          when /\+?(.*)/  then
             glob   = File.directory?(selector) ? "#{selector}/**/*.rb" : selector
             files |= Dir[glob]
+          else
+            raise "Should never reach else - selector: #{selector.inspect}"
         end
       end
       files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
@@ -103,8 +138,8 @@ module BareTest
       :files          => files,
       :include_tags   => include_tags,
       :exclude_tags   => exclude_tags,
-      :include_states => include_states,
-      :exclude_states => exclude_states
+      :include_states => include_states.empty? ? nil : include_states,
+      :exclude_states => exclude_states.empty? ? nil : exclude_states
     }
   end
 

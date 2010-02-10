@@ -9,6 +9,7 @@
 require 'baretest/assertion/context'
 require 'baretest/assertion/failure'
 require 'baretest/assertion/skip'
+require 'baretest/status'
 
 
 
@@ -30,38 +31,15 @@ module BareTest
   # * Kernel#equal_unordered(a,b)
   # * Enumerable#equal_unordered(other)
   class Assertion
-
     # The exceptions baretest will not rescue (NoMemoryError, SignalException, Interrupt
     # and SystemExit)
     PassthroughExceptions = [NoMemoryError, SignalException, Interrupt, SystemExit]
-
-    # An assertion has 5 possible states:
-    # :success:: The assertion passed. This means the block returned a trueish value.
-    # :failure:: The assertion failed. This means the block returned a falsish value.
-    #            Alternatively it raised a Test::Failure (NOT YET IMPLEMENTED).
-    #            The latter has the advantage that it can provide nicer diagnostics.
-    # :pending:: No block given to the assertion to be run
-    # :skipped:: If one of the parent suites is missing a dependency, its assertions
-    #            will be skipped
-    # :error::   The assertion errored out. This means the block raised an exception
-    attr_reader :status
-
-    # If an exception occured in Assertion#execute, this will contain the
-    # Exception object raised.
-    attr_reader :exception
 
     # The description of this assertion.
     attr_reader :description
 
     # The suite this assertion belongs to
     attr_reader :suite
-
-    # The Context-instance the assertions setup, assert and teardown are run
-    attr_reader :context
-
-    # The Setup instances whose #block is to be executed before this assertion
-    # is ran
-    attr_accessor :setups
 
     # The block specifying the assertion
     attr_reader :block
@@ -83,137 +61,98 @@ module BareTest
     # &block::      The block definition. Without one, the Assertion will have a
     #               :pending status.
     def initialize(suite, description, opt=nil, &block)
-      @suite          = suite
-      @description    = (description || "No description given")
-      @setups         = nil
-      @block          = block
-      @skipped        = false
-      reset
+      @suite       = suite
+      @description = (description || "No description given")
+      @block       = block
+      @skipped     = false
       if opt then
         skip = opt[:skip]
-        skip(skip == true ? nil : skip) if skip
-      end
-      unless @block
-        skip("Pending")
-        @status = :pending
+        skip((skip == true ? nil : skip), :manually_skipped) if skip
       end
     end
 
-    def reset
-      @status    = nil
-      @reason    = []
-      @exception = nil
-      @context   = ::BareTest::Assertion::Context.new(self)
-    end
-
-    # The failure/error/skipping/pending reason.
-    # Returns nil if there's no reason, a string otherwise
-    # Options:
-    # :default::     Reason to return if no reason is present
-    # :separator::   String used to separate multiple reasons
-    # :indent::      A String, the indentation to use. Prefixes every line.
-    # :first_indent: A String, used to indent the first line only (replaces indent).
-    def reason(opt=nil)
-      if opt then
-        default, separator, indent, first_indent = 
-          *opt.values_at(:default, :separator, :indent, :first_indent)
-        reason = @reason
-        reason = Array(default) if reason.empty? && default
-        return nil if reason.empty?
-        reason = reason.join(separator || "\n")
-        reason = reason.gsub(/^/, indent) if indent
-        reason = reason.gsub(/^#{Regexp.escape(indent)}/, first_indent) if first_indent
-        reason
-      else
-        @reason.empty? ? nil : @reason.join("\n")
-      end
+    # An ID, usable for persistence
+    def id
+      @id ||= [
+        @description,
+        *(@suite && @suite.ancestors.map { |suite| suite.description })
+      ].compact.join("\f")
     end
 
     def skipped?
-      @skipped
+      !!@skipped
     end
 
     def skip(reason=nil)
-      @skipped = true
-      reason ||= 'Manually skipped'
-      @reason << reason unless @reason.include?(reason)
-      true
+      @skipped ||= []
+      @skipped  |= reason ? Array(reason) : ['Manually skipped']
     end
 
-    def interpolated_description
-      setups = @setups ? @setups.select { |s| s.component } : []
-      if setups.empty? then
+    def interpolated_description(substitutes)
+      if substitutes.empty? then
         @description
       else
-        substitutes = {}
-        setups.each do |setup| substitutes[setup.component] = setup.substitute end
         @description.gsub(/:(?:#{substitutes.keys.join('|')})\b/) { |m|
           substitutes[m[1..-1].to_sym]
         }
       end
     end
 
-    # Run all setups in the order of their nesting (outermost first, innermost last)
-    def setup
-      @setups  ||= @suite ? @suite.first_component_variant : []
-      @setups.each do |setup| @context.instance_exec(setup.value, &setup.block) end
-      true
-    rescue *PassthroughExceptions
-      raise # pass through exceptions must be passed through
-    rescue Exception => exception
-      @reason   << "An error occurred during setup: #{exception}"
-      @exception = exception
-      @status    = :error
-      false
-    end
-
-    # Run all teardowns in the order of their nesting (innermost first, outermost last)
-    def teardown
-      @suite.ancestry_teardown.each do |teardown|
-        @context.instance_eval(&teardown)
-      end if @suite
-    rescue *PassthroughExceptions
-      raise # pass through exceptions must be passed through
-    rescue Exception => exception
-      @reason   << "An error occurred during teardown: #{exception}"
-      @exception = exception
-      @status    = :error
-    end
-
-    # Runs the assertion and sets the status and exception
-    def execute(setups=nil)
+    # Returns a Status
+    # Executes with_setup, then the assertions defining block, and in the end
+    # and_teardown. Usually with_setup and and_teardown are supplied by the
+    # containing suite.
+    def execute(with_setup=nil, and_teardown=nil)
       if @skipped then
-        @status = :skipped unless @status == :pending
+        status = Status.new(self, :manually_skipped)
+      elsif !@block
+        status = Status.new(self, :pending)
       else
-        @setups    = setups if setups
-        @exception = nil
-        if @block then
-          if setup() then
-            # run the assertion
-            begin
-              @status  = @context.instance_eval(&@block) ? :success : :failure
-              @reason << "Assertion failed" if @status == :failure
-            rescue *PassthroughExceptions
-              raise # pass through exceptions must be passed through
-            rescue ::BareTest::Assertion::Failure => failure
-              @status  = :failure
-              @reason << failure.message
-            rescue ::BareTest::Assertion::Skip => skip
-              @status  = :skipped
-              @reason << skip.message
-            rescue Exception => exception
-              @reason    << "An error occurred during execution: #{exception}"
-              @exception  = exception
-              @status     = :error
-            end
-          end
-          teardown
-        else
-          @status = :pending
-        end
+        context  = ::BareTest::Assertion::Context.new(self)
+        status   = execute_phase(:setup, context, with_setup) if with_setup
+        status   = execute_phase(:exercise, context, @block) unless status
+        status   = execute_phase(:teardown, context, and_teardown) unless (status || !and_teardown)
+        status ||= Status.new(self, :success, context)
       end
 
-      self
+      status
+    end
+
+    # A phase can result in either success, skip, failure or error
+    # Execute_phase will simply return nil upon success, all other cases
+    # will generate a full Status instance.
+    # This is for practical reasons - it means you can go through several
+    # phases, looking for the first non-nil one.
+    def execute_phase(name, context, code)
+      status         = nil
+      skip_reason    = nil
+      failure_reason = nil
+      exception      = nil
+
+      begin
+        if code.is_a?(Array) then
+          code.each do |block| context.instance_eval(&block) end
+        else
+          unless context.instance_eval(&code)
+            failure_reason = "Assertion failed" 
+            status         = :failure
+          end
+        end
+      rescue *PassthroughExceptions
+        raise # passthrough-exceptions must be passed through
+      rescue ::BareTest::Assertion::Failure => failure
+        status         = :failure
+        failure_reason = failure.message
+      rescue ::BareTest::Assertion::Skip => skip
+        status         = :manually_skipped
+        skip_reason    = skip.message
+      rescue Exception => exception
+        status         = :error
+        failure_reason = "An error occurred during #{name}: #{exception}"
+        exception      = exception
+      end
+
+      status && Status.new(self, status, context, skip_reason, failure_reason, exception)
     end
 
     def to_s # :nodoc:

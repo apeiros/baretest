@@ -31,14 +31,31 @@ module BareTest
       found
     end
 
+    # The directory this Persistence instance stores its data
+    attr_reader :storage_dir
+
+    # The directory of the project this Persistence instance is attached to
+    attr_reader :project_dir
+
+    # The id of the project this Persistence instance is attached to
+    attr_reader :project_id
+
     def initialize(project_dir=nil, storage_dir=nil)
       @storage_dir = File.expand_path(storage_dir || self.class.storage_path)
       @project_dir = File.expand_path(project_dir || ".")
       @project_id  = self.class.determine_project_id(@project_dir)
     end
 
+    # Stores data to a file.
+    #
+    # === Arguments
+    # filename:: A relative path. Directories are created on the fly if
+    #            necessary. Must not be an absolute path. The path is relative
+    #            to Persistence#storage_dir
+    # data::     The data to store. Anything that can be serialized by YAML.
+    #            This excludes IOs and Procs.
     def store(filename, data)
-      raise "Invalid filename: #{filename}" unless filename =~ /[A-Za-z0-9_-]+/
+      raise "Invalid filename: #{filename}" unless filename =~ %r{\A[A-Za-z0-9_-][A-Za-z0-9_-]*\z}
       dir = "#{@storage_dir}/#{@project_id}"
       FileUtils.mkdir_p(dir)
       File.open("#{dir}/#{filename}.yaml", "w") do |fh|
@@ -46,9 +63,23 @@ module BareTest
       end
     end
 
-    def read(filename)
+    # Reads and deserializes the data in a given filename.
+    # filename:: A relative path. Directories are created on the fly if
+    #            necessary. Must not be an absolute path. The path is relative
+    #            to Persistence#storage_dir
+    # default::  The value to return in case the file does not exist.
+    #            Alternatively you can pass a block that calculates the default.
+    def read(filename, default=nil)
+      raise "Invalid filename: #{filename}" if filename =~ %r{\A\.\./|/\.\./\z}
       path = "#{@storage_dir}/#{@project_id}/#{filename}.yaml"
-      File.exist?(path) ? YAML.load_file(path) : nil
+
+      if File.exist?(path)
+        YAML.load_file(path)
+      elsif block_given?
+        yield
+      else
+        default
+      end
     end
   end
 end
