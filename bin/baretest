@@ -136,16 +136,15 @@ Command.with(ARGV) do
     when "env" # show information about baretest (config, version, paths, ...)
       BareTest::CommandLine.env(arguments, options)
     when "version" # show version information about baretest
-      BareTest::CommandLine.version
+      BareTest::CommandLine.version(arguments, options)
     when "selectors" # show version information about selectors baretest recognizes
-      BareTest::CommandLine.selectors
+      BareTest::CommandLine.selectors(arguments, options)
     when "help"
       puts definition[command].usage_text
     when "commands"
       BareTest::CommandLine.commands(arguments, options)
     else
       puts "Unknown command '#{command}'"
-      puts "Available commands:"
-      puts definition[command].commands_by_name.keys.sort
+      BareTest::CommandLine.commands(arguments, options)
   end
 end
