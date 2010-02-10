@@ -24,6 +24,17 @@ module BareTest
   # See BareTest::IRBMode::AssertionContext for some methods IRBMode adds to Assertion for
   # use within the irb session.
   module IRBMode # :nodoc:
+    RemoveGlobals = %w[
+      $! $" $$ $& $' $* $+ $, $-0 $-F $-I $-K $-a $-d $-i $-l $-p $-v $-w $. $/
+      $0 $: $; $< $= $> $? $@ $FS $NR $OFS $ORS $PID $RS $\\ $_ $` $~
+      $ARGV $CHILD_STATUS $DEBUG $DEFAULT_INPUT $DEFAULT_OUTPUT $ERROR_INFO
+      $ERROR_POSITION $FIELD_SEPARATOR $FILENAME $IGNORECASE $INPUT_LINE_NUMBER
+      $INPUT_RECORD_SEPARATOR $KCODE $LAST_MATCH_INFO $LAST_PAREN_MATCH
+      $LAST_READ_LINE $LOADED_FEATURES $LOAD_PATH $MATCH $OUTPUT_FIELD_SEPARATOR
+      $OUTPUT_RECORD_SEPARATOR $POSTMATCH $PREMATCH $PROCESS_ID $PROGRAM_NAME
+      $SAFE $VERBOSE $stderr $stdin $stdout
+    ]
+
     @irb_setup = false
 
     def self.irb_setup! # :nodoc:
@@ -38,35 +49,46 @@ module BareTest
     # Adds several methods over plain Assertion.
     module IRBContext
 
-      attr_accessor :__original__
+      attr_accessor :__status__
 
       # Prints a list of available helper methods
       def help
         puts "Available methods:",
-             "s!          - the original assertions' status",
-             "e!          - prints the error message and full backtrace",
-             "em!         - prints the error message",
-             "bt!         - prints the full backtrace",
-             "iv!         - lists all available instance variables",
-             "cv!         - lists all available class variables",
-             "gv!         - lists all available global variables",
-             "file        - the file this assertion was defined in",
-             "line        - the line number in the file where this assertion's definition starts",
-             "nesting     - a >-separated list of suite descriptions this assertion is nested in",
-             "description - this assertion's description",
-             "code        - the code of this assertion",
+             "s!           - the original assertions' status",
+             "sc!          - the original assertions' status code",
+             "e!           - prints the error message and full backtrace",
+             "em!          - prints the error message",
+             "bt!          - prints the full backtrace",
+             "iv!          - lists all available instance variables",
+             "cv!          - lists all available class variables",
+             "gv!          - lists all available global variables",
+             "file!        - the file this assertion was defined in",
+             "line!        - the line number in the file where this assertion's definition starts",
+             "nesting!     - a >-separated list of suite descriptions this assertion is nested in",
+             "description! - this assertion's description",
+             "code!        - the code of this assertion",
              #"restart! - Restart this irb session, resetting everything",
-             "irb_help    - irb's original help",
-             "help        - this text you're reading right now"
+             "irb_help     - irb's original help",
+             "help         - this text you're reading right now"
       end
+      alias help! help
 
       def to_s # :nodoc:
         "Context"
       end
 
+      def q
+        exit
+      end
+
       # Returns the original assertion's status
       def s!
-        p @__original__.status
+        @__status__
+      end
+
+      # Returns the original assertion's status code
+      def sc!
+        @__status__.status
       end
 
       # Prints the original assertion's error message and backtrace
@@ -77,20 +99,20 @@ module BareTest
 
       # Prints the original assertion's error message
       def em!
-        if @__original__.exception then
-          puts @__original__.exception.message
-        elsif @__original__.reason
-          puts @__original__.reason
+        if @__status__.exception then
+          puts @__status__.exception.message
+        elsif @__status__.failure_reason
+          puts @__status__.failure_reason
         else
-          puts "No exception occurred, therefore no error message is available"
+          puts "No exception or failure reason available"
         end
       end
 
       # Prints the original assertion's backtrace
       def bt!(size=nil)
-        if @__original__.exception then
+        if @__status__.exception then
           size ||= caller.size+3
-          puts @__original__.exception.backtrace[0..-size]
+          puts @__status__.exception.backtrace[0..-size]
         else
           puts "No exception occurred, therefore no backtrace is available"
         end
@@ -107,25 +129,40 @@ module BareTest
       end
 
       # Returns an array of all global variable names
-      def gv!
-        puts *global_variables.sort
+      def gv!(remove_standard=true)
+        puts *(global_variables-(remove_standard ? IRBMode::RemoveGlobals : [])).sort
+      end
+
+      # Returns the original assertion's file
+      def file!
+        puts @__assertion__.file
+      end
+
+      # Returns the original assertion's line
+      def line!
+        puts @__assertion__.line
+      end
+
+      # Returns the original assertion's line
+      def open!
+        `bbedit '#{@__assertion__.file}:#{@__assertion__.line}'`
       end
 
       # Prints a string of the original assertion's nesting within suites
-      def description
-        puts @__original__.description
+      def description!
+        puts @__assertion__.description
       end
 
       # Prints a string of the original assertion's nesting within suites
-      def nesting
-        puts @__original__.suite.ancestors[0..-2].reverse.map { |s| s.description }.join(' > ')
+      def nesting!
+        puts @__assertion__.suite.ancestors[0..-2].reverse.map { |s| s.description }.join(' > ')
       end
 
       # Prints the code of the assertion
       # Be aware that this relies on your code being properly indented.
       def code!
-        if code = @__original__.code then
-          puts(insert_line_numbers(code, @__original__.line-1))
+        if code = @__assertion__.code then
+          puts(insert_line_numbers(code, @__assertion__.line-1))
         else
           puts "Code could not be extracted"
         end
@@ -230,7 +267,7 @@ module BareTest
     def irb_mode_for_assertion(assertion, status, with_setup) # :nodoc:
       irb_context = ::BareTest::Assertion::Context.new(assertion)
       irb_context.extend IRBContext
-      irb_context.__original__ = assertion
+      irb_context.__status__ = status
       assertion.execute_phase(:setup, irb_context, with_setup.map { |s| s.block })
 
       $stdout = StringIO.new # HAX - silencing 'irb: warn: can't alias help from irb_help.' - find a better way
