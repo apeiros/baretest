@@ -148,7 +148,8 @@ module BareTest
       end
 
       def clear_deferred
-        puts *@deferred
+        puts *@deferred unless @deferred.empty?
+        @deferred.clear
       end
     end
   end
