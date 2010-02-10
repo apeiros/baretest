@@ -23,7 +23,9 @@ module BareTest
     # Prerelease number - nil for release versions
     PRERELEASE = 1
 
+    # The version as a string
     STRING     = %{#{MAJOR}.#{MINOR||0}.#{TINY||0}#{".pre#{PRERELEASE}" if PRERELEASE}}
+
     # The version as a string
     def self.to_s
       STRING
