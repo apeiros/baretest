@@ -1,0 +1,54 @@
+Skipping, possible reasons for a suite to be skipped:
+1. Implementation pending
+  An assertion with no block given
+  `assert "Something"`
+2. Manual skip
+  A suite with the option `:skip => true/reason`
+  `suite "Foo", :skip => "Depends on Feature #37" do ... end`
+3. Dependency missing
+  A suite with the option `:depends_on => :something` where :something
+  was not provided by another suite
+  `suite "Foo", :depends_on => :something do ... end`
+4. Library missing
+  A suite with the option `:requires => 'some/lib` where some/lib
+  could not be required.
+  `suite "Foo", :requires => 'not/installed/lib' do ... end`
+5. Component missing
+  A suite with the option `:use => :some_component` where :some_component
+  is not available.
+  `suite "Foo", :use => :some_component do ... end`
+6. Required Tag missing -> :tags => ...
+7. Excluded Tag present -> :tags => ...
+8. Status mismatch -> <last run status>
+
+
+Inheritance
+  Of which the following are inherited:
+  1, 2, 3, 4, 5
+
+  And the following shallow:
+  6,7,8,9
+
+Recording
+  Of which the following are recorded
+  1, 2, 3, 4, 5
+
+  And the following ignored
+  6,7,8
+
+States
+:pending:              1
+:skipped
+  :manually_skipped:   2
+  :dependency_missing: 3
+  :library_missing     4
+  :component_missing:  5
+:ignored:
+  :included_tag_missing: 6 
+  :excluded_tag_present: 7
+  :status_mismatch:      8
+
+:pending, :dependency_missing, :library_missing and :component_missing are
+a subset of :failure.
+
+:error, :failure, :pending, :manually_skipped, :dependency_missing, :library_missing, :component_missing, :ignored, :success

@@ -2,7 +2,7 @@
   * rack-test port or integration (http://github.com/brynary/rack-test) (done)
   * :use (:use => :rails, :rr, :mocha, ... packages that provide integration) (done)
   * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
-    :integer_addition)
+    :integer_addition) (done)
   * tag/focus/failures-only
     --only <refs>
     --except <refs>
@@ -12,8 +12,8 @@
     NONE, include to NONE.
     Order is: only - except + include
     Tags: @tag
-    Specials: #failure, #error, #pending
-    
+    Specials: %failure, %error, %pending
+
     suite :tags => 'tag1 tag2 tag3'
     baretest tag <ref> <*tags>
 

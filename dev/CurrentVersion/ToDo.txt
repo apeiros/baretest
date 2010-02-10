@@ -1,0 +1,6 @@
+BUGS:
+* `baretest non-existing-path.rb` uses standard glob instead of informing about
+  the glob to yield no file.
+* `baretest -:tag` and `baretest -@status` try to use the argument as file globs
+  should correctly interpret them as tag/status
+* Correct skip reason must be implemented.
