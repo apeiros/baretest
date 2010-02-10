@@ -116,19 +116,20 @@ module BareTest
     exclude_tags    = []
     include_states  = []
     exclude_states  = []
+
     default_initial_positive_glob ||= DefaultInitialPositiveGlob
     Dir.chdir(base_directory) do
       selectors.each do |selector|
         case selector
-          when /-%(.*)/ then exclude_states << $1.to_sym
-          when /-:(.*)/ then exclude_tags << $1.to_sym
-          when /\+?%(.*)/  then include_states << $1.to_sym
-          when /\+?:(.*)/  then include_tags << $1.to_sym
-          when /-(.*)/  then
+          when /\A-%(.*)/   then exclude_states << $1.to_sym
+          when /\A-:(.*)/   then exclude_tags << $1.to_sym
+          when /\A\+?%(.*)/ then include_states << $1.to_sym
+          when /\A\+?:(.*)/ then include_tags << $1.to_sym
+          when /\A-(.*)/    then
             files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
             glob   = File.directory?($1) ? "#{$1}/**/*.rb" : $1
             files -= Dir[glob]
-          when /\+?(.*)/  then
+          when /\A\+?(.*)/  then
             glob   = File.directory?(selector) ? "#{selector}/**/*.rb" : selector
             files |= Dir[glob]
           else
