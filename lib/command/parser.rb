@@ -23,7 +23,6 @@ module Command
       else
         @arguments = @argv.dup
       end
-      @affix      = []
       @options    = {}
     end
 
