@@ -121,7 +121,13 @@ Command.with(ARGV) do
 
   case run_command
     when "run" # run the testsuite/-file
-      success = BareTest::CommandLine.run(arguments, options)
+      begin
+        success = BareTest::CommandLine.run(arguments, options)
+      rescue BareTest::InvalidSelectors => e
+        puts e
+        puts "Valid state selectors are: #{BareTest::ValidStateSelectors.join(', ')}"
+        success = false
+      end
       exit(success ? 0 : 1)
     when "init" # create the test directory
       BareTest::CommandLine.init(arguments, options)

@@ -9,6 +9,7 @@
 require 'baretest/assertion'
 require 'baretest/commandline'
 require 'baretest/formatter'
+require 'baretest/invalidselectors'
 require 'baretest/irb_mode'
 require 'baretest/run'
 require 'baretest/suite'
@@ -48,6 +49,10 @@ module BareTest
   # The standard glob used by baretest to load test files
   # :nodoc:
   DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb'
+
+  # Selectors that are valid to be passed into process_selectors
+  # :nodoc:
+  ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending]
 
   class << self
     # A hash of components - available via BareTest::use(name) and
@@ -133,6 +138,9 @@ module BareTest
       files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
       files.map! do |path| File.expand_path(path) end
     end
+
+    invalid_states = (include_states|exclude_states)-ValidStateSelectors
+    raise InvalidSelectors.new(invalid_states) unless invalid_states.empty?
 
     return {
       :files          => files,
