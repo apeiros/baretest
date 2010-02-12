@@ -18,7 +18,7 @@ module BareTest
   @touch = {}
 
   # We don't want to litter in Assertion
-  # Touches are associated withx
+  # Touches are associated with
   # Used by BareTest::Assertion::Support#touch
   def self.touch(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)
@@ -72,26 +72,24 @@ module BareTest
 
       # FIXME: incomplete and untested
       def throws(symbol) # :nodoc:
-        begin
-          passed = false
-          catch(sym) {
-            yield
-            passed = true
-            return false
-          }
-          passed = true
-          return true
-        rescue NameError => e
-          return false if e.message =~ 'uncaught throw'
+        passed = false
+        catch(symbol) {
+          yield
+          failure "Expected the code to throw %p, but nothing was thrown", symbol
+        }
+        return true
+      # throw raises a NameError if no catch with appropriate symbol is set up
+      rescue ArgumentError, NameError => e
+        # Make sure it's not a NameError with a different reason than the throw
+        # ruby 1.8.7: NameError, "uncaught throw `symbol'"
+        # ruby 1.9.1: ArgumentError, "uncaught throw :symbol"
+        threw_instead = e.message[/\Auncaught throw `(.*)'\z/, 1] || e.message[/\Auncaught throw :(.*)\z/, 1]
+        if threw_instead then
+          failure "Expected the code to throw %p, but it threw %p instead", symbol, threw_instead.to_sym
+        else
+          # It was some other name error, reraise
           raise
-        rescue Exception
-          passed = true
-          raise
-        ensure
-          raise ThrewSomethingElse unless passed
         end
-      rescue ThrewSomethingElse => e
-        return false
       end
 
       # FIXME: incomplete and untested
@@ -109,21 +107,28 @@ module BareTest
       #   raises :with_message => "bar" do raise "bar" end # => true
       #   raises SomeException, :with_message => "bar"; raise SomeException, "bar" end # => true
       #   raises :with_message => /\Aknown \w+\z/; raise "known unknown" end # => true
-      def raises(exception_class=StandardError, opts={})
+      def raises(expected_exception_class=nil, with_message=nil, opts={})
+        exception_class = expected_exception_class || StandardError
         yield
       rescue exception_class => exception
-        if opts[:with_message] && !(opts[:with_message] === exception.message) then
-          failure "Expected block to raise with the message %p, but the message was %p",
-                  exception.message, opts[:with_message]
+        if expected_exception_class && exception.class != expected_exception_class then
+          failure "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
+        elsif with_message && !(with_message === exception.message) then
+          failure "Expected the code to raise with the message %p, but the message was %p",
+                  with_message, exception.message
         else
           true
         end
       rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue => exception
-        failure "Expected block to raise #{exception_class}, but it raised #{exception.class}."
+        failure "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
       else
-        failure "Expected block to raise #{exception_class}, but nothing was raised."
+        if expected_exception_class then
+          failure "Expected the code to raise #{expected_exception_class}, but nothing was raised"
+        else
+          failure "Expected the code to raise, but nothing was raised"
+        end
       end
 
       # Will raise a Failure if the given block raises.
@@ -132,7 +137,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
-        failure "Expected block to raise nothing, but it raised #{exception.class} (#{exception.message})."
+        failure "Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})"
       else
         true
       end
@@ -141,7 +146,12 @@ module BareTest
       # for example a delta comparison instead, to take care
       # of the possible rounding differences.
       def within_delta(a, b, delta)
-        (a-b).abs < delta
+        actual_delta = (a-b).abs
+        if actual_delta >= delta then
+          failure "Expected %p and %p to differ less than %p, but they were different by %p", a, b, delta, actual_delta
+        else
+          true
+        end
       rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
@@ -152,7 +162,7 @@ module BareTest
       # touch marks that it was reached, #touched tests for whether it was reached.
       #
       # Example:
-      #   assert "Code in a Proc object is executed when invoking #call on it." do
+      #   assert "Code in a Proc object is executed when invoking #call on it" do
       #     a_proc = proc { touch :executed }
       #     a_proc.call
       #     touched(:executed)
@@ -170,16 +180,16 @@ module BareTest
         if times then
           unless touched_times == times then
             if thing then
-              failure "Expected the code to touch %p %s times, but did %s times.", thing, times, touched_times
+              failure "Expected the code to touch %p %s times, but did %s times", thing, times, touched_times
             else
-              failure "Expected the code to touch %s times, but did %s times.", times, touched_times
+              failure "Expected the code to touch %s times, but did %s times", times, touched_times
             end
           end
         elsif touched_times < 1 then
           if thing then
-            failure "Expected the code to touch %p, but it was not touched.", thing
+            failure "Expected the code to touch %p, but it was not touched", thing
           else
-            failure "Expected the code to touch, but no touch happened."
+            failure "Expected the code to touch, but no touch happened"
           end
         end
         true
@@ -202,9 +212,9 @@ module BareTest
 
         unless expected.equal?(actual) then
           if message then
-            failure "Expected %s to be the same (equal?) as %p but was %p.", message, expected, actual
+            failure "Expected %s to be the same (equal?) as %p but was %p", message, expected, actual
           else
-            failure "Expected %p but got %p.", expected, actual
+            failure "Expected %p but got %p", expected, actual
           end
         end
         true
@@ -225,9 +235,9 @@ module BareTest
 
         unless expected.eql?(actual) then
           if message then
-            failure "Expected %s to be hash-key equal (eql?) to %p but was %p.", message, expected, actual
+            failure "Expected %s to be hash-key equal (eql?) to %p but was %p", message, expected, actual
           else
-            failure "Expected %p but got %p.", expected, actual
+            failure "Expected %p but got %p", expected, actual
           end
         end
         true
@@ -248,9 +258,9 @@ module BareTest
 
         unless expected == actual then
           if message then
-            failure "Expected %s to be order equal (==) to %p but was %p.", message, expected, actual
+            failure "Expected %s to be order equal (==) to %p but was %p", message, expected, actual
           else
-            failure "Expected %p but got %p.", expected, actual
+            failure "Expected %p but got %p", expected, actual
           end
         end
         true
@@ -272,8 +282,8 @@ module BareTest
 
         unless expected === actual then
           failure_with_optional_message \
-            "Expected %s to be case equal (===) to %p but was %p.",
-            "Expected %p but got %p.",
+            "Expected %s to be case equal (===) to %p but was %p",
+            "Expected %p but got %p",
             message, expected, actual
         end
         true
@@ -299,11 +309,11 @@ module BareTest
           only_in_actual   = count.select { |ele, n| n < 0 }.map { |ele, n| ele }
           if message then
             failure "Expected %s to have the same items the same number of times, " \
-                    "but %p are only in expected, and %p only in actual.",
+                    "but %p are only in expected, and %p only in actual",
                     message, only_in_expected, only_in_actual
           else
             failure "Expected %p and %p to have the same items the same number of times, " \
-                    "but %p are only in expected, and %p only in actual.",
+                    "but %p are only in expected, and %p only in actual",
                     expected, actual, only_in_expected, only_in_actual
           end
         end
@@ -374,7 +384,6 @@ module BareTest
         raise ::BareTest::Assertion::Skip, sprintf(message, *args)
       end
 
-    private
       # extract arg allows to use named or positional args
       #
       # Example:
@@ -402,20 +411,3 @@ module BareTest
     end
   end # Assertion
 end # BareTest
-
-module Enumerable
-
-  # Part of BareTest - require 'baretest/assertion/support'
-  #
-  # Returns true if all elements of self occur the same amount of times in other, regardless
-  # of order. Uses +eql?+ to determine equality.
-  #
-  # Example:
-  #   [2,1,3,2].equal_unordered?([3,2,2,1]) # => true
-  def equal_unordered?(other)
-    count = Hash.new(0)
-    other.each { |element| count[element] += 1 }
-    each { |element| count[element] -= 1 }
-    count.all? { |key, value| value.zero? }
-  end
-end
