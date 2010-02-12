@@ -329,6 +329,7 @@ module BareTest
       end
       @assertions << assertion
     end
+    alias guard assert # TODO: This is temporary, guards should become first class citizens
 
     def to_s #:nodoc:
       sprintf "%s %s", self.class, @description
