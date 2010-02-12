@@ -85,10 +85,12 @@ module BareTest
   def self.load_standard_test_files(opts={})
     verbose    = opts.delete(:verbose)
     setup_path = opts.delete(:setup_path) || 'test/setup.rb'
+    lib_path   = opts.delete(:lib_path) || 'test/lib'
     chdir      = opts.delete(:chdir) || '.'
     files      = opts.delete(:files)
     files      = [DefaultInitialPositiveGlob] if (files.nil? || files.empty?)
     Dir.chdir(chdir) do
+      $LOAD_PATH.unshift(File.expand_path(lib_path)) if File.exist?(lib_path)
       load(setup_path) if File.exist?(setup_path)
       files.each do |glob|
         glob = "#{glob}/**/*.rb" if File.directory?(glob)
