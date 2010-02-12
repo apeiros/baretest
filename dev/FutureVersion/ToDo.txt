@@ -1,0 +1,3 @@
+BUGS:
+* :requires should execute the requires upon execution instead of upon
+  definition
