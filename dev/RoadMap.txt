@@ -1,22 +1,3 @@
-0.4:
-  * rack-test port or integration (http://github.com/brynary/rack-test) (done)
-  * :use (:use => :rails, :rr, :mocha, ... packages that provide integration) (done)
-  * :provides & :depends_on (:provides => :integer_addition ... :depends_on =>
-    :integer_addition) (done)
-  * tag/focus/failures-only
-    --only <refs>
-    --except <refs>
-    --include <refs>
-    Where refs identifies assertions/suites
-    only/except/include are set operations, only defaulting to ALL, except to
-    NONE, include to NONE.
-    Order is: only - except + include
-    Tags: @tag
-    Specials: %failure, %error, %pending
-
-    suite :tags => 'tag1 tag2 tag3'
-    baretest tag <ref> <*tags>
-
 0.5:
   * forked suite execution - auto-isolation
   * forked suite execution - parallel execution
@@ -33,6 +14,12 @@
   * dependency resolving for :provides & :depends_on
   * full ir integration
 
+0.9:
+  * Correct self-test suite with proper isolation of bootstrapping
+  * Implement test-layouts
+
+1.0:
+  * Polish, polish, polish
 
 PROGRESSIVE
 * TestGuide - How to use BareTest
@@ -47,6 +34,8 @@ UNASSIGNED
   takes a lot of time and successive asserts depend on previous ones
   abort flow assertion upon first failure.
 * auto-require corresponding lib-files
+* guard assertions - sometimes we make assumptions in our tests, guard
+  assertions let us test those assumptions
 
 REJECTED
 * configuration system
