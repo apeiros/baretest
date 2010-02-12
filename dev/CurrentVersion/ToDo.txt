@@ -1,6 +1,18 @@
 BUGS:
-* `baretest non-existing-path.rb` uses standard glob instead of informing about
-  the glob to yield no file.
 * `baretest -:tag` and `baretest -@status` try to use the argument as file globs
   should correctly interpret them as tag/status
 * Correct skip reason must be implemented.
+* load helpers when specifying custom globs
+  - look for (?:\A|/)test/ and replace with test/helpers
+
+
+CHORES:
+* Verify that skip works in all variants for both suite and assertion.
+
+MISSING TESTS:
+
+support.rb:
+  module BareTest
+    def self.touch(assertion, thing=nil) # :nodoc:
+    def self.touched(assertion, thing=nil) # :nodoc:
+    def self.clean_touches(assertion) # :nodoc:
