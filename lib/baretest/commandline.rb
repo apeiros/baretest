@@ -33,9 +33,10 @@ module BareTest
     # :interactive => Boolean - activate interactive mode (drops into irb on failure/error)
     # :verbose     => Boolean - provide verbose output
     def run(arguments, options)
-      setup_path  = nil
-      selectors   = BareTest.process_selectors(arguments)
-      options     = selectors.merge(options)
+      setup_path              = nil
+      selectors               = BareTest.process_selectors(arguments)
+      options                 = selectors.merge(options)
+      options[:persistence] ||= Persistence.new
 
       # Load the setup file, all helper files and all test files
       BareTest.load_standard_test_files(

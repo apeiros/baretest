@@ -59,18 +59,20 @@ module BareTest
     # * :format (extends with the formatter module)
     # * :interactive (extends with IRBMode)
     def initialize(suite, opts=nil)
-      @suite          = suite
-      @inits          = []
-      @options        = opts || {}
-      @count          = @options[:count] || Hash.new(0)
-      @provided       = [] # Array's set operations are the fastest
-      @include_tags   = @options[:include_tags]   # nil is ok here
-      @exclude_tags   = @options[:exclude_tags]   # nil is ok here
-      include_states  = @options[:include_states] # nil is ok here
-      exclude_states  = @options[:exclude_states] # nil is ok here
-      @states         = [nil, :success, :failure, :skipped, :pending, :error]
-      @skipped        = {}
-      @persistence    = Persistence.new
+      @suite           = suite
+      @inits           = []
+      @options         = opts || {}
+      @count           = @options[:count] || Hash.new(0)
+      @provided        = [] # Array's set operations are the fastest
+      @include_tags    = @options[:include_tags]   # nil is ok here
+      @exclude_tags    = @options[:exclude_tags]   # nil is ok here
+      include_states   = @options[:include_states] # nil is ok here
+      exclude_states   = @options[:exclude_states] # nil is ok here
+      @states          = [nil, :success, :failure, :skipped, :pending, :error]
+      @skipped         = {}
+      @last_run_states = {}
+
+      @persistence    = @options[:persistence]
 
       if (include_states || exclude_states) && !((include_states && include_states.empty?) && (exclude_states && exclude_states.empty?)) then
         [include_states, exclude_states].compact.each do |states|
@@ -120,10 +122,10 @@ module BareTest
     # Invoked once at the beginning.
     # Gets the toplevel suite as single argument.
     def run_all
-      @last_run_states = @persistence.read('final_states', {})
+      @last_run_states = @persistence ? @persistence.read('final_states', {}) : {}
       @skipped         = {}
       run_suite(@suite)
-      @persistence.store('final_states', @last_run_states)
+      @persistence.store('final_states', @last_run_states) if @persistence
     end
 
     # Formatter callback.
@@ -133,7 +135,7 @@ module BareTest
     def run_suite(suite)
       missing_tags     = @include_tags && @include_tags - suite.tags
       superfluous_tags = @exclude_tags && suite.tags & @exclude_tags
-      ignored          = !missing_tags.empty? || !superfluous_tags.empty?
+      ignored          = (missing_tags && !missing_tags.empty?) || (superfluous_tags && !superfluous_tags.empty?)
 
       unless ignored then
         unmet_dependencies  = (suite.depends_on-@provided)
