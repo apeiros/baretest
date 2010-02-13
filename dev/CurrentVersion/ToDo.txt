@@ -1,6 +1,4 @@
 BUGS:
-* `baretest -:tag` and `baretest -@status` try to use the argument as file globs
-  should correctly interpret them as tag/status
 * Correct skip reason must be implemented.
 * load helpers when specifying custom globs
   - look for (?:\A|/)test/ and replace with test/helpers
@@ -8,6 +6,10 @@ BUGS:
 
 CHORES:
 * Verify that skip works in all variants for both suite and assertion.
+* Implement a callback to inform baretest about things it can ignore and about
+  the expected baretest version
+* Go over persistence coupling in Run
+* Make baretest recognize invalid options '-:' and '-%' as selectors
 
 MISSING TESTS:
 
@@ -16,3 +18,15 @@ support.rb:
     def self.touch(assertion, thing=nil) # :nodoc:
     def self.touched(assertion, thing=nil) # :nodoc:
     def self.clean_touches(assertion) # :nodoc:
+
+  module Support
+    def throws_nothing # :nodoc:
+    def not_touched(thing=nil)
+    def extract_args(args, *named)
+
+    suite "#verify_dependencies!" do
+      assert "Should not make the suite skipped if it depends_on nothing"
+      assert "Should not make the suite skipped if everything it depends_on is provided"
+      assert "Should not make the suite skipped if more than everything it depends_on is provided"
+      assert "Should make the suite skipped if not everything it depends_on is provided"
+    end
