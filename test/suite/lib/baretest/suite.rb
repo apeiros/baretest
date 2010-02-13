@@ -50,22 +50,43 @@ BareTest.suite "BareTest" do
           touched :component
         end
         
-        assert "Should add the setup routines"
-        assert "Should add the teardown routines"
+        assert "Should add the setup routines" do
+          suite = ::BareTest::Suite.new(nil, nil, :use => :test_component)
+          suite.setup[nil].any? { |setup_component| setup_component.block.call == :a }
+        end
+
+        assert "Should add the teardown routines" do
+          suite = ::BareTest::Suite.new(nil, nil, :use => :test_component)
+          suite.teardown.any? { |teardown| teardown.call == :b }
+        end
 
         teardown do
-          ::BareTest.components.delete(:component)
+          ::BareTest.components.delete(:test_component)
         end
       end
 
       suite ":provides option" do
-        assert "Should list all added items"
-        assert "Should add items only once"
+        assert "Should list all added items" do
+          suite = ::BareTest::Suite.new(nil, nil, :provides => [:a, :b, :c])
+          equal_unordered([:a, :b, :c], suite.provides)
+        end
+
+        assert "Should add items only once" do
+          suite = ::BareTest::Suite.new(nil, nil, :provides => [:a, :b, :c, :a])
+          equal_unordered([:a, :b, :c], suite.provides)
+        end
       end
 
       suite ":depends_on option" do
-        assert "Should list all added items"
-        assert "Should add items only once"
+        assert "Should list all added items" do
+          suite = ::BareTest::Suite.new(nil, nil, :depends_on => [:a, :b, :c])
+          equal_unordered([:a, :b, :c], suite.depends_on)
+        end
+
+        assert "Should add items only once" do
+          suite = ::BareTest::Suite.new(nil, nil, :depends_on => [:a, :b, :c])
+          equal_unordered([:a, :b, :c], suite.depends_on)
+        end
       end
 
       assert "Should accept 0-3 arguments" do
@@ -88,17 +109,6 @@ BareTest.suite "BareTest" do
 
         return_value.skipped?
       end
-    end
-
-    suite "#verify_dependencies!" do
-      assert "Should not make the suite skipped if it depends_on nothing"
-      assert "Should not make the suite skipped if everything it depends_on is provided"
-      assert "Should not make the suite skipped if more than everything it depends_on is provided"
-      assert "Should make the suite skipped if not everything it depends_on is provided"
-    end
-
-    suite "#status" do
-      assert "Suite should respond to 'status'"
     end
 
     suite "#suites" do
