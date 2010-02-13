@@ -340,7 +340,24 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not test whether %p is a child of %p due to %s", actual, expected, e
+        failure "Could not test whether %p is a kind of %p due to %s", actual, expected, e
+      end
+
+      # Raises a Failure if the given object is not an instance of the given class
+      def instance_of(*args)
+        expected, actual, message = extract_args(args, :expected, :actual, :message)
+        unless actual.instance_of?(expected) then
+          failure_with_optional_message \
+            "Expected %1$s to be an instance of %3$p, but was a %4$p",
+            "Expected %2$p to be an instance of %1$p, but was a %3$p",
+            message, expected, actual, actual.class
+        end
+        true
+
+      rescue ::BareTest::Assertion::Failure, *::BareTest::Assertion::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        failure "Could not test whether %p is an instance of %p due to %s", actual, expected, e
       end
 
       # Raises a Failure if the given object does not respond to all of the given
