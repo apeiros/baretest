@@ -66,8 +66,8 @@ module BareTest
       @block       = block
       @skipped     = false
       if opt then
-        skip = opt[:skip]
-        skip((skip == true ? nil : skip), :manually_skipped) if skip
+        skip_reason = opt[:skip]
+        skip(skip_reason == true ? "Tagged as skipped" : skip_reason) if skip_reason
       end
     end
 
