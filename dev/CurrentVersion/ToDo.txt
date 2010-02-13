@@ -6,6 +6,8 @@ BUGS:
 
 CHORES:
 * Verify that skip works in all variants for both suite and assertion.
+* Verify that persistence works as expected no matter from where baretest is run
+  and with what glob.
 * Implement a callback to inform baretest about things it can ignore and about
   the expected baretest version
 * Go over persistence coupling in Run
