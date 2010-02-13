@@ -150,15 +150,16 @@ module BareTest
         end
       end
 
-      states = []
-      unless ignored then
-        suite.assertions.each do |test|
-          states.concat(run_test_variants(test))
+      if ignored then
+        states = []
+      else
+        states = suite.assertions.map do |test|
+          run_test_variants(test)
         end
       end
-      suite.suites.each do |(description, subsuite)|
-        states << run_suite(subsuite)
-      end
+      states.concat(suite.suites.map { |(description, subsuite)|
+        run_suite(subsuite)
+      })
       @count[:suite] += 1
 
       # || in case the suite contains no tests or suites
@@ -177,21 +178,22 @@ module BareTest
       skipped = @skipped[assertion] || assertion.skipped?
 
       if ignored then
-        states = [:ignored]
+        overall_status = nil
       elsif skipped then
-        states = Array.new(assertion.suite.component_variant_count) { run_test(assertion, []) }
-        @last_run_states[assertion.id] = :skipped
+        Array.new(assertion.suite.component_variant_count) { run_test(assertion, []) }
+        @last_run_states[assertion.id] = :manually_skipped
+        overall_status                 = :manually_skipped
       else
         states = []
         assertion.suite.each_component_variant do |setups|
           rv = run_test(assertion, setups)
           states << rv.status
         end
-        overall_status            = BareTest.most_important_status(states)
-        @last_run_states[assertion.id] = overall_status
+        overall_status                 = BareTest.most_important_status(states)
       end
+      @last_run_states[assertion.id] = overall_status if overall_status
 
-      states
+      overall_status
     end
 
     # Formatter callback.
