@@ -40,7 +40,7 @@ namespace :doc do
     Project.rdoc.files    -= FileList.new(Project.rdoc.exclude) if Project.rdoc.exclude
     Project.rdoc.files.reject! { |f| File.directory?(f) }
     Project.meta.__finalize__ # convert the name/version procs to strings
-    Project.rdoc.title   ||= "#{Project.meta.name}-#{Project.meta.version} Documentation"
+    Project.rdoc.title   ||= "#{Project.meta.name}-#{Project.meta.version}"
     Project.rdoc.options ||= []
     Project.rdoc.options.push('-t', Project.rdoc.title)
     Project.rdoc.__finalize__
