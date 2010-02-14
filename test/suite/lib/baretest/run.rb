@@ -128,7 +128,7 @@ BareTest.suite "BareTest" do
         extender       = Module.new do |m|
           define_method :run_test do |test, setup|
             invoked_tests << test
-            super
+            super(test, setup)
           end
         end
         toplevel_suite = ::BareTest::Suite.new
