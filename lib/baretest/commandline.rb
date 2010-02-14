@@ -19,13 +19,14 @@ module BareTest
   # It in fact even is what the baretest executable itself uses.
   module CommandLine
 
+    # Load a formatter (see Run::new)
     def load_formatter(format)
       require "baretest/run/#{format}" if String === format
       BareTest.format["baretest/run/#{format}"]
     end
     module_function :load_formatter
 
-    # Run unit tests
+    # Run the tests and display information about them.
     # * arguments: array of dirs/globs of files to load and run as tests
     # * options: a hash with options (all MUST be provided)
     #
@@ -57,6 +58,9 @@ module BareTest
     end
     module_function :run
 
+    # Create a basic skeleton of directories and files to contain baretests
+    # test-suite. Non-destructive (existing files won't be overriden or
+    # deleted).
     def init(arguments, options)
       core = %w[
         test
@@ -113,6 +117,7 @@ module BareTest
     end
     module_function :init
 
+    # Shows all formats available in run's -f/--format option.
     def formats(arguments, options)
       puts "Available formats:"
       Dir.glob("{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb") { |path|
@@ -121,6 +126,7 @@ module BareTest
     end
     module_function :formats
 
+    # List the available commands.
     def commands(arguments, options)
       colors = $stdout.tty?
 
@@ -166,6 +172,7 @@ module BareTest
     end
     module_function :commands
 
+    # Detailed information about the selectors available to run's arguments.
     def selectors(arguments, options)
       colors = $stdout.tty?
 
@@ -218,6 +225,8 @@ module BareTest
     end
     module_function :selectors
 
+    # Provides help for all commands. Describes options, arguments and env
+    # variables each command accepts.
     def help(arguments, options)
       colors = $stdout.tty?
 
@@ -235,6 +244,9 @@ module BareTest
     end
     module_function :help
 
+    # Show the baretest environment. This contains all data that influences
+    # baretests behaviour. That is: ruby version, ruby engine, determined test
+    # directory, stored data about this suite etc.
     def env(arguments, options)
       puts "Versions:",
            "* executable: #{Version}",
@@ -244,6 +256,7 @@ module BareTest
     end
     module_function :env
 
+    # Show the baretest executable and library versions.
     def version(arguments, options)
       puts "baretest executable version #{Version}",
            "library version #{BareTest::VERSION}",

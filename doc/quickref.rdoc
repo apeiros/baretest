@@ -34,6 +34,10 @@ as directories. You can use these to separate different concerns of your suite.
 
 == Writing tests
 
+One way to to learn baretest is to simply look at the examples in
+'examples/tests'. They should provide you with enough information for a quick
+start into writing tests using baretest.
+
 A testfile commonly looks like this:
 
   BareTest.suite "module ModuleName" do
@@ -279,20 +283,25 @@ order of definition.
 
 == Debugging tests
 
-Use `baretest -i` to run baretest in interactive mode. When a failure or an
-error occurs, you have access to the following commands:
+Use `baretest -i` to run baretest in interactive mode. Try it with
+`baretest -i examples/irb_mode/failures.rb`
+When a failure or an error occurs, you have access to the following commands:
 
-* s!          - original assertions' status
-* e!          - error message and full backtrace
-* em!         - error message
-* bt!         - full backtrace
-* iv!         - all available instance variables
-* cv!         - all available class variables
-* gv!         - all available global variables
-* file        - file this assertion was defined in
-* line        - line number in the file where this assertion's definition starts
-* nesting     - a '>'-separated list of suite descriptions this assertion is
-                nested in
-* description - this assertion's description
-* code        - code of this assertion
-* help        - overview over all the commands
+help!::        overview over all the commands
+s!::           the assertions' original status
+sc!::          the assertions' original status code
+e!::           prints the error message and full backtrace
+em!::          prints the error message
+bt!::          prints the full backtrace
+lv!::          lists all available local variables
+iv!::          lists all available instance variables
+cv!::          lists all available class variables
+gv!::          lists all available global variables, per default dropping rubys
+               standard globals (use gv!(false) to avoid that)
+file!::        the file this assertion was defined in
+line!::        the line number in the file where this assertion's definition
+               starts
+nesting!::     a '>'-separated list of suite descriptions this assertion is
+               nested in
+description!:: this assertion's description
+code!::        code of this assertion
