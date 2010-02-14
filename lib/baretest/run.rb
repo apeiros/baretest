@@ -207,7 +207,8 @@ module BareTest
       rv
     end
 
-    def skip_suite(suite, reason)
+    # Marks all assertion within this suite as skipped and the suite itself too.
+    def skip_suite(suite, reason) # :nodoc:
       suite.skip(reason)
       reason = suite.reason
       suite.assertions.each do |test|
@@ -215,7 +216,8 @@ module BareTest
       end
     end
 
-    def skip_recursively(suite, reason)
+    # Marks all tests, suites and their subsuites within this suite as skipped.
+    def skip_recursively(suite, reason) # :nodoc:
       skip_suite(suite, reason)
       suite.suites.each do |description, subsuite|
         skip_recursively(subsuite, reason)
@@ -236,6 +238,9 @@ module BareTest
       } || :success
     end
 
+    # Get an assertions' interpolated description for a given Array of Setup
+    # instances.
+    # See Assertion#interpolated_description
     def interpolated_description(assertion, setup)
       setups = setups ? setups.select { |s| s.component } : []
       substitutes = {}

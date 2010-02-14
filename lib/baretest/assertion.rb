@@ -79,15 +79,22 @@ module BareTest
       ].compact.join("\f")
     end
 
+    # Returns whether this assertion has been marked as manually skipped.
     def skipped?
       !!@skipped
     end
 
+    # Marks this assertion as manually skipped.
     def skip(reason=nil)
       @skipped ||= []
       @skipped  |= reason ? Array(reason) : ['Manually skipped']
     end
 
+    # The description allows substitutes in the form ":identifier" and
+    # ":{identifier}" (the latter in case of ajanced characters that don't
+    # belong to the identifier, like ":{identifier}stuff").
+    # This method will interploate those substitutes.
+    # This is relevant with regards to setup variants.
     def interpolated_description(substitutes)
       if substitutes.empty? then
         @description

@@ -127,6 +127,17 @@ module BareTest
     (StatusOrder & states).first # requires Array#& to be stable (keep order of first operand)
   end
 
+  # Convert an array of selectors into a hash with those selectors preprocessed
+  # as far as possible.
+  # Example:
+  #   BareTest.process_selectors %w[-some/**/glob/*.rb %failure :tag1 -:tag2]
+  #   # => {
+  #   #      :files          => ...an array with paths...,
+  #   #      :include_tags   => [:tag1],
+  #   #      :exclude_tags   => [:tag2],
+  #   #      :include_states => [:failure]
+  #   #      :exclude_states => nil,
+  #   #    }
   def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
     files           = []
     include_tags    = []
@@ -207,12 +218,14 @@ module BareTest
     end
   end
 
+  # Create a new component for Suite's :use option (see BareTest::Suite::new)
   def self.new_component(name, &block)
     name = name.to_sym
     raise ArgumentError, "Component named #{name.inspect} already exists" if @components.has_key?(name)
     @components[name] = block
   end
 
+  # Shortcut for toplevel_suite.use. Preferably use the :use option instead.
   def self.use(component)
     @toplevel_suite.use(component)
   end

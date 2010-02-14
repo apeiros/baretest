@@ -7,6 +7,8 @@
 
 
 module BareTest
+  # Encapsulates a single setup block and associated information.
+  # Relevant for setup variants.
   Setup = Struct.new(:component, :substitute, :value, :block) do
     def inspect
       sprintf "#<Setup component=%s substitute=%p value=%p>", component, substitute, value

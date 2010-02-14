@@ -49,6 +49,7 @@ module BareTest
     # Adds several methods over plain Assertion.
     module IRBContext
 
+      # Provides access the assertions' original status
       attr_accessor :__status__
 
       # Prints a list of available helper methods
@@ -72,6 +73,7 @@ module BareTest
              "code!        - the code of this assertion",
              #"restart! - Restart this irb session, resetting everything",
              "irb_help     - irb's original help",
+             "q            - Quit - alias to irb's exit",
              "help         - this text you're reading right now"
       end
       alias help! help
@@ -80,6 +82,7 @@ module BareTest
         "Context"
       end
 
+      # Quit - an alias to irb's exit
       def q
         exit
       end
@@ -171,7 +174,8 @@ module BareTest
         end
       end
 
-      def insert_line_numbers(code, start_line=1)
+      # Prepend the line number in front of ever line
+      def insert_line_numbers(code, start_line=1) # :nodoc:
         digits       = Math.log10(start_line+code.count("\n")).floor+1
         current_line = start_line-1
         code.gsub(/^/) { sprintf '  %0*d  ', digits, current_line+=1 }

@@ -144,16 +144,19 @@ module BareTest
       end
     end
 
+    # Returns whether this suite has all the passed tags
     def tagged?(tags)
       (@tags-tags).empty?
     end
 
+    # Marks this suite as manually skipped.
     def skip(reason=nil)
       @skipped  = true
       @reason  |= reason ? Array(reason) : ['Manually skipped']
       true
     end
 
+    # Returns whether this assertion has been marked as manually skipped.
     def skipped?
       @skipped
     end
@@ -278,10 +281,13 @@ module BareTest
       block ? @teardown << block : @teardown
     end
 
+    # Returns the number of possible setup variations.
+    # See #each_component_variant
     def component_variant_count
       ancestry_setup.values_at(*ancestry_components).inject(1) { |r,f| r*f.size }
     end
 
+    # Yields all possible permutations of setup components.
     def each_component_variant
       setups     = ancestry_setup
       components = ancestry_components
@@ -305,6 +311,7 @@ module BareTest
       self
     end
 
+    # Return only the first of all possible setup variation permutations.
     def first_component_variant
       setups, *comps = ancestry_setup.values_at(nil, *ancestry_components)
       setups = setups+comps.map { |comp| comp.first }

@@ -16,6 +16,7 @@ module BareTest
     # :nodoc:
     Epoch = Time.utc(2000,1,1).to_i
 
+    # The numeric value of the uid (an Integer)
     attr_reader :value
 
     # Returns a 32byte long String containing a new 16 byte random value

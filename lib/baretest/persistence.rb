@@ -15,10 +15,15 @@ require 'fileutils'
 module BareTest
 
   class Persistence
+
+    # The default storage path base (~/.baretest)
     def self.storage_path
       File.expand_path('~/.baretest')
     end
 
+    # BareTest uses a file of the form '.baretest_id_*' (where * is a 32 digits
+    # long hex) to uniquely identify a project. This ID is then used to
+    # associate stored data with the project.
     def self.determine_project_id(project_dir)
       found = Dir.glob("#{project_dir}/.baretest_id_*") { |path|
         break $1 if File.file?(path) && path =~ /id_([A-Fa-f0-9]{32})$/
@@ -40,6 +45,10 @@ module BareTest
     # The id of the project this Persistence instance is attached to
     attr_reader :project_id
 
+    # Arguments:
+    # project_dir:: The directory of the project
+    # storage_dir:: The directory where this Persistence instance should store
+    #               its data
     def initialize(project_dir=nil, storage_dir=nil)
       @storage_dir = File.expand_path(storage_dir || self.class.storage_path)
       @project_dir = File.expand_path(project_dir || ".")
