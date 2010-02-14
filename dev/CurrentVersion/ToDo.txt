@@ -9,6 +9,13 @@ CHORES:
   and with what glob.
 * Go over persistence coupling in Run
 * Make baretest recognize invalid options '-:' and '-%' as selectors
+* Examples for BareTest::Assertion::Support
+* Document setup variants. Reference that documentation in relevant methods like
+  Assertion#interpolated_description, Suite#component_variant_count,
+  #each_component_variant, #first_component_variant
+
+* Make Assertion::Support become a component, that is added to toplevel suite
+  in setup.rb per default.
 
 MISSING TESTS:
 
