@@ -63,12 +63,12 @@ lib/command/result.rb
 lib/command/types.rb
 lib/command/version.rb
 lib/ruby/kernel.rb
-test/external/bootstraptest.rb
-test/external/bootstrapwrap.rb
-test/helper/mocks.rb
 test/setup.rb
 test/suite/lib/baretest.rb
 test/suite/lib/baretest/assertion.rb
+test/suite/lib/baretest/assertion/context.rb
+test/suite/lib/baretest/assertion/failure.rb
+test/suite/lib/baretest/assertion/skip.rb
 test/suite/lib/baretest/assertion/support.rb
 test/suite/lib/baretest/irb_mode.rb
 test/suite/lib/baretest/run.rb
