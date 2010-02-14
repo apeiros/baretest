@@ -52,29 +52,39 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000039">#bt!</a></li>
+					<li><a href="#M000060">#bt!</a></li>
 					
-					<li><a href="#M000045">#code!</a></li>
+					<li><a href="#M000069">#code!</a></li>
 					
-					<li><a href="#M000041">#cv!</a></li>
+					<li><a href="#M000062">#cv!</a></li>
 					
-					<li><a href="#M000043">#description</a></li>
+					<li><a href="#M000067">#description!</a></li>
 					
-					<li><a href="#M000037">#e!</a></li>
+					<li><a href="#M000058">#e!</a></li>
 					
-					<li><a href="#M000038">#em!</a></li>
+					<li><a href="#M000059">#em!</a></li>
 					
-					<li><a href="#M000042">#gv!</a></li>
+					<li><a href="#M000064">#file!</a></li>
 					
-					<li><a href="#M000034">#help</a></li>
+					<li><a href="#M000063">#gv!</a></li>
 					
-					<li><a href="#M000046">#insert_line_numbers</a></li>
+					<li><a href="#M000052">#help</a></li>
 					
-					<li><a href="#M000040">#iv!</a></li>
+					<li><a href="#M000053">#help!</a></li>
 					
-					<li><a href="#M000044">#nesting</a></li>
+					<li><a href="#M000061">#iv!</a></li>
 					
-					<li><a href="#M000036">#s!</a></li>
+					<li><a href="#M000065">#line!</a></li>
+					
+					<li><a href="#M000068">#nesting!</a></li>
+					
+					<li><a href="#M000066">#open!</a></li>
+					
+					<li><a href="#M000055">#q</a></li>
+					
+					<li><a href="#M000056">#s!</a></li>
+					
+					<li><a href="#M000057">#sc!</a></li>
 					
 				</ul>
 			</div>
@@ -102,6 +112,8 @@
 					<li class="file"><a href="../../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -138,21 +150,43 @@
 				
 					<li><a href="../../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../../Enumerable.html">Enumerable</a></li>
+					<li><a href="../../Command.html">Command</a></li>
+				
+					<li><a href="../../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../../Kernel.html">Kernel</a></li>
 				
@@ -184,19 +218,21 @@ Adds several methods over plain <a href="../Assertion.html">Assertion</a>.
 			<h3 class="section-header">Attributes</h3>
 
 			
-			<div id="-original--attribute-method" class="method-detail">
-				<a name="__original__"></a>
+			<div id="-status--attribute-method" class="method-detail">
+				<a name="__status__"></a>
 				
-				<a name="__original__="></a>
+				<a name="__status__="></a>
 				
 				<div class="method-heading attribute-method-heading">
-					<span class="method-name">__original__</span><span
+					<span class="method-name">__status__</span><span
 						class="attribute-access-type">[RW]</span>
 				</div>
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				<p>
+Provides access the assertions&#8217; original status
+</p>
 				
 				</div>
 			</div>
@@ -211,7 +247,7 @@ Adds several methods over plain <a href="../Assertion.html">Assertion</a>.
 
 		
 			<div id="bt--method" class="method-detail ">
-				<a name="M000039"></a>
+				<a name="M000060"></a>
 
 				<div class="method-heading">
 				
@@ -232,15 +268,15 @@ Prints the original assertion&#8217;s backtrace
 					<div class="method-source-code"
 						id="bt--source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 90</span>
-90:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">size</span>=<span class="ruby-keyword kw">nil</span>)
-91:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
-92:           <span class="ruby-identifier">size</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>
-93:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">backtrace</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-operator">-</span><span class="ruby-identifier">size</span>]
-94:         <span class="ruby-keyword kw">else</span>
-95:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception occurred, therefore no backtrace is available&quot;</span>
-96:         <span class="ruby-keyword kw">end</span>
-97:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 118</span>
+118:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">size</span>=<span class="ruby-keyword kw">nil</span>)
+119:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
+120:           <span class="ruby-identifier">size</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>
+121:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">backtrace</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-operator">-</span><span class="ruby-identifier">size</span>]
+122:         <span class="ruby-keyword kw">else</span>
+123:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception occurred, therefore no backtrace is available&quot;</span>
+124:         <span class="ruby-keyword kw">end</span>
+125:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -250,7 +286,7 @@ Prints the original assertion&#8217;s backtrace
 
 		
 			<div id="code--method" class="method-detail ">
-				<a name="M000045"></a>
+				<a name="M000069"></a>
 
 				<div class="method-heading">
 				
@@ -272,14 +308,14 @@ being properly indented.
 					<div class="method-source-code"
 						id="code--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 126</span>
-126:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">code!</span>
-127:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span> = <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">code</span> <span class="ruby-keyword kw">then</span>
-128:           <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">insert_line_numbers</span>(<span class="ruby-identifier">code</span>, <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>))
-129:         <span class="ruby-keyword kw">else</span>
-130:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Code could not be extracted&quot;</span>
-131:         <span class="ruby-keyword kw">end</span>
-132:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 169</span>
+169:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">code!</span>
+170:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span> = <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">code</span> <span class="ruby-keyword kw">then</span>
+171:           <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">insert_line_numbers</span>(<span class="ruby-identifier">code</span>, <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>))
+172:         <span class="ruby-keyword kw">else</span>
+173:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Code could not be extracted&quot;</span>
+174:         <span class="ruby-keyword kw">end</span>
+175:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -289,7 +325,7 @@ being properly indented.
 
 		
 			<div id="cv--method" class="method-detail ">
-				<a name="M000041"></a>
+				<a name="M000062"></a>
 
 				<div class="method-heading">
 				
@@ -310,10 +346,10 @@ Returns an array of all class variable names
 					<div class="method-source-code"
 						id="cv--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 105</span>
-105:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cv!</span>
-106:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_variables</span>.<span class="ruby-identifier">sort</span>
-107:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 133</span>
+133:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cv!</span>
+134:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_variables</span>.<span class="ruby-identifier">sort</span>
+135:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -322,12 +358,12 @@ Returns an array of all class variable names
 			</div>
 
 		
-			<div id="description-method" class="method-detail ">
-				<a name="M000043"></a>
+			<div id="description--method" class="method-detail ">
+				<a name="M000067"></a>
 
 				<div class="method-heading">
 				
-					<span class="method-name">description</span><span
+					<span class="method-name">description!</span><span
 						class="method-args">()</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
@@ -342,12 +378,12 @@ Prints a string of the original assertion&#8217;s nesting within suites
 
 					
 					<div class="method-source-code"
-						id="description-source">
+						id="description--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 115</span>
-115:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">description</span>
-116:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">description</span>
-117:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 158</span>
+158:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">description!</span>
+159:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">description</span>
+160:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -357,7 +393,7 @@ Prints a string of the original assertion&#8217;s nesting within suites
 
 		
 			<div id="e--method" class="method-detail ">
-				<a name="M000037"></a>
+				<a name="M000058"></a>
 
 				<div class="method-heading">
 				
@@ -378,11 +414,11 @@ Prints the original assertion&#8217;s error message and backtrace
 					<div class="method-source-code"
 						id="e--source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 73</span>
-73:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">e!</span>
-74:         <span class="ruby-identifier">em!</span>
-75:         <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>)
-76:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 101</span>
+101:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">e!</span>
+102:         <span class="ruby-identifier">em!</span>
+103:         <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>)
+104:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -392,7 +428,7 @@ Prints the original assertion&#8217;s error message and backtrace
 
 		
 			<div id="em--method" class="method-detail ">
-				<a name="M000038"></a>
+				<a name="M000059"></a>
 
 				<div class="method-heading">
 				
@@ -413,16 +449,50 @@ Prints the original assertion&#8217;s error message
 					<div class="method-source-code"
 						id="em--source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 79</span>
-79:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">em!</span>
-80:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
-81:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>
-82:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">reason</span>
-83:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">reason</span>
-84:         <span class="ruby-keyword kw">else</span>
-85:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception occurred, therefore no error message is available&quot;</span>
-86:         <span class="ruby-keyword kw">end</span>
-87:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 107</span>
+107:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">em!</span>
+108:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
+109:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>
+110:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">failure_reason</span>
+111:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">failure_reason</span>
+112:         <span class="ruby-keyword kw">else</span>
+113:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception or failure reason available&quot;</span>
+114:         <span class="ruby-keyword kw">end</span>
+115:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="file--method" class="method-detail ">
+				<a name="M000064"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">file!</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Returns the original assertion&#8217;s file
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="file--source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 143</span>
+143:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file!</span>
+144:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">file</span>
+145:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -432,12 +502,12 @@ Prints the original assertion&#8217;s error message
 
 		
 			<div id="gv--method" class="method-detail ">
-				<a name="M000042"></a>
+				<a name="M000063"></a>
 
 				<div class="method-heading">
 				
 					<span class="method-name">gv!</span><span
-						class="method-args">()</span>
+						class="method-args">(remove_standard=true)</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
 				</div>
@@ -453,10 +523,10 @@ Returns an array of all global variable names
 					<div class="method-source-code"
 						id="gv--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 110</span>
-110:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gv!</span>
-111:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">global_variables</span>.<span class="ruby-identifier">sort</span>
-112:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 138</span>
+138:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gv!</span>(<span class="ruby-identifier">remove_standard</span>=<span class="ruby-keyword kw">true</span>)
+139:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span>(<span class="ruby-identifier">global_variables</span><span class="ruby-operator">-</span>(<span class="ruby-identifier">remove_standard</span> <span class="ruby-value">? </span><span class="ruby-constant">IRBMode</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoveGlobals</span> <span class="ruby-operator">:</span> [])).<span class="ruby-identifier">sort</span>
+140:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -466,7 +536,7 @@ Returns an array of all global variable names
 
 		
 			<div id="help-method" class="method-detail ">
-				<a name="M000034"></a>
+				<a name="M000052"></a>
 
 				<div class="method-heading">
 				
@@ -487,60 +557,60 @@ Prints a list of available helper methods
 					<div class="method-source-code"
 						id="help-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 44</span>
-44:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>
-45:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Available methods:&quot;</span>,
-46:              <span class="ruby-value str">&quot;s!          - the original assertions' status&quot;</span>,
-47:              <span class="ruby-value str">&quot;e!          - prints the error message and full backtrace&quot;</span>,
-48:              <span class="ruby-value str">&quot;em!         - prints the error message&quot;</span>,
-49:              <span class="ruby-value str">&quot;bt!         - prints the full backtrace&quot;</span>,
-50:              <span class="ruby-value str">&quot;iv!         - lists all available instance variables&quot;</span>,
-51:              <span class="ruby-value str">&quot;cv!         - lists all available class variables&quot;</span>,
-52:              <span class="ruby-value str">&quot;gv!         - lists all available global variables&quot;</span>,
-53:              <span class="ruby-value str">&quot;file        - the file this assertion was defined in&quot;</span>,
-54:              <span class="ruby-value str">&quot;line        - the line number in the file where this assertion's definition starts&quot;</span>,
-55:              <span class="ruby-value str">&quot;nesting     - a &gt;-separated list of suite descriptions this assertion is nested in&quot;</span>,
-56:              <span class="ruby-value str">&quot;description - this assertion's description&quot;</span>,
-57:              <span class="ruby-value str">&quot;code        - the code of this assertion&quot;</span>,
-58:              <span class="ruby-comment cmt">#&quot;restart! - Restart this irb session, resetting everything&quot;,</span>
-59:              <span class="ruby-value str">&quot;irb_help    - irb's original help&quot;</span>,
-60:              <span class="ruby-value str">&quot;help        - this text you're reading right now&quot;</span>
-61:       <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 56</span>
+56:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>
+57:         <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Available methods:&quot;</span>,
+58:              <span class="ruby-value str">&quot;s!           - the assertions' original status&quot;</span>,
+59:              <span class="ruby-value str">&quot;sc!          - the assertions' original status code&quot;</span>,
+60:              <span class="ruby-value str">&quot;e!           - prints the error message and full backtrace&quot;</span>,
+61:              <span class="ruby-value str">&quot;em!          - prints the error message&quot;</span>,
+62:              <span class="ruby-value str">&quot;bt!          - prints the full backtrace&quot;</span>,
+63:              <span class="ruby-value str">&quot;lv!          - lists all available local variables&quot;</span>,
+64:              <span class="ruby-value str">&quot;iv!          - lists all available instance variables&quot;</span>,
+65:              <span class="ruby-value str">&quot;cv!          - lists all available class variables&quot;</span>,
+66:              <span class="ruby-value str">&quot;gv!          - lists all available global variables, per default dropping rubys&quot;</span>,
+67:              <span class="ruby-value str">&quot;               standard globals (use gv!(false) to avoid that)&quot;</span>,
+68:              <span class="ruby-value str">&quot;file!        - the file this assertion was defined in&quot;</span>,
+69:              <span class="ruby-value str">&quot;line!        - the line number in the file where this assertion's definition&quot;</span>,
+70:              <span class="ruby-value str">&quot;               starts&quot;</span>,
+71:              <span class="ruby-value str">&quot;nesting!     - a &gt;-separated list of suite descriptions this assertion is nested&quot;</span>,
+72:              <span class="ruby-value str">&quot;description! - this assertion's description&quot;</span>,
+73:              <span class="ruby-value str">&quot;code!        - the code of this assertion&quot;</span>,
+74:              <span class="ruby-comment cmt">#&quot;restart! - Restart this irb session, resetting everything&quot;,</span>
+75:              <span class="ruby-value str">&quot;irb_help     - irb's original help&quot;</span>,
+76:              <span class="ruby-value str">&quot;q            - Quit - alias to irb's exit&quot;</span>,
+77:              <span class="ruby-value str">&quot;help         - this text you're reading right now&quot;</span>
+78:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
 
 				
+				<div class="aliases">
+					Also aliased as: <a href="IRBContext.html#M000053">help!</a>
+				</div>
+				
 			</div>
 
 		
-			<div id="insert-line-numbers-method" class="method-detail ">
-				<a name="M000046"></a>
+			<div id="help--method" class="method-detail method-alias">
+				<a name="M000053"></a>
 
 				<div class="method-heading">
 				
-					<span class="method-name">insert_line_numbers</span><span
-						class="method-args">(code, start_line=1)</span>
+					<span class="method-name">help!</span><span
+						class="method-args">()</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
 				</div>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					<p>
+Alias for <a href="IRBContext.html#M000052">help</a>
+</p>
 					
 
-					
-					<div class="method-source-code"
-						id="insert-line-numbers-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 134</span>
-134:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">insert_line_numbers</span>(<span class="ruby-identifier">code</span>, <span class="ruby-identifier">start_line</span>=<span class="ruby-value">1</span>)
-135:         <span class="ruby-identifier">digits</span>       = <span class="ruby-constant">Math</span>.<span class="ruby-identifier">log10</span>(<span class="ruby-identifier">start_line</span><span class="ruby-operator">+</span><span class="ruby-identifier">code</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value str">&quot;\n&quot;</span>)).<span class="ruby-identifier">floor</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>
-136:         <span class="ruby-identifier">current_line</span> = <span class="ruby-identifier">start_line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>
-137:         <span class="ruby-identifier">code</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^/</span>) { <span class="ruby-identifier">sprintf</span> <span class="ruby-value str">'  %0*d  '</span>, <span class="ruby-identifier">digits</span>, <span class="ruby-identifier">current_line</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span> }
-138:       <span class="ruby-keyword kw">end</span></pre>
-					</div>
 					
 				</div>
 
@@ -549,7 +619,7 @@ Prints a list of available helper methods
 
 		
 			<div id="iv--method" class="method-detail ">
-				<a name="M000040"></a>
+				<a name="M000061"></a>
 
 				<div class="method-heading">
 				
@@ -570,10 +640,10 @@ Returns an array of all instance variable names
 					<div class="method-source-code"
 						id="iv--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 100</span>
-100:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iv!</span>
-101:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
-102:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 128</span>
+128:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iv!</span>
+129:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
+130:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -582,12 +652,46 @@ Returns an array of all instance variable names
 			</div>
 
 		
-			<div id="nesting-method" class="method-detail ">
-				<a name="M000044"></a>
+			<div id="line--method" class="method-detail ">
+				<a name="M000065"></a>
 
 				<div class="method-heading">
 				
-					<span class="method-name">nesting</span><span
+					<span class="method-name">line!</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Returns the original assertion&#8217;s line
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="line--source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 148</span>
+148:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">line!</span>
+149:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span>
+150:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="nesting--method" class="method-detail ">
+				<a name="M000068"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">nesting!</span><span
 						class="method-args">()</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
@@ -602,12 +706,80 @@ Prints a string of the original assertion&#8217;s nesting within suites
 
 					
 					<div class="method-source-code"
-						id="nesting-source">
+						id="nesting--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 120</span>
-120:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nesting</span>
-121:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestors</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' &gt; '</span>)
-122:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 163</span>
+163:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nesting!</span>
+164:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestors</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' &gt; '</span>)
+165:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="open--method" class="method-detail ">
+				<a name="M000066"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">open!</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Returns the original assertion&#8217;s line
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="open--source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 153</span>
+153:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open!</span>
+154:         <span class="ruby-node">`bbedit '#{@__assertion__.file}:#{@__assertion__.line}'`</span>
+155:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="q-method" class="method-detail ">
+				<a name="M000055"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">q</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Quit - an alias to irb&#8217;s exit
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="q-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 86</span>
+86:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">q</span>
+87:         <span class="ruby-identifier">exit</span>
+88:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -617,7 +789,7 @@ Prints a string of the original assertion&#8217;s nesting within suites
 
 		
 			<div id="s--method" class="method-detail ">
-				<a name="M000036"></a>
+				<a name="M000056"></a>
 
 				<div class="method-heading">
 				
@@ -638,10 +810,44 @@ Returns the original assertion&#8217;s status
 					<div class="method-source-code"
 						id="s--source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 68</span>
-68:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">s!</span>
-69:         <span class="ruby-identifier">p</span> <span class="ruby-ivar">@__original__</span>.<span class="ruby-identifier">status</span>
-70:       <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 91</span>
+91:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">s!</span>
+92:         <span class="ruby-ivar">@__status__</span>
+93:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="sc--method" class="method-detail ">
+				<a name="M000057"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">sc!</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Returns the original assertion&#8217;s status code
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="sc--source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 96</span>
+96:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sc!</span>
+97:         <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">status</span>
+98:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

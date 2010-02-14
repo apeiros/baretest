@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: mocking_stubbing_test_doubles.rdoc [baretest-0.2.3 Documentation]</title>
+	<title>File: mocking_stubbing_test_doubles.rdoc [baretest-0.4.0.pre1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -40,6 +40,8 @@
 					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -76,21 +78,43 @@
 				
 					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../Enumerable.html">Enumerable</a></li>
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../Kernel.html">Kernel</a></li>
 				
@@ -106,10 +130,41 @@
 		<h1>Mocking, Stubbing and TestDoubles</h1>
 <p>
 <a href="../BareTest.html">BareTest</a> off-the-shelf provides currently
-only integration with mocha. You can use mocha (assuming you have installed
-the mocha gem) by requiring &#8216;baretest/mocha&#8217;. Best you add that
-to your setup.rb.
+only integration with mocha and rr. They are available as components. Until
+baretest 0.5 is released (which will resolve the issue), you should not use
+multiple different stubbing/mocking libraries within your tests, as they
+might collide (define methods with the same name e.g.).
 </p>
+<h2>Mocha</h2>
+<p>
+Example suite using mocha:
+</p>
+<pre>
+    suite &quot;Some suite using mocha&quot;, :use =&gt; :mocha do
+      setup do
+        ...FIXME...
+      end
+
+      assert FIXME do
+        ...FIXME...
+      end
+    end
+</pre>
+<h2>RR</h2>
+<p>
+Example suite using rr:
+</p>
+<pre>
+    suite &quot;Some suite using rr&quot;, :use =&gt; :rr do
+      setup do
+        ...FIXME...
+      end
+
+      assert FIXME do
+        ...FIXME...
+      end
+    end
+</pre>
 
 	</div>
 

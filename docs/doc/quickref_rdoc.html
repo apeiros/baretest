@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: quickref.rdoc [baretest-0.2.3 Documentation]</title>
+	<title>File: quickref.rdoc [baretest-0.4.0.pre1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -40,6 +40,8 @@
 					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -76,21 +78,43 @@
 				
 					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../Enumerable.html">Enumerable</a></li>
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../Kernel.html">Kernel</a></li>
 				
@@ -122,12 +146,14 @@ the examples and baretests own test directory.
     1. git clone git://github.com/apeiros/baretest.git
     2. cd baretest
     3. rake gem:install
+    If 3. fails, try deleting the MANIFEST.txt and do `rake manifest:create`.
+    Then try step 3 again. Also you must have nokogiri and rdoc &gt;=2.3 installed.
 </pre>
 <ol>
 <li>Change into the project directory
 
 </li>
-<li>`baretest &#8212;init` to create the basic test-directory layout
+<li>`baretest init` to create the basic test-directory layout
 
 </li>
 </ol>
@@ -137,8 +163,17 @@ Your tests for PROJECT/lib/foo.rb belong into
 PROJECT/test/suite/lib/foo.rb. Your tests for PROJECT/bin/bar belong into
 PROJECT/test/suite/bin/bar. In other words, for every path, insert
 /test/suite after PROJECT to get the path to the corresponding testfile.
+Besides &#8216;suite&#8217;, baretest also recognizes
+&#8216;integration&#8217;, &#8216;unit&#8217;, and &#8216;system&#8217; as
+directories. You can use these to separate different concerns of your
+suite.
 </p>
 <h2>Writing tests</h2>
+<p>
+One way to to learn baretest is to simply look at the examples in
+&#8216;examples/tests&#8217;. They should provide you with enough
+information for a quick start into writing tests using baretest.
+</p>
 <p>
 A testfile commonly looks like this:
 </p>
@@ -185,7 +220,7 @@ A testfile commonly looks like this:
 </pre>
 <p>
 This layout makes it easy to figure where tests for something are, and thus
-makes maintaining the test-code base easier.
+makes maintaining the testcodebase easier.
 </p>
 <p>
 Setup callbacks are invoked from outermost suite to innermost suite, and
@@ -233,10 +268,72 @@ Running this suite will print:
   7
   8
 </pre>
-<h2>Skipping Tests and Suites</h2>
+<h2>Skipping and ignoring Suites and Assertions</h2>
 <p>
-A test is skipped if it does not have a block or calls &#8216;skip&#8217;
+A suite is pending if it either has no block or a block which contains no
+assertions and suites.
 </p>
+<p>
+You can skip a suite by:
+</p>
+<ul>
+<li>Creating the suite with a :skip option, like `suite &#8220;MySuite&#8221;,
+:skip => &#8220;I want to skip this suite&#8221; do`
+
+</li>
+<li>Calling skip in the suite, like suite &#8220;MySuite&#8221; do
+
+<pre>
+  skip &quot;I want to skip this suite&quot;
+</pre>
+<p>
+end You can call skip at any point in the suite.
+</p>
+</li>
+</ul>
+<p>
+You can ignore a suite by:
+</p>
+<ul>
+<li>Adding one or more tags to the suite, like `suite &#8220;MySuite&#8221;,
+:tags => [:set_x, :set_y]` And then specify any of those tags to be
+ignored, like: `baretest &#8212; -:set_x`
+
+</li>
+</ul>
+<p>
+An assertion is pending if it has no block.
+</p>
+<p>
+You can skip an assertion by:
+</p>
+<ul>
+<li>Having it in a suite that is skipped
+
+</li>
+<li>Creating the assertion with a :skip option, like `assert
+&#8220;Something&#8221;, :skip => &#8220;I want to skip this
+assertion&#8221; do`
+
+</li>
+<li>Calling skip in the assertion, like assert &#8220;Something&#8221; do
+
+<pre>
+  skip &quot;I want to skip this assertion&quot;
+</pre>
+<p>
+end You can call skip at any point in the assertion.
+</p>
+</li>
+</ul>
+<p>
+You can ignore an assertion by:
+</p>
+<ul>
+<li>Having it in a suite that is ignored
+
+</li>
+</ul>
 <h2>Assertion helper methods</h2>
 <p>
 See <a
@@ -372,24 +469,26 @@ touched Failure: see touched
 baretest&#8217;s test-cycle is:
 </p>
 <ol>
-<li>Create Run instance and the toplevel suite
-
-</li>
-<li>Load everything as required by the command line flags
+<li>Create the toplevel suite
 
 </li>
 <li>Load PROJECT/test/setup.rb
 
 </li>
-<li>Find PROJECT/test/suite/*<b>/</b>.rb
+<li>Find every file as required by the command line flags (defaults to
+PROJECT/test/{suite,unit,integration,system}/*<b>/</b>.rb)
 
 </li>
-<li>Load each file found in 2., but for every file, see whether
-PROJECT/test/helpers/suite/*<b>/</b>.rb exists and load that first if it
-does
+<li>Load each file found in 3., but for every file, see whether
+PROJECT/test/helpers/*<b>/</b>.rb exists and load that first if it does
+(e.g. for PROJECT/test/suite/foo.rb load PROJECT/test/helpers/suite/foo.rb)
 
 </li>
-<li>Invoke run on the Run instance
+<li>Create a <a href="../BareTest/Run.html">BareTest::Run</a> instance with the
+toplevel suite and the passed options
+
+</li>
+<li>Invoke run_all on that Run instance.
 
 </li>
 </ol>
@@ -400,55 +499,59 @@ executed in order of definition.
 </p>
 <h2>Debugging tests</h2>
 <p>
-Use `baretest -i` to run baretest in interactive mode. When a failure or an
-error occurs, you have access to the following commands:
+Use `baretest -i` to run baretest in interactive mode. Try it with
+`baretest -i examples/irb_mode/failures.rb` When a failure or an error
+occurs, you have access to the following commands:
 </p>
-<ul>
-<li>s! - original assertions&#8217; status
+<table>
+<tr><td valign="top">help!:</td><td>overview over all the commands
 
-</li>
-<li>e! - error message and full backtrace
+</td></tr>
+<tr><td valign="top">s!:</td><td>the assertions&#8217; original status
 
-</li>
-<li>em! - error message
+</td></tr>
+<tr><td valign="top">sc!:</td><td>the assertions&#8217; original status code
 
-</li>
-<li>bt! - full backtrace
+</td></tr>
+<tr><td valign="top">e!:</td><td>prints the error message and full backtrace
 
-</li>
-<li>iv! - all available instance variables
+</td></tr>
+<tr><td valign="top">em!:</td><td>prints the error message
 
-</li>
-<li>cv! - all available class variables
+</td></tr>
+<tr><td valign="top">bt!:</td><td>prints the full backtrace
 
-</li>
-<li>gv! - all available global variables
+</td></tr>
+<tr><td valign="top">lv!:</td><td>lists all available local variables
 
-</li>
-<li>file - file this assertion was defined in
+</td></tr>
+<tr><td valign="top">iv!:</td><td>lists all available instance variables
 
-</li>
-<li>line - line number in the file where this assertion&#8217;s definition
-starts
+</td></tr>
+<tr><td valign="top">cv!:</td><td>lists all available class variables
 
-</li>
-<li>nesting - a &#8217;>&#8217;-separated list of suite descriptions this
-assertion is
+</td></tr>
+<tr><td valign="top">gv!:</td><td>lists all available global variables, per default dropping rubys standard
+globals (use gv!(false) to avoid that)
 
-<pre>
-              nested in
-</pre>
-</li>
-<li>description - this assertion&#8217;s description
+</td></tr>
+<tr><td valign="top">file!:</td><td>the file this assertion was defined in
 
-</li>
-<li>code - code of this assertion
+</td></tr>
+<tr><td valign="top">line!:</td><td>the line number in the file where this assertion&#8217;s definition starts
 
-</li>
-<li>help - overview over all the commands
+</td></tr>
+<tr><td valign="top">nesting!:</td><td>a &#8217;>&#8217;-separated list of suite descriptions this assertion is
+nested in
 
-</li>
-</ul>
+</td></tr>
+<tr><td valign="top">description!:</td><td>this assertion&#8217;s description
+
+</td></tr>
+<tr><td valign="top">code!:</td><td>code of this assertion
+
+</td></tr>
+</table>
 
 	</div>
 

@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: MANIFEST.txt [baretest-0.2.3 Documentation]</title>
+	<title>File: MANIFEST.txt [baretest-0.4.0.pre1]</title>
 
 	<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet" />
 
@@ -40,6 +40,8 @@
 					<li class="file"><a href="./doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="./doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="./doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="./doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -76,21 +78,43 @@
 				
 					<li><a href="./BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="./BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="./BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="./BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="./BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="./BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="./BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="./BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="./BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="./BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="./BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="./BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="./BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="./BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="./Enumerable.html">Enumerable</a></li>
+					<li><a href="./Command.html">Command</a></li>
+				
+					<li><a href="./Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="./Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="./Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="./Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="./Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="./Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="./Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="./Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="./Kernel.html">Kernel</a></li>
 				
@@ -110,15 +134,19 @@ href="README_rdoc.html">README.rdoc</a> <a
 href="bin/baretest.html">bin/baretest</a> <a
 href="doc/baretest_rdoc.html">doc/baretest.rdoc</a> <a
 href="doc/mocking_stubbing_test_doubles_rdoc.html">doc/mocking_stubbing_test_doubles.rdoc</a>
-<a href="doc/quickref_rdoc.html">doc/quickref.rdoc</a> <a
+doc/news/news-0.3.0.rdoc <a
+href="doc/quickref_rdoc.html">doc/quickref.rdoc</a> <a
+href="doc/whats_going_on_rdoc.html">doc/whats_going_on.rdoc</a> <a
 href="doc/writing_tests_rdoc.html">doc/writing_tests.rdoc</a>
-examples/tests/irb_mode/failures.rb
-examples/tests/mock_developer/test/helper/mocks.rb
-examples/tests/mock_developer/test/setup.rb
-examples/tests/mock_developer/test/suite/mock_demo.rb
-examples/tests/overview/test.rb examples/tests/variations/variations_01.rb
-examples/tests/variations/variations_02.rb
-examples/tests/variations/variations_03.rb examples/test.rake <a
+examples/components/rack-test.rb examples/irb_mode/failures.rb
+examples/rake/test.rake examples/tests/01_basics_I.rb
+examples/tests/02_basics_II_helpers.rb
+examples/tests/03_basics_III_setup_and_teardown.rb
+examples/tests/04_advanced_I_dependencies.rb
+examples/tests/05_advanced_II_tags.rb
+examples/tests/06_advanced_III_requires.rb
+examples/tests/07_advanced_IV_components.rb
+examples/tests/08_expert_I_setup_variants.rb <a
 href="lib/baretest_rb.html">lib/baretest.rb</a> <a
 href="lib/baretest/assertion_rb.html">lib/baretest/assertion.rb</a> <a
 href="lib/baretest/assertion/context_rb.html">lib/baretest/assertion/context.rb</a>
@@ -128,28 +156,48 @@ href="lib/baretest/assertion/failure_rb.html">lib/baretest/assertion/failure.rb<
 href="lib/baretest/assertion/skip_rb.html">lib/baretest/assertion/skip.rb</a>
 <a
 href="lib/baretest/assertion/support_rb.html">lib/baretest/assertion/support.rb</a>
+<a href="lib/baretest/commandline_rb.html">lib/baretest/commandline.rb</a>
+<a href="lib/baretest/formatter_rb.html">lib/baretest/formatter.rb</a> <a
+href="lib/baretest/invalidselectors_rb.html">lib/baretest/invalidselectors.rb</a>
 <a href="lib/baretest/irb_mode_rb.html">lib/baretest/irb_mode.rb</a> <a
 href="lib/baretest/layout_rb.html">lib/baretest/layout.rb</a> <a
-href="lib/baretest/mocha_rb.html">lib/baretest/mocha.rb</a> <a
+href="lib/baretest/persistence_rb.html">lib/baretest/persistence.rb</a> <a
 href="lib/baretest/run_rb.html">lib/baretest/run.rb</a> <a
 href="lib/baretest/run/cli_rb.html">lib/baretest/run/cli.rb</a> <a
-href="lib/baretest/run/errors_rb.html">lib/baretest/run/errors.rb</a> <a
 href="lib/baretest/run/minimal_rb.html">lib/baretest/run/minimal.rb</a> <a
+href="lib/baretest/run/none_rb.html">lib/baretest/run/none.rb</a> <a
 href="lib/baretest/run/profile_rb.html">lib/baretest/run/profile.rb</a> <a
 href="lib/baretest/run/spec_rb.html">lib/baretest/run/spec.rb</a> <a
 href="lib/baretest/run/tap_rb.html">lib/baretest/run/tap.rb</a> <a
 href="lib/baretest/run/xml_rb.html">lib/baretest/run/xml.rb</a> <a
 href="lib/baretest/setup_rb.html">lib/baretest/setup.rb</a> <a
-href="lib/baretest/skipped_rb.html">lib/baretest/skipped.rb</a> <a
-href="lib/baretest/skipped/assertion_rb.html">lib/baretest/skipped/assertion.rb</a>
-<a
-href="lib/baretest/skipped/suite_rb.html">lib/baretest/skipped/suite.rb</a>
-<a href="lib/baretest/suite_rb.html">lib/baretest/suite.rb</a> <a
+href="lib/baretest/status_rb.html">lib/baretest/status.rb</a> <a
+href="lib/baretest/suite_rb.html">lib/baretest/suite.rb</a> <a
+href="lib/baretest/uid_rb.html">lib/baretest/uid.rb</a> <a
+href="lib/baretest/use/mocha_rb.html">lib/baretest/use/mocha.rb</a> <a
+href="lib/baretest/use/rack_test_rb.html">lib/baretest/use/rack_test.rb</a>
+<a href="lib/baretest/use/rr_rb.html">lib/baretest/use/rr.rb</a> <a
 href="lib/baretest/version_rb.html">lib/baretest/version.rb</a> <a
-href="lib/ruby/kernel_rb.html">lib/ruby/kernel.rb</a>
-test/external/bootstraptest.rb test/external/bootstrapwrap.rb
-test/helper/mocks.rb test/setup.rb test/suite/lib/baretest.rb
-test/suite/lib/baretest/assertion.rb
+href="lib/command_rb.html">lib/command.rb</a> <a
+href="lib/command/argument_rb.html">lib/command/argument.rb</a> <a
+href="lib/command/decoratinghash_rb.html">lib/command/decoratinghash.rb</a>
+<a href="lib/command/definition_rb.html">lib/command/definition.rb</a> <a
+href="lib/command/directorynotfounderror_rb.html">lib/command/directorynotfounderror.rb</a>
+<a href="lib/command/env_rb.html">lib/command/env.rb</a> <a
+href="lib/command/filenotfounderror_rb.html">lib/command/filenotfounderror.rb</a>
+<a href="lib/command/kernel_rb.html">lib/command/kernel.rb</a> <a
+href="lib/command/nodirectoryerror_rb.html">lib/command/nodirectoryerror.rb</a>
+<a href="lib/command/nofileerror_rb.html">lib/command/nofileerror.rb</a> <a
+href="lib/command/option_rb.html">lib/command/option.rb</a> <a
+href="lib/command/parser_rb.html">lib/command/parser.rb</a> <a
+href="lib/command/result_rb.html">lib/command/result.rb</a> <a
+href="lib/command/types_rb.html">lib/command/types.rb</a> <a
+href="lib/command/version_rb.html">lib/command/version.rb</a> <a
+href="lib/ruby/kernel_rb.html">lib/ruby/kernel.rb</a> test/setup.rb
+test/suite/lib/baretest.rb test/suite/lib/baretest/assertion.rb
+test/suite/lib/baretest/assertion/context.rb
+test/suite/lib/baretest/assertion/failure.rb
+test/suite/lib/baretest/assertion/skip.rb
 test/suite/lib/baretest/assertion/support.rb
 test/suite/lib/baretest/irb_mode.rb test/suite/lib/baretest/run.rb
 test/suite/lib/baretest/run/cli.rb test/suite/lib/baretest/run/errors.rb

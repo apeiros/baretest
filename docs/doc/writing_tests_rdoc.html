@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: writing_tests.rdoc [baretest-0.2.3 Documentation]</title>
+	<title>File: writing_tests.rdoc [baretest-0.4.0.pre1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -40,6 +40,8 @@
 					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -76,21 +78,43 @@
 				
 					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../Enumerable.html">Enumerable</a></li>
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../Kernel.html">Kernel</a></li>
 				
@@ -127,11 +151,10 @@ directory layout looks like this:
   `-- Rakefile
 </pre>
 <p>
-In your project directory, you can invoke `baretest &#8212;init`, this will
-create the &#8216;test&#8217; directory. It will mirror your project
-directory. That is, it will recreate all directories nested in bin and lib
-within test/suite. The directory layout of &#8216;test&#8217; is as
-follows:
+In your project directory, you can invoke `baretest init`, this will create
+the &#8216;test&#8217; directory. It will mirror your project directory.
+That is, it will recreate all directories nested in bin and lib within
+test/suite. The directory layout of &#8216;test&#8217; is as follows:
 </p>
 <pre>
   `-- test
@@ -238,16 +261,23 @@ So let&#8217;s make use of that and rewrite our previous test:
 In this simplistic example, this may seem like wasted time. The more
 complex the setup becomes and the more assertions need the same setup, the
 more time a separate setup phase saves. It additionally helps in making
-intent clear: this is setup, and this is test.
+intent clear: this is setup, and this is test. The setup and teardown is
+run (via instance_eval) in the same context as the assertion. Local
+variables however are NOT shared. To pass data from the setup to the
+assertion, use instance variables as shown here.
 </p>
 <h2>5. When troubles strike</h2>
 <p>
 If one of your assertions fails or errors, you can use `baretest -i` to
 investigate the issue. It will throw you into an irb session, with self
-being the failing/erroring assertion and with several helpful methods (use
-`help` in the irb session to get a list of those).
+being the failing/erroring assertion context and with several helpful
+methods (use `help` in the irb session to get a list of those).
 </p>
 <h2>Things left to be written out</h2>
+<p>
+This is not part of the tutorial but things the author of this tutorial
+should still add to the tutorial itself.
+</p>
 <ul>
 <li>toplevel suite may have a name/description too, it&#8217;ll act the same as
 if there was a suite in an unnamed toplevel suite
@@ -260,21 +290,27 @@ where the outermost setup is run first, the innermost last.
 <li>using stubs &amp; mocks
 
 </li>
-<li>However, suites with the same name are considered the same.
+<li>Suites with the same name and nesting are considered the same and become
+merged
 
 <p>
-For example, this code:
+Example:
 </p>
 <pre>
-  BareTest.suite &quot;class Foo&quot; do
-    suite &quot;class Bar&quot; do
-      assert &quot;foo&quot;
+  BareTest.suite &quot;Foo&quot; do
+    suite &quot;Bar&quot; do
+      assert &quot;x&quot;
+    end
+  end
+  BareTest.suite &quot;Foo&quot; do
+    suite &quot;Bar&quot; do
+      assert &quot;y&quot;
+    end
   end
 </pre>
 <p>
-Just like ruby&#8217;s namespacing works. That is, if you twice do `module
-X; class Y; &#8230;; end; end`, it will both times open the same class
-X::Y.
+Now the suite &#8220;Foo&#8221; > &#8220;Bar&#8221; has two assertions,
+&#8220;x&#8221; and &#8220;y&#8220;
 </p>
 </li>
 </ul>

@@ -52,7 +52,9 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000063">::to_s</a></li>
+					<li><a href="#M000116">::to_a</a></li>
+					
+					<li><a href="#M000115">::to_s</a></li>
 					
 				</ul>
 			</div>
@@ -80,6 +82,8 @@
 					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -116,21 +120,43 @@
 				
 					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../Enumerable.html">Enumerable</a></li>
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../Kernel.html">Kernel</a></li>
 				
@@ -179,6 +205,27 @@ The tiny version number
 </p></dd>
 				
 			
+				<dt><a name="PRERELEASE">PRERELEASE</a></dt>
+				
+				<dd class="description"><p>
+Prerelease number - nil for release versions
+</p></dd>
+				
+			
+				<dt><a name="STRING">STRING</a></dt>
+				
+				<dd class="description"><p>
+The version as a string
+</p></dd>
+				
+			
+				<dt><a name="ARRAY">ARRAY</a></dt>
+				
+				<dd class="description"><p>
+The version as an array
+</p></dd>
+				
+			
 			</dl>
 		</div>
 		
@@ -192,8 +239,42 @@ The tiny version number
 			<h3 class="section-header">Public Class Methods</h3>
 
 		
+			<div id="to-a-method" class="method-detail ">
+				<a name="M000116"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">to_a</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+The version as an array
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="to-a-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/version.rb, line 38</span>
+38:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_a</span>
+39:       <span class="ruby-constant">ARRAY</span>
+40:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
 			<div id="to-s-method" class="method-detail ">
-				<a name="M000063"></a>
+				<a name="M000115"></a>
 
 				<div class="method-heading">
 				
@@ -214,10 +295,10 @@ The version as a string
 					<div class="method-source-code"
 						id="to-s-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/version.rb, line 24</span>
-24:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>
-25:       <span class="ruby-node">&quot;#{MAJOR}.#{MINOR||0}.#{TINY||0}&quot;</span>
-26:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/version.rb, line 33</span>
+33:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>
+34:       <span class="ruby-constant">STRING</span>
+35:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

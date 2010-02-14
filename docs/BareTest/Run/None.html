@@ -5,7 +5,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>Class: BareTest::Skipped::Suite</title>
+	<title>Module: BareTest::Run::None</title>
 
 	<link rel="stylesheet" href="../../rdoc.css" type="text/css" media="screen" />
 
@@ -19,7 +19,7 @@
 		charset="utf-8"></script>
 
 </head>
-<body class="class">
+<body class="module">
 
 	<div id="metadata">
 		<div id="file-metadata">
@@ -28,8 +28,8 @@
 				<div class="section-body">
 					<ul>
 					
-						<li><a href="../../lib/baretest/skipped/suite_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="lib/baretest/skipped/suite.rb">lib/baretest/skipped/suite.rb</a></li>
+						<li><a href="../../lib/baretest/run/none_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/run/none.rb">lib/baretest/run/none.rb</a></li>
 					
 					</ul>
 				</div>
@@ -41,13 +41,6 @@
 		<div id="class-metadata">
 
 			<!-- Parent Class -->
-			
-			<div id="parent-class-section" class="section">
-				<h3 class="section-header">Parent</h3>
-				
-				<p class="link">::BareTest::Suite</p>
-				
-			</div>
 			
 
 			<!-- Namespace Contents -->
@@ -78,6 +71,8 @@
 					<li class="file"><a href="../../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -114,21 +109,43 @@
 				
 					<li><a href="../../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../../Enumerable.html">Enumerable</a></li>
+					<li><a href="../../Command.html">Command</a></li>
+				
+					<li><a href="../../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../../Kernel.html">Kernel</a></li>
 				
@@ -141,12 +158,13 @@
 	</div>
 
 	<div id="documentation">
-		<h1 class="class">BareTest::Skipped::Suite</h1>
+		<h1 class="module">BareTest::Run::None</h1>
 
 		<div id="description">
 			<p>
-Like Test::Suite, but all Assertions are defined as <a
-href="Assertion.html">Skipped::Assertion</a>
+None runner is invoked with `-f none` or `&#8212;format none`. This runner
+produces NO output at all. You can use it if you&#8217;re only interested
+in baretests exit status.
 </p>
 
 		</div>

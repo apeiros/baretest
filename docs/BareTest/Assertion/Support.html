@@ -61,39 +61,43 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000026">#case_equal</a></li>
+					<li><a href="#M000027">#case_equal</a></li>
 					
-					<li><a href="#M000025">#equal</a></li>
+					<li><a href="#M000026">#equal</a></li>
 					
-					<li><a href="#M000027">#equal_unordered</a></li>
+					<li><a href="#M000028">#equal_unordered</a></li>
 					
-					<li><a href="#M000032">#extract_args</a></li>
+					<li><a href="#M000037">#extract_args</a></li>
 					
-					<li><a href="#M000030">#failure</a></li>
+					<li><a href="#M000035">#failure</a></li>
 					
-					<li><a href="#M000029">#failure_with_optional_message</a></li>
+					<li><a href="#M000034">#failure_with_optional_message</a></li>
 					
 					<li><a href="#M000022">#hash_key_equal</a></li>
 					
-					<li><a href="#M000028">#kind_of</a></li>
+					<li><a href="#M000030">#instance_of</a></li>
 					
-					<li><a href="#M000019">#not_touched</a></li>
+					<li><a href="#M000029">#kind_of</a></li>
 					
-					<li><a href="#M000024">#order_equal</a></li>
+					<li><a href="#M000020">#not_touched</a></li>
+					
+					<li><a href="#M000025">#order_equal</a></li>
 					
 					<li><a href="#M000008">#raises</a></li>
 					
 					<li><a href="#M000010">#raises_nothing</a></li>
 					
-					<li><a href="#M000020">#same</a></li>
+					<li><a href="#M000033">#respond_to</a></li>
 					
-					<li><a href="#M000031">#skip</a></li>
+					<li><a href="#M000021">#same</a></li>
 					
-					<li><a href="#M000014">#touch</a></li>
+					<li><a href="#M000036">#skip</a></li>
 					
-					<li><a href="#M000017">#touched</a></li>
+					<li><a href="#M000017">#touch</a></li>
 					
-					<li><a href="#M000013">#within_delta</a></li>
+					<li><a href="#M000018">#touched</a></li>
+					
+					<li><a href="#M000015">#within_delta</a></li>
 					
 					<li><a href="#M000005">#yields</a></li>
 					
@@ -123,6 +127,8 @@
 					<li class="file"><a href="../../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 				
 					<li class="file"><a href="../../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 				
 					<li class="file"><a href="../../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 				
@@ -159,21 +165,43 @@
 				
 					<li><a href="../../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
+					<li><a href="../../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
 					<li><a href="../../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../../BareTest/Persistence.html">BareTest::Persistence</a></li>
 				
 					<li><a href="../../BareTest/Run.html">BareTest::Run</a></li>
 				
-					<li><a href="../../BareTest/Skipped.html">BareTest::Skipped</a></li>
-				
-					<li><a href="../../BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-				
-					<li><a href="../../BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+					<li><a href="../../BareTest/Status.html">BareTest::Status</a></li>
 				
 					<li><a href="../../BareTest/Suite.html">BareTest::Suite</a></li>
 				
+					<li><a href="../../BareTest/UID.html">BareTest::UID</a></li>
+				
 					<li><a href="../../BareTest/VERSION.html">BareTest::VERSION</a></li>
 				
-					<li><a href="../../Enumerable.html">Enumerable</a></li>
+					<li><a href="../../Command.html">Command</a></li>
+				
+					<li><a href="../../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../../Command/VERSION.html">Command::VERSION</a></li>
 				
 					<li><a href="../../Kernel.html">Kernel</a></li>
 				
@@ -210,7 +238,7 @@ provides several methods to make it easier to write assertions.
 
 		
 			<div id="case-equal-method" class="method-detail ">
-				<a name="M000026"></a>
+				<a name="M000027"></a>
 
 				<div class="method-heading">
 				
@@ -238,23 +266,23 @@ Can be used in either of the following ways:
 					<div class="method-source-code"
 						id="case-equal-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 270</span>
-270:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">case_equal</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-271:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
-272: 
-273:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">actual</span> <span class="ruby-keyword kw">then</span>
-274:           <span class="ruby-identifier">failure_with_optional_message</span> \
-275:             <span class="ruby-value str">&quot;Expected %s to be case equal (===) to %p but was %p.&quot;</span>,
-276:             <span class="ruby-value str">&quot;Expected %p but got %p.&quot;</span>,
-277:             <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-278:         <span class="ruby-keyword kw">end</span>
-279:         <span class="ruby-keyword kw">true</span>
-280: 
-281:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-282:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-283:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-284:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
-285:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 280</span>
+280:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">case_equal</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+281:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+282: 
+283:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">actual</span> <span class="ruby-keyword kw">then</span>
+284:           <span class="ruby-identifier">failure_with_optional_message</span> \
+285:             <span class="ruby-value str">&quot;Expected %s to be case equal (===) to %p but was %p&quot;</span>,
+286:             <span class="ruby-value str">&quot;Expected %p but got %p&quot;</span>,
+287:             <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+288:         <span class="ruby-keyword kw">end</span>
+289:         <span class="ruby-keyword kw">true</span>
+290: 
+291:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+292:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+293:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+294:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
+295:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -264,7 +292,7 @@ Can be used in either of the following ways:
 
 		
 			<div id="equal-method" class="method-detail method-alias">
-				<a name="M000025"></a>
+				<a name="M000026"></a>
 
 				<div class="method-heading">
 				
@@ -277,7 +305,7 @@ Can be used in either of the following ways:
 				<div class="method-description">
 					
 					<p>
-Alias for <a href="Support.html#M000024">order_equal</a>
+Alias for <a href="Support.html#M000025">order_equal</a>
 </p>
 					
 
@@ -289,7 +317,7 @@ Alias for <a href="Support.html#M000024">order_equal</a>
 
 		
 			<div id="equal-unordered-method" class="method-detail ">
-				<a name="M000027"></a>
+				<a name="M000028"></a>
 
 				<div class="method-heading">
 				
@@ -311,34 +339,89 @@ order. E.g. two sets, or the keys of two hashes.
 					<div class="method-source-code"
 						id="equal-unordered-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 290</span>
-290:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">equal_unordered</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-291:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
-292: 
-293:         <span class="ruby-identifier">count</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">0</span>)
-294:         <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">element</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> }
-295:         <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">each</span>   { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">element</span>] <span class="ruby-operator">-=</span> <span class="ruby-value">1</span> }
-296: 
-297:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">count</span>.<span class="ruby-identifier">all?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">zero?</span> } <span class="ruby-keyword kw">then</span>
-298:           <span class="ruby-identifier">only_in_expected</span> = <span class="ruby-identifier">count</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ele</span> }
-299:           <span class="ruby-identifier">only_in_actual</span>   = <span class="ruby-identifier">count</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ele</span> }
-300:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
-301:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to have the same items the same number of times, &quot;</span> \
-302:                     <span class="ruby-value str">&quot;but %p are only in expected, and %p only in actual.&quot;</span>,
-303:                     <span class="ruby-identifier">message</span>, <span class="ruby-identifier">only_in_expected</span>, <span class="ruby-identifier">only_in_actual</span>
-304:           <span class="ruby-keyword kw">else</span>
-305:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p and %p to have the same items the same number of times, &quot;</span> \
-306:                     <span class="ruby-value str">&quot;but %p are only in expected, and %p only in actual.&quot;</span>,
-307:                     <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">only_in_expected</span>, <span class="ruby-identifier">only_in_actual</span>
-308:           <span class="ruby-keyword kw">end</span>
-309:         <span class="ruby-keyword kw">end</span>
-310:         <span class="ruby-keyword kw">true</span>
-311: 
-312:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-313:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-314:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-315:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
-316:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 300</span>
+300:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">equal_unordered</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+301:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+302: 
+303:         <span class="ruby-identifier">count</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">0</span>)
+304:         <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">element</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> }
+305:         <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">each</span>   { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span> <span class="ruby-identifier">count</span>[<span class="ruby-identifier">element</span>] <span class="ruby-operator">-=</span> <span class="ruby-value">1</span> }
+306: 
+307:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">count</span>.<span class="ruby-identifier">all?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">zero?</span> } <span class="ruby-keyword kw">then</span>
+308:           <span class="ruby-identifier">only_in_expected</span> = <span class="ruby-identifier">count</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ele</span> }
+309:           <span class="ruby-identifier">only_in_actual</span>   = <span class="ruby-identifier">count</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">ele</span>, <span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ele</span> }
+310:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
+311:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to have the same items the same number of times, &quot;</span> \
+312:                     <span class="ruby-value str">&quot;but %p are only in expected, and %p only in actual&quot;</span>,
+313:                     <span class="ruby-identifier">message</span>, <span class="ruby-identifier">only_in_expected</span>, <span class="ruby-identifier">only_in_actual</span>
+314:           <span class="ruby-keyword kw">else</span>
+315:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p and %p to have the same items the same number of times, &quot;</span> \
+316:                     <span class="ruby-value str">&quot;but %p are only in expected, and %p only in actual&quot;</span>,
+317:                     <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">only_in_expected</span>, <span class="ruby-identifier">only_in_actual</span>
+318:           <span class="ruby-keyword kw">end</span>
+319:         <span class="ruby-keyword kw">end</span>
+320:         <span class="ruby-keyword kw">true</span>
+321: 
+322:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+323:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+324:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+325:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
+326:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="extract-args-method" class="method-detail ">
+				<a name="M000037"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">extract_args</span><span
+						class="method-args">(args, *named)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+extract arg allows to use named or positional args
+</p>
+<p>
+Example:
+</p>
+<pre>
+  extract_args([1,2,3], :foo, :bar, :baz) # =&gt; [1,2,3]
+  extract_args({:foo =&gt; 1,:bar =&gt; 2, :baz =&gt; 3}, :foo, :bar, :baz) # =&gt; [1,2,3]
+</pre>
+<p>
+Usage:
+</p>
+<pre>
+  def foo(*args)
+    x,y,z = extract_args(args, :x, :y, :z)
+  end
+  foo(1,2,3)
+  foo(:x =&gt; 1, :y =&gt; 2, :z =&gt; 3) # equivalent to the one above
+</pre>
+					
+
+					
+					<div class="method-source-code"
+						id="extract-args-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 417</span>
+417:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">named</span>)
+418:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">then</span>
+419:           <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">named</span>)
+420:         <span class="ruby-keyword kw">else</span>
+421:           <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">named</span>.<span class="ruby-identifier">size</span>)
+422:         <span class="ruby-keyword kw">end</span>
+423:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -348,7 +431,7 @@ order. E.g. two sets, or the keys of two hashes.
 
 		
 			<div id="failure-method" class="method-detail ">
-				<a name="M000030"></a>
+				<a name="M000035"></a>
 
 				<div class="method-heading">
 				
@@ -371,10 +454,10 @@ sprintf over message with *args Particularly useful with %p and %s.
 					<div class="method-source-code"
 						id="failure-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 348</span>
-348:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">failure</span>(<span class="ruby-identifier">message</span>=<span class="ruby-value str">&quot;Assertion failed&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-349:         <span class="ruby-identifier">raise</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-identifier">sprintf</span>(<span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-350:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 393</span>
+393:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">failure</span>(<span class="ruby-identifier">message</span>=<span class="ruby-value str">&quot;Assertion failed&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+394:         <span class="ruby-identifier">raise</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-identifier">sprintf</span>(<span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+395:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -384,7 +467,7 @@ sprintf over message with *args Particularly useful with %p and %s.
 
 		
 			<div id="failure-with-optional-message-method" class="method-detail ">
-				<a name="M000029"></a>
+				<a name="M000034"></a>
 
 				<div class="method-heading">
 				
@@ -406,14 +489,14 @@ easier.
 					<div class="method-source-code"
 						id="failure-with-optional-message-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 337</span>
-337:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">failure_with_optional_message</span>(<span class="ruby-identifier">with_message</span>, <span class="ruby-identifier">without_message</span>, <span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-338:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
-339:           <span class="ruby-identifier">failure</span>(<span class="ruby-identifier">with_message</span>, <span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-340:         <span class="ruby-keyword kw">else</span>
-341:           <span class="ruby-identifier">failure</span>(<span class="ruby-identifier">without_message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-342:         <span class="ruby-keyword kw">end</span>
-343:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 382</span>
+382:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">failure_with_optional_message</span>(<span class="ruby-identifier">with_message</span>, <span class="ruby-identifier">without_message</span>, <span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+383:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
+384:           <span class="ruby-identifier">failure</span>(<span class="ruby-identifier">with_message</span>, <span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+385:         <span class="ruby-keyword kw">else</span>
+386:           <span class="ruby-identifier">failure</span>(<span class="ruby-identifier">without_message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+387:         <span class="ruby-keyword kw">end</span>
+388:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -451,24 +534,71 @@ Can be used in either of the following ways:
 					<div class="method-source-code"
 						id="hash-key-equal-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 223</span>
-223:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hash_key_equal</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-224:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
-225: 
-226:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">eql?</span>(<span class="ruby-identifier">actual</span>) <span class="ruby-keyword kw">then</span>
-227:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
-228:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to be hash-key equal (eql?) to %p but was %p.&quot;</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-229:           <span class="ruby-keyword kw">else</span>
-230:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p but got %p.&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-231:           <span class="ruby-keyword kw">end</span>
-232:         <span class="ruby-keyword kw">end</span>
-233:         <span class="ruby-keyword kw">true</span>
-234: 
-235:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-236:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-237:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-238:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
-239:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 233</span>
+233:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hash_key_equal</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+234:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+235: 
+236:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">eql?</span>(<span class="ruby-identifier">actual</span>) <span class="ruby-keyword kw">then</span>
+237:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
+238:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to be hash-key equal (eql?) to %p but was %p&quot;</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+239:           <span class="ruby-keyword kw">else</span>
+240:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p but got %p&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+241:           <span class="ruby-keyword kw">end</span>
+242:         <span class="ruby-keyword kw">end</span>
+243:         <span class="ruby-keyword kw">true</span>
+244: 
+245:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+246:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+247:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+248:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
+249:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="instance-of-method" class="method-detail ">
+				<a name="M000030"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">instance_of</span><span
+						class="method-args">(*args)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Raises a <a href="Failure.html">Failure</a> if the given object is not an
+instance of the given class
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="instance-of-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 347</span>
+347:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+348:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+349:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">instance_of?</span>(<span class="ruby-identifier">expected</span>) <span class="ruby-keyword kw">then</span>
+350:           <span class="ruby-identifier">failure_with_optional_message</span> \
+351:             <span class="ruby-value str">&quot;Expected %1$s to be an instance of %3$p, but was a %4$p&quot;</span>,
+352:             <span class="ruby-value str">&quot;Expected %2$p to be an instance of %1$p, but was a %3$p&quot;</span>,
+353:             <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">class</span>
+354:         <span class="ruby-keyword kw">end</span>
+355:         <span class="ruby-keyword kw">true</span>
+356: 
+357:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+358:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+359:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+360:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not test whether %p is an instance of %p due to %s&quot;</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">e</span>
+361:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -478,7 +608,7 @@ Can be used in either of the following ways:
 
 		
 			<div id="kind-of-method" class="method-detail ">
-				<a name="M000028"></a>
+				<a name="M000029"></a>
 
 				<div class="method-heading">
 				
@@ -500,22 +630,22 @@ instance of the given class or a descendant thereof
 					<div class="method-source-code"
 						id="kind-of-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 320</span>
-320:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">kind_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-321:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
-322:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-identifier">expected</span>) <span class="ruby-keyword kw">then</span>
-323:           <span class="ruby-identifier">failure_with_optional_message</span> \
-324:             <span class="ruby-value str">&quot;Expected %1$s to be a kind of %3$p, but was a %4$p&quot;</span>,
-325:             <span class="ruby-value str">&quot;Expected %2$p to be a kind of %1$p, but was a %3$p&quot;</span>,
-326:             <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">class</span>
-327:         <span class="ruby-keyword kw">end</span>
-328:         <span class="ruby-keyword kw">true</span>
-329: 
-330:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-331:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-332:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-333:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not test whether %p is a child of %p due to %s&quot;</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">e</span>
-334:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 330</span>
+330:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">kind_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+331:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+332:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-identifier">expected</span>) <span class="ruby-keyword kw">then</span>
+333:           <span class="ruby-identifier">failure_with_optional_message</span> \
+334:             <span class="ruby-value str">&quot;Expected %1$s to be a kind of %3$p, but was a %4$p&quot;</span>,
+335:             <span class="ruby-value str">&quot;Expected %2$p to be a kind of %1$p, but was a %3$p&quot;</span>,
+336:             <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">actual</span>.<span class="ruby-identifier">class</span>
+337:         <span class="ruby-keyword kw">end</span>
+338:         <span class="ruby-keyword kw">true</span>
+339: 
+340:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+341:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+342:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+343:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not test whether %p is a kind of %p due to %s&quot;</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">e</span>
+344:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -525,7 +655,7 @@ instance of the given class or a descendant thereof
 
 		
 			<div id="not-touched-method" class="method-detail ">
-				<a name="M000019"></a>
+				<a name="M000020"></a>
 
 				<div class="method-heading">
 				
@@ -541,7 +671,7 @@ instance of the given class or a descendant thereof
 Used to verify that something was not touched.
 </p>
 <p>
-See <a href="Support.html#M000014">touch</a>
+See <a href="Support.html#M000017">touch</a>
 </p>
 					
 
@@ -549,10 +679,10 @@ See <a href="Support.html#M000014">touch</a>
 					<div class="method-source-code"
 						id="not-touched-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 191</span>
-191:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_touched</span>(<span class="ruby-identifier">thing</span>=<span class="ruby-keyword kw">nil</span>)
-192:         <span class="ruby-identifier">touched</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-value">0</span>)
-193:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 201</span>
+201:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_touched</span>(<span class="ruby-identifier">thing</span>=<span class="ruby-keyword kw">nil</span>)
+202:         <span class="ruby-identifier">touched</span>(<span class="ruby-identifier">thing</span>, <span class="ruby-value">0</span>)
+203:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -562,7 +692,7 @@ See <a href="Support.html#M000014">touch</a>
 
 		
 			<div id="order-equal-method" class="method-detail ">
-				<a name="M000024"></a>
+				<a name="M000025"></a>
 
 				<div class="method-heading">
 				
@@ -590,31 +720,31 @@ Can be used in either of the following ways:
 					<div class="method-source-code"
 						id="order-equal-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 246</span>
-246:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_equal</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-247:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
-248: 
-249:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">actual</span> <span class="ruby-keyword kw">then</span>
-250:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
-251:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to be order equal (==) to %p but was %p.&quot;</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-252:           <span class="ruby-keyword kw">else</span>
-253:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p but got %p.&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-254:           <span class="ruby-keyword kw">end</span>
-255:         <span class="ruby-keyword kw">end</span>
-256:         <span class="ruby-keyword kw">true</span>
-257: 
-258:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-259:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-260:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-261:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
-262:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 256</span>
+256:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_equal</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+257:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+258: 
+259:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">actual</span> <span class="ruby-keyword kw">then</span>
+260:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
+261:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to be order equal (==) to %p but was %p&quot;</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+262:           <span class="ruby-keyword kw">else</span>
+263:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p but got %p&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+264:           <span class="ruby-keyword kw">end</span>
+265:         <span class="ruby-keyword kw">end</span>
+266:         <span class="ruby-keyword kw">true</span>
+267: 
+268:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+269:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+270:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+271:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
+272:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
 
 				
 				<div class="aliases">
-					Also aliased as: <a href="Support.html#M000025">equal</a>
+					Also aliased as: <a href="Support.html#M000026">equal</a>
 				</div>
 				
 			</div>
@@ -626,7 +756,7 @@ Can be used in either of the following ways:
 				<div class="method-heading">
 				
 					<span class="method-name">raises</span><span
-						class="method-args">(exception_class=StandardError, opts={})</span>
+						class="method-args">(expected_exception_class=nil, with_message=nil, opts={})</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
 				</div>
@@ -655,23 +785,30 @@ Examples:
 					<div class="method-source-code"
 						id="raises-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 112</span>
-112:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">raises</span>(<span class="ruby-identifier">exception_class</span>=<span class="ruby-constant">StandardError</span>, <span class="ruby-identifier">opts</span>={})
-113:         <span class="ruby-keyword kw">yield</span>
-114:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">exception_class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
-115:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:with_message</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:with_message</span>] <span class="ruby-operator">===</span> <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>) <span class="ruby-keyword kw">then</span>
-116:           <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected block to raise with the message %p, but the message was %p&quot;</span>,
-117:                   <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:with_message</span>]
-118:         <span class="ruby-keyword kw">else</span>
-119:           <span class="ruby-keyword kw">true</span>
-120:         <span class="ruby-keyword kw">end</span>
-121:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-122:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-123:       <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
-124:         <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected block to raise #{exception_class}, but it raised #{exception.class}.&quot;</span>
-125:       <span class="ruby-keyword kw">else</span>
-126:         <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected block to raise #{exception_class}, but nothing was raised.&quot;</span>
-127:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 110</span>
+110:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">raises</span>(<span class="ruby-identifier">expected_exception_class</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">with_message</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={})
+111:         <span class="ruby-identifier">exception_class</span> = <span class="ruby-identifier">expected_exception_class</span> <span class="ruby-operator">||</span> <span class="ruby-constant">StandardError</span>
+112:         <span class="ruby-keyword kw">yield</span>
+113:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">exception_class</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+114:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">expected_exception_class</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">expected_exception_class</span> <span class="ruby-keyword kw">then</span>
+115:           <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead&quot;</span>
+116:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">with_message</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>(<span class="ruby-identifier">with_message</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>) <span class="ruby-keyword kw">then</span>
+117:           <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to raise with the message %p, but the message was %p&quot;</span>,
+118:                   <span class="ruby-identifier">with_message</span>, <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>
+119:         <span class="ruby-keyword kw">else</span>
+120:           <span class="ruby-keyword kw">true</span>
+121:         <span class="ruby-keyword kw">end</span>
+122:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+123:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+124:       <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+125:         <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead&quot;</span>
+126:       <span class="ruby-keyword kw">else</span>
+127:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">expected_exception_class</span> <span class="ruby-keyword kw">then</span>
+128:           <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected the code to raise #{expected_exception_class}, but nothing was raised&quot;</span>
+129:         <span class="ruby-keyword kw">else</span>
+130:           <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to raise, but nothing was raised&quot;</span>
+131:         <span class="ruby-keyword kw">end</span>
+132:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -702,16 +839,64 @@ Will raise a <a href="Failure.html">Failure</a> if the given block raises.
 					<div class="method-source-code"
 						id="raises-nothing-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 130</span>
-130:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">raises_nothing</span>
-131:         <span class="ruby-keyword kw">yield</span>
-132:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-133:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-134:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
-135:         <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected block to raise nothing, but it raised #{exception.class}.&quot;</span>
-136:       <span class="ruby-keyword kw">else</span>
-137:         <span class="ruby-keyword kw">true</span>
-138:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 135</span>
+135:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">raises_nothing</span>
+136:         <span class="ruby-keyword kw">yield</span>
+137:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+138:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+139:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+140:         <span class="ruby-identifier">failure</span> <span class="ruby-node">&quot;Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})&quot;</span>
+141:       <span class="ruby-keyword kw">else</span>
+142:         <span class="ruby-keyword kw">true</span>
+143:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="respond-to-method" class="method-detail ">
+				<a name="M000033"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">respond_to</span><span
+						class="method-args">(obj, *methods)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Raises a <a href="Failure.html">Failure</a> if the given object does not
+respond to all of the given method names. The method names may be specified
+as String or Symbol.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="respond-to-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 365</span>
+365:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">respond_to</span>(<span class="ruby-identifier">obj</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">methods</span>)
+366:         <span class="ruby-identifier">not_responded_to</span> = <span class="ruby-identifier">methods</span>.<span class="ruby-identifier">reject</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">method_name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">method_name</span>) }
+367:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">not_responded_to</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-keyword kw">then</span>
+368:           <span class="ruby-identifier">must_respond_to</span>  = <span class="ruby-identifier">methods</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">inspect</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">', '</span>)
+369:           <span class="ruby-identifier">not_responded_to</span> = <span class="ruby-identifier">not_responded_to</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>.<span class="ruby-identifier">inspect</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">', '</span>)
+370:           <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %1$s to respond to all of %2$s, but it did not respond to %3$s&quot;</span>,
+371:              <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">must_respond_to</span>, <span class="ruby-identifier">not_responded_to</span>
+372:         <span class="ruby-keyword kw">end</span>
+373:         <span class="ruby-keyword kw">true</span>
+374: 
+375:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+376:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+377:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+378:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not test whether %p responds to %p due to %s&quot;</span>, <span class="ruby-identifier">obj</span>, <span class="ruby-identifier">methods</span>, <span class="ruby-identifier">e</span>
+379:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -721,7 +906,7 @@ Will raise a <a href="Failure.html">Failure</a> if the given block raises.
 
 		
 			<div id="same-method" class="method-detail ">
-				<a name="M000020"></a>
+				<a name="M000021"></a>
 
 				<div class="method-heading">
 				
@@ -749,24 +934,24 @@ Can be used in either of the following ways:
 					<div class="method-source-code"
 						id="same-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 200</span>
-200:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">same</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-201:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
-202: 
-203:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">equal?</span>(<span class="ruby-identifier">actual</span>) <span class="ruby-keyword kw">then</span>
-204:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
-205:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to be the same (equal?) as %p but was %p.&quot;</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-206:           <span class="ruby-keyword kw">else</span>
-207:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p but got %p.&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
-208:           <span class="ruby-keyword kw">end</span>
-209:         <span class="ruby-keyword kw">end</span>
-210:         <span class="ruby-keyword kw">true</span>
-211: 
-212:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-213:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-214:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-215:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
-216:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 210</span>
+210:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">same</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+211:         <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">message</span> = <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">:expected</span>, <span class="ruby-identifier">:actual</span>, <span class="ruby-identifier">:message</span>)
+212: 
+213:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">equal?</span>(<span class="ruby-identifier">actual</span>) <span class="ruby-keyword kw">then</span>
+214:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">message</span> <span class="ruby-keyword kw">then</span>
+215:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %s to be the same (equal?) as %p but was %p&quot;</span>, <span class="ruby-identifier">message</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+216:           <span class="ruby-keyword kw">else</span>
+217:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p but got %p&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>
+218:           <span class="ruby-keyword kw">end</span>
+219:         <span class="ruby-keyword kw">end</span>
+220:         <span class="ruby-keyword kw">true</span>
+221: 
+222:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+223:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+224:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+225:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">e</span>
+226:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -776,7 +961,7 @@ Can be used in either of the following ways:
 
 		
 			<div id="skip-method" class="method-detail ">
-				<a name="M000031"></a>
+				<a name="M000036"></a>
 
 				<div class="method-heading">
 				
@@ -799,10 +984,10 @@ sprintf over message with *args Particularly useful with %p and %s.
 					<div class="method-source-code"
 						id="skip-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 355</span>
-355:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">skip</span>(<span class="ruby-identifier">message</span>=<span class="ruby-value str">&quot;Assertion was skipped&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-356:         <span class="ruby-identifier">raise</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Skip</span>, <span class="ruby-identifier">sprintf</span>(<span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-357:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 400</span>
+400:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">skip</span>(<span class="ruby-identifier">message</span>=<span class="ruby-value str">&quot;Assertion was skipped&quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+401:         <span class="ruby-identifier">raise</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Skip</span>, <span class="ruby-identifier">sprintf</span>(<span class="ruby-identifier">message</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+402:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -812,7 +997,7 @@ sprintf over message with *args Particularly useful with %p and %s.
 
 		
 			<div id="touch-method" class="method-detail ">
-				<a name="M000014"></a>
+				<a name="M000017"></a>
 
 				<div class="method-heading">
 				
@@ -826,14 +1011,14 @@ sprintf over message with *args Particularly useful with %p and %s.
 					
 					<p>
 Use this method to test whether certain code (e.g. a callback) was reached.
-touch marks that it was reached, <a href="Support.html#M000017">touched</a>
+touch marks that it was reached, <a href="Support.html#M000018">touched</a>
 tests for whether it was reached.
 </p>
 <p>
 Example:
 </p>
 <pre>
-  assert &quot;Code in a Proc object is executed when invoking #call on it.&quot; do
+  assert &quot;Code in a Proc object is executed when invoking #call on it&quot; do
     a_proc = proc { touch :executed }
     a_proc.call
     touched(:executed)
@@ -845,10 +1030,10 @@ Example:
 					<div class="method-source-code"
 						id="touch-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 160</span>
-160:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">touch</span>(<span class="ruby-identifier">thing</span>=<span class="ruby-keyword kw">nil</span>)
-161:         <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">touch</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">thing</span>)
-162:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 170</span>
+170:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">touch</span>(<span class="ruby-identifier">thing</span>=<span class="ruby-keyword kw">nil</span>)
+171:         <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">touch</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">thing</span>)
+172:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -858,7 +1043,7 @@ Example:
 
 		
 			<div id="touched-method" class="method-detail ">
-				<a name="M000017"></a>
+				<a name="M000018"></a>
 
 				<div class="method-heading">
 				
@@ -875,7 +1060,7 @@ Used to verify that something was touched. You can also verify that
 something was touched a specific amount of times.
 </p>
 <p>
-See <a href="Support.html#M000014">touch</a>
+See <a href="Support.html#M000017">touch</a>
 </p>
 					
 
@@ -883,26 +1068,26 @@ See <a href="Support.html#M000014">touch</a>
 					<div class="method-source-code"
 						id="touched-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 168</span>
-168:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">touched</span>(<span class="ruby-identifier">thing</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">times</span>=<span class="ruby-keyword kw">nil</span>)
-169:         <span class="ruby-identifier">touched_times</span> = <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">touched</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">thing</span>)
-170:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">times</span> <span class="ruby-keyword kw">then</span>
-171:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">touched_times</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">times</span> <span class="ruby-keyword kw">then</span>
-172:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">thing</span> <span class="ruby-keyword kw">then</span>
-173:               <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch %p %s times, but did %s times.&quot;</span>, <span class="ruby-identifier">thing</span>, <span class="ruby-identifier">times</span>, <span class="ruby-identifier">touched_times</span>
-174:             <span class="ruby-keyword kw">else</span>
-175:               <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch %s times, but did %s times.&quot;</span>, <span class="ruby-identifier">times</span>, <span class="ruby-identifier">touched_times</span>
-176:             <span class="ruby-keyword kw">end</span>
-177:           <span class="ruby-keyword kw">end</span>
-178:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">touched_times</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
-179:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">thing</span> <span class="ruby-keyword kw">then</span>
-180:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch %p, but it was not touched.&quot;</span>, <span class="ruby-identifier">thing</span>
-181:           <span class="ruby-keyword kw">else</span>
-182:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch, but no touch happened.&quot;</span>
-183:           <span class="ruby-keyword kw">end</span>
-184:         <span class="ruby-keyword kw">end</span>
-185:         <span class="ruby-keyword kw">true</span>
-186:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 178</span>
+178:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">touched</span>(<span class="ruby-identifier">thing</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">times</span>=<span class="ruby-keyword kw">nil</span>)
+179:         <span class="ruby-identifier">touched_times</span> = <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">touched</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">thing</span>)
+180:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">times</span> <span class="ruby-keyword kw">then</span>
+181:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">touched_times</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">times</span> <span class="ruby-keyword kw">then</span>
+182:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">thing</span> <span class="ruby-keyword kw">then</span>
+183:               <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch %p %s times, but did %s times&quot;</span>, <span class="ruby-identifier">thing</span>, <span class="ruby-identifier">times</span>, <span class="ruby-identifier">touched_times</span>
+184:             <span class="ruby-keyword kw">else</span>
+185:               <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch %s times, but did %s times&quot;</span>, <span class="ruby-identifier">times</span>, <span class="ruby-identifier">touched_times</span>
+186:             <span class="ruby-keyword kw">end</span>
+187:           <span class="ruby-keyword kw">end</span>
+188:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">touched_times</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
+189:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">thing</span> <span class="ruby-keyword kw">then</span>
+190:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch %p, but it was not touched&quot;</span>, <span class="ruby-identifier">thing</span>
+191:           <span class="ruby-keyword kw">else</span>
+192:             <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected the code to touch, but no touch happened&quot;</span>
+193:           <span class="ruby-keyword kw">end</span>
+194:         <span class="ruby-keyword kw">end</span>
+195:         <span class="ruby-keyword kw">true</span>
+196:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -912,7 +1097,7 @@ See <a href="Support.html#M000014">touch</a>
 
 		
 			<div id="within-delta-method" class="method-detail ">
-				<a name="M000013"></a>
+				<a name="M000015"></a>
 
 				<div class="method-heading">
 				
@@ -935,14 +1120,19 @@ differences.
 					<div class="method-source-code"
 						id="within-delta-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 143</span>
-143:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">within_delta</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">delta</span>)
-144:         (<span class="ruby-identifier">a</span><span class="ruby-operator">-</span><span class="ruby-identifier">b</span>).<span class="ruby-identifier">abs</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">delta</span>
-145:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
-146:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
-147:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
-148:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">e</span>
-149:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 148</span>
+148:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">within_delta</span>(<span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">delta</span>)
+149:         <span class="ruby-identifier">actual_delta</span> = (<span class="ruby-identifier">a</span><span class="ruby-operator">-</span><span class="ruby-identifier">b</span>).<span class="ruby-identifier">abs</span>
+150:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">actual_delta</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">delta</span> <span class="ruby-keyword kw">then</span>
+151:           <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Expected %p and %p to differ less than %p, but they were different by %p&quot;</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">delta</span>, <span class="ruby-identifier">actual_delta</span>
+152:         <span class="ruby-keyword kw">else</span>
+153:           <span class="ruby-keyword kw">true</span>
+154:         <span class="ruby-keyword kw">end</span>
+155:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span>, <span class="ruby-operator">*</span><span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">PassthroughExceptions</span>
+156:         <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">raise</span>
+157:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+158:         <span class="ruby-identifier">failure</span> <span class="ruby-value str">&quot;Could not compare %p with %p due to %s&quot;</span>, <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">e</span>
+159:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -982,67 +1172,6 @@ mock instead.
 69:         <span class="ruby-keyword kw">end</span>
 70:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">expected</span>.<span class="ruby-identifier">empty?</span>
 71:       <span class="ruby-keyword kw">end</span></pre>
-					</div>
-					
-				</div>
-
-				
-			</div>
-
-		
-		</div>
-	
-		<div id="private-instance-method-details" class="method-section section">
-			<h3 class="section-header">Private Instance Methods</h3>
-
-		
-			<div id="extract-args-method" class="method-detail ">
-				<a name="M000032"></a>
-
-				<div class="method-heading">
-				
-					<span class="method-name">extract_args</span><span
-						class="method-args">(args, *named)</span>
-					<span class="method-click-advice">click to toggle source</span>
-				
-				</div>
-
-				<div class="method-description">
-					
-					<p>
-extract arg allows to use named or positional args
-</p>
-<p>
-Example:
-</p>
-<pre>
-  extract_args([1,2,3], :foo, :bar, :baz) # =&gt; [1,2,3]
-  extract_args({:foo =&gt; 1,:bar =&gt; 2, :baz =&gt; 3}, :foo, :bar, :baz) # =&gt; [1,2,3]
-</pre>
-<p>
-Usage:
-</p>
-<pre>
-  def foo(*args)
-    x,y,z = extract_args(args, :x, :y, :z)
-  end
-  foo(1,2,3)
-  foo(:x =&gt; 1, :y =&gt; 2, :z =&gt; 3) # equivalent to the one above
-</pre>
-					
-
-					
-					<div class="method-source-code"
-						id="extract-args-source">
-<pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion/support.rb, line 373</span>
-373:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_args</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">named</span>)
-374:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">then</span>
-375:           <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">named</span>)
-376:         <span class="ruby-keyword kw">else</span>
-377:           <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">named</span>.<span class="ruby-identifier">size</span>)
-378:         <span class="ruby-keyword kw">end</span>
-379:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

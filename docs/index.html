@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>baretest-0.2.3 Documentation</title>
+	<title>baretest-0.4.0.pre1</title>
 
 	<link type="text/css" media="screen" href="rdoc.css" rel="stylesheet" />
 
@@ -19,10 +19,10 @@
 <body class="indexpage">
 
 	
-	<h1>baretest-0.2.3 Documentation</h1>
+	<h1>baretest-0.4.0.pre1</h1>
 
 	
-	<p>This is the API documentation for 'baretest-0.2.3 Documentation'.</p>
+	<p>This is the API documentation for 'baretest-0.4.0.pre1'.</p>
 	
 
 	
@@ -41,6 +41,8 @@
 			<li class="file"><a href="doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
 		
 			<li class="file"><a href="doc/quickref_rdoc.html">quickref.rdoc</a></li>
+		
+			<li class="file"><a href="doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
 		
 			<li class="file"><a href="doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
 		
@@ -64,21 +66,43 @@
 		
 		<li class="module"><a href="BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 		
+		<li class="module"><a href="BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+		
+		<li class="module"><a href="BareTest/Formatter.html">BareTest::Formatter</a></li>
+		
 		<li class="module"><a href="BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+		
+		<li class="class"><a href="BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+		
+		<li class="class"><a href="BareTest/Persistence.html">BareTest::Persistence</a></li>
 		
 		<li class="class"><a href="BareTest/Run.html">BareTest::Run</a></li>
 		
-		<li class="module"><a href="BareTest/Skipped.html">BareTest::Skipped</a></li>
-		
-		<li class="class"><a href="BareTest/Skipped/Assertion.html">BareTest::Skipped::Assertion</a></li>
-		
-		<li class="class"><a href="BareTest/Skipped/Suite.html">BareTest::Skipped::Suite</a></li>
+		<li class="class"><a href="BareTest/Status.html">BareTest::Status</a></li>
 		
 		<li class="class"><a href="BareTest/Suite.html">BareTest::Suite</a></li>
 		
+		<li class="class"><a href="BareTest/UID.html">BareTest::UID</a></li>
+		
 		<li class="module"><a href="BareTest/VERSION.html">BareTest::VERSION</a></li>
 		
-		<li class="module"><a href="Enumerable.html">Enumerable</a></li>
+		<li class="module"><a href="Command.html">Command</a></li>
+		
+		<li class="class"><a href="Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+		
+		<li class="class"><a href="Command/Definition.html">Command::Definition</a></li>
+		
+		<li class="class"><a href="Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+		
+		<li class="class"><a href="Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+		
+		<li class="class"><a href="Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+		
+		<li class="class"><a href="Command/NoFileError.html">Command::NoFileError</a></li>
+		
+		<li class="class"><a href="Command/Parser.html">Command::Parser</a></li>
+		
+		<li class="module"><a href="Command/VERSION.html">Command::VERSION</a></li>
 		
 		<li class="module"><a href="Kernel.html">Kernel</a></li>
 		
@@ -87,139 +111,317 @@
 	<h2>Methods</h2>
 	<ul>
 		
-			<li><a href="BareTest/Suite.html#M000061">::create &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/CommandLine.html#M000040">::commands &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="Kernel.html#M000082">::expanded_require_path &mdash; Kernel</a></li>
+			<li><a href="BareTest.html#M000129">::component &mdash; BareTest</a></li>
 		
-			<li><a href="Kernel.html#M000083">::load_into &mdash; Kernel</a></li>
+			<li><a href="Command/Definition.html#M000133">::create_argument &mdash; Command::Definition</a></li>
 		
-			<li><a href="BareTest.html#M000073">::load_standard_test_files &mdash; BareTest</a></li>
+			<li><a href="Command/Definition.html#M000134">::create_option &mdash; Command::Definition</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000062">::new &mdash; BareTest::Suite</a></li>
+			<li><a href="Command.html#M000159">::define &mdash; Command</a></li>
+		
+			<li><a href="BareTest/Persistence.html#M000072">::determine_project_id &mdash; BareTest::Persistence</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000043">::env &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="Kernel.html#M000162">::expanded_require_path &mdash; Kernel</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000039">::formats &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000042">::help &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="BareTest/UID.html#M000092">::hex_uid &mdash; BareTest::UID</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000038">::init &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000031">::load_formatter &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="Kernel.html#M000163">::load_into &mdash; Kernel</a></li>
+		
+			<li><a href="BareTest.html#M000119">::load_standard_test_files &mdash; BareTest</a></li>
+		
+			<li><a href="BareTest.html#M000120">::most_important_status &mdash; BareTest</a></li>
+		
+			<li><a href="BareTest/Status.html#M000086">::new &mdash; BareTest::Status</a></li>
 		
 			<li><a href="BareTest/Assertion/Context.html#M000000">::new &mdash; BareTest::Assertion::Context</a></li>
 		
+			<li><a href="BareTest/Suite.html#M000089">::new &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="Command/Definition.html#M000135">::new &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/Run.html#M000076">::new &mdash; BareTest::Run</a></li>
+		
+			<li><a href="Command/Parser.html#M000149">::new &mdash; Command::Parser</a></li>
+		
+			<li><a href="BareTest/Persistence.html#M000073">::new &mdash; BareTest::Persistence</a></li>
+		
+			<li><a href="Command/DecoratingHash.html#M000121">::new &mdash; Command::DecoratingHash</a></li>
+		
+			<li><a href="BareTest/UID.html#M000093">::new &mdash; BareTest::UID</a></li>
+		
 			<li><a href="BareTest/Assertion.html#M000009">::new &mdash; BareTest::Assertion</a></li>
 		
-			<li><a href="BareTest/Run.html#M000047">::new &mdash; BareTest::Run</a></li>
+			<li><a href="BareTest.html#M000131">::new_component &mdash; BareTest</a></li>
 		
-			<li><a href="Kernel.html#M000081">::require_path &mdash; Kernel</a></li>
+			<li><a href="BareTest.html#M000126">::process_selectors &mdash; BareTest</a></li>
 		
-			<li><a href="BareTest.html#M000080">::run &mdash; BareTest</a></li>
+			<li><a href="BareTest.html#M000117">::require_baretest &mdash; BareTest</a></li>
 		
-			<li><a href="BareTest.html#M000079">::run_if_mainfile &mdash; BareTest</a></li>
+			<li><a href="Kernel.html#M000161">::require_path &mdash; Kernel</a></li>
 		
-			<li><a href="BareTest.html#M000076">::suite &mdash; BareTest</a></li>
+			<li><a href="BareTest.html#M000118">::require_ruby &mdash; BareTest</a></li>
 		
-			<li><a href="BareTest/VERSION.html#M000063">::to_s &mdash; BareTest::VERSION</a></li>
+			<li><a href="BareTest/CommandLine.html#M000032">::run &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000067">#ancestry_components &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/CommandLine.html#M000041">::selectors &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000066">#ancestry_setup &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/Persistence.html#M000071">::storage_path &mdash; BareTest::Persistence</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000068">#ancestry_teardown &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest.html#M000130">::suite &mdash; BareTest</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000074">#assert &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/VERSION.html#M000116">::to_a &mdash; BareTest::VERSION</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000039">#bt! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/VERSION.html#M000115">::to_s &mdash; BareTest::VERSION</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000026">#case_equal &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="Command/VERSION.html#M000158">::to_s &mdash; Command::VERSION</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000045">#code! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest.html#M000132">::use &mdash; BareTest</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000041">#cv! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/CommandLine.html#M000044">::version &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000043">#description &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="Command.html#M000160">::with &mdash; Command</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000037">#e! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="Kernel.html#M000148">#Command &mdash; Kernel</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000071">#each_component_variant &mdash; BareTest::Suite</a></li>
+			<li><a href="Command/Definition.html#M000136">#[] &mdash; Command::Definition</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000038">#em! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/Suite.html#M000103">#ancestry_components &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000025">#equal &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Suite.html#M000102">#ancestry_setup &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000027">#equal_unordered &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Suite.html#M000104">#ancestry_teardown &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="Enumerable.html#M000033">#equal_unordered? &mdash; Enumerable</a></li>
+			<li><a href="Command/Parser.html#M000150">#argument &mdash; Command::Parser</a></li>
 		
-			<li><a href="BareTest/Assertion.html#M000018">#execute &mdash; BareTest::Assertion</a></li>
+			<li><a href="Command/Definition.html#M000140">#argument &mdash; Command::Definition</a></li>
 		
-			<li><a href="Kernel.html#M000082">#expanded_require_path &mdash; Kernel</a></li>
+			<li><a href="Command/Parser.html#M000152">#arguments &mdash; Command::Parser</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000032">#extract_args &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Suite.html#M000110">#assert &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000030">#failure &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000060">#bt! &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000029">#failure_with_optional_message &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Assertion/Support.html#M000027">#case_equal &mdash; BareTest::Assertion::Support</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000072">#first_component_variant &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000069">#code! &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
-			<li><a href="BareTest/Run.html#M000053">#global_status &mdash; BareTest::Run</a></li>
+			<li><a href="Command/Definition.html#M000147">#command &mdash; Command::Definition</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000042">#gv! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="Command/Parser.html#M000153">#command! &mdash; Command::Parser</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000040">#commands &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000107">#component_variant_count &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="Command/Definition.html#M000137">#content_for &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000062">#cv! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000067">#description! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000058">#e! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000108">#each_component_variant &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000059">#em! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000043">#env &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="BareTest/Formatter.html#M000049">#env_option &mdash; BareTest::Formatter</a></li>
+		
+			<li><a href="Command/Definition.html#M000146">#env_option &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000026">#equal &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000028">#equal_unordered &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Assertion.html#M000016">#execute &mdash; BareTest::Assertion</a></li>
+		
+			<li><a href="BareTest/Assertion.html#M000019">#execute_phase &mdash; BareTest::Assertion</a></li>
+		
+			<li><a href="Kernel.html#M000162">#expanded_require_path &mdash; Kernel</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000037">#extract_args &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000035">#failure &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000034">#failure_with_optional_message &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000064">#file! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000109">#first_component_variant &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000039">#formats &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="BareTest/Run.html#M000084">#global_status &mdash; BareTest::Run</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000111">#guard &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000063">#gv! &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
 			<li><a href="BareTest/Assertion/Support.html#M000022">#hash_key_equal &mdash; BareTest::Assertion::Support</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000034">#help &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000052">#help &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
-			<li><a href="BareTest/Run.html#M000048">#init &mdash; BareTest::Run</a></li>
+			<li><a href="BareTest/CommandLine.html#M000042">#help &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000046">#insert_line_numbers &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000053">#help! &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
-			<li><a href="BareTest/Assertion.html#M000012">#interpolated_description &mdash; BareTest::Assertion</a></li>
+			<li><a href="BareTest/UID.html#M000094">#hex &mdash; BareTest::UID</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000040">#iv! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/Suite.html#M000090">#id &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000028">#kind_of &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Assertion.html#M000011">#id &mdash; BareTest::Assertion</a></li>
 		
-			<li><a href="Kernel.html#M000083">#load_into &mdash; Kernel</a></li>
+			<li><a href="BareTest/Run.html#M000077">#init &mdash; BareTest::Run</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000044">#nesting &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="BareTest/CommandLine.html#M000038">#init &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000019">#not_touched &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Assertion/Support.html#M000030">#instance_of &mdash; BareTest::Assertion::Support</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000024">#order_equal &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Assertion.html#M000014">#interpolated_description &mdash; BareTest::Assertion</a></li>
+		
+			<li><a href="BareTest/Run.html#M000085">#interpolated_description &mdash; BareTest::Run</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000061">#iv! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="Command/DecoratingHash.html#M000127">#keys &mdash; Command::DecoratingHash</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000029">#kind_of &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="Command/DecoratingHash.html#M000125">#length &mdash; Command::DecoratingHash</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000065">#line! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000031">#load_formatter &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="Kernel.html#M000163">#load_into &mdash; Kernel</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000114">#merge_attributes &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000068">#nesting! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="Command/Parser.html#M000154">#normalize_arguments! &mdash; Command::Parser</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000020">#not_touched &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="Command/Definition.html#M000143">#o &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000066">#open! &mdash; BareTest::IRBMode::IRBContext</a></li>
+		
+			<li><a href="BareTest/Formatter.html#M000050">#option &mdash; BareTest::Formatter</a></li>
+		
+			<li><a href="Command/Definition.html#M000142">#option &mdash; Command::Definition</a></li>
+		
+			<li><a href="Command/Parser.html#M000151">#option &mdash; Command::Parser</a></li>
+		
+			<li><a href="BareTest/Formatter.html#M000047">#option_defaults &mdash; BareTest::Formatter</a></li>
+		
+			<li><a href="Command/Parser.html#M000155">#options! &mdash; Command::Parser</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000025">#order_equal &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="Command/DecoratingHash.html#M000124">#own_length &mdash; Command::DecoratingHash</a></li>
+		
+			<li><a href="Command/DecoratingHash.html#M000123">#own_size &mdash; Command::DecoratingHash</a></li>
+		
+			<li><a href="Command/Parser.html#M000157">#parse &mdash; Command::Parser</a></li>
+		
+			<li><a href="Command/Definition.html#M000145">#placeholder &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000055">#q &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
 			<li><a href="BareTest/Assertion/Support.html#M000008">#raises &mdash; BareTest::Assertion::Support</a></li>
 		
 			<li><a href="BareTest/Assertion/Support.html#M000010">#raises_nothing &mdash; BareTest::Assertion::Support</a></li>
 		
-			<li><a href="Kernel.html#M000081">#require_path &mdash; Kernel</a></li>
+			<li><a href="BareTest/Persistence.html#M000075">#read &mdash; BareTest::Persistence</a></li>
 		
-			<li><a href="BareTest/Assertion.html#M000011">#reset &mdash; BareTest::Assertion</a></li>
+			<li><a href="BareTest/Suite.html#M000099">#reason &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Run.html#M000049">#run_all &mdash; BareTest::Run</a></li>
+			<li><a href="BareTest/Status.html#M000087">#reason &mdash; BareTest::Status</a></li>
 		
-			<li><a href="BareTest/Run.html#M000050">#run_suite &mdash; BareTest::Run</a></li>
+			<li><a href="Kernel.html#M000161">#require_path &mdash; Kernel</a></li>
 		
-			<li><a href="BareTest/Run.html#M000052">#run_test &mdash; BareTest::Run</a></li>
+			<li><a href="BareTest/Suite.html#M000095">#requires &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Run.html#M000051">#run_test_variants &mdash; BareTest::Run</a></li>
+			<li><a href="BareTest/Assertion/Support.html#M000033">#respond_to &mdash; BareTest::Assertion::Support</a></li>
 		
-			<li><a href="BareTest/IRBMode/IRBContext.html#M000036">#s! &mdash; BareTest::IRBMode::IRBContext</a></li>
+			<li><a href="Command/Parser.html#M000156">#result &mdash; Command::Parser</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000020">#same &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/CommandLine.html#M000032">#run &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/Assertion.html#M000015">#setup &mdash; BareTest::Assertion</a></li>
+			<li><a href="BareTest/Run.html#M000078">#run_all &mdash; BareTest::Run</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000069">#setup &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/Run.html#M000079">#run_suite &mdash; BareTest::Run</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000031">#skip &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/Run.html#M000081">#run_test &mdash; BareTest::Run</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000064">#suite &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/Run.html#M000080">#run_test_variants &mdash; BareTest::Run</a></li>
 		
-			<li><a href="BareTest/Assertion.html#M000016">#teardown &mdash; BareTest::Assertion</a></li>
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000056">#s! &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000070">#teardown &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/Assertion/Support.html#M000021">#same &mdash; BareTest::Assertion::Support</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000014">#touch &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/IRBMode/IRBContext.html#M000057">#sc! &mdash; BareTest::IRBMode::IRBContext</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000017">#touched &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="BareTest/CommandLine.html#M000041">#selectors &mdash; BareTest::CommandLine</a></li>
 		
-			<li><a href="BareTest/Suite.html#M000065">#update &mdash; BareTest::Suite</a></li>
+			<li><a href="BareTest/Suite.html#M000105">#setup &mdash; BareTest::Suite</a></li>
 		
-			<li><a href="BareTest/Assertion/Support.html#M000013">#within_delta &mdash; BareTest::Assertion::Support</a></li>
+			<li><a href="Command/DecoratingHash.html#M000122">#size &mdash; Command::DecoratingHash</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000036">#skip &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Assertion.html#M000013">#skip &mdash; BareTest::Assertion</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000097">#skip &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/Assertion.html#M000012">#skipped? &mdash; BareTest::Assertion</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000098">#skipped? &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/Persistence.html#M000074">#store &mdash; BareTest::Persistence</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000100">#suite &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000096">#tagged? &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000106">#teardown &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/Formatter.html#M000048">#text &mdash; BareTest::Formatter</a></li>
+		
+			<li><a href="Command/Definition.html#M000144">#text &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000017">#touch &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000018">#touched &mdash; BareTest::Assertion::Support</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000101">#update &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="Command/Definition.html#M000139">#usage &mdash; Command::Definition</a></li>
+		
+			<li><a href="Command/Definition.html#M000138">#usage_text &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/Suite.html#M000091">#use &mdash; BareTest::Suite</a></li>
+		
+			<li><a href="BareTest/CommandLine.html#M000044">#version &mdash; BareTest::CommandLine</a></li>
+		
+			<li><a href="Command/Definition.html#M000141">#virtual_argument &mdash; Command::Definition</a></li>
+		
+			<li><a href="BareTest/Assertion/Support.html#M000015">#within_delta &mdash; BareTest::Assertion::Support</a></li>
 		
 			<li><a href="BareTest/Assertion/Support.html#M000005">#yields &mdash; BareTest::Assertion::Support</a></li>
 		

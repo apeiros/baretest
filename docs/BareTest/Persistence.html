@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: BareTest::Persistence</title>
+
+	<link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="../lib/baretest/persistence_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/persistence.rb">lib/baretest/persistence.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">Object</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#M000072">::determine_project_id</a></li>
+					
+					<li><a href="#M000073">::new</a></li>
+					
+					<li><a href="#M000071">::storage_path</a></li>
+					
+					<li><a href="#M000075">#read</a></li>
+					
+					<li><a href="#M000074">#store</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
+				
+					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/baretest_rdoc.html">baretest.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../BareTest.html">BareTest</a></li>
+				
+					<li><a href="../BareTest/Assertion.html">BareTest::Assertion</a></li>
+				
+					<li><a href="../BareTest/Assertion/Context.html">BareTest::Assertion::Context</a></li>
+				
+					<li><a href="../BareTest/Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+				
+					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
+				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
+					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
+				
+					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
+				
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
+				
+					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
+				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
+					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
+				
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
+				
+					<li><a href="../Kernel.html">Kernel</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">BareTest::Persistence</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+		<div id="attribute-method-details" class="method-section section">
+			<h3 class="section-header">Attributes</h3>
+
+			
+			<div id="storage-dir-attribute-method" class="method-detail">
+				<a name="storage_dir"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">storage_dir</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The directory this <a href="Persistence.html">Persistence</a> instance
+stores its data
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="project-dir-attribute-method" class="method-detail">
+				<a name="project_dir"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">project_dir</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The directory of the project this <a
+href="Persistence.html">Persistence</a> instance is attached to
+</p>
+				
+				</div>
+			</div>
+			
+			<div id="project-id-attribute-method" class="method-detail">
+				<a name="project_id"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">project_id</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p>
+The id of the project this <a href="Persistence.html">Persistence</a>
+instance is attached to
+</p>
+				
+				</div>
+			</div>
+			
+		</div>
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="determine-project-id-method" class="method-detail ">
+				<a name="M000072"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">determine_project_id</span><span
+						class="method-args">(project_dir)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+<a href="../BareTest.html">BareTest</a> uses a file of the form
+&#8217;.baretest_id_*&#8217; (where * is a 32 digits long hex) to uniquely
+identify a project. This ID is then used to associate stored data with the
+project.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="determine-project-id-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 27</span>
+27:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-identifier">project_dir</span>)
+28:       <span class="ruby-identifier">found</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;#{project_dir}/.baretest_id_*&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+29:         <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">$1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/id_([A-Fa-f0-9]{32})$/</span>
+30:       }
+31:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">found</span> <span class="ruby-keyword kw">then</span>
+32:         <span class="ruby-identifier">found</span> = <span class="ruby-constant">UID</span>.<span class="ruby-identifier">hex_uid</span>
+33:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;.baretest_id_#{found}&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) {} <span class="ruby-comment cmt"># no File::touch, evil</span>
+34:       <span class="ruby-keyword kw">end</span>
+35: 
+36:       <span class="ruby-identifier">found</span>
+37:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="new-method" class="method-detail ">
+				<a name="M000073"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">new</span><span
+						class="method-args">(project_dir=nil, storage_dir=nil)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Arguments:
+</p>
+<table>
+<tr><td valign="top"><a href="Persistence.html#project_dir">project_dir</a>:</td><td>The directory of the project
+
+</td></tr>
+<tr><td valign="top"><a href="Persistence.html#storage_dir">storage_dir</a>:</td><td>The directory where this <a href="Persistence.html">Persistence</a>
+instance should store its data
+
+</td></tr>
+</table>
+					
+
+					
+					<div class="method-source-code"
+						id="new-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 52</span>
+52:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">project_dir</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">storage_dir</span>=<span class="ruby-keyword kw">nil</span>)
+53:       <span class="ruby-ivar">@storage_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">storage_dir</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">storage_path</span>)
+54:       <span class="ruby-ivar">@project_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">project_dir</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;.&quot;</span>)
+55:       <span class="ruby-ivar">@project_id</span>  = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-ivar">@project_dir</span>)
+56:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="storage-path-method" class="method-detail ">
+				<a name="M000071"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">storage_path</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+The default storage path base (~/.baretest)
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="storage-path-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 20</span>
+20:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">storage_path</span>
+21:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-value str">'~/.baretest'</span>)
+22:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="read-method" class="method-detail ">
+				<a name="M000075"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">read</span><span
+						class="method-args">(filename, default=nil)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Reads and deserializes the data in a given filename.
+</p>
+<table>
+<tr><td valign="top">filename:</td><td>A relative path. Directories are created on the fly if necessary. Must not
+be an absolute path. The path is relative to <a
+href="Persistence.html#storage_dir">Persistence#storage_dir</a>
+
+</td></tr>
+<tr><td valign="top">default:</td><td>The value to return in case the file does not exist. Alternatively you can
+pass a block that calculates the default.
+
+</td></tr>
+</table>
+					
+
+					
+					<div class="method-source-code"
+						id="read-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 81</span>
+81:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">default</span>=<span class="ruby-keyword kw">nil</span>)
+82:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A\.\./|/\.\./\z}</span>
+83:       <span class="ruby-identifier">path</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}/#{filename}.yaml&quot;</span>
+84: 
+85:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">path</span>)
+86:         <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">path</span>)
+87:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">block_given?</span>
+88:         <span class="ruby-keyword kw">yield</span>
+89:       <span class="ruby-keyword kw">else</span>
+90:         <span class="ruby-identifier">default</span>
+91:       <span class="ruby-keyword kw">end</span>
+92:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="store-method" class="method-detail ">
+				<a name="M000074"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">store</span><span
+						class="method-args">(filename, data)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Stores data to a file.
+</p>
+<h3>Arguments</h3>
+<table>
+<tr><td valign="top">filename:</td><td>A relative path. Directories are created on the fly if necessary. Must not
+be an absolute path. The path is relative to <a
+href="Persistence.html#storage_dir">Persistence#storage_dir</a>
+
+</td></tr>
+<tr><td valign="top">data:</td><td>The data to store. Anything that can be serialized by YAML. This excludes
+IOs and Procs.
+
+</td></tr>
+</table>
+					
+
+					
+					<div class="method-source-code"
+						id="store-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 66</span>
+66:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">data</span>)
+67:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A[A-Za-z0-9_-][A-Za-z0-9_-]*\z}</span>
+68:       <span class="ruby-identifier">dir</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}&quot;</span>
+69:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">dir</span>)
+70:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{dir}/#{filename}.yaml&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fh</span><span class="ruby-operator">|</span>
+71:         <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_yaml</span>)
+72:       <span class="ruby-keyword kw">end</span>
+73:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+
