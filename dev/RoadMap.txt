@@ -3,12 +3,22 @@
   * forked suite execution - parallel execution
 
 0.6:
-  * continuous testing on OS X (fsevents+growl)
-
-0.7:
+  * website integration teststack for rack based frameworks
+    - check all links
+    - check html syntax
+    - check javascript syntax
+    - check css syntax
+    - check css for browser compatibility
+    - check presence of expected elements
+    - check behaviour (e.g. click on element X hides element Y), including
+      javascript enabled behaviour
   * rails integration (controllers, models, views, helpers)
   * full ruby-debug integration
   * full rcov integration
+
+0.7:
+  * continuous testing on OS X (fsevents+growl)
+  * daemon mode for baretest, reload changed files
 
 0.8:
   * dependency resolving for :provides & :depends_on
