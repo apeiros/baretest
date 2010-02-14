@@ -174,11 +174,13 @@ module BareTest
 
         \e[1mDescription\e[0m
             Selectors are used to identify what tests to run. Baretest knows 3 kinds of
-            selectors: globs, tags and last-run-states. All of these can be preceeded with a
-            minus sign (-), to negate the expression.
+            selectors: globs, tags and last-run-states. All of these can be preceeded
+            with a minus sign (-), to negate the expression.
+            Beware that you must use negated expressions only after a -- separator,
+            as otherwise baretest will try to interpret them as short options (like -f).
         
         \e[1mExample\e[0m
-            `baretest test/suite -test/suite/foo @a -@b #failure -#pending`
+            `baretest -- test/suite -test/suite/foo :a -:b #failure -#pending`
 
             This will run all tests that
             * Are in the directory test/suite or any of its subdirectories
@@ -196,13 +198,17 @@ module BareTest
             * Directories are equivalent to `directory/**/*` patterns
 
         \e[1mTags\e[0m
-            Tags are preceeded with an @.
+            Tags are preceeded with an :.
+            Examples:
+              baretest :focus
+              baretest -- -:hocus
+              baretest -- :focus :important -:irrelevant -:obsolete
 
         \e[1mLast-run-status\e[0m
-            Last run states are preceeded with a #.
-            * #success, #failure, #error, #skipped, #pending
-            * #error, #skipped and #pending are a subset of #failure
-            * #pending is a subset of #skipped
+            Last run states are preceeded with a %.
+            * %success, %failure, %error, %skipped, %pending
+            * %error, %skipped and %pending are a subset of %failure
+            * %pending is a subset of %skipped
 
       END_OF_DESCRIPTION
 
@@ -211,6 +217,23 @@ module BareTest
       puts description
     end
     module_function :selectors
+
+    def help(arguments, options)
+      colors = $stdout.tty?
+
+      description = <<-END_OF_DESCRIPTION.gsub(/^ {8}/, '') #                           |<- 80 cols ends here
+        \e[1mHELP\e[0m
+
+        See `#{$0} commands` for a list of available commands.
+        You can also use `#{$0} COMMAND --help` to get information about
+        the command COMMAND.
+      END_OF_DESCRIPTION
+
+      description.gsub!(/\e.*?m/, '') unless colors
+
+      puts description
+    end
+    module_function :help
 
     def env(arguments, options)
       puts "Versions:",

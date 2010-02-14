@@ -33,6 +33,7 @@ Command "run" do
   o :commands,    nil,  '--commands', :Boolean, "overview over the commands"
   o :help,        '-h', '--help',     :Boolean, "help for usage and flags"
   o :version,     '-v', '--version',  :Boolean, "print the version and exit"
+  o :init,        nil,  '--init',     "Deprecated form for `baretest --init`"
 
   # specify the 'run' command, its default options, its options and helptext
   command "run", :format => 'cli', :interactive => false, :verbose => false do
@@ -56,6 +57,7 @@ Command "run" do
     o :verbose,     '-w', '--warn',          :Boolean, "turn warnings on for your script"
     o :help
     o :version
+    o :init
 
     text ""
 
@@ -99,6 +101,8 @@ Command.with(ARGV) do
   # command
   if set = [:help, :commands, :version].find { |flag| options[flag] } then
     run_command = set.to_s
+  elsif options[:init]
+    abort "`#{$0} --init` is depreciated, please use `baretest init`."
   else
     run_command = command
   end
@@ -140,7 +144,11 @@ Command.with(ARGV) do
     when "selectors" # show version information about selectors baretest recognizes
       BareTest::CommandLine.selectors(arguments, options)
     when "help"
-      puts definition[command].usage_text
+      if command == 'help' then
+        BareTest::CommandLine.help(arguments, options)
+      else
+        puts definition[command].usage_text
+      end
     when "commands"
       BareTest::CommandLine.commands(arguments, options)
     else
