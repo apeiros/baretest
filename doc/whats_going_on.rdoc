@@ -1,3 +1,8 @@
+= What's going on
+
+This document intends to show you what happens behind the scene and help you
+understand the mechanics of baretest.
+
 With the following test definition:
   BareTest.suite "A"
     setup do

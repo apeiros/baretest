@@ -122,9 +122,40 @@ Running this suite will print:
 
 
 
-== Skipping Tests and Suites
+== Skipping and ignoring Suites and Assertions
 
-A test is skipped if it does not have a block or calls 'skip'
+A suite is pending if it either has no block or a block which contains no
+assertions and suites.
+
+You can skip a suite by:
+* Creating the suite with a :skip option, like
+  `suite "MySuite", :skip => "I want to skip this suite" do`
+* Calling skip in the suite, like
+  suite "MySuite" do
+    skip "I want to skip this suite"
+  end
+  You can call skip at any point in the suite.
+
+You can ignore a suite by:
+* Adding one or more tags to the suite, like
+  `suite "MySuite", :tags => [:set_x, :set_y]`
+  And then specify any of those tags to be ignored, like:
+  `baretest -- -:set_x`
+
+An assertion is pending if it has no block.
+
+You can skip an assertion by:
+* Having it in a suite that is skipped
+* Creating the assertion with a :skip option, like
+  `assert "Something", :skip => "I want to skip this assertion" do`
+* Calling skip in the assertion, like
+  assert "Something" do
+    skip "I want to skip this assertion"
+  end
+  You can call skip at any point in the assertion.
+
+You can ignore an assertion by:
+* Having it in a suite that is ignored
 
 == Assertion helper methods
 
