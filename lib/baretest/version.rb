@@ -26,9 +26,17 @@ module BareTest
     # The version as a string
     STRING     = %{#{MAJOR}.#{MINOR||0}.#{TINY||0}#{".pre#{PRERELEASE}" if PRERELEASE}}
 
+    # The version as an array
+    ARRAY      = [MAJOR || 0, MINOR || 0, TINY || 0, PRERELEASE].compact
+
     # The version as a string
     def self.to_s
       STRING
+    end
+
+    # The version as an array
+    def self.to_a
+      ARRAY
     end
   end
 end
