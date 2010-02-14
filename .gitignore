@@ -1,10 +1,8 @@
-# We don't care about OS X' littering
-.DS_Store
-._*
-
-# BBedit Projectfile doesn't need versioning
-/baretest.bbprojectd
-
 # We don't care about build products
-/docs/*
 /pkg/*
+
+# Keeping 'command' gem currently inlined - this task facilitates synchronization
+/rake/tasks/sync.rake
+
+# The locale baretest id is not of interest to others
+/.baretest_id_*

@@ -1,22 +1,35 @@
-VERSIONS:
-0.3:
-  * setup-variations (done)
-  * skip-method and Skip < StandardError (done)
-  * ~/.baretestrc
-  * configuration system
-  * formatter specific options
-
-0.4:
-  * continuous testing on OS X (fsevents+growl)
-  * full ruby-debug integration
-  * full ir integration
-  * tag/focus
-
 0.5:
-  * forked suite execution
+  * forked suite execution - auto-isolation
+  * forked suite execution - parallel execution
 
 0.6:
+  * website integration teststack for rack based frameworks
+    - check all links
+    - check html syntax
+    - check javascript syntax
+    - check css syntax
+    - check css for browser compatibility
+    - check presence of expected elements
+    - check behaviour (e.g. click on element X hides element Y), including
+      javascript enabled behaviour
   * rails integration (controllers, models, views, helpers)
+  * full ruby-debug integration
+  * full rcov integration
+
+0.7:
+  * continuous testing on OS X (fsevents+growl)
+  * daemon mode for baretest, reload changed files
+
+0.8:
+  * dependency resolving for :provides & :depends_on
+  * full ir integration
+
+0.9:
+  * Correct self-test suite with proper isolation of bootstrapping
+  * Implement test-layouts
+
+1.0:
+  * Polish, polish, polish
 
 PROGRESSIVE
 * TestGuide - How to use BareTest
@@ -31,3 +44,9 @@ UNASSIGNED
   takes a lot of time and successive asserts depend on previous ones
   abort flow assertion upon first failure.
 * auto-require corresponding lib-files
+* guard assertions - sometimes we make assumptions in our tests, guard
+  assertions let us test those assumptions
+
+REJECTED
+* configuration system
+  -> Configure what and why?

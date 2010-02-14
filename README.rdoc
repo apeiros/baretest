@@ -1,4 +1,4 @@
-= Bare Test
+= BareTest
 
 
 
@@ -6,6 +6,8 @@
 
 A testframework that doesn't stand in your way or forces you to learn a new
 language. Two methods is all that is required to know.
+If you need it, it provides you with all kinds of features to support you
+writing your tests.
 
 
 
@@ -69,6 +71,11 @@ To get baretest edge, use:
 1. Download from github and unpack (or clone)
 2. Change into the baretest directory: `cd the/baretest/directory`
 3. Run the installation task: `rake gem:install` (alternatively `rake install:lib`)
+
+IMPORTANT: if the gem:install task fails, it might be because I forgot to update
+the MANIFEST.txt. Simply delete MANIFEST.txt, then run `rake manifest:create`
+and then retry `rake gem:install`.
+Also notice that you should have the gems 'nokogiri' and 'rdoc' installed.
 
 If you have multiple ruby versions installed parallely, this might pick the wrong gem
 executable to install the gem. You can set the GEM env variable to ensure it uses the

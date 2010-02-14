@@ -14,8 +14,10 @@ Also look into the examples and baretests own test directory.
     1. git clone git://github.com/apeiros/baretest.git
     2. cd baretest
     3. rake gem:install
+    If 3. fails, try deleting the MANIFEST.txt and do `rake manifest:create`.
+    Then try step 3 again. Also you must have nokogiri and rdoc >=2.3 installed.
 2. Change into the project directory
-3. `baretest --init` to create the basic test-directory layout
+3. `baretest init` to create the basic test-directory layout
 
 
 
@@ -25,10 +27,16 @@ Your tests for PROJECT/lib/foo.rb belong into PROJECT/test/suite/lib/foo.rb.
 Your tests for PROJECT/bin/bar belong into PROJECT/test/suite/bin/bar.
 In other words, for every path, insert /test/suite after PROJECT to get the
 path to the corresponding testfile.
+Besides 'suite', baretest also recognizes 'integration', 'unit', and 'system'
+as directories. You can use these to separate different concerns of your suite.
 
 
 
 == Writing tests
+
+One way to to learn baretest is to simply look at the examples in
+'examples/tests'. They should provide you with enough information for a quick
+start into writing tests using baretest.
 
 A testfile commonly looks like this:
 
@@ -73,7 +81,7 @@ A testfile commonly looks like this:
   end
 
 This layout makes it easy to figure where tests for something are, and thus
-makes maintaining the test-code base easier.
+makes maintaining the testcodebase easier.
 
 Setup callbacks are invoked from outermost suite to innermost suite, and
 within the same suite, in the order of definition.
@@ -118,9 +126,40 @@ Running this suite will print:
 
 
 
-== Skipping Tests and Suites
+== Skipping and ignoring Suites and Assertions
 
-A test is skipped if it does not have a block or calls 'skip'
+A suite is pending if it either has no block or a block which contains no
+assertions and suites.
+
+You can skip a suite by:
+* Creating the suite with a :skip option, like
+  `suite "MySuite", :skip => "I want to skip this suite" do`
+* Calling skip in the suite, like
+  suite "MySuite" do
+    skip "I want to skip this suite"
+  end
+  You can call skip at any point in the suite.
+
+You can ignore a suite by:
+* Adding one or more tags to the suite, like
+  `suite "MySuite", :tags => [:set_x, :set_y]`
+  And then specify any of those tags to be ignored, like:
+  `baretest -- -:set_x`
+
+An assertion is pending if it has no block.
+
+You can skip an assertion by:
+* Having it in a suite that is skipped
+* Creating the assertion with a :skip option, like
+  `assert "Something", :skip => "I want to skip this assertion" do`
+* Calling skip in the assertion, like
+  assert "Something" do
+    skip "I want to skip this assertion"
+  end
+  You can call skip at any point in the assertion.
+
+You can ignore an assertion by:
+* Having it in a suite that is ignored
 
 == Assertion helper methods
 
@@ -226,13 +265,15 @@ can alternatively be used with named arguments:
 
 baretest's test-cycle is:
 
-1. Create Run instance and the toplevel suite
-2. Load everything as required by the command line flags
-3. Load PROJECT/test/setup.rb
-4. Find PROJECT/test/suite/**/*.rb
-5. Load each file found in 2., but for every file, see whether
-   PROJECT/test/helpers/suite/**/*.rb exists and load that first if it does
-6. Invoke run on the Run instance
+1. Create the toplevel suite
+2. Load PROJECT/test/setup.rb
+3. Find every file as required by the command line flags (defaults to
+   PROJECT/test/{suite,unit,integration,system}/**/*.rb)
+4. Load each file found in 3., but for every file, see whether
+   PROJECT/test/helpers/**/*.rb exists and load that first if it does
+   (e.g. for PROJECT/test/suite/foo.rb load PROJECT/test/helpers/suite/foo.rb)
+5. Create a BareTest::Run instance with the toplevel suite and the passed options
+6. Invoke run_all on that Run instance.
 
 From there on it depends on the loaded formatters and extenders, what really
 will happen. But the norm is, that suites and assertions will be executed in
@@ -242,20 +283,25 @@ order of definition.
 
 == Debugging tests
 
-Use `baretest -i` to run baretest in interactive mode. When a failure or an
-error occurs, you have access to the following commands:
+Use `baretest -i` to run baretest in interactive mode. Try it with
+`baretest -i examples/irb_mode/failures.rb`
+When a failure or an error occurs, you have access to the following commands:
 
-* s!          - original assertions' status
-* e!          - error message and full backtrace
-* em!         - error message
-* bt!         - full backtrace
-* iv!         - all available instance variables
-* cv!         - all available class variables
-* gv!         - all available global variables
-* file        - file this assertion was defined in
-* line        - line number in the file where this assertion's definition starts
-* nesting     - a '>'-separated list of suite descriptions this assertion is
-                nested in
-* description - this assertion's description
-* code        - code of this assertion
-* help        - overview over all the commands
+help!::        overview over all the commands
+s!::           the assertions' original status
+sc!::          the assertions' original status code
+e!::           prints the error message and full backtrace
+em!::          prints the error message
+bt!::          prints the full backtrace
+lv!::          lists all available local variables
+iv!::          lists all available instance variables
+cv!::          lists all available class variables
+gv!::          lists all available global variables, per default dropping rubys
+               standard globals (use gv!(false) to avoid that)
+file!::        the file this assertion was defined in
+line!::        the line number in the file where this assertion's definition
+               starts
+nesting!::     a '>'-separated list of suite descriptions this assertion is
+               nested in
+description!:: this assertion's description
+code!::        code of this assertion

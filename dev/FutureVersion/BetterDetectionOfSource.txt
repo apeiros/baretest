@@ -1,0 +1,77 @@
+Use set_trace_func to better detect the source of an assertion.
+Overhead for setting the trace func: ~0.02ms per set/unset
+
+set_trace_func(proc { |event, file, line, id, binding, classname| ... })
+
+starting an assertion:
+  {
+    file  = one of the test-suite files
+    event = "line"
+  }
+  immediatly followed by
+  {
+    id        = :assert
+    classname = BareTest::Suite (actual class)
+  }
+  -> store file in open_assertion
+
+ending an assertion
+  {
+    file  = open_assertion
+  }
+  scan up in source until we hit the 'end' token
+  important! the assertion might be ended by starting a new assertion
+
+
+Below code generally works but is slightly buggy and has weaknesses:
+* does not account for # or =begin/=end comments
+* does not account for literals containing 'end' ("this is the end")
+* does not account for 'end's comming from another kind of nesting
+
+sources        = []
+code           = []
+last_file      = nil
+last_line      = nil
+assertion_file = nil
+assertion_line = nil
+cache          = {}
+set_trace_func(proc { |event, file, line, id, binding, classname|
+  if assertion_file then
+    last_file = file
+    last_line = line
+    if assertion_file == file then
+      if line == assertion_line then
+        raise "You're an idiot, don't use ; in your testcode."
+      else
+        current = cache[file]
+        line   -= 1
+        until (current[line] =~ /\bend\b/) || (line <= assertion_line)
+          p current[line]
+          line   -= 1 
+        end
+        sources << [assertion_file, assertion_line, line+1]
+        code << current[(assertion_line-1)..(line)].join("")
+      end
+      assertion_file = nil
+    end
+  elsif id == :assert && classname == BareTest::Suite then
+    assertion_file = last_file
+    assertion_line = last_line
+    cache[assertion_file] ||= File.readlines(assertion_file)
+  else
+    last_file = file
+    last_line = line
+  end
+})
+
+--------------------------------------------------------------------------------
+      dotted = false
+      set_trace_func(proc { |event, file, line, id, binding, classname|
+        if file == '/Users/Shared/Development/Gems/baretest/assertions.rb' || id == :assert then
+          printf "event: %p file: %s:%-2d id: %p classname: %p\n", event, file, line, id, classname
+          dotted = false
+        else
+          puts "." unless dotted
+          dotted = true
+        end
+      })

@@ -31,47 +31,49 @@ module BareTest
     #   <status>The final status, one of: success, incomplete, failure, error</status>
     #
     module XML # :nodoc:
+      extend Formatter
+      option_defaults :indent => "\t"
+      text       "Options for 'XML' formatter:\n"
+      option     :indent,  '--indent STRING',   :String, 'String to use for indenting'
+      text       "\nEnvironment variables for 'XML' formatter:\n"
+      env_option :indent, 'INDENT'
+
       def run_all
-        @depth = 1
+        @depth  = 1
+        @indent = @options[:indent]
 
         puts '<?xml version="1.0" encoding="utf-8"?>',
              '<tests>'
         start  = Time.now
         super
         stop   = Time.now
-        status = case
-          when @count[:error]   > 0 then 'error'
-          when @count[:failure] > 0 then 'failure'
-          when @count[:pending] > 0 then 'incomplete'
-          when @count[:skipped] > 0 then 'incomplete'
-          else 'success'
-        end
         puts %{</tests>},
              %{<report>},
-             %{\t<duration>#{stop-start}</duration>}
+             %{#{@indent}<duration>#{stop-start}</duration>}
         @count.each { |key, value|
-          puts %{\t<count type="#{key}">#{value}</count>}
+          puts %{#{@indent}<count type="#{key}">#{value}</count>}
         }
         puts %{</report>},
-             %{<status>#{status}</status>}
+             %{<status>#{global_status}</status>}
       end
 
       def run_suite(suite)
-        puts %{#{"\t"*@depth}<suite description="#{suite.description}">}
+        puts %{#{@indent*@depth}<suite description="#{suite.description}">}
         @depth += 1
         super
         @depth -= 1
-        puts %{#{"\t"*@depth}</suite>}
+        puts %{#{@indent*@depth}</suite>}
       end
 
       def run_test(assertion, setup)
         rv = super
-        puts %{#{"\t"*@depth}<test>},
-             %{#{"\t"*@depth}\t<file>#{rv.file}</file>},
-             %{#{"\t"*@depth}\t<line>#{rv.line}</line>},
-             %{#{"\t"*@depth}\t<status>#{rv.status}</status>},
-             %{#{"\t"*@depth}\t<description>#{rv.description}</description>},
-             %{#{"\t"*@depth}</test>}
+        puts %{#{@indent*@depth}<test>},
+             %{#{@indent*@depth}#{@indent}<file>#{assertion.file}</file>},
+             %{#{@indent*@depth}#{@indent}<line>#{assertion.line}</line>},
+             %{#{@indent*@depth}#{@indent}<status>#{rv.status}</status>},
+             %{#{@indent*@depth}#{@indent}<description>#{assertion.description}</description>},
+             %{#{@indent*@depth}</test>}
+        rv
       end
     end
   end

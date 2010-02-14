@@ -6,7 +6,7 @@
 
 Basic Usage:
 
-  baretest [options] [glob, ...]"
+  baretest [options] [glob, ...]
 
 Either you provide a `glob` (or a directory, which is equivalent to DIRECTORY/\*\*/\*.rb),
 then baretest will load all the files it matches and invoke BareTest.run in the end. Or you

@@ -21,7 +21,10 @@ BareTest.suite "BareTest" do
       end
 
       assert "Should accept an option ':format'" do
+        $LOADED_FEATURES << 'baretest/run/spec'
         raises_nothing do ::BareTest::Run.new(::BareTest::Suite.new, :format => 'spec') end
+        $LOADED_FEATURES.delete 'baretest/run/spec'
+        true
       end
 
       assert "Should use the formatter specified in the :format option" do
@@ -125,6 +128,7 @@ BareTest.suite "BareTest" do
         extender       = Module.new do |m|
           define_method :run_test do |test, setup|
             invoked_tests << test
+            super(test, setup)
           end
         end
         toplevel_suite = ::BareTest::Suite.new
@@ -151,21 +155,111 @@ BareTest.suite "BareTest" do
 
         equal(count_before+1, count_after)
       end
+
+      suite "With no assertions or suites in it" do
+        setup do
+          @invoked_tests  = []
+          @suite = ::BareTest::Suite.new
+          @run   = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "It sets the suites' status to :pending" do
+          status = @run.run_suite(@suite)
+          same(:pending, status.status)
+        end
+      end
+
+      suite "With a succeeding assertion in it" do
+        setup do
+          @invoked_tests  = []
+          @suite = ::BareTest::Suite.new do
+            assert "A success" do true end
+          end
+          @run   = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "It sets the suites' status to :success" do
+          status = @run.run_suite(@suite)
+          same(:success, status.status)
+        end
+      end
+
+      suite "With a failing assertion in it" do
+        setup do
+          @invoked_tests  = []
+          @suite = ::BareTest::Suite.new do
+            assert "A failure" do false end
+          end
+          @run   = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "It sets the suites' status to :failure" do
+          status = @run.run_suite(@suite)
+          same(:failure, status.status)
+        end
+      end
+
+      suite "With a erroring assertion in it" do
+        setup do
+          @invoked_tests  = []
+          @suite = ::BareTest::Suite.new do
+            assert "An error" do raise "some exception" end
+          end
+          @run   = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "It sets the suites' status to :error" do
+          status = @run.run_suite(@suite)
+          same(:error, status.status)
+        end
+      end
+
+      suite "With a pending assertion in it" do
+        setup do
+          @invoked_tests  = []
+          @suite = ::BareTest::Suite.new do
+            assert "Pending"
+          end
+          @run   = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "It sets the suites' status to :pending" do
+          status = @run.run_suite(@suite)
+          same(:pending, status.status)
+        end
+      end
+
+      suite "With a skipped assertion in it" do
+        setup do
+          @invoked_tests  = []
+          @suite = ::BareTest::Suite.new do
+            assert "Skipped", :skip => "For testing purposes" do true end
+          end
+          @run   = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "It sets the suites' status to :manually_skipped" do
+          status = @run.run_suite(@suite)
+          same(:manually_skipped, status.status)
+        end
+      end
     end
 
     suite "#run_test" do
       assert "Runs the given test" do
         # should implement this with a mock, expecting #execute to be called
-        assertion = ::BareTest::Assertion.new(nil, nil) do true end
-        run       = ::BareTest::Run.new(::BareTest::Suite.new)
-        run.run_test(assertion, [])
+        suite     = ::BareTest::Suite.new
+        assertion = ::BareTest::Assertion.new(suite, nil) do true end
+        run       = ::BareTest::Run.new(suite)
+        status    = run.run_test(assertion, [])
 
-        equal(:success, assertion.status)
+        same(:success, status.status)
       end
 
       assert "Increments the counter ':test' at the end" do
-        assertion = ::BareTest::Assertion.new(nil, "") do true end
-        run       = ::BareTest::Run.new(::BareTest::Suite.new)
+        suite     = ::BareTest::Suite.new
+        assertion = ::BareTest::Assertion.new(suite, "") do true end
+        run       = ::BareTest::Run.new(suite)
         count_before = run.count[:test]
         run.run_test(assertion, [])
         count_after = run.count[:test]
@@ -175,8 +269,9 @@ BareTest.suite "BareTest" do
 
       suite "The given test was a success" do
         assert "Increments the counter ':success' at the end" do
-          assertion = ::BareTest::Assertion.new(nil, "") do true end
-          run       = ::BareTest::Run.new(::BareTest::Suite.new)
+          suite     = ::BareTest::Suite.new
+          assertion = ::BareTest::Assertion.new(suite, "") do true end
+          run       = ::BareTest::Run.new(suite)
           count_before = run.count[:success]
           run.run_test(assertion, [])
           count_after = run.count[:success]
@@ -187,8 +282,9 @@ BareTest.suite "BareTest" do
 
       suite "The given test was pending" do
         assert "Increments the counter ':pending' at the end" do
-          assertion = ::BareTest::Assertion.new(nil, "")
-          run       = ::BareTest::Run.new(::BareTest::Suite.new)
+          suite     = ::BareTest::Suite.new
+          assertion = ::BareTest::Assertion.new(suite, "")
+          run       = ::BareTest::Run.new(suite)
           count_before = run.count[:pending]
           run.run_test(assertion, [])
           count_after = run.count[:pending]
@@ -199,11 +295,12 @@ BareTest.suite "BareTest" do
 
       suite "The given test was skipped" do
         assert "Increments the counter ':skipped' at the end" do
-          assertion = ::BareTest::Skipped::Assertion.new(nil, "")
+          suite     = ::BareTest::Suite.new
+          assertion = ::BareTest::Assertion.new(suite, "", :skip => true) do true end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
-          count_before = run.count[:skipped]
+          count_before = run.count[:manually_skipped]
           run.run_test(assertion, [])
-          count_after = run.count[:skipped]
+          count_after = run.count[:manually_skipped]
 
           equal(count_before+1, count_after)
         end
@@ -211,7 +308,8 @@ BareTest.suite "BareTest" do
 
       suite "The given test was failure" do
         assert "Increments the counter ':failure' at the end" do
-          assertion = ::BareTest::Assertion.new(nil, "") do false end
+          suite     = ::BareTest::Suite.new
+          assertion = ::BareTest::Assertion.new(suite, "") do false end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:failure]
           run.run_test(assertion, [])
@@ -223,7 +321,8 @@ BareTest.suite "BareTest" do
 
       suite "The given test was error" do
         assert "Increments the counter ':error' at the end" do
-          assertion = ::BareTest::Assertion.new(nil, "") do raise end
+          suite     = ::BareTest::Suite.new
+          assertion = ::BareTest::Assertion.new(suite, "") do raise end
           run       = ::BareTest::Run.new(::BareTest::Suite.new)
           count_before = run.count[:error]
           run.run_test(assertion, [])

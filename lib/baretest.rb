@@ -7,6 +7,9 @@
 
 
 require 'baretest/assertion'
+require 'baretest/commandline'
+require 'baretest/formatter'
+require 'baretest/invalidselectors'
 require 'baretest/irb_mode'
 require 'baretest/run'
 require 'baretest/suite'
@@ -17,7 +20,45 @@ require 'ruby/kernel'
 
 
 module BareTest
+  # A lookup table to test which of two states is more important
+  # (MoreImportantStatus[[a,b]] # => a or b)
+  MoreImportantStatus = {}
+
+  # All states in the order of relevance, more relevant states first
+  StatusOrder         = :error,
+                        :failure,
+                        :pending,
+                        :manually_skipped,
+                        :dependency_missing,
+                        :library_missing,
+                        :component_missing,
+                        :ignored,
+                        :success
+
+  StatusOrder.combination(2) do |x,y|
+    more_important = StatusOrder.index(x) < StatusOrder.index(y) ? x : y
+    MoreImportantStatus[[x,y]] = more_important
+    MoreImportantStatus[[y,x]] = more_important
+  end
+  StatusOrder.each do |status|
+    MoreImportantStatus[[status,status]] = status
+    MoreImportantStatus[[nil,status]]    = status
+    MoreImportantStatus[[status,nil]]    = status
+  end
+
+  # The standard glob used by baretest to load test files
+  # :nodoc:
+  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb'
+
+  # Selectors that are valid to be passed into process_selectors
+  # :nodoc:
+  ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending]
+
   class << self
+    # A hash of components - available via BareTest::use(name) and
+    # Suite#suite :use => name
+    attr_reader :components
+
     # A hash of formatters (require-string => module) to be used with Test::Run.
     attr_reader :format
 
@@ -33,6 +74,21 @@ module BareTest
     attr_reader :required_file # :nodoc:
   end
 
+  # Enure that the suite is run wiht a minimal version of baretest
+  def self.require_baretest(version)
+    if (version.split(".").map { |s| s.to_i } <=> BareTest::VERSION.to_a) == 0 then
+      abort "Requires baretest version #{version}, you have #{BareTest::VERSION}"
+    end
+  end
+
+  # Ensure that the suite is run with a minimal version of ruby
+  def self.require_ruby(version)
+    if (version.split(".").map { |s| s.to_i } <=> RUBY_VERSION.split(".").map { |s| s.to_i }) == 1 then
+      abort "Requires ruby version #{version}, you have #{RUBY_VERSION}"
+    end
+  end
+
+
   # Loads all files in a test directory in order to load the suites and
   # assertions. Used by the 'baretest' executable and the standard rake task.
   #
@@ -44,16 +100,20 @@ module BareTest
   def self.load_standard_test_files(opts={})
     verbose    = opts.delete(:verbose)
     setup_path = opts.delete(:setup_path) || 'test/setup.rb'
+    lib_path   = opts.delete(:lib_path) || 'test/lib'
     chdir      = opts.delete(:chdir) || '.'
-    files      = opts.delete(:files) || ['test/{suite,unit,integration,system}/**/*.rb']
+    files      = opts.delete(:files)
+    files      = [DefaultInitialPositiveGlob] if (files.nil? || files.empty?)
     Dir.chdir(chdir) do
+      $LOAD_PATH.unshift(File.expand_path(lib_path)) if File.exist?(lib_path)
       load(setup_path) if File.exist?(setup_path)
       files.each do |glob|
         glob = "#{glob}/**/*.rb" if File.directory?(glob)
         Dir.glob(glob) { |path|
           helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
-          puts(File.exist?(helper_path) ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
-          load(helper_path) if File.exist?(helper_path)
+          exists = (helper_path != path && File.exist?(helper_path))
+          puts(exists ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
+          load(helper_path) if exists
           puts "Loading test file #{path}" if verbose
           load(path)
         }
@@ -61,10 +121,70 @@ module BareTest
     end
   end
 
+  # Determine which of the named states is the most important one (see
+  # StatusOrder)
+  def self.most_important_status(states)
+    (StatusOrder & states).first # requires Array#& to be stable (keep order of first operand)
+  end
+
+  # Convert an array of selectors into a hash with those selectors preprocessed
+  # as far as possible.
+  # Example:
+  #   BareTest.process_selectors %w[-some/**/glob/*.rb %failure :tag1 -:tag2]
+  #   # => {
+  #   #      :files          => ...an array with paths...,
+  #   #      :include_tags   => [:tag1],
+  #   #      :exclude_tags   => [:tag2],
+  #   #      :include_states => [:failure]
+  #   #      :exclude_states => nil,
+  #   #    }
+  def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
+    files           = []
+    include_tags    = []
+    exclude_tags    = []
+    include_states  = []
+    exclude_states  = []
+
+    default_initial_positive_glob ||= DefaultInitialPositiveGlob
+    Dir.chdir(base_directory) do
+      selectors.each do |selector|
+        case selector
+          when /\A-%(.*)/   then exclude_states << $1.to_sym
+          when /\A-:(.*)/   then exclude_tags << $1.to_sym
+          when /\A\+?%(.*)/ then include_states << $1.to_sym
+          when /\A\+?:(.*)/ then include_tags << $1.to_sym
+          when /\A-(.*)/    then
+            files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
+            glob   = File.directory?($1) ? "#{$1}/**/*.rb" : $1
+            files -= Dir[glob]
+          when /\A\+?(.*)/  then
+            glob   = File.directory?(selector) ? "#{selector}/**/*.rb" : selector
+            files |= Dir[glob]
+          else
+            raise "Should never reach else - selector: #{selector.inspect}"
+        end
+      end
+      files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
+      files.map! do |path| File.expand_path(path) end
+    end
+
+    invalid_states = (include_states|exclude_states)-ValidStateSelectors
+    raise InvalidSelectors.new(invalid_states) unless invalid_states.empty?
+
+    return {
+      :files          => files,
+      :include_tags   => include_tags,
+      :exclude_tags   => exclude_tags,
+      :include_states => include_states.empty? ? nil : include_states,
+      :exclude_states => exclude_states.empty? ? nil : exclude_states
+    }
+  end
+
   # Initializes BareTest, is automatically called
   #
   # Needed for bootstrapped selftest
   def self.init # :nodoc:
+    @components     = {}
     @format         = {}
     @extender       = []
     @toplevel_suite = BareTest::Suite.new
@@ -73,6 +193,17 @@ module BareTest
     }.find { |full| File.exist?(full) }
   end
   init
+
+  def self.component(name)
+    component = @components[name]
+    begin
+      require "baretest/use/#{name}"
+    rescue LoadError
+    else
+      component = @components[name]
+    end
+    component
+  end
 
   # If no description was given, it adds the contained assertions and suites to the toplevel suite,
   # if a description was given, a suite with the given description is created, added to the toplevel
@@ -87,26 +218,16 @@ module BareTest
     end
   end
 
-  # Creates a Test::Run instance, adds the assertions and suites defined in its
-  # own block to that Test::Run instance's toplevel suite and if $PROGRAM_NAME
-  # (aka $0) is equal to \_\_FILE__ (means the current file is the file directly
-  # executed by ruby, and not just required/loaded/evaled by another file),
-  # subsequently also runs that suite.
-  def self.run_if_mainfile(description=nil, opts={}, &block)
-    suite(description, opts, &block)
-    if caller.first[/^[^:]*/] == $0 then # if is mainfile
-      run(:format => ENV['FORMAT'], :interactive => ENV['INTERACTIVE'])
-    end
+  # Create a new component for Suite's :use option (see BareTest::Suite::new)
+  def self.new_component(name, &block)
+    name = name.to_sym
+    raise ArgumentError, "Component named #{name.inspect} already exists" if @components.has_key?(name)
+    @components[name] = block
   end
 
-  # Runs the toplevel suite (which usually contains all suites and assertions
-  # defined in all loaded test files).
-  #
-  # Returns the Run instance.
-  def self.run(opts=nil)
-    runner = BareTest::Run.new(@toplevel_suite, opts)
-    runner.run_all
-    runner
+  # Shortcut for toplevel_suite.use. Preferably use the :use option instead.
+  def self.use(component)
+    @toplevel_suite.use(component)
   end
 end
 

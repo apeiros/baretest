@@ -26,6 +26,7 @@ Project.manifest.ignore       = %w[
                                     dev/**/*
                                     doc/announcements/**/*
                                     docs/**/*
+                                    lib/baretest/safe.rb
                                     pkg/**/*
                                     rake/**/*
                                     web/**/*

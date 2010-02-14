@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>File: README.rdoc [baretest-0.4.0.pre1]</title>
+
+	<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+</head>
+
+<body class="file">
+	<div id="metadata">
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="./MANIFEST_txt.html">MANIFEST.txt</a></li>
+				
+					<li class="file"><a href="./README_rdoc.html">README.rdoc</a></li>
+				
+					<li class="file"><a href="./doc/baretest_rdoc.html">baretest.rdoc</a></li>
+				
+					<li class="file"><a href="./doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
+				
+					<li class="file"><a href="./doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="./doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
+				
+					<li class="file"><a href="./doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./BareTest.html">BareTest</a></li>
+				
+					<li><a href="./BareTest/Assertion.html">BareTest::Assertion</a></li>
+				
+					<li><a href="./BareTest/Assertion/Context.html">BareTest::Assertion::Context</a></li>
+				
+					<li><a href="./BareTest/Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+				
+					<li><a href="./BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
+				
+					<li><a href="./BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
+				
+					<li><a href="./BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
+				
+					<li><a href="./BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="./BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
+					<li><a href="./BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="./BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="./BareTest/Persistence.html">BareTest::Persistence</a></li>
+				
+					<li><a href="./BareTest/Run.html">BareTest::Run</a></li>
+				
+					<li><a href="./BareTest/Status.html">BareTest::Status</a></li>
+				
+					<li><a href="./BareTest/Suite.html">BareTest::Suite</a></li>
+				
+					<li><a href="./BareTest/UID.html">BareTest::UID</a></li>
+				
+					<li><a href="./BareTest/VERSION.html">BareTest::VERSION</a></li>
+				
+					<li><a href="./Command.html">Command</a></li>
+				
+					<li><a href="./Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="./Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="./Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="./Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="./Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="./Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="./Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="./Command/VERSION.html">Command::VERSION</a></li>
+				
+					<li><a href="./Kernel.html">Kernel</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1><a href="BareTest.html">BareTest</a></h1>
+<h2>Summary</h2>
+<p>
+A testframework that doesn&#8217;t stand in your way or forces you to learn
+a new language. Two methods is all that is required to know. If you need
+it, it provides you with all kinds of features to support you writing your
+tests.
+</p>
+<h2>Also See</h2>
+<table>
+<tr><td valign="top">Executable Docs:</td><td><a href="doc/baretest_rdoc.html">doc/baretest.rdoc</a>
+
+</td></tr>
+<tr><td valign="top">IRC:</td><td>The channel ruby-lang on irc.freenode.org
+
+<p>
+I&#8217;m there under the nick apeiros.
+</p>
+<p>
+Beware, I&#8217;m idling there 24/7, so my nick being in there
+doesn&#8217;t mean I&#8217;m in front of the computer.
+</p>
+</td></tr>
+</table>
+<h2>Description</h2>
+<p>
+Baretest is a Testframework that tries to stay out of your way, but support
+you when you want it. In order to do so it has a load of features:
+</p>
+<ul>
+<li>Straightforward and terse assertions (just a block whose return value
+defines success/failure)
+
+</li>
+<li>Easy grouping of assertions into suites
+
+</li>
+<li>BDD style specifications/test descriptions (NOT code), also extractable
+
+</li>
+<li>Uncomplicated dependency testing and skipping
+
+</li>
+<li>Helpers to deal painlessly with raising, throwing, float imprecision,
+unordered collections etc.
+
+</li>
+<li>Ships with colored Shell formatter, Diagnostic-, XML- and TAP formatter
+
+</li>
+<li>Interactive mode - drops you into an irb session within failed assertion
+with all setup methods executed, so you can inspect interactively why it
+failed.
+
+</li>
+<li>Trivial to add new formatters (the standard formatters are only roughly
+20-50 lines of code each)
+
+</li>
+<li>Teardown and Setup for suites
+
+</li>
+<li>Callbacks to integrate mock libraries
+
+</li>
+<li>API to use it from code, such as rake tasks (comes with an example
+rake-task)
+
+</li>
+<li>baretest executable to run tests on multiple files at once
+
+</li>
+<li>Diagnostic assertion helpers (e.g. same(:a, :b) will give you
+&#8216;Expected :a but got :b&#8217; as diagnostic)
+
+</li>
+</ul>
+<h2>Quick Try</h2>
+<ol>
+<li>Download from github and unpack (or clone)
+
+</li>
+<li>Change into the baretest directory: `cd the/baretest/directory`
+
+</li>
+<li>Run the examples: `./bin/baretest examples/test.rb`
+
+</li>
+</ol>
+<p>
+That&#8217;s it. Alternatively you can run baretests own tests, and play
+with formatters: `./bin/baretest -f tap`
+</p>
+<h2>Install</h2>
+<ol>
+<li>run `gem install baretest`, alternatively run `sudo gem install baretest`
+
+</li>
+<li>There is no 2.
+
+</li>
+</ol>
+<p>
+To get baretest edge, use:
+</p>
+<ol>
+<li>Download from github and unpack (or clone)
+
+</li>
+<li>Change into the baretest directory: `cd the/baretest/directory`
+
+</li>
+<li>Run the installation task: `rake gem:install` (alternatively `rake
+install:lib`)
+
+</li>
+</ol>
+<p>
+IMPORTANT: if the gem:install task fails, it might be because I forgot to
+update the <a href="MANIFEST_txt.html">MANIFEST.txt</a>. Simply delete <a
+href="MANIFEST_txt.html">MANIFEST.txt</a>, then run `rake manifest:create`
+and then retry `rake gem:install`. Also notice that you should have the
+gems &#8216;nokogiri&#8217; and &#8216;rdoc&#8217; installed.
+</p>
+<p>
+If you have multiple ruby versions installed parallely, this might pick the
+wrong gem executable to install the gem. You can set the GEM env variable
+to ensure it uses the right one: `rake gem:install GEM=gem1.9`
+</p>
+<h2>Executable</h2>
+<p>
+Usage:
+</p>
+<pre>
+  baretest [options] [glob, ...]
+
+  Glob defaults to 'test/**/*.rb'
+  Providing a directory as glob is equivalent to dir/**/*.rb
+  Options:
+    -f, --format FORMAT      use FORMAT for output
+    -F, --formats            show available formats
+    -d, --debug              set debugging flags (set $DEBUG to true)
+    -i, --interactive        drop into IRB on error or failure
+    -s, --setup FILE         specify setup file
+    -v, --version            print the version and exit
+    -w, --warn               turn warnings on for your script
+</pre>
+<h2>Planned Features</h2>
+<ul>
+<li>Passing on flags/options for formatters
+
+</li>
+<li>Tagging tests to allow focusing (only run tests with/without specific tags)
+
+</li>
+<li>Word-wrapping for CLI runner
+
+</li>
+<li>Flags for color and verbose ([no-]color and [no-]verbose) for the
+executable
+
+</li>
+<li>baretest &#8212;init [LAYOUT], to create the necessary directory structure
+
+</li>
+<li>Detect whether baretest is run from an interactive terminal or not and
+adjust defaults (no-color e.g.)
+
+</li>
+<li>Alternative CLI runner with status implicit via colored/bg-colored
+descriptions
+
+</li>
+<li>Alternative CLI runner which prints the name of the test prior the label
+and rewrites the line when the test has executed to add status &amp;
+coloring.
+
+</li>
+<li>Simple stubbing with automatic cleanup at teardown. Example:
+
+<pre>
+  assert &quot;Should require a single file listed in :requires option.&quot; do |a|
+    file = 'foo/bar'
+    stub(Kernel, :require) do |file, *args| a.touch(file) end
+    ::Test::Suite.create(nil, nil, :requires =&gt; file)
+
+    touched file
+  end
+</pre>
+</li>
+<li>Inline tests via Module#describe (basically the same as Test::Suite#suite)
+
+</li>
+<li>YARD code to extract the specifications without running the code
+
+</li>
+<li>A redmine plugin
+
+</li>
+<li>&#8212;fail-all flag, to test/review diagnostics of tests (no idea how to
+do that yet)
+
+</li>
+</ul>
+<h2>Rejected Features</h2>
+<ul>
+<li>Currently none
+
+</li>
+</ul>
+<h2>A Bit of Background</h2>
+<p>
+Originally, bare-test started out as a project for shits &amp; giggles on
+the flight back from vegas (railsconf09), to prove that it is possible to
+have a fully fledged test-framework in under 100 lines of source-code.
+Later I realized that this project could become more. For one it was (still
+is) dead simple to add another formatter, it is just as dead simple to
+embedd it in code. The principles are trivial to understand, embrace and
+extend. Upon that it dawned me, that the project was viable and I began
+adding features not found in other projects.
+</p>
+<h2>Example Testsuite</h2>
+<p>
+From examples/test.rb:
+</p>
+<pre>
+  BareTest.suite do
+    # assertions and refutations can be grouped in suites. They will share
+    # setup and teardown
+    # they don't have to be in suites, though
+    suite &quot;Success&quot; do
+      assert &quot;An assertion returning a trueish value (non nil/false) is a success&quot; do
+        true
+      end
+    end
+
+    suite &quot;Failure&quot; do
+      assert &quot;An assertion returning a falsish value (nil/false) is a failure&quot; do
+        false
+      end
+    end
+
+    suite &quot;Pending&quot; do
+      assert &quot;An assertion without a block is pending&quot;
+    end
+
+    suite &quot;Error&quot; do
+      assert &quot;Uncaught exceptions in an assertion are an error&quot; do
+        raise &quot;Error!&quot;
+      end
+    end
+
+    suite &quot;Special assertions&quot; do
+      assert &quot;Assert a block to raise&quot; do
+        raises do
+          sleep(rand()/3+0.05)
+          raise &quot;If this raises then the assertion is a success&quot;
+        end
+      end
+
+      assert &quot;Assert a float to be close to another&quot; do
+        a = 0.18 - 0.01
+        b = 0.17
+        within_delta a, b, 0.001
+      end
+
+      suite &quot;Nested suite&quot; do
+        assert &quot;Assert two randomly ordered arrays to contain the same values&quot; do
+          a = [*&quot;A&quot;..&quot;Z&quot;] # an array with values from A to Z
+          b = a.sort_by { rand }
+          equal_unordered(a, b) # can be used with any Enumerable, uses hash-key identity
+        end
+      end
+    end
+
+    suite &quot;Setup &amp; Teardown&quot; do
+      setup do
+        @foo = &quot;foo&quot;
+        @bar = &quot;bar&quot;
+      end
+
+      assert &quot;@foo should be set&quot; do
+        @foo == &quot;foo&quot;
+      end
+
+      suite &quot;Nested suite&quot; do
+        setup do
+          @bar = &quot;inner bar&quot;
+          @baz = &quot;baz&quot;
+        end
+
+        assert &quot;@foo is inherited&quot; do
+          @foo == &quot;foo&quot;
+        end
+
+        assert &quot;@bar is overridden&quot; do
+          @bar == &quot;inner bar&quot;
+        end
+
+        assert &quot;@baz is defined only for inner&quot; do
+          @baz == &quot;baz&quot;
+        end
+      end
+
+      teardown do
+        @foo = nil # not that it'd make much sense, just to demonstrate
+      end
+    end
+
+    suite &quot;Dependencies&quot;, :requires =&gt; ['foo', 'bar'] do
+      assert &quot;Will be skipped, due to unsatisfied dependencies&quot; do
+        failure &quot;Why the heck do you have a 'foo/bar' file?&quot;
+      end
+    end
+  end
+</pre>
+<h2>Credits &amp; Contributions</h2>
+<ul>
+<li>dominikh
+
+<ul>
+<li>adding mocha integration
+
+</li>
+<li>showing me every dirty little bit I did wrong
+
+</li>
+<li>fixes
+
+</li>
+<li>added line number on failures
+
+</li>
+</ul>
+</li>
+<li>Tass
+
+<ul>
+<li>adding rr integration
+
+</li>
+<li>reporting bugs
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>Known bugs</h2>
+<p>
+Currently none.
+</p>
+<h2>Foot Notes</h2>
+<table>
+<tr><td valign="top"><sup>1</sup>:</td><td>The abbreviated form without support code and output formatters. The normal
+code is expanded to more lines for readability.
+
+</td></tr>
+</table>
+
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+</body>
+</html>
+

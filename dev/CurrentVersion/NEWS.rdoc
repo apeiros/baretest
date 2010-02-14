@@ -1,0 +1,66 @@
+NEWS Version 0.3 (rolled into 0.4)
+* Setup-variations
+  See examples/tests/08_expert_I_setup_variants.rb for more examples.
+  Example:
+    suite "Variations - Notation II" do
+      setup :number, %w[123 -123 1.23 -1.23 1e3 -1e3 1e-3 -1e-3] do |number|
+        @number = number
+      end
+    
+      # This assertion will be run 8 times with a different value and
+      # description each time
+      assert ":number should be a numeric" do
+        @number.numeric?
+      end
+    end
+
+* Suite/Assertion :skip => true/reason, skip-method and Skip exception
+  You can now manually skip a suite by either providing ':skip => true' or
+  'skip => "skip reason"' in the suite options, by invoking Suite#skip or by
+  raising a Baretest::Assertion::Skip exception. The same works for Assertions.
+
+* Formatter specific options
+  Each formatter can now define options specific to it. This is useful e.g. to
+  create formatters that are more configurable (e.g. several formatters might
+  have a use for --[no-]color, while that makes no sense for others)
+
+* Data persistence to retain run statistics and other information in ~/.baretest
+
+
+
+NEWS Version 0.4
+* Components via BareTest.new_component, :use and :fake
+  Example:
+    suite "Rack Integration Test", :use => :rack_test do ... end
+    suite "FileUtils Test", :fake => :file_system do ... end
+    # `:fake => :file_system` does not yet exist, but might one day via FakeFS
+
+* Inter-Test-Dependencies via :provides & :depends_on
+  Example:
+    suite "Integer Addition", :provides => :integer_addition do ... end
+    suite "Integer Multiplication", :depends_on => :integer_addition do ... end
+
+* Selectors in the baretest executable, supporting globs, tags and
+  last-run-status.
+  Important: All negative selectors must be placed after the '--' argument, as
+  otherwise they'll be interpreted as options. This may be resolved in a future
+  release.
+  See `baretest selectors` for an overview on selectors
+  Example:
+    # Load only files matching this glob:
+    baretest test/suite/lib/somelib/**/* # test/suite/lib/somelib would do the same
+    # Exclude some files via glob:
+    baretest -- -test/suite/lib/somelib/**/*.rb
+    # Only run suites tagged with :focus (suite "Foo", :tags => :focus)
+    baretest :focus
+    # Only run suites that are NOT tagged with :pocus
+    baretest -- -:pocus
+    # Only run tests that have failed in the last run
+    baretest %failure
+    # Don't run tests that succeeded in the last run
+    baretest -%success
+    # Combine it all
+    baretest -- test/suite/lib/somelib -test/suite/lib/somelib/foo :focus -:pocus %failure -%success
+
+* rack-test Integration via :rack_test component (suite "Foo", :use => :rack_test)
+  See http://github.com/brynary/rack-test for information on rack_test.

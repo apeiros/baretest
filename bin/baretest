@@ -8,143 +8,151 @@
 
 
 
-Version = "0.3.2"
+Version = "0.4.0" # Executable version
+
+# assume baretest is not installed and this is a cold-run from source
+lib_dir = File.expand_path("#{__FILE__}/../../lib")
+$LOAD_PATH.unshift(lib_dir) if File.directory?(lib_dir)
+lib_dir = File.expand_path("#{__FILE__}/../../../command/lib")
+$LOAD_PATH.unshift(lib_dir) if File.directory?(lib_dir)
 
 
 
-require 'optparse'
-begin
-  # if baretest is installed as a gem, the executable is be wrapped by rubgems anyway, so we don't
-  # need to require rubygems ourself.
-  require 'baretest'
-rescue LoadError
-  # assume baretest is not installed and this is a cold-run from source
-  $LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib"))
-  require 'baretest'
+require 'command'
+require 'baretest'
+
+
+
+# Specify commands and options
+Command "run" do
+  # global arguments
+  virtual_argument :command, '[command]', "The command to run. See `baretest commands`"
+  virtual_argument :options, '[options]', "The flags and options, see in the \"Options\" section."
+
+  # global options
+  o :commands,    nil,  '--commands', :Boolean, "overview over the commands"
+  o :help,        '-h', '--help',     :Boolean, "help for usage and flags"
+  o :version,     '-v', '--version',  :Boolean, "print the version and exit"
+  o :init,        nil,  '--init',     "Deprecated form for `baretest --init`"
+
+  # specify the 'run' command, its default options, its options and helptext
+  command "run", :format => 'cli', :interactive => false, :verbose => false do
+    usage
+
+    virtual_argument :command
+    virtual_argument :options
+    virtual_argument :selector, '*(selector | -selector)', :String,
+      "The tests to run. Example:\n" \
+      "  baretest -- test/suite/a -test/suite/a/x @tag -@other %failure -%pending\n" \
+      "Defaults to 'test/{suite,unit,integration,system}\n" \
+      "See `baretest selectors` to get more information"
+
+    text "\nDefault command is 'run', which runs the testsuite or the provided testfiles.\n\nOptions:\n"
+
+    o :commands
+    o :debug,       '-d', '--debug',         :Boolean, "set debugging flags (set $DEBUG to true)"
+    o :interactive, '-i', '--interactive',   :Boolean, "drop into IRB on error or failure"
+    o :format,      '-f', '--format FORMAT', :String,  "use FORMAT for output, see `baretest formats`"
+    o :setup_file,  '-s', '--setup FILE',    :File,    "specify setup file"
+    o :verbose,     '-w', '--warn',          :Boolean, "turn warnings on for your script"
+    o :help
+    o :version
+    o :init
+
+    text ""
+
+    placeholder :format_options
+
+    text "\nEnvironment variables:\n"
+
+    env_option :format,      'FORMAT'
+    env_option :verbose,     'VERBOSE'
+    env_option :interactive, 'INTERACTIVE'
+  end
+
+  command "init" do
+    usage
+
+    virtual_argument :command
+    virtual_argument :options
+    text "\n  Create the necessary directories and files"
+
+    o :help
+  end
+
+  command "formats"
+  command "env"
+  command "version"
+  command "commands"
+  command "selectors"
+  command "help"
 end
 
 
 
-# Get all the command-line arguments and adapt options to it
-format      = ENV['FORMAT'] || 'cli'
-interactive = ['false', nil].include?(ENV['INTERACTIVE']) ? false : true
-setup_path  = nil
+# Execute command
+Command.with(ARGV) do
+  # parse out the command
+  command = command!
+  # parse all options we know about and leave alone those we don't
+  options = options! :ignore_invalid_options
 
-opts = OptionParser.new("", 24, '  ') do |opts|
-  opts.banner = "Usage: baretest [options] [glob, ...]"
+  # some options are equivalent to commands - if they are set, change the
+  # command
+  if set = [:help, :commands, :version].find { |flag| options[flag] } then
+    run_command = set.to_s
+  elsif options[:init]
+    abort "`#{$0} --init` is depreciated, please use `baretest init`."
+  else
+    run_command = command
+  end
+  if %w[run help].include?(command) then
+    formatter = BareTest::CommandLine.load_formatter(options[:format])
 
-  opts.separator "Glob defaults to 'test/{suite,unit,integration,system}/**/*.rb'"
-  opts.separator "Providing a directory as glob is equivalent to dir/**/*.rb\n"
-  opts.separator "Options:"
-
-  opts.on(nil, "--init", "create the necessary directories and files") {
-    core = %w[
-      test
-      test/external
-      test/helper
-      test/helper/suite
-      test/suite
-    ]
-    mirror = {
-      'bin'  => %w[test/helper/suite test/suite],
-      'lib'  => %w[test/helper/suite test/suite],
-      'rake' => %w[test/helper/suite test/suite],
-    }
-    files = {
-      'test/setup.rb' => <<-END_OF_SETUP.gsub(/^ {8}/, '')
-        $LOAD_PATH.unshift(File.expand_path("\#{__FILE__}/../../lib")) # Add PROJECT/lib to $LOAD_PATH
-      END_OF_SETUP
-    }
-
-    puts "Creating all directories and files needed in #{File.expand_path('.')}"
-    core.each do |dir|
-      if File.exist?(dir) then
-        puts "Directory #{dir} exists already -- skipping"
-      else
-        puts "Creating #{dir}"
-        Dir.mkdir(dir)
-      end
-    end
-    mirror.each do |path, destinations|
-      if File.exist?(path) then
-        destinations.each do |destination|
-          destination = File.join(destination,path)
-          if File.exist?(destination) then
-            puts "Mirror #{destination} of #{path} exists already -- skipping"
-          else
-            puts "Mirroring #{path} in #{destination}"
-            Dir.mkdir(destination)
-          end
+    definition[command].content_for :format_options do |d|
+      if formatter.is_a?(BareTest::Formatter) then
+        d.default_options.update(formatter.command[:option_defaults]) do |k,v1,v2| v2 end
+        formatter.command[:elements].each do |key, args|
+          d.send(key, *args)
         end
-      end
-    end
-    files.each do |path, data|
-      if File.exist?(path) then
-        puts "File #{path} exists already -- skipping"
       else
-        puts "Writing #{path}"
-        File.open(path, 'wb') do |fh|
-          fh.write(data)
-        end
+        d.text "Formatter '#{options[:format]}' does not specify any custom options."
       end
     end
+  end
 
-    exit
-  }
+  options = options! # reparse with new information
 
-  opts.on("-f", "--format FORMAT", "use FORMAT for output") { |use|
-    format = use
-  }
-
-  opts.on("-F", "--formats", "show available formats") { |use|
-    puts "Available formats:"
-    Dir.glob("{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb") { |path|
-      puts "- #{File.basename(path, '.rb')}"
-    }
-    exit
-  }
-
-  opts.on("-d", "--debug", "set debugging flags (set $DEBUG to true)") {
-    $DEBUG   = true
-    $VERBOSE = true
-  }
-
-  opts.on("-i", "--interactive", "drop into IRB on error or failure") {
-    interactive = true
-  }
-
-  opts.on("-s", "--setup FILE", "specify setup file") { |path|
-    setup_path = path
-  }
-
-  opts.on("-v", "--version", "print the version and exit") {
-    puts "baretest executable version #{Version}, library version #{BareTest::VERSION}"
-    exit
-  }
-
-  opts.on("-w", "--warn", "turn warnings on for your script") {
-    $VERBOSE = true
-  }
-
-  opts.parse! ARGV
-end
-
-
-
-# Load the setup file, all helper files and all test files
-BareTest.load_standard_test_files(
-  :verbose    => $VERBOSE,
-  :setup_path => setup_path,
-  :files      => (ARGV.empty? ? nil : ARGV),
-  :chdir      => '.'
-)
-
-
-
-# Run the tests
-puts if $VERBOSE
-if BareTest.run(:format => format, :interactive => interactive).global_status == :success then
-  exit 0
-else
-  exit 1
+  case run_command
+    when "run" # run the testsuite/-file
+      begin
+        success = BareTest::CommandLine.run(arguments, options)
+      rescue BareTest::InvalidSelectors => e
+        puts e
+        puts "Valid state selectors are: #{BareTest::ValidStateSelectors.join(', ')}"
+        success = false
+      end
+      exit(success ? 0 : 1)
+    when "init" # create the test directory
+      BareTest::CommandLine.init(arguments, options)
+    when "formats" # list available formats
+      BareTest::CommandLine.formats(arguments, options)
+    when "env" # show information about baretest (config, version, paths, ...)
+      BareTest::CommandLine.env(arguments, options)
+    when "version" # show version information about baretest
+      BareTest::CommandLine.version(arguments, options)
+    when "selectors" # show version information about selectors baretest recognizes
+      BareTest::CommandLine.selectors(arguments, options)
+    when "help"
+      if command == 'help' then
+        BareTest::CommandLine.help(arguments, options)
+      else
+        puts definition[command].usage_text
+      end
+    when "commands"
+      BareTest::CommandLine.commands(arguments, options)
+    else
+      puts "Unknown command '#{command}'"
+      BareTest::CommandLine.commands(arguments, options)
+  end
 end

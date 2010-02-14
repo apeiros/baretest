@@ -1,5 +1,33 @@
 = Mocking, Stubbing and TestDoubles
 
-BareTest off-the-shelf provides currently only integration with mocha.
-You can use mocha (assuming you have installed the mocha gem) by requiring 'baretest/mocha'.
-Best you add that to your setup.rb.
+BareTest off-the-shelf provides currently only integration with mocha and rr.
+They are available as components.
+Until baretest 0.5 is released (which will resolve the issue), you should not
+use multiple different stubbing/mocking libraries within your tests, as they
+might collide (define methods with the same name e.g.).
+
+== Mocha
+
+Example suite using mocha:
+    suite "Some suite using mocha", :use => :mocha do
+      setup do
+        ...FIXME...
+      end
+
+      assert FIXME do
+        ...FIXME...
+      end
+    end
+
+== RR
+
+Example suite using rr:
+    suite "Some suite using rr", :use => :rr do
+      setup do
+        ...FIXME...
+      end
+
+      assert FIXME do
+        ...FIXME...
+      end
+    end
