@@ -19,6 +19,16 @@ require 'ruby/kernel'
 
 
 
+module Kernel
+  # Execute a piece of code in the context of BareTest
+  def BareTest(&block)
+    BareTest.instance_eval(&block)
+  end
+  module_function :BareTest
+end
+
+
+
 module BareTest
   # A lookup table to test which of two states is more important
   # (MoreImportantStatus[[a,b]] # => a or b)

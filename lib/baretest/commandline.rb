@@ -76,9 +76,14 @@ module BareTest
       }
       files = {
         'test/setup.rb' => <<-END_OF_SETUP.gsub(/^ {10}/, '')
-          BareTest.require_ruby     #{RUBY_VERSION.inspect}
-          BareTest.require_baretest #{BareTest::VERSION.to_a.first(3).join('.').inspect}
-          $LOAD_PATH.unshift(File.expand_path("\#{__FILE__}/../../lib")) # Add PROJECT/lib to $LOAD_PATH
+          $LOAD_PATH.unshift(File.expand_path("#{__FILE__}/../../lib")) # Add PROJECT/lib to $LOAD_PATH
+          require 'baretest'
+          
+          BareTest do
+            require_baretest #{BareTest::VERSION.to_a.first(3).join('.').inspect}
+            require_ruby     #{RUBY_VERSION.inspect}
+            use              :support
+          end
         END_OF_SETUP
       }
 
