@@ -43,23 +43,6 @@ module BareTest
     #
     module Support
 
-      # Creates global setup and teardown callbacks that are needed by some of
-      # BareTest::Assertion::Support's methods.
-      #
-      module SetupAndTeardown
-
-        # Install the setup and teardown callbacks.
-        def self.extended(run_obj) # :nodoc:
-          run_obj.init do
-            suite.teardown do
-              ::BareTest.clean_touches(self) # instance evaled, self is the assertion
-            end
-          end
-        end
-
-        ::BareTest.extender << self
-      end
-
       # FIXME: undocumented and untested
       # It's really ugly. You should use a mock instead.
       def yields(subject, meth, args, *expected)

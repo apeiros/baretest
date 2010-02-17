@@ -74,11 +74,22 @@ module BareTest
         'lib'  => %w[test/helper/suite test/suite],
         'rake' => %w[test/helper/suite test/suite],
       }
+      baretest_version = BareTest::VERSION.to_a.first(3).join('.').inspect
+      ruby_version     = RUBY_VERSION.inspect
       files = {
         'test/setup.rb' => <<-END_OF_SETUP.gsub(/^ {10}/, '')
-          BareTest.require_ruby     #{RUBY_VERSION.inspect}
-          BareTest.require_baretest #{BareTest::VERSION.to_a.first(3).join('.').inspect}
-          $LOAD_PATH.unshift(File.expand_path("\#{__FILE__}/../../lib")) # Add PROJECT/lib to $LOAD_PATH
+          # Add PROJECT/lib to $LOAD_PATH
+          $LOAD_PATH.unshift(File.expand_path("\#{__FILE__}/../../lib"))
+
+          # Ensure baretest is required
+          require 'baretest'
+
+          # Some defaults on BareTest (see Kernel#BareTest)
+          BareTest do
+            require_baretest #{baretest_version} # minimum baretest version to run these tests
+            require_ruby     #{ruby_version} # minimum ruby version to run these tests
+            use              :support # Use :support in all suites
+          end
         END_OF_SETUP
       }
 

@@ -245,6 +245,101 @@ BareTest.suite "BareTest" do
       end
     end
 
+    suite "#run_test_variants" do
+      suite "With a suite with no setup" do
+        setup do
+          @suite     = ::BareTest::Suite.new
+          @assertion = ::BareTest::Assertion.new @suite, "test" do true end
+          @run       = ::BareTest::Run.new(::BareTest::Suite.new)
+        end
+
+        assert "Invokes run_test with the assertion once" do
+          invoked   = []
+          (class <<@run; self; end).send :define_method, :run_test do |assertion, setup|
+            invoked << [assertion, setup]
+            ::BareTest::Status.new(assertion, :success)
+          end
+          @run.run_test_variants(@assertion)
+
+          equal_unordered([[@assertion, []]], invoked)
+        end
+      end
+
+      suite "With a suite with a static setup" do
+        setup do
+          @suite     = ::BareTest::Suite.new do
+            setup do "nothing" end
+          end
+          @assertion = ::BareTest::Assertion.new @suite, "test" do true end
+          @run       = ::BareTest::Run.new(::BareTest::Suite.new)
+
+          @setups    = @suite.instance_variable_get(:@setup)[nil]
+        end
+
+        assert "Invokes run_test with the assertion once" do
+          invoked   = []
+          (class <<@run; self; end).send :define_method, :run_test do |assertion, setup|
+            invoked << [assertion, setup]
+            ::BareTest::Status.new(assertion, :success)
+          end
+          @run.run_test_variants(@assertion)
+
+          equal_unordered([[@assertion, @setups]], invoked)
+        end
+      end
+
+      suite "With a suite with a dynamic setup" do
+        setup do
+          @suite     = ::BareTest::Suite.new do
+            setup :component_name do "nothing" end
+          end
+          @assertion = ::BareTest::Assertion.new @suite, "test" do true end
+          @run       = ::BareTest::Run.new(::BareTest::Suite.new)
+
+          @setups    = @suite.instance_variable_get(:@setup)[:component_name]
+        end
+
+        assert "Invokes run_test with the assertion once" do
+          invoked   = []
+          (class <<@run; self; end).send :define_method, :run_test do |assertion, setup|
+            invoked << [assertion, setup]
+            ::BareTest::Status.new(assertion, :success)
+          end
+          @run.run_test_variants(@assertion)
+
+          equal_unordered([[@assertion, @setups]], invoked)
+        end
+      end
+
+      suite "With a suite with multiple dynamic setups using hash notation" do
+        setup do
+          @suite     = ::BareTest::Suite.new do
+            setup :component_name, {:a => 1, :b => 2, :c => 3} do "nothing" end
+          end
+          @assertion = ::BareTest::Assertion.new @suite, "test" do true end
+          @run       = ::BareTest::Run.new(::BareTest::Suite.new)
+
+          @setups    = @suite.instance_variable_get(:@setup)[:component_name]
+        end
+
+        assert "Invokes run_test with the assertion 3 times, with the corresponding setup" do
+          actual   = []
+          (class <<@run; self; end).send :define_method, :run_test do |assertion, setup|
+            actual << [assertion, setup]
+            ::BareTest::Status.new(assertion, :success)
+          end
+          @run.run_test_variants(@assertion)
+          expected = @setups.map { |setup| [@assertion,[setup]] }
+
+          equal_unordered(expected, actual)
+        end
+      end
+    end
+
+    suite "#interpolated_description" do
+      
+    end
+
     suite "#run_test" do
       assert "Runs the given test" do
         # should implement this with a mock, expecting #execute to be called
