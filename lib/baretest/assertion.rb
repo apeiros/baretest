@@ -116,9 +116,9 @@ module BareTest
         status = Status.new(self, :pending)
       else
         context  = ::BareTest::Assertion::Context.new(self)
-        status   = execute_phase(:setup, context, with_setup) if with_setup
+        status   = execute_phase(:setup, context, with_setup.map { |s| [[s.value], s.block] }) if with_setup
         status   = execute_phase(:exercise, context, @block) unless status
-        status   = execute_phase(:teardown, context, and_teardown) unless (status || !and_teardown)
+        status   = execute_phase(:teardown, context, and_teardown.map { |t| [nil, t] }) unless (status || !and_teardown)
         status ||= Status.new(self, :success, context)
       end
 
@@ -138,7 +138,7 @@ module BareTest
 
       begin
         if code.is_a?(Array) then
-          code.each do |block| context.instance_eval(&block) end
+          code.each do |args, block| context.instance_exec(*args, &block) end
         else
           unless context.instance_eval(&code)
             failure_reason = "Assertion failed" 

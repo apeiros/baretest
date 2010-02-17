@@ -200,7 +200,7 @@ module BareTest
     # Invoked once for every variation of an assertion.
     # Gets the assertion to run as single argument.
     def run_test(assertion, setup)
-      rv = assertion.execute(setup.map { |s| s.block }, assertion.suite.ancestry_teardown)
+      rv = assertion.execute(setup, assertion.suite.ancestry_teardown)
       @count[:test]     += 1
       @count[rv.status] += 1
 
@@ -241,7 +241,7 @@ module BareTest
     # Get an assertions' interpolated description for a given Array of Setup
     # instances.
     # See Assertion#interpolated_description
-    def interpolated_description(assertion, setup)
+    def interpolated_description(assertion, setups)
       setups = setups ? setups.select { |s| s.component } : []
       substitutes = {}
       setups.each do |setup| substitutes[setup.component] = setup.substitute end
