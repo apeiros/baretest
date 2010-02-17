@@ -14,8 +14,10 @@ CHORES:
   Assertion#interpolated_description, Suite#component_variant_count,
   #each_component_variant, #first_component_variant
 
-* Make Assertion::Support become a component, that is added to toplevel suite
-  in setup.rb per default.
+
+FEATURES:
+* BareTest.external_file, returning an absolute path for a path relative to
+  TEST/external dir
 
 MISSING TESTS:
 
