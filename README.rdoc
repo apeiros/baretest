@@ -104,10 +104,7 @@ Usage:
 
 == Planned Features
 
-* Passing on flags/options for formatters
-* Tagging tests to allow focusing (only run tests with/without specific tags)
 * Word-wrapping for CLI runner
-* Flags for color and verbose (\[no-]color and \[no-]verbose) for the executable
 * baretest --init \[LAYOUT], to create the necessary directory structure
 * Detect whether baretest is run from an interactive terminal or not and adjust
   defaults (no-color e.g.)
@@ -124,8 +121,6 @@ Usage:
       touched file
     end
 
-* Inline tests via Module#describe (basically the same as Test::Suite#suite)
-* YARD code to extract the specifications without running the code
 * A redmine plugin
 * --fail-all flag, to test/review diagnostics of tests (no idea how to do that yet)
 
@@ -138,7 +133,7 @@ Usage:
 
 == A Bit of Background
 
-Originally, bare-test started out as a project for shits & giggles on the flight
+Originally, baretest started out as a project for shits & giggles on the flight
 back from vegas (railsconf09), to prove that it is possible to have a fully
 fledged test-framework in under 100 lines of source-code.
 Later I realized that this project could become more. For one it was (still is)
