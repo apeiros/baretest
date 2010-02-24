@@ -69,10 +69,10 @@ module BareTest
           *opt.values_at(:default, :separator, :indent, :first_indent)
         reason = @skip_reason || @failure_reason || default
         return nil unless reason
-        reason = Array(reason)
+        reason = reason.kind_of?(Array) ? reason : [reason]
         reason = reason.join(separator || "\n")
         reason = reason.gsub(/^/, indent) if indent
-        reason = reason.gsub(/^#{Regexp.escape(indent)}/, first_indent) if first_indent
+        reason = reason.gsub(/\A#{Regexp.escape(indent)}/, first_indent) if first_indent
         reason
       else
         @reason.empty? ? nil : @reason.join("\n")

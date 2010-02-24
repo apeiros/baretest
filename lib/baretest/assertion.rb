@@ -115,10 +115,12 @@ module BareTest
       elsif !@block
         status = Status.new(self, :pending)
       else
+        handlers = @suite ? @suite.ancestors.inject({}) { |handlers, suite| handlers.merge(suite.verification_exception_handlers) } : nil
         context  = ::BareTest::Assertion::Context.new(self)
         status   = execute_phase(:setup, context, with_setup.map { |s| [[s.value], s.block] }) if with_setup
-        status   = execute_phase(:exercise, context, @block) unless status
-        status   = execute_phase(:teardown, context, and_teardown.map { |t| [nil, t] }) unless (status || !and_teardown)
+        setup_failed = status
+        status   = execute_phase(:exercise, context, @block, handlers) unless status
+        status   = execute_phase(:teardown, context, and_teardown.map { |t| [nil, t] }) unless (setup_failed || !and_teardown)
         status ||= Status.new(self, :success, context)
       end
 
@@ -130,7 +132,7 @@ module BareTest
     # will generate a full Status instance.
     # This is for practical reasons - it means you can go through several
     # phases, looking for the first non-nil one.
-    def execute_phase(name, context, code)
+    def execute_phase(name, context, code, handlers=nil)
       status         = nil
       skip_reason    = nil
       failure_reason = nil
@@ -154,6 +156,10 @@ module BareTest
         status         = :manually_skipped
         skip_reason    = skip.message
       rescue Exception => exception
+        handler = handlers[error.class]
+        if handler then
+          return handler.call(self, context, error) # FIXME: ugly mid-method return - work around it returning a complete Status
+        end
         status         = :error
         failure_reason = "An error occurred during #{name}: #{exception}"
         exception      = exception

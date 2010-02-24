@@ -49,6 +49,9 @@ module BareTest
     # All things this suite is tagged with, see Suite::new for more information
     attr_reader   :tags
 
+    # :nodoc:
+    attr_reader   :verification_exception_handlers
+
     # A list of valid options Suite::new accepts
     ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
 
@@ -90,6 +93,7 @@ module BareTest
       @setup       = {nil => []}
       @components  = []
       @teardown    = []
+      @verification_exception_handlers = {}
       if @parent then
         @ancestors   = [self, *@parent.ancestors]
         @depends_on  = @parent.depends_on
@@ -129,6 +133,17 @@ module BareTest
         else
           skip("Missing component: #{name.inspect}")
         end
+      end
+    end
+
+    # Experimental
+    # Define handlers for specific exception classes. The handler gets
+    # the assertion, the phase and the exception yielded and is expected
+    # to return a BareTest::Status.
+    def handle_verification_exceptions(*exception_classes, &block) # :nodoc:
+      exception_classes.each do |exception_class|
+        raise "Already registered a verification exception handler for class #{exception_class}" if @verification_exception_handlers[exception_class]
+        @verification_exception_handlers[exception_class] = block
       end
     end
 
