@@ -102,7 +102,7 @@ module BareTest
         return super unless suite.description
 
         indent      = "           #{'  '*@depth}"
-        skip_reason = suite.reason(:indent => indent+'  ', :first_indent => indent+'  Skipped due to: ')
+        skip_reason = suite.reason(:indent => indent+'  ', :first_indent => indent+'  Reason: ')
 
         case size = suite.assertions.size
           when 0
@@ -125,7 +125,7 @@ module BareTest
         rv        = super # run the assertion
         indent    = '           '+'  '*@depth
         backtrace = []
-        reason    = rv.reason(:indent => indent, :first_indent => indent+'Skipped due to: ')
+        reason    = rv.reason(:indent => indent, :first_indent => indent+'Reason: ')
 
         printf(Formats[rv.status], StatusLabel[rv.status], '  '*@depth, interpolated_description(assertion, setup))
         if rv.status == :error then
