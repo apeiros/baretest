@@ -1,0 +1,14 @@
+= README
+
+== Examples
+
+The examples directory shall serve to quickly lead you into using baretest.
+
+=== Directories
+
+components:: Contains examples on how to use components that ship with baretest
+             itself.
+irb_mode::   Examples to help you explore baretest when run with the -i flag.
+rake::       Example rake tasks to use baretest from within rake.
+tests::      Several example files, ordered by difficulty, each dealing with a
+             topic, containing suites that explain the topic.
