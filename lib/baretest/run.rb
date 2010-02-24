@@ -68,18 +68,21 @@ module BareTest
       @exclude_tags    = @options[:exclude_tags]   # nil is ok here
       include_states   = @options[:include_states] # nil is ok here
       exclude_states   = @options[:exclude_states] # nil is ok here
-      @states          = [nil, :success, :failure, :skipped, :pending, :error]
+      @states          = [nil, *BareTest::StatusOrder]
       @skipped         = {}
       @last_run_states = {}
-
-      @persistence    = @options[:persistence]
+      @persistence     = @options[:persistence]
 
       if (include_states || exclude_states) && !((include_states && include_states.empty?) && (exclude_states && exclude_states.empty?)) then
         [include_states, exclude_states].compact.each do |states|
           states << nil if states.include?(:new)
-          states << :pending if states.include?(:skipped)
-          states.concat([:error, :skipped, :pending]) if states.include?(:failure)
+          states.push(:error, :skipped, :pending) if states.include?(:failure)
           states.delete(:new)
+          if states.include?(:skipped) then
+            states.delete(:skipped)
+            states.push(:pending, :manually_skipped, :dependency_missing, :library_missing, :component_missing)
+          end
+          states.uniq!
         end
         @states = (include_states || @states) - (exclude_states || [])
       end
