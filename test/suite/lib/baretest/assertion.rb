@@ -145,7 +145,7 @@ BareTest.suite 'BareTest' do
 
     suite '#setup' do
       assert 'Fails if setup raises an exception' do
-        setup     = proc { raise 'Some error' }
+        setup     = BareTest::Setup.new do raise 'Some error' end
         assertion = ::BareTest::Assertion.new(nil, 'assertion') do true end
         status    = assertion.execute([setup])
 
