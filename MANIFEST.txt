@@ -46,6 +46,7 @@ lib/baretest/uid.rb
 lib/baretest/use/mocha.rb
 lib/baretest/use/rack_test.rb
 lib/baretest/use/rr.rb
+lib/baretest/use/support.rb
 lib/baretest/version.rb
 lib/command.rb
 lib/command/argument.rb
