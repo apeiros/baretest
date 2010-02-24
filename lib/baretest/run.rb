@@ -147,9 +147,9 @@ module BareTest
         skipped             = @skipped[suite] || recursively_skipped
 
         if recursively_skipped then
-          skip_recursively(suite, "Skipped")
+          skip_recursively(suite, "Ancestor was skipped")
         elsif skipped then
-          skip_suite(suite, "Skipped")
+          skip_suite(suite, "Container was skipped")
         end
       end
 

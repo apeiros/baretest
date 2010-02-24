@@ -100,13 +100,17 @@ module BareTest
 
       def run_suite(suite)
         return super unless suite.description
+
+        indent      = "           #{'  '*@depth}"
+        skip_reason = suite.reason(:indent => indent+'  ', :first_indent => indent+'  Skipped due to: ')
+
         case size = suite.assertions.size
           when 0
-            defer "\n           \e[1m#{'  '*@depth+suite.description}\e[0m"
+            defer "\n#{indent}\e[1m#{suite.description}\e[0m", skip_reason
           when 1
-            defer "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (1 test)"
+            defer "\n#{indent}\e[1m#{suite.description}\e[0m (1 test)", skip_reason
           else
-            defer "\n           \e[1m#{'  '*@depth+suite.description}\e[0m (#{size} tests)"
+            defer "\n#{indent}\e[1m#{suite.description}\e[0m (#{size} tests)", skip_reason
         end
         @depth += 1
         rv = super(suite) # run the suite
@@ -121,7 +125,7 @@ module BareTest
         rv        = super # run the assertion
         indent    = '           '+'  '*@depth
         backtrace = []
-        reason    = rv.reason(:indent => indent)
+        reason    = rv.reason(:indent => indent, :first_indent => indent+'Skipped due to: ')
 
         printf(Formats[rv.status], StatusLabel[rv.status], '  '*@depth, interpolated_description(assertion, setup))
         if rv.status == :error then
@@ -139,8 +143,12 @@ module BareTest
         str.scan(/[^ ]+ /)
       end
 
-      def defer(output)
-        @deferred << output
+      # Add data to output, but mark it as deferred
+      # We defer in order to be able to ignore suites. Ignored suites that
+      # contain unignored suites/assertions must be displayed, ignored suites
+      # that don't, will be popped from the deferred-stack
+      def defer(*output)
+        @deferred.concat(output.compact)
       end
 
       def pop_deferred

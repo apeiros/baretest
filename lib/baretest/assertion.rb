@@ -111,7 +111,7 @@ module BareTest
     # containing suite.
     def execute(with_setup=nil, and_teardown=nil)
       if @skipped then
-        status = Status.new(self, :manually_skipped)
+        status = Status.new(self, :manually_skipped, nil, @skipped)
       elsif !@block
         status = Status.new(self, :pending)
       else
