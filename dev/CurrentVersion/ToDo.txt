@@ -38,3 +38,29 @@ support.rb:
       assert "Should not make the suite skipped if more than everything it depends_on is provided"
       assert "Should make the suite skipped if not everything it depends_on is provided"
     end
+
+must be moved to "run" tests:
+  assert "Runs all enclosing suite's setup blocks, outermost first" do
+    executed  = []
+    block1    = proc { executed << :block1 }
+    block2    = proc { executed << :block2 }
+    suite1    = ::BareTest::Suite.new("block1") do setup(&block1) end
+    suite2    = ::BareTest::Suite.new("suite2", suite1) do setup(&block2) end
+    assertion = ::BareTest::Assertion.new(suite2, "assertion")
+
+    raises_nothing do assertion.setup end &&
+    equal([:block1, :block2], executed)
+  end
+
+  assert "Runs all enclosing suite's teardown blocks, innermost first" do
+    executed  = []
+    block1    = proc { executed << :block1 }
+    block2    = proc { executed << :block2 }
+    suite1    = ::BareTest::Suite.new("block1") do teardown(&block1) end
+    suite2    = ::BareTest::Suite.new("suite2", suite1) do teardown(&block2) end
+    assertion = ::BareTest::Assertion.new(suite2, "assertion")
+
+    raises_nothing do assertion.teardown end &&
+    equal([:block2, :block1], executed)
+  end
+

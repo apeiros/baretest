@@ -3,6 +3,7 @@
     helpers et al, later runs a single isolated file)
   * forked suite execution - auto-isolation
   * forked suite execution - parallel execution
+  * setup_once (via forking after setup)
 
 0.6:
   * website integration teststack for rack based frameworks
@@ -31,6 +32,8 @@
 0.9:
   * Correct self-test suite with proper isolation of bootstrapping
   * Implement test-layouts
+  * Implement `baretest update`, which will add suites for currently untested
+    files, namespaces and methods (by convention)
 
 1.0:
   * Polish, polish, polish
@@ -50,6 +53,8 @@ UNASSIGNED
 * auto-require corresponding lib-files
 * guard assertions - sometimes we make assumptions in our tests, guard
   assertions let us test those assumptions
+* Cleanly separate exercise and verify phase (currently exercise is a bit split
+  between setup and assert, and verify is in assert).
 
 REJECTED
 * configuration system
