@@ -1,13 +1,5 @@
 BareTest.new_component :rr do
-  begin
-    require 'rr'
-  rescue LoadError
-    begin
-      require 'rubygems'
-    rescue LoadError
-    end
-    require 'rr'
-  end
+  BareTest.require 'rr'
 
   BareTest::Assertion::Context.send :include, RR::Adapters::RRMethods
 
