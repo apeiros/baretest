@@ -239,6 +239,20 @@ module BareTest
   def self.use(component)
     @toplevel_suite.use(component)
   end
+
+  def self.require(*paths)
+    paths.each do |path|
+      begin
+        Kernel.require path
+      rescue LoadError
+        begin
+          Kernel.require 'rubygems'
+        rescue LoadError
+        end
+        Kernel.instance_method(:require).bind(self).call path # ugly, but at least until rubygems 1.3.5, Kernel.require isn't overriden
+      end
+    end
+  end
 end
 
 
