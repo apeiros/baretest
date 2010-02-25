@@ -115,13 +115,13 @@ module BareTest
       elsif !@block
         status = Status.new(self, :pending)
       else
-        handlers = @suite ? @suite.ancestors.inject({}) { |handlers, suite| handlers.merge(suite.verification_exception_handlers) } : nil
-        context  = ::BareTest::Assertion::Context.new(self)
-        status   = execute_phase(:setup, context, with_setup.map { |s| [[s.value], s.block] }) if with_setup
-        setup_failed = status
-        status   = execute_phase(:exercise, context, @block, handlers) unless status
-        status   = execute_phase(:teardown, context, and_teardown.map { |t| [nil, t] }) unless (setup_failed || !and_teardown)
-        status ||= Status.new(self, :success, context)
+        handlers        = @suite ? @suite.ancestors.inject({}) { |handlers, suite| handlers.merge(suite.verification_exception_handlers) } : nil
+        context         = ::BareTest::Assertion::Context.new(self)
+        status          = execute_phase(:setup, context, with_setup.map { |s| [[s.value], s.block] }) if with_setup
+        setup_failed    = status
+        status          = execute_phase(:exercise, context, @block, handlers) unless status
+        teardown_status = execute_phase(:teardown, context, and_teardown.map { |t| [nil, t] }) unless (setup_failed || !and_teardown)
+        status = status || teardown_status || Status.new(self, :success, context)
       end
 
       status
@@ -155,11 +155,11 @@ module BareTest
       rescue ::BareTest::Assertion::Skip => skip
         status         = :manually_skipped
         skip_reason    = skip.message
+      rescue *handlers.keys => exception
+        handled_class = exception.class.ancestors.find { |ancestor| handlers.has_key?(ancestor) }
+        handler       = handlers[handled_class]
+        return handler.call(self, context, exception) # FIXME: ugly mid-method return - work around it returning a complete Status
       rescue Exception => exception
-        handler = handlers[error.class]
-        if handler then
-          return handler.call(self, context, error) # FIXME: ugly mid-method return - work around it returning a complete Status
-        end
         status         = :error
         failure_reason = "An error occurred during #{name}: #{exception}"
         exception      = exception
