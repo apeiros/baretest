@@ -8,7 +8,10 @@ doc/news/news-0.3.0.rdoc
 doc/quickref.rdoc
 doc/whats_going_on.rdoc
 doc/writing_tests.rdoc
+examples/README_EXAMPLES.rdoc
+examples/components/mocha.rb
 examples/components/rack-test.rb
+examples/components/rr.rb
 examples/irb_mode/failures.rb
 examples/rake/test.rake
 examples/tests/01_basics_I.rb
