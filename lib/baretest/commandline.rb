@@ -198,7 +198,7 @@ module BareTest
             as otherwise baretest will try to interpret them as short options (like -f).
         
         \e[1mExample\e[0m
-            `baretest -- test/suite -test/suite/foo :a -:b #failure -#pending`
+            `baretest -- test/suite -test/suite/foo :a -:b %failure -%pending`
 
             This will run all tests that
             * Are in the directory test/suite or any of its subdirectories
@@ -216,7 +216,7 @@ module BareTest
             * Directories are equivalent to `directory/**/*` patterns
 
         \e[1mTags\e[0m
-            Tags are preceeded with an :.
+            Tags are preceeded with a ':'.
             Examples:
               baretest :focus
               baretest -- -:hocus
@@ -224,9 +224,10 @@ module BareTest
 
         \e[1mLast-run-status\e[0m
             Last run states are preceeded with a %.
-            * %success, %failure, %error, %skipped, %pending
+            * %new, %success, %failure, %error, %skipped, %pending
             * %error, %skipped and %pending are a subset of %failure
             * %pending is a subset of %skipped
+            * %new matches tests that are run for the very first time
 
       END_OF_DESCRIPTION
 
