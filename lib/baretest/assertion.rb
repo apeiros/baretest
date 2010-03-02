@@ -155,11 +155,13 @@ module BareTest
       rescue ::BareTest::Assertion::Skip => skip
         status         = :manually_skipped
         skip_reason    = skip.message
-      rescue *handlers.keys => exception
-        handled_class = exception.class.ancestors.find { |ancestor| handlers.has_key?(ancestor) }
-        handler       = handlers[handled_class]
-        return handler.call(self, context, exception) # FIXME: ugly mid-method return - work around it returning a complete Status
       rescue Exception => exception
+        exception_class = exception.class
+        handled_by      = handlers && handlers.find { |handling, handler| exception_class <= handling }
+        if handled_by then
+          handler       = handled_by.last
+          return handler.call(self, context, exception) # FIXME: ugly mid-method return - work around it returning a complete Status
+        end
         status         = :error
         failure_reason = "An error occurred during #{name}: #{exception}"
         exception      = exception
