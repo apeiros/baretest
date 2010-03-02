@@ -240,6 +240,7 @@ module BareTest
     @toplevel_suite.use(component)
   end
 
+  # Tries to require a file, if it fails, it will require rubygems and retries
   def self.require(*paths)
     paths.each do |path|
       begin
@@ -252,6 +253,20 @@ module BareTest
         Kernel.instance_method(:require).bind(self).call path # ugly, but at least until rubygems 1.3.5, Kernel.require isn't overriden
       end
     end
+  end
+
+  # Returns the absolute path to the external file
+  # Example
+  #   suite "#mkdir" do
+  #     setup do
+  #       @base = BareTest.external('suite_mkdir') # => "/.../PROJECT/test/external/suite_mkdir"
+  def self.external(*path)
+    File.join(test_directory, 'external', *path)
+  end
+
+  # Returns the absolute path to the test directory
+  def self.test_directory
+    File.expand_path(path, 'test')
   end
 end
 
