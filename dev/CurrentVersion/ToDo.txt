@@ -1,8 +1,5 @@
 BUGS:
 * Correct skip reason must be implemented.
-* load helpers when specifying custom globs
-  - look for (?:\A|/)test/ and replace with test/helpers
-
 
 CHORES:
 * Verify that persistence works as expected no matter from where baretest is run
@@ -16,8 +13,6 @@ CHORES:
 
 
 FEATURES:
-* BareTest.external_file, returning an absolute path for a path relative to
-  TEST/external dir
 
 MISSING TESTS:
 
