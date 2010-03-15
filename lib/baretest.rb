@@ -120,9 +120,17 @@ module BareTest
       files.each do |glob|
         glob = "#{glob}/**/*.rb" if File.directory?(glob)
         Dir.glob(glob) { |path|
-          helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
+          helper_path = path.sub(%r{((?:^|/)test)/(suite|unit|integration|system)/}, '\1/helper/\2/')
           exists = (helper_path != path && File.exist?(helper_path))
-          puts(exists ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
+          if verbose then
+            if helper_path == path then
+              puts "Could not resolve helper path for path #{path}"
+            elsif exists
+              puts "Loading helper file #{helper_path}"
+            else
+              puts "No helper file #{helper_path} to load"
+            end
+          end
           load(helper_path) if exists
           puts "Loading test file #{path}" if verbose
           load(path)
