@@ -1,6 +1,7 @@
 0.5:
   * understanding of project- and file-mode (former uses layout, with setup.rb,
     helpers et al, later runs a single isolated file)
+    Also with regards to saved state
   * forked suite execution - auto-isolation
   * forked suite execution - parallel execution
   * setup_once (via forking after setup)
