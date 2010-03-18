@@ -13,8 +13,7 @@ module BareTest
   # 'macaddr').
   class UID
 
-    # :nodoc:
-    Epoch = Time.utc(2000,1,1).to_i
+    Epoch = Time.utc(2000,1,1).to_i # :nodoc:
 
     # The numeric value of the uid (an Integer)
     attr_reader :value

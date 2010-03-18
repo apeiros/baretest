@@ -49,8 +49,7 @@ module BareTest
     # All things this suite is tagged with, see Suite::new for more information
     attr_reader   :tags
 
-    # :nodoc:
-    attr_reader   :verification_exception_handlers
+    attr_reader   :verification_exception_handlers # :nodoc:
 
     # A list of valid options Suite::new accepts
     ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
@@ -179,10 +178,10 @@ module BareTest
     # The failure/error/skipping/pending reason.
     # Returns nil if there's no reason, a string otherwise
     # Options:
-    # :default::     Reason to return if no reason is present
-    # :separator::   String used to separate multiple reasons
-    # :indent::      A String, the indentation to use. Prefixes every line.
-    # :first_indent: A String, used to indent the first line only (replaces indent).
+    # :default::      Reason to return if no reason is present
+    # :separator::    String used to separate multiple reasons
+    # :indent::       A String, the indentation to use. Prefixes every line.
+    # :first_indent:: A String, used to indent the first line only (replaces indent).
     def reason(opt=nil)
       if opt then
         default, separator, indent, first_indent = 

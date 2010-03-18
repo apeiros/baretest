@@ -57,12 +57,10 @@ module BareTest
   end
 
   # The standard glob used by baretest to load test files
-  # :nodoc:
-  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb'
+  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb' # :nodoc:
 
   # Selectors that are valid to be passed into process_selectors
-  # :nodoc:
-  ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending]
+  ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending] # :nodoc:
 
   class << self
     # A hash of components - available via BareTest::use(name) and
