@@ -1,6 +1,10 @@
 0.5:
+  * understanding of project- and file-mode (former uses layout, with setup.rb,
+    helpers et al, later runs a single isolated file)
+    Also with regards to saved state
   * forked suite execution - auto-isolation
   * forked suite execution - parallel execution
+  * setup_once (via forking after setup)
 
 0.6:
   * website integration teststack for rack based frameworks
@@ -15,6 +19,8 @@
   * rails integration (controllers, models, views, helpers)
   * full ruby-debug integration
   * full rcov integration
+  * better rr integration (not having to do .call at the end of spying, not
+    having to return true in the end of spying assertions, ...)
 
 0.7:
   * continuous testing on OS X (fsevents+growl)
@@ -27,6 +33,8 @@
 0.9:
   * Correct self-test suite with proper isolation of bootstrapping
   * Implement test-layouts
+  * Implement `baretest update`, which will add suites for currently untested
+    files, namespaces and methods (by convention)
 
 1.0:
   * Polish, polish, polish
@@ -46,6 +54,8 @@ UNASSIGNED
 * auto-require corresponding lib-files
 * guard assertions - sometimes we make assumptions in our tests, guard
   assertions let us test those assumptions
+* Cleanly separate exercise and verify phase (currently exercise is a bit split
+  between setup and assert, and verify is in assert).
 
 REJECTED
 * configuration system

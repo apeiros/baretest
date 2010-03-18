@@ -49,6 +49,8 @@ module BareTest
     # All things this suite is tagged with, see Suite::new for more information
     attr_reader   :tags
 
+    attr_reader   :verification_exception_handlers # :nodoc:
+
     # A list of valid options Suite::new accepts
     ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
 
@@ -90,6 +92,7 @@ module BareTest
       @setup       = {nil => []}
       @components  = []
       @teardown    = []
+      @verification_exception_handlers = {}
       if @parent then
         @ancestors   = [self, *@parent.ancestors]
         @depends_on  = @parent.depends_on
@@ -132,6 +135,17 @@ module BareTest
       end
     end
 
+    # Experimental
+    # Define handlers for specific exception classes. The handler gets
+    # the assertion, the phase and the exception yielded and is expected
+    # to return a BareTest::Status.
+    def handle_verification_exceptions(*exception_classes, &block) # :nodoc:
+      exception_classes.each do |exception_class|
+        raise "Already registered a verification exception handler for class #{exception_class}" if @verification_exception_handlers[exception_class]
+        @verification_exception_handlers[exception_class] = block
+      end
+    end
+
     # Instruct this suite to require the given files.
     # The suite is skipped if a file can't be loaded.
     def requires(*paths)
@@ -164,10 +178,10 @@ module BareTest
     # The failure/error/skipping/pending reason.
     # Returns nil if there's no reason, a string otherwise
     # Options:
-    # :default::     Reason to return if no reason is present
-    # :separator::   String used to separate multiple reasons
-    # :indent::      A String, the indentation to use. Prefixes every line.
-    # :first_indent: A String, used to indent the first line only (replaces indent).
+    # :default::      Reason to return if no reason is present
+    # :separator::    String used to separate multiple reasons
+    # :indent::       A String, the indentation to use. Prefixes every line.
+    # :first_indent:: A String, used to indent the first line only (replaces indent).
     def reason(opt=nil)
       if opt then
         default, separator, indent, first_indent = 

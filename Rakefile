@@ -22,7 +22,7 @@ Project.meta.use_git          = true
 
 Project.manifest.ignore       = %w[
                                     Rakefile
-                                    beat/**/*
+                                    baretest.gemspec
                                     dev/**/*
                                     doc/announcements/**/*
                                     docs/**/*

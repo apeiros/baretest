@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: README.rdoc [baretest-0.4.0.pre1]</title>
+	<title>File: README.rdoc [baretest-0.4.0]</title>
 
 	<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet" />
 
@@ -75,8 +75,6 @@
 					<li><a href="./BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
 				
 					<li><a href="./BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
-				
-					<li><a href="./BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
 					<li><a href="./BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
@@ -261,85 +259,47 @@ to ensure it uses the right one: `rake gem:install GEM=gem1.9`
 Usage:
 </p>
 <pre>
-  baretest [options] [glob, ...]
+    baretest [command] [options] *(selector | -selector)
+      command:   The command to run. See `baretest commands`
+      options:   The flags and options, see in the &quot;Options&quot; section.
+      selector:  The tests to run. Example:
+                   baretest -- test/suite/a -test/suite/a/x @tag -@other %failure -%pending
+                 Defaults to 'test/{suite,unit,integration,system}
+                 See `baretest selectors` to get more information
 
-  Glob defaults to 'test/**/*.rb'
-  Providing a directory as glob is equivalent to dir/**/*.rb
-  Options:
-    -f, --format FORMAT      use FORMAT for output
-    -F, --formats            show available formats
-    -d, --debug              set debugging flags (set $DEBUG to true)
-    -i, --interactive        drop into IRB on error or failure
-    -s, --setup FILE         specify setup file
-    -v, --version            print the version and exit
-    -w, --warn               turn warnings on for your script
+    Default command is 'run', which runs the testsuite or the provided testfiles.
+
+    Options:
+
+          --commands       overview over the commands
+      -d, --debug          set debugging flags (set $DEBUG to true)
+      -i, --interactive    drop into IRB on error or failure. Use 'help!' in the irb session for more information
+      -f, --format FORMAT  use FORMAT for output, see `baretest formats`
+      -s, --setup FILE     specify setup file
+      -w, --warn           turn warnings on for your script
+      -h, --help           help for usage and flags
+      -v, --version        print the version and exit
+          --init           Deprecated form for `baretest --init`
+
+    Options for 'CLI' formatter:
+
+      -c, --[no-]color    Enable/disable output coloring
+      -p, --[no-]profile  Enable/disable profiling assertions
+
+    Environment variables for 'CLI' formatter:
+
+    * COLOR    Enable/disable output coloring
+    * PROFILE  Enable/disable profiling assertions
+
+    Environment variables:
+
+    * FORMAT       use FORMAT for output, see `baretest formats`
+    * VERBOSE      turn warnings on for your script
+    * INTERACTIVE  drop into IRB on error or failure. Use 'help!' in the irb session for more information
 </pre>
-<h2>Planned Features</h2>
-<ul>
-<li>Passing on flags/options for formatters
-
-</li>
-<li>Tagging tests to allow focusing (only run tests with/without specific tags)
-
-</li>
-<li>Word-wrapping for CLI runner
-
-</li>
-<li>Flags for color and verbose ([no-]color and [no-]verbose) for the
-executable
-
-</li>
-<li>baretest &#8212;init [LAYOUT], to create the necessary directory structure
-
-</li>
-<li>Detect whether baretest is run from an interactive terminal or not and
-adjust defaults (no-color e.g.)
-
-</li>
-<li>Alternative CLI runner with status implicit via colored/bg-colored
-descriptions
-
-</li>
-<li>Alternative CLI runner which prints the name of the test prior the label
-and rewrites the line when the test has executed to add status &amp;
-coloring.
-
-</li>
-<li>Simple stubbing with automatic cleanup at teardown. Example:
-
-<pre>
-  assert &quot;Should require a single file listed in :requires option.&quot; do |a|
-    file = 'foo/bar'
-    stub(Kernel, :require) do |file, *args| a.touch(file) end
-    ::Test::Suite.create(nil, nil, :requires =&gt; file)
-
-    touched file
-  end
-</pre>
-</li>
-<li>Inline tests via Module#describe (basically the same as Test::Suite#suite)
-
-</li>
-<li>YARD code to extract the specifications without running the code
-
-</li>
-<li>A redmine plugin
-
-</li>
-<li>&#8212;fail-all flag, to test/review diagnostics of tests (no idea how to
-do that yet)
-
-</li>
-</ul>
-<h2>Rejected Features</h2>
-<ul>
-<li>Currently none
-
-</li>
-</ul>
 <h2>A Bit of Background</h2>
 <p>
-Originally, bare-test started out as a project for shits &amp; giggles on
+Originally, baretest started out as a project for shits &amp; giggles on
 the flight back from vegas (railsconf09), to prove that it is possible to
 have a fully fledged test-framework in under 100 lines of source-code.
 Later I realized that this project could become more. For one it was (still
@@ -473,11 +433,38 @@ From examples/test.rb:
 </li>
 </ul>
 </li>
+<li>robgleeson
+
+<ul>
+<li>Introducing me to rack-test
+
+</li>
+<li>Feedback
+
+</li>
+</ul>
+</li>
 </ul>
 <h2>Known bugs</h2>
 <p>
 Currently none.
 </p>
+<h2>Known issues</h2>
+<ul>
+<li>A setup that raises an exception will cause all teardowns to not be
+executed. This will change in a future release as follows: a setup that
+raises an exception will only cause teardowns defined on the same suite not
+to be executed.
+
+</li>
+<li>&#8212;interactive can&#8217;t be used to investigate problems in setup or
+teardown
+
+</li>
+<li>Inherited skip reasons are not reported
+
+</li>
+</ul>
 <h2>Foot Notes</h2>
 <table>
 <tr><td valign="top"><sup>1</sup>:</td><td>The abbreviated form without support code and output formatters. The normal

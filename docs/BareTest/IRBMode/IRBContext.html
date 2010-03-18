@@ -64,6 +64,8 @@
 					
 					<li><a href="#M000059">#em!</a></li>
 					
+					<li><a href="#M000070">#eval!</a></li>
+					
 					<li><a href="#M000064">#file!</a></li>
 					
 					<li><a href="#M000063">#gv!</a></li>
@@ -147,8 +149,6 @@
 					<li><a href="../../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
 				
 					<li><a href="../../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
-				
-					<li><a href="../../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
 					<li><a href="../../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
@@ -268,15 +268,15 @@ Prints the original assertion&#8217;s backtrace
 					<div class="method-source-code"
 						id="bt--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 118</span>
-118:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">size</span>=<span class="ruby-keyword kw">nil</span>)
-119:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
-120:           <span class="ruby-identifier">size</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>
-121:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">backtrace</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-operator">-</span><span class="ruby-identifier">size</span>]
-122:         <span class="ruby-keyword kw">else</span>
-123:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception occurred, therefore no backtrace is available&quot;</span>
-124:         <span class="ruby-keyword kw">end</span>
-125:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 119</span>
+119:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">size</span>=<span class="ruby-keyword kw">nil</span>)
+120:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
+121:           <span class="ruby-identifier">size</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>
+122:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">backtrace</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-operator">-</span><span class="ruby-identifier">size</span>]
+123:         <span class="ruby-keyword kw">else</span>
+124:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception occurred, therefore no backtrace is available&quot;</span>
+125:         <span class="ruby-keyword kw">end</span>
+126:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -308,14 +308,14 @@ being properly indented.
 					<div class="method-source-code"
 						id="code--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 169</span>
-169:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">code!</span>
-170:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span> = <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">code</span> <span class="ruby-keyword kw">then</span>
-171:           <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">insert_line_numbers</span>(<span class="ruby-identifier">code</span>, <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>))
-172:         <span class="ruby-keyword kw">else</span>
-173:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Code could not be extracted&quot;</span>
-174:         <span class="ruby-keyword kw">end</span>
-175:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 170</span>
+170:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">code!</span>
+171:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span> = <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">code</span> <span class="ruby-keyword kw">then</span>
+172:           <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">insert_line_numbers</span>(<span class="ruby-identifier">code</span>, <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>))
+173:         <span class="ruby-keyword kw">else</span>
+174:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Code could not be extracted&quot;</span>
+175:         <span class="ruby-keyword kw">end</span>
+176:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -346,10 +346,10 @@ Returns an array of all class variable names
 					<div class="method-source-code"
 						id="cv--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 133</span>
-133:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cv!</span>
-134:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_variables</span>.<span class="ruby-identifier">sort</span>
-135:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 134</span>
+134:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cv!</span>
+135:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_variables</span>.<span class="ruby-identifier">sort</span>
+136:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -380,10 +380,10 @@ Prints a string of the original assertion&#8217;s nesting within suites
 					<div class="method-source-code"
 						id="description--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 158</span>
-158:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">description!</span>
-159:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">description</span>
-160:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 159</span>
+159:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">description!</span>
+160:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">description</span>
+161:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -414,11 +414,11 @@ Prints the original assertion&#8217;s error message and backtrace
 					<div class="method-source-code"
 						id="e--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 101</span>
-101:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">e!</span>
-102:         <span class="ruby-identifier">em!</span>
-103:         <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>)
-104:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 102</span>
+102:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">e!</span>
+103:         <span class="ruby-identifier">em!</span>
+104:         <span class="ruby-identifier">bt!</span>(<span class="ruby-identifier">caller</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>)
+105:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -449,16 +449,67 @@ Prints the original assertion&#8217;s error message
 					<div class="method-source-code"
 						id="em--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 107</span>
-107:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">em!</span>
-108:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
-109:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>
-110:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">failure_reason</span>
-111:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">failure_reason</span>
-112:         <span class="ruby-keyword kw">else</span>
-113:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception or failure reason available&quot;</span>
-114:         <span class="ruby-keyword kw">end</span>
-115:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 108</span>
+108:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">em!</span>
+109:         <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span> <span class="ruby-keyword kw">then</span>
+110:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">exception</span>.<span class="ruby-identifier">message</span>
+111:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">failure_reason</span>
+112:           <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">failure_reason</span>
+113:         <span class="ruby-keyword kw">else</span>
+114:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;No exception or failure reason available&quot;</span>
+115:         <span class="ruby-keyword kw">end</span>
+116:       <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="eval--method" class="method-detail ">
+				<a name="M000070"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">eval!</span><span
+						class="method-args">(from, number=nil, explicit_binding=nil)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="eval--source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 178</span>
+178:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">eval!</span>(<span class="ruby-identifier">from</span>, <span class="ruby-identifier">number</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">explicit_binding</span>=<span class="ruby-keyword kw">nil</span>)
+179:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span> = <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">code</span> <span class="ruby-keyword kw">then</span>
+180:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">from</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Range</span>) <span class="ruby-keyword kw">then</span>
+181:             <span class="ruby-identifier">number</span> = <span class="ruby-identifier">from</span>.<span class="ruby-identifier">end</span><span class="ruby-operator">-</span><span class="ruby-identifier">from</span>.<span class="ruby-identifier">begin</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>
+182:             <span class="ruby-identifier">from</span>   = <span class="ruby-identifier">from</span>.<span class="ruby-identifier">begin</span>
+183:           <span class="ruby-keyword kw">end</span>
+184:           <span class="ruby-identifier">number</span>    <span class="ruby-operator">||=</span> <span class="ruby-value">1</span>
+185:           <span class="ruby-identifier">total_lines</span> = <span class="ruby-identifier">code</span>.<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">count</span>(<span class="ruby-value str">&quot;\n&quot;</span>)<span class="ruby-operator">-</span><span class="ruby-value">1</span>
+186:           <span class="ruby-identifier">first_line</span>  = <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span>
+187:           <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">from</span>.<span class="ruby-identifier">between?</span>(<span class="ruby-identifier">first_line</span>, <span class="ruby-identifier">first_line</span><span class="ruby-operator">+</span><span class="ruby-identifier">total_lines</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)
+188:             <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;From must be between #{first_line} and #{first_line+total_lines-1}&quot;</span>
+189:           <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">number</span>.<span class="ruby-identifier">between?</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">total_lines</span>)
+190:             <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Number must be between 1 and #{total_lines}&quot;</span>
+191:           <span class="ruby-keyword kw">else</span>
+192:             <span class="ruby-identifier">from</span> <span class="ruby-operator">-=</span> <span class="ruby-identifier">first_line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>
+193:             <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Evaluating: &quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">code</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)[<span class="ruby-identifier">from</span>, <span class="ruby-identifier">number</span>]
+194:             <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">code</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)[<span class="ruby-identifier">from</span>, <span class="ruby-identifier">number</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>), <span class="ruby-identifier">explicit_binding</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">workspace</span>.<span class="ruby-identifier">binding</span>) <span class="ruby-comment cmt"># this 'context' comes from irb</span>
+195:           <span class="ruby-keyword kw">end</span>
+196:         <span class="ruby-keyword kw">else</span>
+197:           <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Code could not be extracted&quot;</span>
+198:         <span class="ruby-keyword kw">end</span>
+199:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -489,10 +540,10 @@ Returns the original assertion&#8217;s file
 					<div class="method-source-code"
 						id="file--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 143</span>
-143:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file!</span>
-144:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">file</span>
-145:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 144</span>
+144:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file!</span>
+145:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">file</span>
+146:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -523,10 +574,10 @@ Returns an array of all global variable names
 					<div class="method-source-code"
 						id="gv--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 138</span>
-138:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gv!</span>(<span class="ruby-identifier">remove_standard</span>=<span class="ruby-keyword kw">true</span>)
-139:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span>(<span class="ruby-identifier">global_variables</span><span class="ruby-operator">-</span>(<span class="ruby-identifier">remove_standard</span> <span class="ruby-value">? </span><span class="ruby-constant">IRBMode</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoveGlobals</span> <span class="ruby-operator">:</span> [])).<span class="ruby-identifier">sort</span>
-140:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 139</span>
+139:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gv!</span>(<span class="ruby-identifier">remove_standard</span>=<span class="ruby-keyword kw">true</span>)
+140:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span>(<span class="ruby-identifier">global_variables</span><span class="ruby-operator">-</span>(<span class="ruby-identifier">remove_standard</span> <span class="ruby-value">? </span><span class="ruby-constant">IRBMode</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoveGlobals</span> <span class="ruby-operator">:</span> [])).<span class="ruby-identifier">sort</span>
+141:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -576,11 +627,12 @@ Prints a list of available helper methods
 71:              <span class="ruby-value str">&quot;nesting!     - a &gt;-separated list of suite descriptions this assertion is nested&quot;</span>,
 72:              <span class="ruby-value str">&quot;description! - this assertion's description&quot;</span>,
 73:              <span class="ruby-value str">&quot;code!        - the code of this assertion&quot;</span>,
-74:              <span class="ruby-comment cmt">#&quot;restart! - Restart this irb session, resetting everything&quot;,</span>
-75:              <span class="ruby-value str">&quot;irb_help     - irb's original help&quot;</span>,
-76:              <span class="ruby-value str">&quot;q            - Quit - alias to irb's exit&quot;</span>,
-77:              <span class="ruby-value str">&quot;help         - this text you're reading right now&quot;</span>
-78:       <span class="ruby-keyword kw">end</span></pre>
+74:              <span class="ruby-value str">&quot;eval!        - eval (from_line, number_of_lines) or (from_line..to_line)&quot;</span>,
+75:              <span class="ruby-comment cmt">#&quot;restart! - Restart this irb session, resetting everything&quot;,</span>
+76:              <span class="ruby-value str">&quot;irb_help     - irb's original help&quot;</span>,
+77:              <span class="ruby-value str">&quot;q            - Quit - alias to irb's exit&quot;</span>,
+78:              <span class="ruby-value str">&quot;help         - this text you're reading right now&quot;</span>
+79:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -640,10 +692,10 @@ Returns an array of all instance variable names
 					<div class="method-source-code"
 						id="iv--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 128</span>
-128:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iv!</span>
-129:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
-130:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 129</span>
+129:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iv!</span>
+130:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
+131:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -674,10 +726,10 @@ Returns the original assertion&#8217;s line
 					<div class="method-source-code"
 						id="line--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 148</span>
-148:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">line!</span>
-149:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span>
-150:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 149</span>
+149:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">line!</span>
+150:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">line</span>
+151:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -708,10 +760,10 @@ Prints a string of the original assertion&#8217;s nesting within suites
 					<div class="method-source-code"
 						id="nesting--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 163</span>
-163:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nesting!</span>
-164:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestors</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' &gt; '</span>)
-165:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 164</span>
+164:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nesting!</span>
+165:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestors</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' &gt; '</span>)
+166:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -742,10 +794,10 @@ Returns the original assertion&#8217;s line
 					<div class="method-source-code"
 						id="open--source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 153</span>
-153:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open!</span>
-154:         <span class="ruby-node">`bbedit '#{@__assertion__.file}:#{@__assertion__.line}'`</span>
-155:       <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 154</span>
+154:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open!</span>
+155:         <span class="ruby-node">`bbedit '#{@__assertion__.file}:#{@__assertion__.line}'`</span>
+156:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -776,10 +828,10 @@ Quit - an alias to irb&#8217;s exit
 					<div class="method-source-code"
 						id="q-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 86</span>
-86:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">q</span>
-87:         <span class="ruby-identifier">exit</span>
-88:       <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 87</span>
+87:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">q</span>
+88:         <span class="ruby-identifier">exit</span>
+89:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -810,10 +862,10 @@ Returns the original assertion&#8217;s status
 					<div class="method-source-code"
 						id="s--source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 91</span>
-91:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">s!</span>
-92:         <span class="ruby-ivar">@__status__</span>
-93:       <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 92</span>
+92:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">s!</span>
+93:         <span class="ruby-ivar">@__status__</span>
+94:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -844,10 +896,10 @@ Returns the original assertion&#8217;s status code
 					<div class="method-source-code"
 						id="sc--source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 96</span>
-96:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sc!</span>
-97:         <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">status</span>
-98:       <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 97</span>
+97:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sc!</span>
+98:         <span class="ruby-ivar">@__status__</span>.<span class="ruby-identifier">status</span>
+99:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

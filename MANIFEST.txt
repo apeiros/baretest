@@ -5,11 +5,16 @@ bin/baretest
 doc/baretest.rdoc
 doc/mocking_stubbing_test_doubles.rdoc
 doc/news/news-0.3.0.rdoc
+doc/news/news-0.4.0.rdoc
 doc/quickref.rdoc
 doc/whats_going_on.rdoc
 doc/writing_tests.rdoc
+examples/README_EXAMPLES.rdoc
+examples/components/mocha.rb
 examples/components/rack-test.rb
+examples/components/rr.rb
 examples/irb_mode/failures.rb
+examples/isolation/example1.rb
 examples/rake/test.rake
 examples/tests/01_basics_I.rb
 examples/tests/02_basics_II_helpers.rb
@@ -46,6 +51,7 @@ lib/baretest/uid.rb
 lib/baretest/use/mocha.rb
 lib/baretest/use/rack_test.rb
 lib/baretest/use/rr.rb
+lib/baretest/use/support.rb
 lib/baretest/version.rb
 lib/command.rb
 lib/command/argument.rb

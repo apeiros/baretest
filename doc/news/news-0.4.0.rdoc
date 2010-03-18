@@ -1,0 +1,9 @@
+= NEWS
+
+== baretest version 0.4.0
+
+* Components
+* Integration of mocha
+* Integration of RR
+* Integration of rack-test
+* Improved `baretest` executable

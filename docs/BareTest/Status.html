@@ -59,9 +59,9 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000086">::new</a></li>
+					<li><a href="#M000090">::new</a></li>
 					
-					<li><a href="#M000087">#reason</a></li>
+					<li><a href="#M000091">#reason</a></li>
 					
 				</ul>
 			</div>
@@ -124,8 +124,6 @@
 					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
 				
 					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
-				
-					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
 					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
@@ -318,7 +316,7 @@ Detailed reason for failing. Array or nil.
 				
 				<p>
 If an exception occured in <a
-href="Assertion.html#M000016">Assertion#execute</a>, this will contain the
+href="Assertion.html#M000020">Assertion#execute</a>, this will contain the
 Exception object raised.
 </p>
 				
@@ -335,7 +333,7 @@ Exception object raised.
 
 		
 			<div id="new-method" class="method-detail ">
-				<a name="M000086"></a>
+				<a name="M000090"></a>
 
 				<div class="method-heading">
 				
@@ -394,7 +392,7 @@ href="Suite.html">Suite</a> was skipped. Array, String or nil.
 
 		
 			<div id="reason-method" class="method-detail ">
-				<a name="M000087"></a>
+				<a name="M000091"></a>
 
 				<div class="method-heading">
 				
@@ -420,11 +418,10 @@ reason, a string otherwise Options:
 <tr><td valign="top">:indent:</td><td>A String, the indentation to use. Prefixes every line.
 
 </td></tr>
+<tr><td valign="top">:first_indent:</td><td>A String, used to indent the first line only (replaces indent).
+
+</td></tr>
 </table>
-<p>
-:first_indent: A String, used to indent the first line only (replaces
-indent).
-</p>
 					
 
 					
@@ -438,10 +435,10 @@ indent).
 69:           <span class="ruby-operator">*</span><span class="ruby-identifier">opt</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-identifier">:default</span>, <span class="ruby-identifier">:separator</span>, <span class="ruby-identifier">:indent</span>, <span class="ruby-identifier">:first_indent</span>)
 70:         <span class="ruby-identifier">reason</span> = <span class="ruby-ivar">@skip_reason</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@failure_reason</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">default</span>
 71:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">reason</span>
-72:         <span class="ruby-identifier">reason</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">reason</span>)
+72:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">reason</span> <span class="ruby-operator">:</span> [<span class="ruby-identifier">reason</span>]
 73:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">separator</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;\n&quot;</span>)
 74:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^/</span>, <span class="ruby-identifier">indent</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">indent</span>
-75:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/^#{Regexp.escape(indent)}/</span>, <span class="ruby-identifier">first_indent</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">first_indent</span>
+75:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/\A#{Regexp.escape(indent)}/</span>, <span class="ruby-identifier">first_indent</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">first_indent</span>
 76:         <span class="ruby-identifier">reason</span>
 77:       <span class="ruby-keyword kw">else</span>
 78:         <span class="ruby-ivar">@reason</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@reason</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)

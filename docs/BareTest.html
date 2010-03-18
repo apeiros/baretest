@@ -61,11 +61,11 @@
 						<li><a href="./lib/baretest/persistence_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/persistence.rb">lib/baretest/persistence.rb</a></li>
 					
-						<li><a href="./lib/baretest/run/cli_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="lib/baretest/run/cli.rb">lib/baretest/run/cli.rb</a></li>
-					
 						<li><a href="./lib/baretest/run/minimal_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/run/minimal.rb">lib/baretest/run/minimal.rb</a></li>
+					
+						<li><a href="./lib/baretest/run/cli_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/run/cli.rb">lib/baretest/run/cli.rb</a></li>
 					
 						<li><a href="./lib/baretest/run/none_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/run/none.rb">lib/baretest/run/none.rb</a></li>
@@ -158,21 +158,27 @@
 					
 					<li><a href="#M000129">::component</a></li>
 					
-					<li><a href="#M000119">::load_standard_test_files</a></li>
+					<li><a href="#M000140">::external</a></li>
 					
-					<li><a href="#M000120">::most_important_status</a></li>
+					<li><a href="#M000125">::load_standard_test_files</a></li>
 					
-					<li><a href="#M000131">::new_component</a></li>
+					<li><a href="#M000126">::most_important_status</a></li>
 					
-					<li><a href="#M000126">::process_selectors</a></li>
+					<li><a href="#M000133">::new_component</a></li>
 					
-					<li><a href="#M000117">::require_baretest</a></li>
+					<li><a href="#M000127">::process_selectors</a></li>
 					
-					<li><a href="#M000118">::require_ruby</a></li>
+					<li><a href="#M000139">::require</a></li>
+					
+					<li><a href="#M000123">::require_baretest</a></li>
+					
+					<li><a href="#M000124">::require_ruby</a></li>
 					
 					<li><a href="#M000130">::suite</a></li>
 					
-					<li><a href="#M000132">::use</a></li>
+					<li><a href="#M000141">::test_directory</a></li>
+					
+					<li><a href="#M000134">::use</a></li>
 					
 				</ul>
 			</div>
@@ -236,8 +242,6 @@
 				
 					<li><a href="./BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
 				
-					<li><a href="./BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
-				
 					<li><a href="./BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
 					<li><a href="./BareTest/Formatter.html">BareTest::Formatter</a></li>
@@ -293,10 +297,7 @@
 			<hr size="1"></hr><p>
 encoding: utf-8
 </p>
-<hr size="1"></hr><p>
-See bottom for more requires
-</p>
-
+<hr size="1"></hr>
 		</div>
 
 		<!-- Constants -->
@@ -328,21 +329,6 @@ All states in the order of relevance, more relevant states first
 </p></dd>
 				
 			
-				<dt><a name="DefaultInitialPositiveGlob">DefaultInitialPositiveGlob</a></dt>
-				
-				<dd class="description"><p>
-The standard glob used by baretest to load test files :nodoc:
-</p></dd>
-				
-			
-				<dt><a name="ValidStateSelectors">ValidStateSelectors</a></dt>
-				
-				<dd class="description"><p>
-Selectors that are valid to be passed into <a
-href="BareTest.html#M000126">process_selectors</a> :nodoc:
-</p></dd>
-				
-			
 			</dl>
 		</div>
 		
@@ -365,7 +351,7 @@ href="BareTest.html#M000126">process_selectors</a> :nodoc:
 				
 				<p>
 A hash of components - available via BareTest::use(name) and <a
-href="BareTest/Suite.html#M000100">Suite#suite</a> :use => name
+href="BareTest/Suite.html#M000105">Suite#suite</a> :use => name
 </p>
 				
 				</div>
@@ -453,17 +439,56 @@ suites and assertions to.
 					<div class="method-source-code"
 						id="component-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 197</span>
-197:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">component</span>(<span class="ruby-identifier">name</span>)
-198:     <span class="ruby-identifier">component</span> = <span class="ruby-ivar">@components</span>[<span class="ruby-identifier">name</span>]
-199:     <span class="ruby-keyword kw">begin</span>
-200:       <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;baretest/use/#{name}&quot;</span>
-201:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span>
-202:     <span class="ruby-keyword kw">else</span>
-203:       <span class="ruby-identifier">component</span> = <span class="ruby-ivar">@components</span>[<span class="ruby-identifier">name</span>]
-204:     <span class="ruby-keyword kw">end</span>
-205:     <span class="ruby-identifier">component</span>
-206:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 213</span>
+213:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">component</span>(<span class="ruby-identifier">name</span>)
+214:     <span class="ruby-identifier">component</span> = <span class="ruby-ivar">@components</span>[<span class="ruby-identifier">name</span>]
+215:     <span class="ruby-keyword kw">begin</span>
+216:       <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;baretest/use/#{name}&quot;</span>
+217:     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span>
+218:     <span class="ruby-keyword kw">else</span>
+219:       <span class="ruby-identifier">component</span> = <span class="ruby-ivar">@components</span>[<span class="ruby-identifier">name</span>]
+220:     <span class="ruby-keyword kw">end</span>
+221:     <span class="ruby-identifier">component</span>
+222:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="external-method" class="method-detail ">
+				<a name="M000140"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">external</span><span
+						class="method-args">(*path)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Returns the absolute path to the external file Example
+</p>
+<pre>
+  suite &quot;#mkdir&quot; do
+    setup do
+      @base = BareTest.external('suite_mkdir') # =&gt; &quot;/.../PROJECT/test/external/suite_mkdir&quot;
+</pre>
+					
+
+					
+					<div class="method-source-code"
+						id="external-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 269</span>
+269:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">external</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">path</span>)
+270:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">test_directory</span>, <span class="ruby-value str">'external'</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">path</span>)
+271:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -473,7 +498,7 @@ suites and assertions to.
 
 		
 			<div id="load-standard-test-files-method" class="method-detail ">
-				<a name="M000119"></a>
+				<a name="M000125"></a>
 
 				<div class="method-heading">
 				
@@ -512,30 +537,38 @@ original directory after loading (default: &#8217;.&#8217;)
 					<div class="method-source-code"
 						id="load-standard-test-files-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 100</span>
-100:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_standard_test_files</span>(<span class="ruby-identifier">opts</span>={})
-101:     <span class="ruby-identifier">verbose</span>    = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:verbose</span>)
-102:     <span class="ruby-identifier">setup_path</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:setup_path</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'test/setup.rb'</span>
-103:     <span class="ruby-identifier">lib_path</span>   = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:lib_path</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'test/lib'</span>
-104:     <span class="ruby-identifier">chdir</span>      = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:chdir</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'.'</span>
-105:     <span class="ruby-identifier">files</span>      = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:files</span>)
-106:     <span class="ruby-identifier">files</span>      = [<span class="ruby-constant">DefaultInitialPositiveGlob</span>] <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">files</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">files</span>.<span class="ruby-identifier">empty?</span>)
-107:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-identifier">chdir</span>) <span class="ruby-keyword kw">do</span>
-108:       <span class="ruby-identifier">$LOAD_PATH</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">lib_path</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">lib_path</span>)
-109:       <span class="ruby-identifier">load</span>(<span class="ruby-identifier">setup_path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">setup_path</span>)
-110:       <span class="ruby-identifier">files</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">glob</span><span class="ruby-operator">|</span>
-111:         <span class="ruby-identifier">glob</span> = <span class="ruby-node">&quot;#{glob}/**/*.rb&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">glob</span>)
-112:         <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-identifier">glob</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
-113:           <span class="ruby-identifier">helper_path</span> = <span class="ruby-identifier">path</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">%r{^test/(suite|unit|integration|system)/}</span>, <span class="ruby-value str">'test/helper/\1/'</span>)
-114:           <span class="ruby-identifier">exists</span> = (<span class="ruby-identifier">helper_path</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">helper_path</span>))
-115:           <span class="ruby-identifier">puts</span>(<span class="ruby-identifier">exists</span> <span class="ruby-value">? </span><span class="ruby-node">&quot;Loading helper file #{helper_path}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;No helper file #{helper_path} to load&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">verbose</span>
-116:           <span class="ruby-identifier">load</span>(<span class="ruby-identifier">helper_path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">exists</span>
-117:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Loading test file #{path}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">verbose</span>
-118:           <span class="ruby-identifier">load</span>(<span class="ruby-identifier">path</span>)
-119:         }
-120:       <span class="ruby-keyword kw">end</span>
-121:     <span class="ruby-keyword kw">end</span>
-122:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 108</span>
+108:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_standard_test_files</span>(<span class="ruby-identifier">opts</span>={})
+109:     <span class="ruby-identifier">verbose</span>    = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:verbose</span>)
+110:     <span class="ruby-identifier">setup_path</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:setup_path</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'test/setup.rb'</span>
+111:     <span class="ruby-identifier">lib_path</span>   = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:lib_path</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'test/lib'</span>
+112:     <span class="ruby-identifier">chdir</span>      = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:chdir</span>) <span class="ruby-operator">||</span> <span class="ruby-value str">'.'</span>
+113:     <span class="ruby-identifier">files</span>      = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:files</span>)
+114:     <span class="ruby-identifier">files</span>      = [<span class="ruby-constant">DefaultInitialPositiveGlob</span>] <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">files</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">files</span>.<span class="ruby-identifier">empty?</span>)
+115:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-identifier">chdir</span>) <span class="ruby-keyword kw">do</span>
+116:       <span class="ruby-identifier">$LOAD_PATH</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">lib_path</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">lib_path</span>)
+117:       <span class="ruby-identifier">load</span>(<span class="ruby-identifier">setup_path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">setup_path</span>)
+118:       <span class="ruby-identifier">files</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">glob</span><span class="ruby-operator">|</span>
+119:         <span class="ruby-identifier">glob</span> = <span class="ruby-node">&quot;#{glob}/**/*.rb&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">glob</span>)
+120:         <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-identifier">glob</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+121:           <span class="ruby-identifier">helper_path</span> = <span class="ruby-identifier">path</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">%r{((?:^|/)test)/(suite|unit|integration|system)/}</span>, <span class="ruby-value str">'\1/helper/\2/'</span>)
+122:           <span class="ruby-identifier">exists</span> = (<span class="ruby-identifier">helper_path</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">helper_path</span>))
+123:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">verbose</span> <span class="ruby-keyword kw">then</span>
+124:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">helper_path</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">path</span> <span class="ruby-keyword kw">then</span>
+125:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Could not resolve helper path for path #{path}&quot;</span>
+126:             <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">exists</span>
+127:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Loading helper file #{helper_path}&quot;</span>
+128:             <span class="ruby-keyword kw">else</span>
+129:               <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;No helper file #{helper_path} to load&quot;</span>
+130:             <span class="ruby-keyword kw">end</span>
+131:           <span class="ruby-keyword kw">end</span>
+132:           <span class="ruby-identifier">load</span>(<span class="ruby-identifier">helper_path</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">exists</span>
+133:           <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Loading test file #{path}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">verbose</span>
+134:           <span class="ruby-identifier">load</span>(<span class="ruby-identifier">path</span>)
+135:         }
+136:       <span class="ruby-keyword kw">end</span>
+137:     <span class="ruby-keyword kw">end</span>
+138:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -545,7 +578,7 @@ original directory after loading (default: &#8217;.&#8217;)
 
 		
 			<div id="most-important-status-method" class="method-detail ">
-				<a name="M000120"></a>
+				<a name="M000126"></a>
 
 				<div class="method-heading">
 				
@@ -567,10 +600,10 @@ href="BareTest.html#StatusOrder">StatusOrder</a>)
 					<div class="method-source-code"
 						id="most-important-status-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 126</span>
-126:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">most_important_status</span>(<span class="ruby-identifier">states</span>)
-127:     (<span class="ruby-constant">StatusOrder</span> <span class="ruby-operator">&amp;</span> <span class="ruby-identifier">states</span>).<span class="ruby-identifier">first</span> <span class="ruby-comment cmt"># requires Array#&amp; to be stable (keep order of first operand)</span>
-128:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 142</span>
+142:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">most_important_status</span>(<span class="ruby-identifier">states</span>)
+143:     (<span class="ruby-constant">StatusOrder</span> <span class="ruby-operator">&amp;</span> <span class="ruby-identifier">states</span>).<span class="ruby-identifier">first</span> <span class="ruby-comment cmt"># requires Array#&amp; to be stable (keep order of first operand)</span>
+144:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -580,7 +613,7 @@ href="BareTest.html#StatusOrder">StatusOrder</a>)
 
 		
 			<div id="new-component-method" class="method-detail ">
-				<a name="M000131"></a>
+				<a name="M000133"></a>
 
 				<div class="method-heading">
 				
@@ -602,12 +635,12 @@ BareTest::Suite::new)
 					<div class="method-source-code"
 						id="new-component-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 222</span>
-222:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new_component</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-223:     <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>
-224:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Component named #{name.inspect} already exists&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@components</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>)
-225:     <span class="ruby-ivar">@components</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">block</span>
-226:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 238</span>
+238:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new_component</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+239:     <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>
+240:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Component named #{name.inspect} already exists&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@components</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>)
+241:     <span class="ruby-ivar">@components</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">block</span>
+242:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -617,7 +650,7 @@ BareTest::Suite::new)
 
 		
 			<div id="process-selectors-method" class="method-detail ">
-				<a name="M000126"></a>
+				<a name="M000127"></a>
 
 				<div class="method-heading">
 				
@@ -649,48 +682,92 @@ as far as possible. Example:
 					<div class="method-source-code"
 						id="process-selectors-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 141</span>
-141:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">process_selectors</span>(<span class="ruby-identifier">selectors</span>, <span class="ruby-identifier">base_directory</span>=<span class="ruby-value str">&quot;.&quot;</span>, <span class="ruby-identifier">default_initial_positive_glob</span>=<span class="ruby-keyword kw">nil</span>)
-142:     <span class="ruby-identifier">files</span>           = []
-143:     <span class="ruby-identifier">include_tags</span>    = []
-144:     <span class="ruby-identifier">exclude_tags</span>    = []
-145:     <span class="ruby-identifier">include_states</span>  = []
-146:     <span class="ruby-identifier">exclude_states</span>  = []
-147: 
-148:     <span class="ruby-identifier">default_initial_positive_glob</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">DefaultInitialPositiveGlob</span>
-149:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-identifier">base_directory</span>) <span class="ruby-keyword kw">do</span>
-150:       <span class="ruby-identifier">selectors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">selector</span><span class="ruby-operator">|</span>
-151:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">selector</span>
-152:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A-%(.*)/</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">exclude_states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
-153:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A-:(.*)/</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">exclude_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
-154:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A\+?%(.*)/</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">include_states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
-155:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A\+?:(.*)/</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">include_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
-156:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A-(.*)/</span>    <span class="ruby-keyword kw">then</span>
-157:             <span class="ruby-identifier">files</span>  = <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">default_initial_positive_glob</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">files</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">default_initial_positive_glob</span>
-158:             <span class="ruby-identifier">glob</span>   = <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">$1</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{$1}/**/*.rb&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">$1</span>
-159:             <span class="ruby-identifier">files</span> <span class="ruby-operator">-=</span> <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">glob</span>]
-160:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A\+?(.*)/</span>  <span class="ruby-keyword kw">then</span>
-161:             <span class="ruby-identifier">glob</span>   = <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{selector}/**/*.rb&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">selector</span>
-162:             <span class="ruby-identifier">files</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">glob</span>]
-163:           <span class="ruby-keyword kw">else</span>
-164:             <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Should never reach else - selector: #{selector.inspect}&quot;</span>
-165:         <span class="ruby-keyword kw">end</span>
-166:       <span class="ruby-keyword kw">end</span>
-167:       <span class="ruby-identifier">files</span>  = <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">default_initial_positive_glob</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">files</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">default_initial_positive_glob</span>
-168:       <span class="ruby-identifier">files</span>.<span class="ruby-identifier">map!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>) <span class="ruby-keyword kw">end</span>
-169:     <span class="ruby-keyword kw">end</span>
-170: 
-171:     <span class="ruby-identifier">invalid_states</span> = (<span class="ruby-identifier">include_states</span><span class="ruby-operator">|</span><span class="ruby-identifier">exclude_states</span>)<span class="ruby-operator">-</span><span class="ruby-constant">ValidStateSelectors</span>
-172:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">InvalidSelectors</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">invalid_states</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">invalid_states</span>.<span class="ruby-identifier">empty?</span>
-173: 
-174:     <span class="ruby-keyword kw">return</span> {
-175:       <span class="ruby-identifier">:files</span>          =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">files</span>,
-176:       <span class="ruby-identifier">:include_tags</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">include_tags</span>,
-177:       <span class="ruby-identifier">:exclude_tags</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exclude_tags</span>,
-178:       <span class="ruby-identifier">:include_states</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">include_states</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">include_states</span>,
-179:       <span class="ruby-identifier">:exclude_states</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exclude_states</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">exclude_states</span>
-180:     }
-181:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 157</span>
+157:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">process_selectors</span>(<span class="ruby-identifier">selectors</span>, <span class="ruby-identifier">base_directory</span>=<span class="ruby-value str">&quot;.&quot;</span>, <span class="ruby-identifier">default_initial_positive_glob</span>=<span class="ruby-keyword kw">nil</span>)
+158:     <span class="ruby-identifier">files</span>           = []
+159:     <span class="ruby-identifier">include_tags</span>    = []
+160:     <span class="ruby-identifier">exclude_tags</span>    = []
+161:     <span class="ruby-identifier">include_states</span>  = []
+162:     <span class="ruby-identifier">exclude_states</span>  = []
+163: 
+164:     <span class="ruby-identifier">default_initial_positive_glob</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">DefaultInitialPositiveGlob</span>
+165:     <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-identifier">base_directory</span>) <span class="ruby-keyword kw">do</span>
+166:       <span class="ruby-identifier">selectors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">selector</span><span class="ruby-operator">|</span>
+167:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">selector</span>
+168:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A-%(.*)/</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">exclude_states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
+169:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A-:(.*)/</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">exclude_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
+170:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A\+?%(.*)/</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">include_states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
+171:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A\+?:(.*)/</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">include_tags</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>
+172:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A-(.*)/</span>    <span class="ruby-keyword kw">then</span>
+173:             <span class="ruby-identifier">files</span>  = <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">default_initial_positive_glob</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">files</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">default_initial_positive_glob</span>
+174:             <span class="ruby-identifier">glob</span>   = <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">$1</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{$1}/**/*.rb&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">$1</span>
+175:             <span class="ruby-identifier">files</span> <span class="ruby-operator">-=</span> <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">glob</span>]
+176:           <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/\A\+?(.*)/</span>  <span class="ruby-keyword kw">then</span>
+177:             <span class="ruby-identifier">glob</span>   = <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{selector}/**/*.rb&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">selector</span>
+178:             <span class="ruby-identifier">files</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">glob</span>]
+179:           <span class="ruby-keyword kw">else</span>
+180:             <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Should never reach else - selector: #{selector.inspect}&quot;</span>
+181:         <span class="ruby-keyword kw">end</span>
+182:       <span class="ruby-keyword kw">end</span>
+183:       <span class="ruby-identifier">files</span>  = <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">default_initial_positive_glob</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">files</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">default_initial_positive_glob</span>
+184:       <span class="ruby-identifier">files</span>.<span class="ruby-identifier">map!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>) <span class="ruby-keyword kw">end</span>
+185:     <span class="ruby-keyword kw">end</span>
+186: 
+187:     <span class="ruby-identifier">invalid_states</span> = (<span class="ruby-identifier">include_states</span><span class="ruby-operator">|</span><span class="ruby-identifier">exclude_states</span>)<span class="ruby-operator">-</span><span class="ruby-constant">ValidStateSelectors</span>
+188:     <span class="ruby-identifier">raise</span> <span class="ruby-constant">InvalidSelectors</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">invalid_states</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">invalid_states</span>.<span class="ruby-identifier">empty?</span>
+189: 
+190:     <span class="ruby-keyword kw">return</span> {
+191:       <span class="ruby-identifier">:files</span>          =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">files</span>,
+192:       <span class="ruby-identifier">:include_tags</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">include_tags</span>,
+193:       <span class="ruby-identifier">:exclude_tags</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exclude_tags</span>,
+194:       <span class="ruby-identifier">:include_states</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">include_states</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">include_states</span>,
+195:       <span class="ruby-identifier">:exclude_states</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exclude_states</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">exclude_states</span>
+196:     }
+197:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="require-method" class="method-detail ">
+				<a name="M000139"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">require</span><span
+						class="method-args">(*paths)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Tries to require a file, if it fails, it will require rubygems and retries
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="require-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 250</span>
+250:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">require</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">paths</span>)
+251:     <span class="ruby-identifier">paths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+252:       <span class="ruby-keyword kw">begin</span>
+253:         <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">require</span> <span class="ruby-identifier">path</span>
+254:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span>
+255:         <span class="ruby-keyword kw">begin</span>
+256:           <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">require</span> <span class="ruby-value str">'rubygems'</span>
+257:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span>
+258:         <span class="ruby-keyword kw">end</span>
+259:         <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">instance_method</span>(<span class="ruby-identifier">:require</span>).<span class="ruby-identifier">bind</span>(<span class="ruby-keyword kw">self</span>).<span class="ruby-identifier">call</span> <span class="ruby-identifier">path</span> <span class="ruby-comment cmt"># ugly, but at least until rubygems 1.3.5, Kernel.require isn't overriden</span>
+260:       <span class="ruby-keyword kw">end</span>
+261:     <span class="ruby-keyword kw">end</span>
+262:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -700,7 +777,7 @@ as far as possible. Example:
 
 		
 			<div id="require-baretest-method" class="method-detail ">
-				<a name="M000117"></a>
+				<a name="M000123"></a>
 
 				<div class="method-heading">
 				
@@ -721,12 +798,12 @@ Enure that the suite is run wiht a minimal version of baretest
 					<div class="method-source-code"
 						id="require-baretest-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest.rb, line 78</span>
-78:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">require_baretest</span>(<span class="ruby-identifier">version</span>)
-79:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">version</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;.&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_i</span> } <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">VERSION</span>.<span class="ruby-identifier">to_a</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">then</span>
-80:       <span class="ruby-identifier">abort</span> <span class="ruby-node">&quot;Requires baretest version #{version}, you have #{BareTest::VERSION}&quot;</span>
-81:     <span class="ruby-keyword kw">end</span>
-82:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest.rb, line 86</span>
+86:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">require_baretest</span>(<span class="ruby-identifier">version</span>)
+87:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">version</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;.&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_i</span> } <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">VERSION</span>.<span class="ruby-identifier">to_a</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">then</span>
+88:       <span class="ruby-identifier">abort</span> <span class="ruby-node">&quot;Requires baretest version #{version}, you have #{BareTest::VERSION}&quot;</span>
+89:     <span class="ruby-keyword kw">end</span>
+90:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -736,7 +813,7 @@ Enure that the suite is run wiht a minimal version of baretest
 
 		
 			<div id="require-ruby-method" class="method-detail ">
-				<a name="M000118"></a>
+				<a name="M000124"></a>
 
 				<div class="method-heading">
 				
@@ -757,12 +834,12 @@ Ensure that the suite is run with a minimal version of ruby
 					<div class="method-source-code"
 						id="require-ruby-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest.rb, line 85</span>
-85:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">require_ruby</span>(<span class="ruby-identifier">version</span>)
-86:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">version</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;.&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_i</span> } <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-constant">RUBY_VERSION</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;.&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_i</span> }) <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
-87:       <span class="ruby-identifier">abort</span> <span class="ruby-node">&quot;Requires ruby version #{version}, you have #{RUBY_VERSION}&quot;</span>
-88:     <span class="ruby-keyword kw">end</span>
-89:   <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest.rb, line 93</span>
+93:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">require_ruby</span>(<span class="ruby-identifier">version</span>)
+94:     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">version</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;.&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_i</span> } <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-constant">RUBY_VERSION</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;.&quot;</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_i</span> }) <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
+95:       <span class="ruby-identifier">abort</span> <span class="ruby-node">&quot;Requires ruby version #{version}, you have #{RUBY_VERSION}&quot;</span>
+96:     <span class="ruby-keyword kw">end</span>
+97:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -796,16 +873,50 @@ assertions and suites are added to the created suite.
 					<div class="method-source-code"
 						id="suite-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 211</span>
-211:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suite</span>(<span class="ruby-identifier">description</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-212:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">description</span> <span class="ruby-keyword kw">then</span>
-213:       <span class="ruby-ivar">@toplevel_suite</span>.<span class="ruby-identifier">suite</span>(<span class="ruby-identifier">description</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-214:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">opts</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>.<span class="ruby-identifier">empty?</span>
-215:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Suites with options must have names&quot;</span>
-216:     <span class="ruby-keyword kw">else</span>
-217:       <span class="ruby-ivar">@toplevel_suite</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-218:     <span class="ruby-keyword kw">end</span>
-219:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 227</span>
+227:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">suite</span>(<span class="ruby-identifier">description</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+228:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">description</span> <span class="ruby-keyword kw">then</span>
+229:       <span class="ruby-ivar">@toplevel_suite</span>.<span class="ruby-identifier">suite</span>(<span class="ruby-identifier">description</span>, <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+230:     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">opts</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>.<span class="ruby-identifier">empty?</span>
+231:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Suites with options must have names&quot;</span>
+232:     <span class="ruby-keyword kw">else</span>
+233:       <span class="ruby-ivar">@toplevel_suite</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+234:     <span class="ruby-keyword kw">end</span>
+235:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="test-directory-method" class="method-detail ">
+				<a name="M000141"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">test_directory</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Returns the absolute path to the test directory
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="test-directory-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 274</span>
+274:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">test_directory</span>
+275:     <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>, <span class="ruby-value str">'test'</span>)
+276:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -815,7 +926,7 @@ assertions and suites are added to the created suite.
 
 		
 			<div id="use-method" class="method-detail ">
-				<a name="M000132"></a>
+				<a name="M000134"></a>
 
 				<div class="method-heading">
 				
@@ -836,10 +947,10 @@ Shortcut for toplevel_suite.use. Preferably use the :use option instead.
 					<div class="method-source-code"
 						id="use-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest.rb, line 229</span>
-229:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">use</span>(<span class="ruby-identifier">component</span>)
-230:     <span class="ruby-ivar">@toplevel_suite</span>.<span class="ruby-identifier">use</span>(<span class="ruby-identifier">component</span>)
-231:   <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest.rb, line 245</span>
+245:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">use</span>(<span class="ruby-identifier">component</span>)
+246:     <span class="ruby-ivar">@toplevel_suite</span>.<span class="ruby-identifier">use</span>(<span class="ruby-identifier">component</span>)
+247:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

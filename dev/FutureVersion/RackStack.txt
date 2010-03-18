@@ -1,0 +1,16 @@
+User interaction:
+- visit (enter address in url bar and go there)
+- click_link
+- click_button
+- select_checkbox (<input type="checkbox" ...>)
+- select_radio_button (<input type="radio" ...>)
+- select_option (<select><option>...)
+- type_text (<textarea>, <input type="text", <input type="password")
+- click_item (css/xpath selector)
+- drag_item
+
+Verifications:
+- no_broken_internal_links
+- no_broken_external_links
+- no_broken_links (internal+external)
+- 200-ok

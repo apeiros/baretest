@@ -59,20 +59,20 @@ module BareTest
     # The failure/error/skipping/pending reason.
     # Returns nil if there's no reason, a string otherwise
     # Options:
-    # :default::     Reason to return if no reason is present
-    # :separator::   String used to separate multiple reasons
-    # :indent::      A String, the indentation to use. Prefixes every line.
-    # :first_indent: A String, used to indent the first line only (replaces indent).
+    # :default::      Reason to return if no reason is present
+    # :separator::    String used to separate multiple reasons
+    # :indent::       A String, the indentation to use. Prefixes every line.
+    # :first_indent:: A String, used to indent the first line only (replaces indent).
     def reason(opt=nil)
       if opt then
         default, separator, indent, first_indent = 
           *opt.values_at(:default, :separator, :indent, :first_indent)
         reason = @skip_reason || @failure_reason || default
         return nil unless reason
-        reason = Array(reason)
+        reason = reason.kind_of?(Array) ? reason : [reason]
         reason = reason.join(separator || "\n")
         reason = reason.gsub(/^/, indent) if indent
-        reason = reason.gsub(/^#{Regexp.escape(indent)}/, first_indent) if first_indent
+        reason = reason.gsub(/\A#{Regexp.escape(indent)}/, first_indent) if first_indent
         reason
       else
         @reason.empty? ? nil : @reason.join("\n")

@@ -31,6 +31,9 @@
 						<li><a href="./lib/baretest/irb_mode_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/irb_mode.rb">lib/baretest/irb_mode.rb</a></li>
 					
+						<li><a href="./lib/baretest_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest.rb">lib/baretest.rb</a></li>
+					
 						<li><a href="./lib/command/kernel_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/command/kernel.rb">lib/command/kernel.rb</a></li>
 					
@@ -58,19 +61,23 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000162">::expanded_require_path</a></li>
+					<li><a href="#M000122">::BareTest</a></li>
 					
-					<li><a href="#M000163">::load_into</a></li>
+					<li><a href="#M000169">::expanded_require_path</a></li>
 					
-					<li><a href="#M000161">::require_path</a></li>
+					<li><a href="#M000172">::load_into</a></li>
 					
-					<li><a href="#M000148">#Command</a></li>
+					<li><a href="#M000168">::require_path</a></li>
 					
-					<li><a href="#M000162">#expanded_require_path</a></li>
+					<li><a href="#M000122">#BareTest</a></li>
 					
-					<li><a href="#M000163">#load_into</a></li>
+					<li><a href="#M000157">#Command</a></li>
 					
-					<li><a href="#M000161">#require_path</a></li>
+					<li><a href="#M000169">#expanded_require_path</a></li>
+					
+					<li><a href="#M000172">#load_into</a></li>
+					
+					<li><a href="#M000168">#require_path</a></li>
 					
 				</ul>
 			</div>
@@ -134,8 +141,6 @@
 				
 					<li><a href="./BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
 				
-					<li><a href="./BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
-				
 					<li><a href="./BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
 					<li><a href="./BareTest/Formatter.html">BareTest::Formatter</a></li>
@@ -188,7 +193,10 @@
 		<h1 class="module">Kernel</h1>
 
 		<div id="description">
-			<hr size="1"></hr>
+			<p>
+See bottom for more requires
+</p>
+<hr size="1"></hr>
 		</div>
 
 		<!-- Constants -->
@@ -200,8 +208,8 @@
 				<dt><a name="RequireExtensions">RequireExtensions</a></dt>
 				
 				<dd class="description"><p>
-All extensions <a href="Kernel.html#M000161">Kernel#require_path</a> and <a
-href="Kernel.html#M000162">Kernel#expanded_require_path</a> will try for a
+All extensions <a href="Kernel.html#M000168">Kernel#require_path</a> and <a
+href="Kernel.html#M000169">Kernel#expanded_require_path</a> will try for a
 given filename
 </p></dd>
 				
@@ -219,8 +227,43 @@ given filename
 			<h3 class="section-header">Public Class Methods</h3>
 
 		
+			<div id="-are-est-method" class="method-detail ">
+				<a name="M000122"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">BareTest</span><span
+						class="method-args">(&block)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Execute a piece of code in the context of <a
+href="Kernel.html#M000122">BareTest</a>
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="-are-est-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest.rb, line 24</span>
+24:   <span class="ruby-keyword kw">def</span> <span class="ruby-constant">BareTest</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+25:     <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+26:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
 			<div id="expanded-require-path-method" class="method-detail ">
-				<a name="M000162"></a>
+				<a name="M000169"></a>
 
 				<div class="method-heading">
 				
@@ -234,7 +277,7 @@ given filename
 					
 					<p>
 Returns the absolute path to the file require would load, also see <a
-href="Kernel.html#M000161">Kernel#require_path</a>
+href="Kernel.html#M000168">Kernel#require_path</a>
 </p>
 					
 
@@ -256,7 +299,7 @@ href="Kernel.html#M000161">Kernel#require_path</a>
 
 		
 			<div id="load-into-method" class="method-detail ">
-				<a name="M000163"></a>
+				<a name="M000172"></a>
 
 				<div class="method-heading">
 				
@@ -272,7 +315,7 @@ href="Kernel.html#M000161">Kernel#require_path</a>
 Will load the given file like load (but accepts files without .rb in the
 end, like require), but evaluate it into the module given with the second
 arg (defaulting to Module.new). It uses <a
-href="Kernel.html#M000162">Kernel#expanded_require_path</a> with
+href="Kernel.html#M000169">Kernel#expanded_require_path</a> with
 &#8217;&#8217; and &#8217;.rb&#8217; as extensions to determine the file to
 load uses the returned path for error messages (second argument to
 Module#modul_eval).
@@ -301,7 +344,7 @@ Module#modul_eval).
 
 		
 			<div id="require-path-method" class="method-detail ">
-				<a name="M000161"></a>
+				<a name="M000168"></a>
 
 				<div class="method-heading">
 				
@@ -315,7 +358,7 @@ Module#modul_eval).
 					
 					<p>
 Returns the path to the file require would load, also see <a
-href="Kernel.html#M000162">Kernel#expanded_require_path</a>
+href="Kernel.html#M000169">Kernel#expanded_require_path</a>
 </p>
 					
 
@@ -345,8 +388,43 @@ href="Kernel.html#M000162">Kernel#expanded_require_path</a>
 			<h3 class="section-header">Private Instance Methods</h3>
 
 		
+			<div id="-are-est-method" class="method-detail ">
+				<a name="M000122"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">BareTest</span><span
+						class="method-args">(&block)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Execute a piece of code in the context of <a
+href="Kernel.html#M000122">BareTest</a>
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="-are-est-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/baretest.rb, line 24</span>
+24:   <span class="ruby-keyword kw">def</span> <span class="ruby-constant">BareTest</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+25:     <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+26:   <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
 			<div id="-ommand-method" class="method-detail ">
-				<a name="M000148"></a>
+				<a name="M000157"></a>
 
 				<div class="method-heading">
 				
@@ -378,7 +456,7 @@ href="Kernel.html#M000162">Kernel#expanded_require_path</a>
 
 		
 			<div id="expanded-require-path-method" class="method-detail ">
-				<a name="M000162"></a>
+				<a name="M000169"></a>
 
 				<div class="method-heading">
 				
@@ -392,7 +470,7 @@ href="Kernel.html#M000162">Kernel#expanded_require_path</a>
 					
 					<p>
 Returns the absolute path to the file require would load, also see <a
-href="Kernel.html#M000161">Kernel#require_path</a>
+href="Kernel.html#M000168">Kernel#require_path</a>
 </p>
 					
 
@@ -414,7 +492,7 @@ href="Kernel.html#M000161">Kernel#require_path</a>
 
 		
 			<div id="load-into-method" class="method-detail ">
-				<a name="M000163"></a>
+				<a name="M000172"></a>
 
 				<div class="method-heading">
 				
@@ -430,7 +508,7 @@ href="Kernel.html#M000161">Kernel#require_path</a>
 Will load the given file like load (but accepts files without .rb in the
 end, like require), but evaluate it into the module given with the second
 arg (defaulting to Module.new). It uses <a
-href="Kernel.html#M000162">Kernel#expanded_require_path</a> with
+href="Kernel.html#M000169">Kernel#expanded_require_path</a> with
 &#8217;&#8217; and &#8217;.rb&#8217; as extensions to determine the file to
 load uses the returned path for error messages (second argument to
 Module#modul_eval).
@@ -459,7 +537,7 @@ Module#modul_eval).
 
 		
 			<div id="require-path-method" class="method-detail ">
-				<a name="M000161"></a>
+				<a name="M000168"></a>
 
 				<div class="method-heading">
 				
@@ -473,7 +551,7 @@ Module#modul_eval).
 					
 					<p>
 Returns the path to the file require would load, also see <a
-href="Kernel.html#M000162">Kernel#expanded_require_path</a>
+href="Kernel.html#M000169">Kernel#expanded_require_path</a>
 </p>
 					
 

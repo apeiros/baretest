@@ -57,12 +57,10 @@ module BareTest
   end
 
   # The standard glob used by baretest to load test files
-  # :nodoc:
-  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb'
+  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb' # :nodoc:
 
   # Selectors that are valid to be passed into process_selectors
-  # :nodoc:
-  ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending]
+  ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending] # :nodoc:
 
   class << self
     # A hash of components - available via BareTest::use(name) and
@@ -120,9 +118,17 @@ module BareTest
       files.each do |glob|
         glob = "#{glob}/**/*.rb" if File.directory?(glob)
         Dir.glob(glob) { |path|
-          helper_path = path.sub(%r{^test/(suite|unit|integration|system)/}, 'test/helper/\1/')
+          helper_path = path.sub(%r{((?:^|/)test)/(suite|unit|integration|system)/}, '\1/helper/\2/')
           exists = (helper_path != path && File.exist?(helper_path))
-          puts(exists ? "Loading helper file #{helper_path}" : "No helper file #{helper_path} to load") if verbose
+          if verbose then
+            if helper_path == path then
+              puts "Could not resolve helper path for path #{path}"
+            elsif exists
+              puts "Loading helper file #{helper_path}"
+            else
+              puts "No helper file #{helper_path} to load"
+            end
+          end
           load(helper_path) if exists
           puts "Loading test file #{path}" if verbose
           load(path)
@@ -238,6 +244,35 @@ module BareTest
   # Shortcut for toplevel_suite.use. Preferably use the :use option instead.
   def self.use(component)
     @toplevel_suite.use(component)
+  end
+
+  # Tries to require a file, if it fails, it will require rubygems and retries
+  def self.require(*paths)
+    paths.each do |path|
+      begin
+        Kernel.require path
+      rescue LoadError
+        begin
+          Kernel.require 'rubygems'
+        rescue LoadError
+        end
+        Kernel.instance_method(:require).bind(self).call path # ugly, but at least until rubygems 1.3.5, Kernel.require isn't overriden
+      end
+    end
+  end
+
+  # Returns the absolute path to the external file
+  # Example
+  #   suite "#mkdir" do
+  #     setup do
+  #       @base = BareTest.external('suite_mkdir') # => "/.../PROJECT/test/external/suite_mkdir"
+  def self.external(*path)
+    File.join(test_directory, 'external', *path)
+  end
+
+  # Returns the absolute path to the test directory
+  def self.test_directory
+    File.expand_path(path, 'test')
   end
 end
 

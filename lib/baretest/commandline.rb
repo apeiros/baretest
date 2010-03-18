@@ -128,6 +128,13 @@ module BareTest
     end
     module_function :init
 
+    # Remove all files that store state, cache things etc. from persistence.
+    def reset(arguments, options)
+      options[:persistence] ||= Persistence.new
+      options[:persistence].clear
+    end
+    module_function :reset
+
     # Shows all formats available in run's -f/--format option.
     def formats(arguments, options)
       puts "Available formats:"
@@ -165,6 +172,9 @@ module BareTest
             Create a basic skeleton of directories and files to contain baretests test-
             suite. Non-destructive (existing files won't be overriden or deleted).
 
+        \e[1mreset\e[0m (default command)
+            Delete persistent data collected from previous runs.
+
         \e[1mrun\e[0m (default command)
             Run the tests and display information about them.
 
@@ -198,7 +208,7 @@ module BareTest
             as otherwise baretest will try to interpret them as short options (like -f).
         
         \e[1mExample\e[0m
-            `baretest -- test/suite -test/suite/foo :a -:b #failure -#pending`
+            `baretest -- test/suite -test/suite/foo :a -:b %failure -%pending`
 
             This will run all tests that
             * Are in the directory test/suite or any of its subdirectories
@@ -216,7 +226,7 @@ module BareTest
             * Directories are equivalent to `directory/**/*` patterns
 
         \e[1mTags\e[0m
-            Tags are preceeded with an :.
+            Tags are preceeded with a ':'.
             Examples:
               baretest :focus
               baretest -- -:hocus
@@ -224,9 +234,10 @@ module BareTest
 
         \e[1mLast-run-status\e[0m
             Last run states are preceeded with a %.
-            * %success, %failure, %error, %skipped, %pending
+            * %new, %success, %failure, %error, %skipped, %pending
             * %error, %skipped and %pending are a subset of %failure
             * %pending is a subset of %skipped
+            * %new matches tests that are run for the very first time
 
       END_OF_DESCRIPTION
 
