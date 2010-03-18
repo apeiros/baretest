@@ -74,7 +74,7 @@ module BareTest
       }
 
       def run_all(*args)
-        puts "Running all tests#{' verbosly' if $VERBOSE}"
+        puts "Running all tests#{' verbosly' if @options[:verbose]}"
 
         @depth    = 0
         @deferred = []
@@ -129,7 +129,7 @@ module BareTest
 
         printf(Formats[rv.status], StatusLabel[rv.status], '  '*@depth, interpolated_description(assertion, setup))
         if rv.status == :error then
-          backtrace = $VERBOSE ? rv.exception.backtrace : rv.exception.backtrace.first(1)
+          backtrace = @options[:verbose] ? rv.exception.backtrace : rv.exception.backtrace.first(1)
         elsif rv.status == :failure
           backtrace = ["#{assertion.file}:#{assertion.line}"]
         end
