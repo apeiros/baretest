@@ -71,6 +71,7 @@ module BareTest
              "nesting!     - a >-separated list of suite descriptions this assertion is nested",
              "description! - this assertion's description",
              "code!        - the code of this assertion",
+             "eval!        - eval (from_line, number_of_lines) or (from_line..to_line)",
              #"restart! - Restart this irb session, resetting everything",
              "irb_help     - irb's original help",
              "q            - Quit - alias to irb's exit",
@@ -174,6 +175,29 @@ module BareTest
         end
       end
 
+      def eval!(from, number=nil, explicit_binding=nil)
+        if code = @__assertion__.code then
+          if from.is_a?(Range) then
+            number = from.end-from.begin+1
+            from   = from.begin
+          end
+          number    ||= 1
+          total_lines = code.chomp.count("\n")-1
+          first_line  = @__assertion__.line
+          if !from.between?(first_line, first_line+total_lines-1)
+            puts "From must be between #{first_line} and #{first_line+total_lines-1}"
+          elsif !number.between?(0, total_lines)
+            puts "Number must be between 1 and #{total_lines}"
+          else
+            from -= first_line-1
+            puts "Evaluating: ", *code.split(/\n/)[from, number]
+            eval(code.split(/\n/)[from, number].join("\n"), explicit_binding || context.workspace.binding) # this 'context' comes from irb
+          end
+        else
+          puts "Code could not be extracted"
+        end
+      end
+
       # Prepend the line number in front of ever line
       def insert_line_numbers(code, start_line=1) # :nodoc:
         digits       = Math.log10(start_line+code.count("\n")).floor+1
@@ -202,11 +226,11 @@ module BareTest
       case rv.status
         when :failure
           start_irb_failure_mode(assertion, rv)
-          irb_mode_for_assertion(assertion, rv, with_setup)
+          irb_mode_for_assertion(assertion, rv, with_setup, assertion.suite.ancestry_teardown)
           stop_irb_mode
         when :error
           start_irb_error_mode(assertion, rv)
-          irb_mode_for_assertion(assertion, rv, with_setup)
+          irb_mode_for_assertion(assertion, rv, with_setup, assertion.suite.ancestry_teardown)
           stop_irb_mode
         # with other states, irb-mode is not started
       end
@@ -271,14 +295,17 @@ module BareTest
     # Drop into an irb shell in the context of the assertion passed as an argument.
     # Uses Assertion#clean_copy(AssertionContext) to create the context.
     # Adds the code into irb's history.
-    def irb_mode_for_assertion(assertion, status, with_setup) # :nodoc:
-      irb_context = ::BareTest::Assertion::Context.new(assertion)
-      irb_context.extend IRBContext
-      irb_context.__status__ = status
-      assertion.execute_phase(:setup, irb_context, with_setup.map { |s| s.block })
+    def irb_mode_for_assertion(assertion, status, with_setup, and_teardown) # :nodoc:
+      handlers        = @suite ? @suite.ancestors.inject({}) { |handlers, suite| handlers.merge(suite.verification_exception_handlers) } : nil
+      context         = ::BareTest::Assertion::Context.new(assertion)
+      context.extend IRBContext
+      context.__status__ = status
+
+      status          = assertion.execute_phase(:setup, context, with_setup.map { |s| [[s.value], s.block] }) if with_setup
+      setup_failed    = status
 
       $stdout = StringIO.new # HAX - silencing 'irb: warn: can't alias help from irb_help.' - find a better way
-      irb = IRB::Irb.new(IRB::WorkSpace.new(irb_context))
+      irb = IRB::Irb.new(IRB::WorkSpace.new(context))
       $stdout = STDOUT # /HAX
       # HAX - cargo cult, taken from irb.rb, not yet really understood.
       IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC] # loads the irbrc?
@@ -294,7 +321,7 @@ module BareTest
 
       catch(:IRB_EXIT) do irb.eval_input end
 
-      assertion.execute_phase(:teardown, irb_context, assertion.suite.ancestry_teardown)
+      teardown_status = assertion.execute_phase(:teardown, context, and_teardown.map { |t| [nil, t] }) unless (setup_failed || !and_teardown)
     end
 
     # Invoked when we leave the irb session
