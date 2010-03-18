@@ -51,7 +51,7 @@ Command "run" do
 
     o :commands
     o :debug,       '-d', '--debug',         :Boolean, "set debugging flags (set $DEBUG to true)"
-    o :interactive, '-i', '--interactive',   :Boolean, "drop into IRB on error or failure"
+    o :interactive, '-i', '--interactive',   :Boolean, "drop into IRB on error or failure. Use 'help!' in the irb session for more information"
     o :format,      '-f', '--format FORMAT', :String,  "use FORMAT for output, see `baretest formats`"
     o :setup_file,  '-s', '--setup FILE',    :File,    "specify setup file"
     o :verbose,     '-w', '--warn',          :Boolean, "turn warnings on for your script"
@@ -80,13 +80,47 @@ Command "run" do
     o :help
   end
 
-  command "reset"
-  command "formats"
-  command "env"
-  command "version"
-  command "commands"
-  command "selectors"
-  command "help"
+  command "reset" do
+    usage
+
+    virtual_argument :command
+  end
+
+  command "formats" do
+    usage
+
+    virtual_argument :command
+  end
+
+  command "env" do
+    usage
+
+    virtual_argument :command
+  end
+
+  command "version" do
+    usage
+
+    virtual_argument :command
+  end
+
+  command "commands" do
+    usage
+
+    virtual_argument :command
+  end
+
+  command "selectors" do
+    usage
+
+    virtual_argument :command
+  end
+
+  command "help" do
+    usage
+
+    virtual_argument :command
+  end
 end
 
 
