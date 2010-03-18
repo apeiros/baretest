@@ -14,6 +14,11 @@ require 'fileutils'
 
 module BareTest
 
+  # A simple file based storage. This is used to persist data between runs
+  # of baretest (caching data, keeping the last run's states for filtering,
+  # etc.)
+  # The data is stored in ~/.baretest, per project. A file with the name pattern
+  #
   class Persistence
 
     # The default storage path base (~/.baretest)
@@ -30,7 +35,16 @@ module BareTest
       }
       unless found then
         found = UID.hex_uid
-        File.open(".baretest_id_#{found}", "w") {} # no File::touch, evil
+        File.open(".baretest_id_#{found}", "w") { |fh|
+          # The content of this file is irrelevant, only its name. So lets
+          # add a little bit of explaining text in case somebody wonders about
+          # the purpose of this file.
+          fh.write(
+            "This file is used by baretest to find the persisted data in your ~/.baretest directory.\n" \
+            "Deleting this file will result in orphaned persistence data.\n" \
+            "See `baretest help reset`."
+          )
+        }
       end
 
       found
@@ -53,6 +67,12 @@ module BareTest
       @storage_dir = File.expand_path(storage_dir || self.class.storage_path)
       @project_dir = File.expand_path(project_dir || ".")
       @project_id  = self.class.determine_project_id(@project_dir)
+      stat         = File.stat(@project_dir)
+      store('project', {
+        :project_directory        => @project_dir,
+        :project_directory_inode  => stat.ino,
+        :project_directory_device => stat.dev
+      })
     end
 
     # Stores data to a file.
@@ -89,6 +109,37 @@ module BareTest
       else
         default
       end
+    end
+
+    # Deletes the file for the given filename.
+    # filename:: A relative path. Empty directories are recursively deleted
+    #            up to (but without) Persistence#storage_dir. The path is
+    #            relative to Persistence#storage_dir
+    def delete(filename)
+      raise "Invalid filename: #{filename}" if filename =~ %r{\A\.\./|/\.\./\z}
+      project_storage_dir = "#{@storage_dir}/#{@project_id}"
+      path                = "#{project_storage_dir}/#{filename}.yaml"
+
+      File.delete(path)
+      container = File.dirname(path)
+      while container != project_storage_dir
+        begin
+          Dir.delete(container)
+        rescue Errno::ENOTEMPTY
+          break
+        else
+          container = File.dirname(container)
+        end
+      end
+    end
+
+    # Remove all files that store state, cache things etc.
+    def clear
+      delete('final_states')
+    end
+
+  private
+    def assert_valid_filename(filename)
     end
   end
 end
