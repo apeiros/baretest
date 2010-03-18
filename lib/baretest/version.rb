@@ -21,7 +21,7 @@ module BareTest
     TINY       = 0
 
     # Prerelease number - nil for release versions
-    PRERELEASE = 3
+    PRERELEASE = nil
 
     # The version as a string
     STRING     = %{#{MAJOR}.#{MINOR||0}.#{TINY||0}#{".pre#{PRERELEASE}" if PRERELEASE}}
