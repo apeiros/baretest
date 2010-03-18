@@ -1,6 +1,3 @@
-BUGS:
-* Correct skip reason must be implemented.
-
 CHORES:
 * Verify that persistence works as expected no matter from where baretest is run
   and with what glob.
