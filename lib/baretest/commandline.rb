@@ -172,6 +172,9 @@ module BareTest
             Create a basic skeleton of directories and files to contain baretests test-
             suite. Non-destructive (existing files won't be overriden or deleted).
 
+        \e[1mreset\e[0m (default command)
+            Delete persistent data collected from previous runs.
+
         \e[1mrun\e[0m (default command)
             Run the tests and display information about them.
 
