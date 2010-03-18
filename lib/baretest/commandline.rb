@@ -128,6 +128,13 @@ module BareTest
     end
     module_function :init
 
+    # Remove all files that store state, cache things etc. from persistence.
+    def reset(arguments, options)
+      options[:persistence] ||= Persistence.new
+      options[:persistence].clear
+    end
+    module_function :reset
+
     # Shows all formats available in run's -f/--format option.
     def formats(arguments, options)
       puts "Available formats:"

@@ -80,6 +80,7 @@ Command "run" do
     o :help
   end
 
+  command "reset"
   command "formats"
   command "env"
   command "version"
@@ -135,6 +136,8 @@ Command.with(ARGV) do
       exit(success ? 0 : 1)
     when "init" # create the test directory
       BareTest::CommandLine.init(arguments, options)
+    when "reset" # trash runtime stats & caching
+      BareTest::CommandLine.reset(arguments, options)
     when "formats" # list available formats
       BareTest::CommandLine.formats(arguments, options)
     when "env" # show information about baretest (config, version, paths, ...)
