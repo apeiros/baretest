@@ -86,19 +86,19 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000009">::new</a></li>
+					<li><a href="#M000007">::new</a></li>
 					
-					<li><a href="#M000016">#execute</a></li>
+					<li><a href="#M000015">#execute</a></li>
 					
 					<li><a href="#M000019">#execute_phase</a></li>
 					
-					<li><a href="#M000011">#id</a></li>
+					<li><a href="#M000009">#id</a></li>
 					
 					<li><a href="#M000014">#interpolated_description</a></li>
 					
-					<li><a href="#M000013">#skip</a></li>
+					<li><a href="#M000011">#skip</a></li>
 					
-					<li><a href="#M000012">#skipped?</a></li>
+					<li><a href="#M000010">#skipped?</a></li>
 					
 				</ul>
 			</div>
@@ -116,8 +116,6 @@
 				<ul>
 				
 					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
-				
-					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
 				
 					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
 				
@@ -161,8 +159,6 @@
 					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
 				
 					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
-				
-					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
 					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
@@ -415,7 +411,7 @@ href="Assertion.html">Assertion</a> itself.
 
 		
 			<div id="new-method" class="method-detail ">
-				<a name="M000009"></a>
+				<a name="M000007"></a>
 
 				<div class="method-heading">
 				
@@ -472,7 +468,7 @@ href="Assertion.html">Assertion</a> will have a :pending status.
 
 		
 			<div id="execute-method" class="method-detail ">
-				<a name="M000016"></a>
+				<a name="M000015"></a>
 
 				<div class="method-heading">
 				
@@ -498,19 +494,21 @@ and and_teardown are supplied by the containing suite.
      <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 112</span>
 112:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute</span>(<span class="ruby-identifier">with_setup</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">and_teardown</span>=<span class="ruby-keyword kw">nil</span>)
 113:       <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@skipped</span> <span class="ruby-keyword kw">then</span>
-114:         <span class="ruby-identifier">status</span> = <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:manually_skipped</span>)
+114:         <span class="ruby-identifier">status</span> = <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:manually_skipped</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-ivar">@skipped</span>)
 115:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@block</span>
 116:         <span class="ruby-identifier">status</span> = <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:pending</span>)
 117:       <span class="ruby-keyword kw">else</span>
-118:         <span class="ruby-identifier">context</span>  = <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
-119:         <span class="ruby-identifier">status</span>   = <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">:setup</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">with_setup</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">with_setup</span>
-120:         <span class="ruby-identifier">status</span>   = <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">:exercise</span>, <span class="ruby-identifier">context</span>, <span class="ruby-ivar">@block</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">status</span>
-121:         <span class="ruby-identifier">status</span>   = <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">:teardown</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">and_teardown</span>) <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">status</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">and_teardown</span>)
-122:         <span class="ruby-identifier">status</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:success</span>, <span class="ruby-identifier">context</span>)
-123:       <span class="ruby-keyword kw">end</span>
-124: 
-125:       <span class="ruby-identifier">status</span>
-126:     <span class="ruby-keyword kw">end</span></pre>
+118:         <span class="ruby-identifier">handlers</span>        = <span class="ruby-ivar">@suite</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@suite</span>.<span class="ruby-identifier">ancestors</span>.<span class="ruby-identifier">inject</span>({}) { <span class="ruby-operator">|</span><span class="ruby-identifier">handlers</span>, <span class="ruby-identifier">suite</span><span class="ruby-operator">|</span> <span class="ruby-identifier">handlers</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">verification_exception_handlers</span>) } <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+119:         <span class="ruby-identifier">context</span>         = <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>)
+120:         <span class="ruby-identifier">status</span>          = <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">:setup</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">with_setup</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> [[<span class="ruby-identifier">s</span>.<span class="ruby-identifier">value</span>], <span class="ruby-identifier">s</span>.<span class="ruby-identifier">block</span>] }) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">with_setup</span>
+121:         <span class="ruby-identifier">setup_failed</span>    = <span class="ruby-identifier">status</span>
+122:         <span class="ruby-identifier">status</span>          = <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">:exercise</span>, <span class="ruby-identifier">context</span>, <span class="ruby-ivar">@block</span>, <span class="ruby-identifier">handlers</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">status</span>
+123:         <span class="ruby-identifier">teardown_status</span> = <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">:teardown</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">and_teardown</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> [<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">t</span>] }) <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">setup_failed</span> <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">and_teardown</span>)
+124:         <span class="ruby-identifier">status</span> = <span class="ruby-identifier">status</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">teardown_status</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:success</span>, <span class="ruby-identifier">context</span>)
+125:       <span class="ruby-keyword kw">end</span>
+126: 
+127:       <span class="ruby-identifier">status</span>
+128:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -525,7 +523,7 @@ and and_teardown are supplied by the containing suite.
 				<div class="method-heading">
 				
 					<span class="method-name">execute_phase</span><span
-						class="method-args">(name, context, code)</span>
+						class="method-args">(name, context, code, handlers=nil)</span>
 					<span class="method-click-advice">click to toggle source</span>
 				
 				</div>
@@ -545,38 +543,44 @@ one.
 					<div class="method-source-code"
 						id="execute-phase-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 133</span>
-133:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">code</span>)
-134:       <span class="ruby-identifier">status</span>         = <span class="ruby-keyword kw">nil</span>
-135:       <span class="ruby-identifier">skip_reason</span>    = <span class="ruby-keyword kw">nil</span>
-136:       <span class="ruby-identifier">failure_reason</span> = <span class="ruby-keyword kw">nil</span>
-137:       <span class="ruby-identifier">exception</span>      = <span class="ruby-keyword kw">nil</span>
-138: 
-139:       <span class="ruby-keyword kw">begin</span>
-140:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-keyword kw">then</span>
-141:           <span class="ruby-identifier">code</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">end</span>
-142:         <span class="ruby-keyword kw">else</span>
-143:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">code</span>)
-144:             <span class="ruby-identifier">failure_reason</span> = <span class="ruby-value str">&quot;Assertion failed&quot;</span> 
-145:             <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:failure</span>
-146:           <span class="ruby-keyword kw">end</span>
-147:         <span class="ruby-keyword kw">end</span>
-148:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">*</span><span class="ruby-constant">PassthroughExceptions</span>
-149:         <span class="ruby-identifier">raise</span> <span class="ruby-comment cmt"># passthrough-exceptions must be passed through</span>
-150:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">failure</span>
-151:         <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:failure</span>
-152:         <span class="ruby-identifier">failure_reason</span> = <span class="ruby-identifier">failure</span>.<span class="ruby-identifier">message</span>
-153:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Skip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">skip</span>
-154:         <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:manually_skipped</span>
-155:         <span class="ruby-identifier">skip_reason</span>    = <span class="ruby-identifier">skip</span>.<span class="ruby-identifier">message</span>
-156:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
-157:         <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:error</span>
-158:         <span class="ruby-identifier">failure_reason</span> = <span class="ruby-node">&quot;An error occurred during #{name}: #{exception}&quot;</span>
-159:         <span class="ruby-identifier">exception</span>      = <span class="ruby-identifier">exception</span>
-160:       <span class="ruby-keyword kw">end</span>
-161: 
-162:       <span class="ruby-identifier">status</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">status</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">skip_reason</span>, <span class="ruby-identifier">failure_reason</span>, <span class="ruby-identifier">exception</span>)
-163:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/assertion.rb, line 135</span>
+135:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">execute_phase</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">code</span>, <span class="ruby-identifier">handlers</span>=<span class="ruby-keyword kw">nil</span>)
+136:       <span class="ruby-identifier">status</span>         = <span class="ruby-keyword kw">nil</span>
+137:       <span class="ruby-identifier">skip_reason</span>    = <span class="ruby-keyword kw">nil</span>
+138:       <span class="ruby-identifier">failure_reason</span> = <span class="ruby-keyword kw">nil</span>
+139:       <span class="ruby-identifier">exception</span>      = <span class="ruby-keyword kw">nil</span>
+140: 
+141:       <span class="ruby-keyword kw">begin</span>
+142:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-keyword kw">then</span>
+143:           <span class="ruby-identifier">code</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">args</span>, <span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">end</span>
+144:         <span class="ruby-keyword kw">else</span>
+145:           <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">code</span>)
+146:             <span class="ruby-identifier">failure_reason</span> = <span class="ruby-value str">&quot;Assertion failed&quot;</span> 
+147:             <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:failure</span>
+148:           <span class="ruby-keyword kw">end</span>
+149:         <span class="ruby-keyword kw">end</span>
+150:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">*</span><span class="ruby-constant">PassthroughExceptions</span>
+151:         <span class="ruby-identifier">raise</span> <span class="ruby-comment cmt"># passthrough-exceptions must be passed through</span>
+152:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Failure</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">failure</span>
+153:         <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:failure</span>
+154:         <span class="ruby-identifier">failure_reason</span> = <span class="ruby-identifier">failure</span>.<span class="ruby-identifier">message</span>
+155:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Assertion</span><span class="ruby-operator">::</span><span class="ruby-constant">Skip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">skip</span>
+156:         <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:manually_skipped</span>
+157:         <span class="ruby-identifier">skip_reason</span>    = <span class="ruby-identifier">skip</span>.<span class="ruby-identifier">message</span>
+158:       <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">exception</span>
+159:         <span class="ruby-identifier">exception_class</span> = <span class="ruby-identifier">exception</span>.<span class="ruby-identifier">class</span>
+160:         <span class="ruby-identifier">handled_by</span>      = <span class="ruby-identifier">handlers</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">handlers</span>.<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">handling</span>, <span class="ruby-identifier">handler</span><span class="ruby-operator">|</span> <span class="ruby-identifier">exception_class</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">handling</span> }
+161:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">handled_by</span> <span class="ruby-keyword kw">then</span>
+162:           <span class="ruby-identifier">handler</span>       = <span class="ruby-identifier">handled_by</span>.<span class="ruby-identifier">last</span>
+163:           <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">handler</span>.<span class="ruby-identifier">call</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">exception</span>) <span class="ruby-comment cmt"># FIXME: ugly mid-method return - work around it returning a complete Status</span>
+164:         <span class="ruby-keyword kw">end</span>
+165:         <span class="ruby-identifier">status</span>         = <span class="ruby-identifier">:error</span>
+166:         <span class="ruby-identifier">failure_reason</span> = <span class="ruby-node">&quot;An error occurred during #{name}: #{exception}&quot;</span>
+167:         <span class="ruby-identifier">exception</span>      = <span class="ruby-identifier">exception</span>
+168:       <span class="ruby-keyword kw">end</span>
+169: 
+170:       <span class="ruby-identifier">status</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">status</span>, <span class="ruby-identifier">context</span>, <span class="ruby-identifier">skip_reason</span>, <span class="ruby-identifier">failure_reason</span>, <span class="ruby-identifier">exception</span>)
+171:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -586,7 +590,7 @@ one.
 
 		
 			<div id="id-method" class="method-detail ">
-				<a name="M000011"></a>
+				<a name="M000009"></a>
 
 				<div class="method-heading">
 				
@@ -667,7 +671,7 @@ substitutes. This is relevant with regards to setup variants.
 
 		
 			<div id="skip-method" class="method-detail ">
-				<a name="M000013"></a>
+				<a name="M000011"></a>
 
 				<div class="method-heading">
 				
@@ -702,7 +706,7 @@ Marks this assertion as manually skipped.
 
 		
 			<div id="skipped--method" class="method-detail ">
-				<a name="M000012"></a>
+				<a name="M000010"></a>
 
 				<div class="method-heading">
 				

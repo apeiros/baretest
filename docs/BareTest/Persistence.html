@@ -59,15 +59,21 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000072">::determine_project_id</a></li>
+					<li><a href="#M000073">::determine_project_id</a></li>
 					
-					<li><a href="#M000073">::new</a></li>
+					<li><a href="#M000074">::new</a></li>
 					
-					<li><a href="#M000071">::storage_path</a></li>
+					<li><a href="#M000072">::storage_path</a></li>
 					
-					<li><a href="#M000075">#read</a></li>
+					<li><a href="#M000079">#assert_valid_filename</a></li>
 					
-					<li><a href="#M000074">#store</a></li>
+					<li><a href="#M000078">#clear</a></li>
+					
+					<li><a href="#M000077">#delete</a></li>
+					
+					<li><a href="#M000076">#read</a></li>
+					
+					<li><a href="#M000075">#store</a></li>
 					
 				</ul>
 			</div>
@@ -85,8 +91,6 @@
 				<ul>
 				
 					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
-				
-					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
 				
 					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
 				
@@ -130,8 +134,6 @@
 					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
 				
 					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
-				
-					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
 					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
@@ -185,7 +187,13 @@
 		<h1 class="class">BareTest::Persistence</h1>
 
 		<div id="description">
-			
+			<p>
+A simple file based storage. This is used to persist data between runs of
+baretest (caching data, keeping the last run&#8217;s states for filtering,
+etc.) The data is stored in ~/.baretest, per project. A file with the name
+pattern
+</p>
+
 		</div>
 
 		<!-- Constants -->
@@ -261,7 +269,7 @@ instance is attached to
 
 		
 			<div id="determine-project-id-method" class="method-detail ">
-				<a name="M000072"></a>
+				<a name="M000073"></a>
 
 				<div class="method-heading">
 				
@@ -285,18 +293,27 @@ project.
 					<div class="method-source-code"
 						id="determine-project-id-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 27</span>
-27:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-identifier">project_dir</span>)
-28:       <span class="ruby-identifier">found</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;#{project_dir}/.baretest_id_*&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
-29:         <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">$1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/id_([A-Fa-f0-9]{32})$/</span>
-30:       }
-31:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">found</span> <span class="ruby-keyword kw">then</span>
-32:         <span class="ruby-identifier">found</span> = <span class="ruby-constant">UID</span>.<span class="ruby-identifier">hex_uid</span>
-33:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;.baretest_id_#{found}&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) {} <span class="ruby-comment cmt"># no File::touch, evil</span>
-34:       <span class="ruby-keyword kw">end</span>
-35: 
-36:       <span class="ruby-identifier">found</span>
-37:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 32</span>
+32:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-identifier">project_dir</span>)
+33:       <span class="ruby-identifier">found</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;#{project_dir}/.baretest_id_*&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+34:         <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">$1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/id_([A-Fa-f0-9]{32})$/</span>
+35:       }
+36:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">found</span> <span class="ruby-keyword kw">then</span>
+37:         <span class="ruby-identifier">found</span> = <span class="ruby-constant">UID</span>.<span class="ruby-identifier">hex_uid</span>
+38:         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;.baretest_id_#{found}&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">fh</span><span class="ruby-operator">|</span>
+39:           <span class="ruby-comment cmt"># The content of this file is irrelevant, only its name. So lets</span>
+40:           <span class="ruby-comment cmt"># add a little bit of explaining text in case somebody wonders about</span>
+41:           <span class="ruby-comment cmt"># the purpose of this file.</span>
+42:           <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(
+43:             <span class="ruby-value str">&quot;This file is used by baretest to find the persisted data in your ~/.baretest directory.\n&quot;</span> \
+44:             <span class="ruby-value str">&quot;Deleting this file will result in orphaned persistence data.\n&quot;</span> \
+45:             <span class="ruby-value str">&quot;See `baretest help reset`.&quot;</span>
+46:           )
+47:         }
+48:       <span class="ruby-keyword kw">end</span>
+49: 
+50:       <span class="ruby-identifier">found</span>
+51:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -306,7 +323,7 @@ project.
 
 		
 			<div id="new-method" class="method-detail ">
-				<a name="M000073"></a>
+				<a name="M000074"></a>
 
 				<div class="method-heading">
 				
@@ -336,12 +353,18 @@ instance should store its data
 					<div class="method-source-code"
 						id="new-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 52</span>
-52:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">project_dir</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">storage_dir</span>=<span class="ruby-keyword kw">nil</span>)
-53:       <span class="ruby-ivar">@storage_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">storage_dir</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">storage_path</span>)
-54:       <span class="ruby-ivar">@project_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">project_dir</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;.&quot;</span>)
-55:       <span class="ruby-ivar">@project_id</span>  = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-ivar">@project_dir</span>)
-56:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 66</span>
+66:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">project_dir</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">storage_dir</span>=<span class="ruby-keyword kw">nil</span>)
+67:       <span class="ruby-ivar">@storage_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">storage_dir</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">storage_path</span>)
+68:       <span class="ruby-ivar">@project_dir</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">project_dir</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;.&quot;</span>)
+69:       <span class="ruby-ivar">@project_id</span>  = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-ivar">@project_dir</span>)
+70:       <span class="ruby-identifier">stat</span>         = <span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-ivar">@project_dir</span>)
+71:       <span class="ruby-identifier">store</span>(<span class="ruby-value str">'project'</span>, {
+72:         <span class="ruby-identifier">:project_directory</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@project_dir</span>,
+73:         <span class="ruby-identifier">:project_directory_inode</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>.<span class="ruby-identifier">ino</span>,
+74:         <span class="ruby-identifier">:project_directory_device</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>.<span class="ruby-identifier">dev</span>
+75:       })
+76:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -351,7 +374,7 @@ instance should store its data
 
 		
 			<div id="storage-path-method" class="method-detail ">
-				<a name="M000071"></a>
+				<a name="M000072"></a>
 
 				<div class="method-heading">
 				
@@ -372,10 +395,10 @@ The default storage path base (~/.baretest)
 					<div class="method-source-code"
 						id="storage-path-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 20</span>
-20:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">storage_path</span>
-21:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-value str">'~/.baretest'</span>)
-22:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 25</span>
+25:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">storage_path</span>
+26:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-value str">'~/.baretest'</span>)
+27:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -390,8 +413,99 @@ The default storage path base (~/.baretest)
 			<h3 class="section-header">Public Instance Methods</h3>
 
 		
+			<div id="clear-method" class="method-detail ">
+				<a name="M000078"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">clear</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Remove all files that store state, cache things etc.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="clear-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 137</span>
+137:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear</span>
+138:       <span class="ruby-identifier">delete</span>(<span class="ruby-value str">'final_states'</span>)
+139:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="delete-method" class="method-detail ">
+				<a name="M000077"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">delete</span><span
+						class="method-args">(filename)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+Deletes the file for the given filename.
+</p>
+<table>
+<tr><td valign="top">filename:</td><td>A relative path. Empty directories are recursively deleted up to (but
+without) <a
+href="Persistence.html#storage_dir">Persistence#storage_dir</a>. The path
+is relative to <a
+href="Persistence.html#storage_dir">Persistence#storage_dir</a>
+
+</td></tr>
+</table>
+					
+
+					
+					<div class="method-source-code"
+						id="delete-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 118</span>
+118:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">filename</span>)
+119:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A\.\./|/\.\./\z}</span>
+120:       <span class="ruby-identifier">project_storage_dir</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}&quot;</span>
+121:       <span class="ruby-identifier">path</span>                = <span class="ruby-node">&quot;#{project_storage_dir}/#{filename}.yaml&quot;</span>
+122: 
+123:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">path</span>)
+124:       <span class="ruby-identifier">container</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">path</span>)
+125:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">container</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">project_storage_dir</span>
+126:         <span class="ruby-keyword kw">begin</span>
+127:           <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">container</span>)
+128:         <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ENOTEMPTY</span>
+129:           <span class="ruby-keyword kw">break</span>
+130:         <span class="ruby-keyword kw">else</span>
+131:           <span class="ruby-identifier">container</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">container</span>)
+132:         <span class="ruby-keyword kw">end</span>
+133:       <span class="ruby-keyword kw">end</span>
+134:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
 			<div id="read-method" class="method-detail ">
-				<a name="M000075"></a>
+				<a name="M000076"></a>
 
 				<div class="method-heading">
 				
@@ -423,19 +537,19 @@ pass a block that calculates the default.
 					<div class="method-source-code"
 						id="read-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 81</span>
-81:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">default</span>=<span class="ruby-keyword kw">nil</span>)
-82:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A\.\./|/\.\./\z}</span>
-83:       <span class="ruby-identifier">path</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}/#{filename}.yaml&quot;</span>
-84: 
-85:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">path</span>)
-86:         <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">path</span>)
-87:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">block_given?</span>
-88:         <span class="ruby-keyword kw">yield</span>
-89:       <span class="ruby-keyword kw">else</span>
-90:         <span class="ruby-identifier">default</span>
-91:       <span class="ruby-keyword kw">end</span>
-92:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 101</span>
+101:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">default</span>=<span class="ruby-keyword kw">nil</span>)
+102:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A\.\./|/\.\./\z}</span>
+103:       <span class="ruby-identifier">path</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}/#{filename}.yaml&quot;</span>
+104: 
+105:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">path</span>)
+106:         <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">path</span>)
+107:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">block_given?</span>
+108:         <span class="ruby-keyword kw">yield</span>
+109:       <span class="ruby-keyword kw">else</span>
+110:         <span class="ruby-identifier">default</span>
+111:       <span class="ruby-keyword kw">end</span>
+112:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -445,7 +559,7 @@ pass a block that calculates the default.
 
 		
 			<div id="store-method" class="method-detail ">
-				<a name="M000074"></a>
+				<a name="M000075"></a>
 
 				<div class="method-heading">
 				
@@ -478,15 +592,52 @@ IOs and Procs.
 					<div class="method-source-code"
 						id="store-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 66</span>
-66:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">data</span>)
-67:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A[A-Za-z0-9_-][A-Za-z0-9_-]*\z}</span>
-68:       <span class="ruby-identifier">dir</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}&quot;</span>
-69:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">dir</span>)
-70:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{dir}/#{filename}.yaml&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fh</span><span class="ruby-operator">|</span>
-71:         <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_yaml</span>)
-72:       <span class="ruby-keyword kw">end</span>
-73:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 86</span>
+86:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">data</span>)
+87:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A[A-Za-z0-9_-][A-Za-z0-9_-]*\z}</span>
+88:       <span class="ruby-identifier">dir</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}&quot;</span>
+89:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">dir</span>)
+90:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{dir}/#{filename}.yaml&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fh</span><span class="ruby-operator">|</span>
+91:         <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">data</span>.<span class="ruby-identifier">to_yaml</span>)
+92:       <span class="ruby-keyword kw">end</span>
+93:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="private-instance-method-details" class="method-section section">
+			<h3 class="section-header">Private Instance Methods</h3>
+
+		
+			<div id="assert-valid-filename-method" class="method-detail ">
+				<a name="M000079"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">assert_valid_filename</span><span
+						class="method-args">(filename)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="assert-valid-filename-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 142</span>
+142:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assert_valid_filename</span>(<span class="ruby-identifier">filename</span>)
+143:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>

@@ -59,11 +59,11 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000092">::hex_uid</a></li>
+					<li><a href="#M000094">::hex_uid</a></li>
 					
-					<li><a href="#M000093">::new</a></li>
+					<li><a href="#M000095">::new</a></li>
 					
-					<li><a href="#M000094">#hex</a></li>
+					<li><a href="#M000097">#hex</a></li>
 					
 				</ul>
 			</div>
@@ -81,8 +81,6 @@
 				<ul>
 				
 					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
-				
-					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
 				
 					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
 				
@@ -126,8 +124,6 @@
 					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
 				
 					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
-				
-					<li><a href="../BareTest/Assertion/Support/SetupAndTeardown.html">BareTest::Assertion::Support::SetupAndTeardown</a></li>
 				
 					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
 				
@@ -196,9 +192,7 @@ Generate a unique ID. Not using uuid simply to avoid two dependencies
 			
 				<dt><a name="Epoch">Epoch</a></dt>
 				
-				<dd class="description"><p>
-:nodoc:
-</p></dd>
+				<dd class="description missing-docs">(Not documented)</dd>
 				
 			
 			</dl>
@@ -238,7 +232,7 @@ The numeric value of the uid (an Integer)
 
 		
 			<div id="hex-uid-method" class="method-detail ">
-				<a name="M000092"></a>
+				<a name="M000094"></a>
 
 				<div class="method-heading">
 				
@@ -260,10 +254,10 @@ representation
 					<div class="method-source-code"
 						id="hex-uid-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/uid.rb, line 24</span>
-24:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hex_uid</span>
-25:       <span class="ruby-identifier">new</span>.<span class="ruby-identifier">hex</span>
-26:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/uid.rb, line 23</span>
+23:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hex_uid</span>
+24:       <span class="ruby-identifier">new</span>.<span class="ruby-identifier">hex</span>
+25:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -273,7 +267,7 @@ representation
 
 		
 			<div id="new-method" class="method-detail ">
-				<a name="M000093"></a>
+				<a name="M000095"></a>
 
 				<div class="method-heading">
 				
@@ -294,22 +288,22 @@ Create a 128bit (16 Byte) long random number
 					<div class="method-source-code"
 						id="new-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/uid.rb, line 29</span>
-29:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
-30:       <span class="ruby-identifier">now</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
-31:       
-32:       <span class="ruby-comment cmt"># Works for the next 100 years - should be enough</span>
-33:       <span class="ruby-comment cmt"># after that, it'll wrap around.</span>
-34:       <span class="ruby-identifier">time_part_52</span>   = (((<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-constant">Epoch</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xffffffff</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">20</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">now</span>.<span class="ruby-identifier">usec</span>
-35: 
-36:       <span class="ruby-comment cmt"># Not solid, but for the purposes, should work</span>
-37:       <span class="ruby-identifier">process_part32</span> = (<span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">object_id</span> <span class="ruby-operator">^</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">pid</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xfffffffff</span>
-38: 
-39:       <span class="ruby-comment cmt"># Add a bit of random noise</span>
-40:       <span class="ruby-identifier">random_part44</span>  = <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">rand</span>(<span class="ruby-value">0x100000000000</span>)
-41: 
-42:       <span class="ruby-ivar">@value</span> = (<span class="ruby-identifier">random_part44</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">84</span>) <span class="ruby-operator">+</span> (<span class="ruby-identifier">process_part32</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">52</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">time_part_52</span>
-43:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/uid.rb, line 28</span>
+28:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
+29:       <span class="ruby-identifier">now</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+30:       
+31:       <span class="ruby-comment cmt"># Works for the next 100 years - should be enough</span>
+32:       <span class="ruby-comment cmt"># after that, it'll wrap around.</span>
+33:       <span class="ruby-identifier">time_part_52</span>   = (((<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-constant">Epoch</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xffffffff</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">20</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">now</span>.<span class="ruby-identifier">usec</span>
+34: 
+35:       <span class="ruby-comment cmt"># Not solid, but for the purposes, should work</span>
+36:       <span class="ruby-identifier">process_part32</span> = (<span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">object_id</span> <span class="ruby-operator">^</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">pid</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xfffffffff</span>
+37: 
+38:       <span class="ruby-comment cmt"># Add a bit of random noise</span>
+39:       <span class="ruby-identifier">random_part44</span>  = <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">rand</span>(<span class="ruby-value">0x100000000000</span>)
+40: 
+41:       <span class="ruby-ivar">@value</span> = (<span class="ruby-identifier">random_part44</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">84</span>) <span class="ruby-operator">+</span> (<span class="ruby-identifier">process_part32</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">52</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">time_part_52</span>
+42:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
@@ -325,7 +319,7 @@ Create a 128bit (16 Byte) long random number
 
 		
 			<div id="hex-method" class="method-detail ">
-				<a name="M000094"></a>
+				<a name="M000097"></a>
 
 				<div class="method-heading">
 				
@@ -347,10 +341,10 @@ representation
 					<div class="method-source-code"
 						id="hex-source">
 <pre>
-    <span class="ruby-comment cmt"># File lib/baretest/uid.rb, line 47</span>
-47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hex</span>
-48:       <span class="ruby-value str">&quot;%032x&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-ivar">@value</span>
-49:     <span class="ruby-keyword kw">end</span></pre>
+    <span class="ruby-comment cmt"># File lib/baretest/uid.rb, line 46</span>
+46:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hex</span>
+47:       <span class="ruby-value str">&quot;%032x&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-ivar">@value</span>
+48:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
