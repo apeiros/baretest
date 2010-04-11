@@ -1,3 +1,24 @@
-BUGS:
+== BUGS:
 * :requires should execute the requires upon execution instead of upon
   definition
+
+== Planned Features
+
+* Word-wrapping for CLI runner
+* Detect whether baretest is run from an interactive terminal or not and adjust
+  defaults (no-color e.g.)
+* Alternative CLI runner with status implicit via colored/bg-colored descriptions
+* Alternative CLI runner which prints the name of the test prior the label and rewrites
+  the line when the test has executed to add status & coloring.
+* Simple stubbing with automatic cleanup at teardown. Example:
+
+    assert "Should require a single file listed in :requires option." do |a|
+      file = 'foo/bar'
+      stub(Kernel, :require) do |file, *args| a.touch(file) end
+      ::Test::Suite.create(nil, nil, :requires => file)
+    
+      touched file
+    end
+
+* A redmine plugin
+* --fail-all flag, to test/review diagnostics of tests (no idea how to do that yet)
