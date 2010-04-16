@@ -24,12 +24,14 @@ module BareTest
         return super unless suite.description
         puts("\n"+'  '*@depth+suite.description)
         @depth += 1
-        super
+        rv = super
         @depth -= 1
+        rv
       end
 
       def run_test(assertion, setup)
         puts('  '*@depth+assertion.description)
+        BareTest::Status.new(assertion, :success)
       end
     end
   end
