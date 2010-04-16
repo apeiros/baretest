@@ -1,5 +1,7 @@
 # We don't care about build products
 /pkg/*
+/.yardoc/*
+/ydocs/*
 
 # Keeping 'command' gem currently inlined - this task facilitates synchronization
 /rake/tasks/sync.rake
