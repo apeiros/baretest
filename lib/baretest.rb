@@ -84,14 +84,14 @@ module BareTest
 
   # Enure that the suite is run wiht a minimal version of baretest
   def self.require_baretest(version)
-    if (version.split(".").map { |s| s.to_i } <=> BareTest::VERSION.to_a) == 0 then
+    if (version.split(".").map { |s| s.to_i } <=> BareTest::VERSION.to_a) > 0 then
       abort "Requires baretest version #{version}, you have #{BareTest::VERSION}"
     end
   end
 
   # Ensure that the suite is run with a minimal version of ruby
   def self.require_ruby(version)
-    if (version.split(".").map { |s| s.to_i } <=> RUBY_VERSION.split(".").map { |s| s.to_i }) == 1 then
+    if (version.split(".").map { |s| s.to_i } <=> RUBY_VERSION.split(".").map { |s| s.to_i }) > 0 then
       abort "Requires ruby version #{version}, you have #{RUBY_VERSION}"
     end
   end
