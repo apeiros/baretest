@@ -87,8 +87,6 @@ Project.rcov = SilverPlatter::Project::Description.new({
 # Rdoc
 Project.rdoc = SilverPlatter::Project::Description.new({
   :options    => %w[
-                   --inline-source
-                   --line-numbers
                    --charset utf-8
                    --tab-width 2
                  ],

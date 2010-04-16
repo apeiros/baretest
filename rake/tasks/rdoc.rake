@@ -7,8 +7,7 @@
 
 
 require 'rdoc'
-require 'rake/rdoctask'
-require 'rake/lib/rdocmarkdown'
+require 'rdoc/task'
 
 
 
@@ -23,7 +22,7 @@ namespace :doc do
     task :coverage     => :missing_project
     task :ri           => :missing_project
     task :clobber_ri   => :missing_project
-  elsif !lib?('rake/rdoctask') then
+  elsif !lib?('rdoc/task') then
     task :missing_rdoctask do
       abort("Missing rake/rdoctask in Project to run the gem tasks")
     end
@@ -45,10 +44,10 @@ namespace :doc do
     Project.rdoc.options.push('-t', Project.rdoc.title)
     Project.rdoc.__finalize__
 
-    Rake::RDocTask.new do |rd|
+    RDoc::Task.new do |rd|
       rd.main       = Project.rdoc.main if Project.rdoc.main
       rd.rdoc_files = Project.rdoc.files
-      rd.rdoc_dir   = Project.rdoc.output_dir
+      rd.rdoc_dir   = Project.rdoc.output_dir if Project.rdoc.output_dir
       rd.template   = Project.rdoc.template if Project.rdoc.template
 
       rd.options.concat(Project.rdoc.options)
