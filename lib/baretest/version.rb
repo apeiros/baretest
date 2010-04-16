@@ -18,7 +18,7 @@ module BareTest
     MINOR      = 4
 
     # The tiny version number
-    TINY       = 0
+    TINY       = 1
 
     # Prerelease number - nil for release versions
     PRERELEASE = nil
