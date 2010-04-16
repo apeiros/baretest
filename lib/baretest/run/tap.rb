@@ -21,7 +21,6 @@ module BareTest
         count = proc { |acc,csuite|
           acc+
           csuite.assertions.size+
-          csuite.skipped.size+
           csuite.suites.map { |d,suite| suite }.inject(0, &count)
         }
         puts "1..#{count[0, suite]}"
@@ -34,8 +33,10 @@ module BareTest
         printf "%sok %d - %s%s\n",
           rv.status == :success ? '' : 'not ',
           @current+=1,
-          rv.description,
+          assertion.description,
           rv.status == :success ? '' : " # #{rv.status}"
+
+        rv
       end
     end
   end
