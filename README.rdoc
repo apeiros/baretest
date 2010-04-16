@@ -143,7 +143,7 @@ not found in other projects.
 
 == Example Testsuite
 
-From examples/test.rb:
+From examples/tests/01_basics_I.rb:
 
   BareTest.suite do
     # assertions and refutations can be grouped in suites. They will share
