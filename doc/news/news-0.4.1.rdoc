@@ -1,0 +1,11 @@
+= NEWS
+
+== baretest version 0.4.1
+
+### Bugfixes
+* Correct handling of required baretest version
+* Fixed Spec formatter
+* Fixed TAP formatter
+
+### Removals
+* Removed 'profile' formatter
