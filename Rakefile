@@ -22,6 +22,7 @@ Project.meta.use_git          = true
 
 Project.manifest.ignore       = %w[
                                     Rakefile
+                                    baretest.bbprojectd/**/*
                                     baretest.gemspec
                                     dev/**/*
                                     doc/announcements/**/*
@@ -30,7 +31,7 @@ Project.manifest.ignore       = %w[
                                     pkg/**/*
                                     rake/**/*
                                     web/**/*
-                                    baretest.bbprojectd/**/*
+                                    ydocs/**/*
                                 ]
 
 Project.rubyforge.project     = 'baretest'

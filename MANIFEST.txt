@@ -40,7 +40,6 @@ lib/baretest/run.rb
 lib/baretest/run/cli.rb
 lib/baretest/run/minimal.rb
 lib/baretest/run/none.rb
-lib/baretest/run/profile.rb
 lib/baretest/run/spec.rb
 lib/baretest/run/tap.rb
 lib/baretest/run/xml.rb
