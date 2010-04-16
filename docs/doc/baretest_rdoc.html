@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: baretest.rdoc [baretest-0.4.0]</title>
+	<title>File: baretest.rdoc [baretest-0.4.1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -22,6 +22,16 @@
 
 <body class="file">
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="project-metadata">
 			
 			
@@ -178,29 +188,35 @@ if found.
 <h2>2. Options</h2>
 <h3>Getting information about baretest:</h3>
 <table>
-<tr><td valign="top">-F, --formats:</td><td>Lists the available output formatters
-
+<tr><td valign="top">-F, --formats</td><td><p>
+Lists the available output formatters
+</p>
 </td></tr>
-<tr><td valign="top">-v:</td><td>Prints the baretest executables and the libs version number
-
+<tr><td valign="top">-v</td><td><p>
+Prints the baretest executables and the libs version number
+</p>
 </td></tr>
 </table>
 <h3>Running tests:</h3>
 <table>
-<tr><td valign="top">-i, --interactive:</td><td>drop into IRB on error or failure
-
+<tr><td valign="top">-i, --interactive</td><td><p>
+drop into IRB on error or failure
+</p>
 </td></tr>
-<tr><td valign="top">-d, --debug:</td><td>Set debugging flags.
-
+<tr><td valign="top">-d, --debug</td><td><p>
+Set debugging flags.
+</p>
 <p>
 This sets $DEBUG to true, same as rubys -d switch.
 </p>
 </td></tr>
-<tr><td valign="top">-f, --format FORMAT:</td><td>Use the formatter specified in FORMAT, defaults to &#8216;cli&#8217;
-
+<tr><td valign="top">-f, --format FORMAT</td><td><p>
+Use the formatter specified in FORMAT, defaults to &#8216;cli&#8217;
+</p>
 </td></tr>
-<tr><td valign="top">-s, --setup FILE:</td><td>specify setup file
-
+<tr><td valign="top">-s, --setup FILE</td><td><p>
+specify setup file
+</p>
 <p>
 This option allows you to tell baretest where it finds the setup.rb file.
 </p>
@@ -208,8 +224,9 @@ This option allows you to tell baretest where it finds the setup.rb file.
 Defaults to test/setup.rb.
 </p>
 </td></tr>
-<tr><td valign="top">-w, --warn:</td><td>Turn warnings on for your script.
-
+<tr><td valign="top">-w, --warn</td><td><p>
+Turn warnings on for your script.
+</p>
 <p>
 This sets $VERBOSE to true, same as rubys -w switch.
 </p>

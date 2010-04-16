@@ -22,6 +22,16 @@
 <body class="class">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -59,11 +69,11 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000094">::hex_uid</a></li>
+					<li><a href="#M000117">::hex_uid</a></li>
 					
-					<li><a href="#M000095">::new</a></li>
+					<li><a href="#M000118">::new</a></li>
 					
-					<li><a href="#M000096">#hex</a></li>
+					<li><a href="#M000119">#hex</a></li>
 					
 				</ul>
 			</div>
@@ -194,7 +204,7 @@ Generate a unique ID. Not using uuid simply to avoid two dependencies
 			
 				<dt><a name="Epoch">Epoch</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 			</dl>
@@ -234,7 +244,7 @@ The numeric value of the uid (an Integer)
 
 		
 			<div id="hex-uid-method" class="method-detail ">
-				<a name="M000094"></a>
+				<a name="M000117"></a>
 
 				<div class="method-heading">
 				
@@ -265,11 +275,13 @@ representation
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="new-method" class="method-detail ">
-				<a name="M000095"></a>
+				<a name="M000118"></a>
 
 				<div class="method-heading">
 				
@@ -296,10 +308,10 @@ Create a 128bit (16 Byte) long random number
 30:       
 31:       <span class="ruby-comment cmt"># Works for the next 100 years - should be enough</span>
 32:       <span class="ruby-comment cmt"># after that, it'll wrap around.</span>
-33:       <span class="ruby-identifier">time_part_52</span>   = (((<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-constant">Epoch</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xffffffff</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">20</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">now</span>.<span class="ruby-identifier">usec</span>
+33:       <span class="ruby-identifier">time_part_52</span>   = (((<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-constant">Epoch</span>) &amp; <span class="ruby-value">0xffffffff</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">20</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">now</span>.<span class="ruby-identifier">usec</span>
 34: 
 35:       <span class="ruby-comment cmt"># Not solid, but for the purposes, should work</span>
-36:       <span class="ruby-identifier">process_part32</span> = (<span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">object_id</span> <span class="ruby-operator">^</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">pid</span>) <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xfffffffff</span>
+36:       <span class="ruby-identifier">process_part32</span> = (<span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">object_id</span> <span class="ruby-operator">^</span> <span class="ruby-constant">Process</span>.<span class="ruby-identifier">pid</span>) &amp; <span class="ruby-value">0xfffffffff</span>
 37: 
 38:       <span class="ruby-comment cmt"># Add a bit of random noise</span>
 39:       <span class="ruby-identifier">random_part44</span>  = <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">rand</span>(<span class="ruby-value">0x100000000000</span>)
@@ -309,6 +321,8 @@ Create a 128bit (16 Byte) long random number
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -321,7 +335,7 @@ Create a 128bit (16 Byte) long random number
 
 		
 			<div id="hex-method" class="method-detail ">
-				<a name="M000096"></a>
+				<a name="M000119"></a>
 
 				<div class="method-heading">
 				
@@ -350,6 +364,8 @@ representation
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

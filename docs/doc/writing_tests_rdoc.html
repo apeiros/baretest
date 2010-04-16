@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: writing_tests.rdoc [baretest-0.4.0]</title>
+	<title>File: writing_tests.rdoc [baretest-0.4.1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -22,6 +22,16 @@
 
 <body class="file">
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="project-metadata">
 			
 			
@@ -221,17 +231,21 @@ tests.
 A classical test consists of four phases:
 </p>
 <ol>
-<li>setup
-
+<li><p>
+setup
+</p>
 </li>
-<li>exercise
-
+<li><p>
+exercise
+</p>
 </li>
-<li>validate
-
+<li><p>
+validate
+</p>
 </li>
-<li>teardown
-
+<li><p>
+teardown
+</p>
 </li>
 </ol>
 <p>
@@ -277,20 +291,29 @@ This is not part of the tutorial but things the author of this tutorial
 should still add to the tutorial itself.
 </p>
 <ul>
-<li>toplevel suite may have a name/description too, it&#8217;ll act the same as
+<li><p>
+toplevel suite may have a name/description too, it&#8217;ll act the same as
 if there was a suite in an unnamed toplevel suite
-
+</p>
 </li>
-<li>[setup] They will also be run for every nested suite&#8217;s assertion,
+<li><dl>
+<dt>setup</dt><dd><p>
+They will also be run for every nested suite&#8217;s assertion,
+</p>
+</dd>
+</dl>
+<p>
 where the outermost setup is run first, the innermost last.
-
+</p>
 </li>
-<li>using stubs &amp; mocks
-
+<li><p>
+using stubs &amp; mocks
+</p>
 </li>
-<li>Suites with the same name and nesting are considered the same and become
+<li><p>
+Suites with the same name and nesting are considered the same and become
 merged
-
+</p>
 <p>
 Example:
 </p>

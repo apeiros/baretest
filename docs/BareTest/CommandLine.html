@@ -22,6 +22,16 @@
 <body class="module">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -54,15 +64,15 @@
 					
 					<li><a href="#M000040">::commands</a></li>
 					
-					<li><a href="#M000049">::env</a></li>
+					<li><a href="#M000043">::env</a></li>
 					
 					<li><a href="#M000039">::formats</a></li>
 					
-					<li><a href="#M000044">::help</a></li>
+					<li><a href="#M000042">::help</a></li>
 					
 					<li><a href="#M000037">::init</a></li>
 					
-					<li><a href="#M000034">::load_formatter</a></li>
+					<li><a href="#M000035">::load_formatter</a></li>
 					
 					<li><a href="#M000038">::reset</a></li>
 					
@@ -70,19 +80,19 @@
 					
 					<li><a href="#M000041">::selectors</a></li>
 					
-					<li><a href="#M000050">::version</a></li>
+					<li><a href="#M000044">::version</a></li>
 					
 					<li><a href="#M000040">#commands</a></li>
 					
-					<li><a href="#M000049">#env</a></li>
+					<li><a href="#M000043">#env</a></li>
 					
 					<li><a href="#M000039">#formats</a></li>
 					
-					<li><a href="#M000044">#help</a></li>
+					<li><a href="#M000042">#help</a></li>
 					
 					<li><a href="#M000037">#init</a></li>
 					
-					<li><a href="#M000034">#load_formatter</a></li>
+					<li><a href="#M000035">#load_formatter</a></li>
 					
 					<li><a href="#M000038">#reset</a></li>
 					
@@ -90,7 +100,7 @@
 					
 					<li><a href="#M000041">#selectors</a></li>
 					
-					<li><a href="#M000050">#version</a></li>
+					<li><a href="#M000044">#version</a></li>
 					
 				</ul>
 			</div>
@@ -248,26 +258,28 @@ List the available commands.
 					<div class="method-source-code"
 						id="commands-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 149</span>
-149:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commands</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-150:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
-151: 
-152:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">&quot;\\e[1mCOMMANDS\\e[0m\n\nThe following commands are available in baretest:\n\n\\e[1mcommands\\e[0m\nList the available commands.\n\n\\e[1menv\\e[0m\nShow the baretest environment. This contains all data that influences\nbaretests behaviour. That is: ruby version, ruby engine, determined\ntest directory, stored data about this suite etc.\n\n\\e[1mformats\\e[0m\nShows all formats available in \\e[34mrun\\e[0m's -f/--format option.\n\n\\e[1mhelp\\e[0m\nProvides help for all commands. Describes options, arguments and env\nvariables each command accepts.\n\n\\e[1minit\\e[0m\nCreate a basic skeleton of directories and files to contain baretests test-\nsuite. Non-destructive (existing files won't be overriden or deleted).\n\n\\e[1mreset\\e[0m (default command)\nDelete persistent data collected from previous runs.\n\n\\e[1mrun\\e[0m (default command)\nRun the tests and display information about them.\n\n\\e[1mselectors\\e[0m\nDetailed information about the selectors available to \\e[34mrun\\e[0m's\narguments.\n\n\\e[1mversion\\e[0m\nShow the baretest executable and library versions.\n\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
-153:       <span class="ruby-comment cmt">#'#                                                                               |&lt;- 80 cols ends here</span>
-154:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
-155: 
-156:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
-157:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 148</span>
+148:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commands</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+149:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+150: 
+151:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">        \e[1mCOMMANDS\e[0m        The following commands are available in baretest:        \e[1mcommands\e[0m            List the available commands.        \e[1menv\e[0m            Show the baretest environment. This contains all data that influences            baretests behaviour. That is: ruby version, ruby engine, determined            test directory, stored data about this suite etc.        \e[1mformats\e[0m            Shows all formats available in \e[34mrun\e[0m's -f/--format option.        \e[1mhelp\e[0m            Provides help for all commands. Describes options, arguments and env            variables each command accepts.        \e[1minit\e[0m            Create a basic skeleton of directories and files to contain baretests test-            suite. Non-destructive (existing files won't be overriden or deleted).        \e[1mreset\e[0m (default command)            Delete persistent data collected from previous runs.        \e[1mrun\e[0m (default command)            Run the tests and display information about them.        \e[1mselectors\e[0m            Detailed information about the selectors available to \e[34mrun\e[0m's            arguments.        \e[1mversion\e[0m            Show the baretest executable and library versions.</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
+152:       <span class="ruby-comment cmt">#'#                                                                               |&lt;- 80 cols ends here</span>
+153:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
+154: 
+155:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
+156:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
 
 		
 			<div id="env-method" class="method-detail ">
-				<a name="M000049"></a>
+				<a name="M000043"></a>
 
 				<div class="method-heading">
 				
@@ -290,17 +302,19 @@ directory, stored data about this suite etc.
 					<div class="method-source-code"
 						id="env-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 276</span>
-276:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">env</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-277:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Versions:&quot;</span>,
-278:            <span class="ruby-node">&quot;* executable: #{Version}&quot;</span>,
-279:            <span class="ruby-node">&quot;* library: #{BareTest::VERSION}&quot;</span>,
-280:            <span class="ruby-node">&quot;* ruby #{RUBY_VERSION}&quot;</span>,
-281:            <span class="ruby-value str">&quot;&quot;</span>
-282:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 272</span>
+272:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">env</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+273:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Versions:&quot;</span>,
+274:            <span class="ruby-node">&quot;* executable: #{Version}&quot;</span>,
+275:            <span class="ruby-node">&quot;* library: #{BareTest::VERSION}&quot;</span>,
+276:            <span class="ruby-node">&quot;* ruby #{RUBY_VERSION}&quot;</span>,
+277:            <span class="ruby-value str">&quot;&quot;</span>
+278:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -320,7 +334,7 @@ directory, stored data about this suite etc.
 				<div class="method-description">
 					
 					<p>
-Shows all formats available in run&#8217;s -f/&#8212;format option.
+Shows all formats available in run&#8217;s -f/--format option.
 </p>
 					
 
@@ -328,23 +342,25 @@ Shows all formats available in run&#8217;s -f/&#8212;format option.
 					<div class="method-source-code"
 						id="formats-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 140</span>
-140:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">formats</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-141:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Available formats:&quot;</span>
-142:       <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
-143:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;- #{File.basename(path, '.rb')}&quot;</span>
-144:       }
-145:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 139</span>
+139:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">formats</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+140:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Available formats:&quot;</span>
+141:       <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+142:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;- #{File.basename(path, '.rb')}&quot;</span>
+143:       }
+144:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
 
 		
 			<div id="help-method" class="method-detail ">
-				<a name="M000044"></a>
+				<a name="M000042"></a>
 
 				<div class="method-heading">
 				
@@ -366,19 +382,21 @@ variables each command accepts.
 					<div class="method-source-code"
 						id="help-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 255</span>
-255:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-256:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
-257: 
-258:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">&quot;\\e[1mHELP\\e[0m\n\nSee `\#{$0} commands` for a list of available commands.\nYou can also use `\#{$0} COMMAND --help` to get information about\nthe command COMMAND.\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
-259: 
-260:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
-261: 
-262:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
-263:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 252</span>
+252:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+253:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+254: 
+255:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">        \e[1mHELP\e[0m        See `#{$0} commands` for a list of available commands.        You can also use `#{$0} COMMAND --help` to get information about        the command COMMAND.</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
+256: 
+257:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
+258: 
+259:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
+260:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -410,7 +428,7 @@ deleted).
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 64</span>
  64:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
- 65:       <span class="ruby-identifier">core</span> = <span class="ruby-node">%w[
+ 65:       <span class="ruby-identifier">core</span> = <span class="ruby-node">]
  66:         test
  67:         test/external
  68:         test/helper
@@ -418,14 +436,14 @@ deleted).
  70:         test/suite
  71:       ]</span>
  72:       <span class="ruby-identifier">mirror</span> = {
- 73:         <span class="ruby-value str">'bin'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%w[test/helper/suite test/suite]</span>,
- 74:         <span class="ruby-value str">'lib'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%w[test/helper/suite test/suite]</span>,
- 75:         <span class="ruby-value str">'rake'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%w[test/helper/suite test/suite]</span>,
+ 73:         <span class="ruby-value str">'bin'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">]test/helper/suite test/suite]</span>,
+ 74:         <span class="ruby-value str">'lib'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">]test/helper/suite test/suite]</span>,
+ 75:         <span class="ruby-value str">'rake'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">]test/helper/suite test/suite]</span>,
  76:       }
  77:       <span class="ruby-identifier">baretest_version</span> = <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">VERSION</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">first</span>(<span class="ruby-value">3</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>).<span class="ruby-identifier">inspect</span>
  78:       <span class="ruby-identifier">ruby_version</span>     = <span class="ruby-constant">RUBY_VERSION</span>.<span class="ruby-identifier">inspect</span>
  79:       <span class="ruby-identifier">files</span> = {
- 80:         <span class="ruby-value str">'test/setup.rb'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;# Add PROJECT/lib to $LOAD_PATH\n$LOAD_PATH.unshift(File.expand_path(\&quot;\\\#{__FILE__}/../../lib\&quot;))\n\n# Ensure baretest is required\nrequire 'baretest'\n\n# Some defaults on BareTest (see Kernel#BareTest)\nBareTest do\nrequire_baretest \#{baretest_version} # minimum baretest version to run these tests\nrequire_ruby     \#{ruby_version} # minimum ruby version to run these tests\nuse              :support # Use :support in all suites\nend\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {10}/</span>, <span class="ruby-value str">''</span>)
+ 80:         <span class="ruby-value str">'test/setup.rb'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">          # Add PROJECT/lib to $LOAD_PATH          $LOAD_PATH.unshift(File.expand_path(&quot;\#{__FILE__}/../../lib&quot;))          # Ensure baretest is required          require 'baretest'          # Some defaults on BareTest (see Kernel#BareTest)          BareTest do            require_baretest #{baretest_version} # minimum baretest version to run these tests            require_ruby     #{ruby_version} # minimum ruby version to run these tests            use              :support # Use :support in all suites          end</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {10}/</span>, <span class="ruby-value str">''</span>)
  81:       }
  82: 
  83:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Creating all directories and files needed in #{File.expand_path('.')}&quot;</span>
@@ -466,11 +484,13 @@ deleted).
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="load-formatter-method" class="method-detail ">
-				<a name="M000034"></a>
+				<a name="M000035"></a>
 
 				<div class="method-heading">
 				
@@ -501,6 +521,8 @@ Load a formatter (see Run::new)
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -526,14 +548,16 @@ Remove all files that store state, cache things etc. from persistence.
 					<div class="method-source-code"
 						id="reset-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 133</span>
-133:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-134:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
-135:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:persistence</span>].<span class="ruby-identifier">clear</span>
-136:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 132</span>
+132:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+133:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
+134:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:persistence</span>].<span class="ruby-identifier">clear</span>
+135:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -556,17 +580,19 @@ Remove all files that store state, cache things etc. from persistence.
 <a href="Run.html">Run</a> the tests and display information about them.
 </p>
 <ul>
-<li>arguments: array of dirs/globs of files to load and run as tests
-
+<li><p>
+arguments: array of dirs/globs of files to load and run as tests
+</p>
 </li>
-<li>options: a hash with options (all MUST be provided)
-
+<li><p>
+options: a hash with options (all MUST be provided)
+</p>
 </li>
 </ul>
 <p>
-:format => String - the formatter :interactive => Boolean - activate
-interactive mode (drops into irb on failure/error) :verbose => Boolean -
-provide verbose output
+:format      => String - the formatter :interactive => Boolean - activate
+interactive mode (drops into irb on failure/error) :verbose     => Boolean
+- provide verbose output
 </p>
 					
 
@@ -579,28 +605,30 @@ provide verbose output
 37:       <span class="ruby-identifier">setup_path</span>              = <span class="ruby-keyword kw">nil</span>
 38:       <span class="ruby-identifier">selectors</span>               = <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">process_selectors</span>(<span class="ruby-identifier">arguments</span>)
 39:       <span class="ruby-identifier">options</span>                 = <span class="ruby-identifier">selectors</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
-40:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
+40:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
 41: 
 42:       <span class="ruby-comment cmt"># Load the setup file, all helper files and all test files</span>
 43:       <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">load_standard_test_files</span>(
-44:         <span class="ruby-identifier">:verbose</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>],
-45:         <span class="ruby-identifier">:setup_path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:setup_path</span>],
-46:         <span class="ruby-identifier">:files</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:files</span>],
-47:         <span class="ruby-identifier">:chdir</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'.'</span>
+44:         <span class="ruby-value">:verbose</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>],
+45:         <span class="ruby-value">:setup_path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:setup_path</span>],
+46:         <span class="ruby-value">:files</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:files</span>],
+47:         <span class="ruby-value">:chdir</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'.'</span>
 48:       )
 49: 
 50:       <span class="ruby-comment cmt"># Run the tests</span>
-51:       <span class="ruby-identifier">puts</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>]
+51:       <span class="ruby-identifier">puts</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>]
 52:       <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">clear</span> <span class="ruby-comment cmt"># IRB is being stupid</span>
 53:       <span class="ruby-identifier">runner</span> = <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Run</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">toplevel_suite</span>, <span class="ruby-identifier">options</span>)
 54:       <span class="ruby-identifier">runner</span>.<span class="ruby-identifier">run_all</span>
 55: 
 56:       <span class="ruby-comment cmt"># Return whether all tests ran successful</span>
-57:       <span class="ruby-identifier">runner</span>.<span class="ruby-identifier">global_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:success</span>
+57:       <span class="ruby-identifier">runner</span>.<span class="ruby-identifier">global_status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:success</span>
 58:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -629,26 +657,28 @@ arguments.
 					<div class="method-source-code"
 						id="selectors-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 199</span>
-199:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">selectors</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-200:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 197</span>
+197:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">selectors</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+198:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+199: 
+200:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">        \e[1mSELECTORS\e[0m        \e[1mDescription\e[0m            Selectors are used to identify what tests to run. Baretest knows 3 kinds of            selectors: globs, tags and last-run-states. All of these can be preceeded            with a minus sign (-), to negate the expression.            Beware that you must use negated expressions only after a -- separator,            as otherwise baretest will try to interpret them as short options (like -f).                \e[1mExample\e[0m            `baretest -- test/suite -test/suite/foo :a -:b %failure -%pending`            This will run all tests that            * Are in the directory test/suite or any of its subdirectories            * Are NOT in the directory test/suite/foo, or any of its subdirectories            * Have the tag 'a'            * Do NOT have the tag 'b'            * Terminated with a failure status on the last run            * Did NOT terminate with a pending status on the last run                \e[1mGlobs\e[0m            * '**' recursively matches all files and directories            * '*' wildcard, matches any amount of any character            * '?' wildcard, matches one character             * '{a,b,c}' alternation, matches any pattern in the comma separated list            * Directories are equivalent to `directory/**/*` patterns        \e[1mTags\e[0m            Tags are preceeded with a ':'.            Examples:              baretest :focus              baretest -- -:hocus              baretest -- :focus :important -:irrelevant -:obsolete        \e[1mLast-run-status\e[0m            Last run states are preceeded with a %.            * %new, %success, %failure, %error, %skipped, %pending            * %error, %skipped and %pending are a subset of %failure            * %pending is a subset of %skipped            * %new matches tests that are run for the very first time</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
 201: 
-202:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">&quot;\\e[1mSELECTORS\\e[0m\n\n\\e[1mDescription\\e[0m\nSelectors are used to identify what tests to run. Baretest knows 3 kinds of\nselectors: globs, tags and last-run-states. All of these can be preceeded\nwith a minus sign (-), to negate the expression.\nBeware that you must use negated expressions only after a -- separator,\nas otherwise baretest will try to interpret them as short options (like -f).\n\n\\e[1mExample\\e[0m\n`baretest -- test/suite -test/suite/foo :a -:b %failure -%pending`\n\nThis will run all tests that\n* Are in the directory test/suite or any of its subdirectories\n* Are NOT in the directory test/suite/foo, or any of its subdirectories\n* Have the tag 'a'\n* Do NOT have the tag 'b'\n* Terminated with a failure status on the last run\n* Did NOT terminate with a pending status on the last run\n\n\\e[1mGlobs\\e[0m\n* '**' recursively matches all files and directories\n* '*' wildcard, matches any amount of any character\n* '?' wildcard, matches one character\n* '{a,b,c}' alternation, matches any pattern in the comma separated list\n* Directories are equivalent to `directory/**/*` patterns\n\n\\e[1mTags\\e[0m\nTags are preceeded with a ':'.\nExamples:\nbaretest :focus\nbaretest -- -:hocus\nbaretest -- :focus :important -:irrelevant -:obsolete\n\n\\e[1mLast-run-status\\e[0m\nLast run states are preceeded with a %.\n* %new, %success, %failure, %error, %skipped, %pending\n* %error, %skipped and %pending are a subset of %failure\n* %pending is a subset of %skipped\n* %new matches tests that are run for the very first time\n\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
+202:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
 203: 
-204:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
-205: 
-206:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
-207:     <span class="ruby-keyword kw">end</span></pre>
+204:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
+205:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
 
 		
 			<div id="version-method" class="method-detail ">
-				<a name="M000050"></a>
+				<a name="M000044"></a>
 
 				<div class="method-heading">
 				
@@ -669,16 +699,18 @@ Show the baretest executable and library versions.
 					<div class="method-source-code"
 						id="version-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 286</span>
-286:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">version</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-287:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;baretest executable version #{Version}&quot;</span>,
-288:            <span class="ruby-node">&quot;library version #{BareTest::VERSION}&quot;</span>,
-289:            <span class="ruby-node">&quot;ruby version #{RUBY_VERSION}&quot;</span>,
-290:            <span class="ruby-value str">&quot;&quot;</span>
-291:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 282</span>
+282:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">version</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+283:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;baretest executable version #{Version}&quot;</span>,
+284:            <span class="ruby-node">&quot;library version #{BareTest::VERSION}&quot;</span>,
+285:            <span class="ruby-node">&quot;ruby version #{RUBY_VERSION}&quot;</span>,
+286:            <span class="ruby-value str">&quot;&quot;</span>
+287:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -712,26 +744,28 @@ List the available commands.
 					<div class="method-source-code"
 						id="commands-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 149</span>
-149:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commands</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-150:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
-151: 
-152:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">&quot;\\e[1mCOMMANDS\\e[0m\n\nThe following commands are available in baretest:\n\n\\e[1mcommands\\e[0m\nList the available commands.\n\n\\e[1menv\\e[0m\nShow the baretest environment. This contains all data that influences\nbaretests behaviour. That is: ruby version, ruby engine, determined\ntest directory, stored data about this suite etc.\n\n\\e[1mformats\\e[0m\nShows all formats available in \\e[34mrun\\e[0m's -f/--format option.\n\n\\e[1mhelp\\e[0m\nProvides help for all commands. Describes options, arguments and env\nvariables each command accepts.\n\n\\e[1minit\\e[0m\nCreate a basic skeleton of directories and files to contain baretests test-\nsuite. Non-destructive (existing files won't be overriden or deleted).\n\n\\e[1mreset\\e[0m (default command)\nDelete persistent data collected from previous runs.\n\n\\e[1mrun\\e[0m (default command)\nRun the tests and display information about them.\n\n\\e[1mselectors\\e[0m\nDetailed information about the selectors available to \\e[34mrun\\e[0m's\narguments.\n\n\\e[1mversion\\e[0m\nShow the baretest executable and library versions.\n\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
-153:       <span class="ruby-comment cmt">#'#                                                                               |&lt;- 80 cols ends here</span>
-154:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
-155: 
-156:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
-157:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 148</span>
+148:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commands</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+149:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+150: 
+151:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">        \e[1mCOMMANDS\e[0m        The following commands are available in baretest:        \e[1mcommands\e[0m            List the available commands.        \e[1menv\e[0m            Show the baretest environment. This contains all data that influences            baretests behaviour. That is: ruby version, ruby engine, determined            test directory, stored data about this suite etc.        \e[1mformats\e[0m            Shows all formats available in \e[34mrun\e[0m's -f/--format option.        \e[1mhelp\e[0m            Provides help for all commands. Describes options, arguments and env            variables each command accepts.        \e[1minit\e[0m            Create a basic skeleton of directories and files to contain baretests test-            suite. Non-destructive (existing files won't be overriden or deleted).        \e[1mreset\e[0m (default command)            Delete persistent data collected from previous runs.        \e[1mrun\e[0m (default command)            Run the tests and display information about them.        \e[1mselectors\e[0m            Detailed information about the selectors available to \e[34mrun\e[0m's            arguments.        \e[1mversion\e[0m            Show the baretest executable and library versions.</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
+152:       <span class="ruby-comment cmt">#'#                                                                               |&lt;- 80 cols ends here</span>
+153:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
+154: 
+155:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
+156:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
 
 		
 			<div id="env-method" class="method-detail ">
-				<a name="M000049"></a>
+				<a name="M000043"></a>
 
 				<div class="method-heading">
 				
@@ -754,17 +788,19 @@ directory, stored data about this suite etc.
 					<div class="method-source-code"
 						id="env-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 276</span>
-276:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">env</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-277:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Versions:&quot;</span>,
-278:            <span class="ruby-node">&quot;* executable: #{Version}&quot;</span>,
-279:            <span class="ruby-node">&quot;* library: #{BareTest::VERSION}&quot;</span>,
-280:            <span class="ruby-node">&quot;* ruby #{RUBY_VERSION}&quot;</span>,
-281:            <span class="ruby-value str">&quot;&quot;</span>
-282:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 272</span>
+272:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">env</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+273:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Versions:&quot;</span>,
+274:            <span class="ruby-node">&quot;* executable: #{Version}&quot;</span>,
+275:            <span class="ruby-node">&quot;* library: #{BareTest::VERSION}&quot;</span>,
+276:            <span class="ruby-node">&quot;* ruby #{RUBY_VERSION}&quot;</span>,
+277:            <span class="ruby-value str">&quot;&quot;</span>
+278:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -784,7 +820,7 @@ directory, stored data about this suite etc.
 				<div class="method-description">
 					
 					<p>
-Shows all formats available in run&#8217;s -f/&#8212;format option.
+Shows all formats available in run&#8217;s -f/--format option.
 </p>
 					
 
@@ -792,23 +828,25 @@ Shows all formats available in run&#8217;s -f/&#8212;format option.
 					<div class="method-source-code"
 						id="formats-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 140</span>
-140:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">formats</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-141:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Available formats:&quot;</span>
-142:       <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
-143:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;- #{File.basename(path, '.rb')}&quot;</span>
-144:       }
-145:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 139</span>
+139:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">formats</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+140:       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Available formats:&quot;</span>
+141:       <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;{#{$LOAD_PATH.join(',')}}/baretest/run/*.rb&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+142:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;- #{File.basename(path, '.rb')}&quot;</span>
+143:       }
+144:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
 
 		
 			<div id="help-method" class="method-detail ">
-				<a name="M000044"></a>
+				<a name="M000042"></a>
 
 				<div class="method-heading">
 				
@@ -830,19 +868,21 @@ variables each command accepts.
 					<div class="method-source-code"
 						id="help-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 255</span>
-255:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-256:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
-257: 
-258:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">&quot;\\e[1mHELP\\e[0m\n\nSee `\#{$0} commands` for a list of available commands.\nYou can also use `\#{$0} COMMAND --help` to get information about\nthe command COMMAND.\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
-259: 
-260:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
-261: 
-262:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
-263:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 252</span>
+252:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+253:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+254: 
+255:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">        \e[1mHELP\e[0m        See `#{$0} commands` for a list of available commands.        You can also use `#{$0} COMMAND --help` to get information about        the command COMMAND.</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
+256: 
+257:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
+258: 
+259:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
+260:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -874,7 +914,7 @@ deleted).
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 64</span>
  64:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
- 65:       <span class="ruby-identifier">core</span> = <span class="ruby-node">%w[
+ 65:       <span class="ruby-identifier">core</span> = <span class="ruby-node">]
  66:         test
  67:         test/external
  68:         test/helper
@@ -882,14 +922,14 @@ deleted).
  70:         test/suite
  71:       ]</span>
  72:       <span class="ruby-identifier">mirror</span> = {
- 73:         <span class="ruby-value str">'bin'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%w[test/helper/suite test/suite]</span>,
- 74:         <span class="ruby-value str">'lib'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%w[test/helper/suite test/suite]</span>,
- 75:         <span class="ruby-value str">'rake'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%w[test/helper/suite test/suite]</span>,
+ 73:         <span class="ruby-value str">'bin'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">]test/helper/suite test/suite]</span>,
+ 74:         <span class="ruby-value str">'lib'</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">]test/helper/suite test/suite]</span>,
+ 75:         <span class="ruby-value str">'rake'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">]test/helper/suite test/suite]</span>,
  76:       }
  77:       <span class="ruby-identifier">baretest_version</span> = <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">VERSION</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">first</span>(<span class="ruby-value">3</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">'.'</span>).<span class="ruby-identifier">inspect</span>
  78:       <span class="ruby-identifier">ruby_version</span>     = <span class="ruby-constant">RUBY_VERSION</span>.<span class="ruby-identifier">inspect</span>
  79:       <span class="ruby-identifier">files</span> = {
- 80:         <span class="ruby-value str">'test/setup.rb'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;# Add PROJECT/lib to $LOAD_PATH\n$LOAD_PATH.unshift(File.expand_path(\&quot;\\\#{__FILE__}/../../lib\&quot;))\n\n# Ensure baretest is required\nrequire 'baretest'\n\n# Some defaults on BareTest (see Kernel#BareTest)\nBareTest do\nrequire_baretest \#{baretest_version} # minimum baretest version to run these tests\nrequire_ruby     \#{ruby_version} # minimum ruby version to run these tests\nuse              :support # Use :support in all suites\nend\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {10}/</span>, <span class="ruby-value str">''</span>)
+ 80:         <span class="ruby-value str">'test/setup.rb'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">          # Add PROJECT/lib to $LOAD_PATH          $LOAD_PATH.unshift(File.expand_path(&quot;\#{__FILE__}/../../lib&quot;))          # Ensure baretest is required          require 'baretest'          # Some defaults on BareTest (see Kernel#BareTest)          BareTest do            require_baretest #{baretest_version} # minimum baretest version to run these tests            require_ruby     #{ruby_version} # minimum ruby version to run these tests            use              :support # Use :support in all suites          end</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {10}/</span>, <span class="ruby-value str">''</span>)
  81:       }
  82: 
  83:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Creating all directories and files needed in #{File.expand_path('.')}&quot;</span>
@@ -930,11 +970,13 @@ deleted).
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="load-formatter-method" class="method-detail ">
-				<a name="M000034"></a>
+				<a name="M000035"></a>
 
 				<div class="method-heading">
 				
@@ -965,6 +1007,8 @@ Load a formatter (see Run::new)
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -990,14 +1034,16 @@ Remove all files that store state, cache things etc. from persistence.
 					<div class="method-source-code"
 						id="reset-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 133</span>
-133:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-134:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
-135:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:persistence</span>].<span class="ruby-identifier">clear</span>
-136:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 132</span>
+132:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+133:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
+134:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:persistence</span>].<span class="ruby-identifier">clear</span>
+135:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -1020,17 +1066,19 @@ Remove all files that store state, cache things etc. from persistence.
 <a href="Run.html">Run</a> the tests and display information about them.
 </p>
 <ul>
-<li>arguments: array of dirs/globs of files to load and run as tests
-
+<li><p>
+arguments: array of dirs/globs of files to load and run as tests
+</p>
 </li>
-<li>options: a hash with options (all MUST be provided)
-
+<li><p>
+options: a hash with options (all MUST be provided)
+</p>
 </li>
 </ul>
 <p>
-:format => String - the formatter :interactive => Boolean - activate
-interactive mode (drops into irb on failure/error) :verbose => Boolean -
-provide verbose output
+:format      => String - the formatter :interactive => Boolean - activate
+interactive mode (drops into irb on failure/error) :verbose     => Boolean
+- provide verbose output
 </p>
 					
 
@@ -1043,28 +1091,30 @@ provide verbose output
 37:       <span class="ruby-identifier">setup_path</span>              = <span class="ruby-keyword kw">nil</span>
 38:       <span class="ruby-identifier">selectors</span>               = <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">process_selectors</span>(<span class="ruby-identifier">arguments</span>)
 39:       <span class="ruby-identifier">options</span>                 = <span class="ruby-identifier">selectors</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">options</span>)
-40:       <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
+40:       <span class="ruby-identifier">options</span>[<span class="ruby-value">:persistence</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Persistence</span>.<span class="ruby-identifier">new</span>
 41: 
 42:       <span class="ruby-comment cmt"># Load the setup file, all helper files and all test files</span>
 43:       <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">load_standard_test_files</span>(
-44:         <span class="ruby-identifier">:verbose</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>],
-45:         <span class="ruby-identifier">:setup_path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:setup_path</span>],
-46:         <span class="ruby-identifier">:files</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:files</span>],
-47:         <span class="ruby-identifier">:chdir</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'.'</span>
+44:         <span class="ruby-value">:verbose</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>],
+45:         <span class="ruby-value">:setup_path</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:setup_path</span>],
+46:         <span class="ruby-value">:files</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:files</span>],
+47:         <span class="ruby-value">:chdir</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'.'</span>
 48:       )
 49: 
 50:       <span class="ruby-comment cmt"># Run the tests</span>
-51:       <span class="ruby-identifier">puts</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:verbose</span>]
+51:       <span class="ruby-identifier">puts</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>]
 52:       <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">clear</span> <span class="ruby-comment cmt"># IRB is being stupid</span>
 53:       <span class="ruby-identifier">runner</span> = <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">Run</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">toplevel_suite</span>, <span class="ruby-identifier">options</span>)
 54:       <span class="ruby-identifier">runner</span>.<span class="ruby-identifier">run_all</span>
 55: 
 56:       <span class="ruby-comment cmt"># Return whether all tests ran successful</span>
-57:       <span class="ruby-identifier">runner</span>.<span class="ruby-identifier">global_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:success</span>
+57:       <span class="ruby-identifier">runner</span>.<span class="ruby-identifier">global_status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:success</span>
 58:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -1093,26 +1143,28 @@ arguments.
 					<div class="method-source-code"
 						id="selectors-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 199</span>
-199:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">selectors</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-200:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 197</span>
+197:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">selectors</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+198:       <span class="ruby-identifier">colors</span> = <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">tty?</span>
+199: 
+200:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">        \e[1mSELECTORS\e[0m        \e[1mDescription\e[0m            Selectors are used to identify what tests to run. Baretest knows 3 kinds of            selectors: globs, tags and last-run-states. All of these can be preceeded            with a minus sign (-), to negate the expression.            Beware that you must use negated expressions only after a -- separator,            as otherwise baretest will try to interpret them as short options (like -f).                \e[1mExample\e[0m            `baretest -- test/suite -test/suite/foo :a -:b %failure -%pending`            This will run all tests that            * Are in the directory test/suite or any of its subdirectories            * Are NOT in the directory test/suite/foo, or any of its subdirectories            * Have the tag 'a'            * Do NOT have the tag 'b'            * Terminated with a failure status on the last run            * Did NOT terminate with a pending status on the last run                \e[1mGlobs\e[0m            * '**' recursively matches all files and directories            * '*' wildcard, matches any amount of any character            * '?' wildcard, matches one character             * '{a,b,c}' alternation, matches any pattern in the comma separated list            * Directories are equivalent to `directory/**/*` patterns        \e[1mTags\e[0m            Tags are preceeded with a ':'.            Examples:              baretest :focus              baretest -- -:hocus              baretest -- :focus :important -:irrelevant -:obsolete        \e[1mLast-run-status\e[0m            Last run states are preceeded with a %.            * %new, %success, %failure, %error, %skipped, %pending            * %error, %skipped and %pending are a subset of %failure            * %pending is a subset of %skipped            * %new matches tests that are run for the very first time</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
 201: 
-202:       <span class="ruby-identifier">description</span> = <span class="ruby-value str">&quot;\\e[1mSELECTORS\\e[0m\n\n\\e[1mDescription\\e[0m\nSelectors are used to identify what tests to run. Baretest knows 3 kinds of\nselectors: globs, tags and last-run-states. All of these can be preceeded\nwith a minus sign (-), to negate the expression.\nBeware that you must use negated expressions only after a -- separator,\nas otherwise baretest will try to interpret them as short options (like -f).\n\n\\e[1mExample\\e[0m\n`baretest -- test/suite -test/suite/foo :a -:b %failure -%pending`\n\nThis will run all tests that\n* Are in the directory test/suite or any of its subdirectories\n* Are NOT in the directory test/suite/foo, or any of its subdirectories\n* Have the tag 'a'\n* Do NOT have the tag 'b'\n* Terminated with a failure status on the last run\n* Did NOT terminate with a pending status on the last run\n\n\\e[1mGlobs\\e[0m\n* '**' recursively matches all files and directories\n* '*' wildcard, matches any amount of any character\n* '?' wildcard, matches one character\n* '{a,b,c}' alternation, matches any pattern in the comma separated list\n* Directories are equivalent to `directory/**/*` patterns\n\n\\e[1mTags\\e[0m\nTags are preceeded with a ':'.\nExamples:\nbaretest :focus\nbaretest -- -:hocus\nbaretest -- :focus :important -:irrelevant -:obsolete\n\n\\e[1mLast-run-status\\e[0m\nLast run states are preceeded with a %.\n* %new, %success, %failure, %error, %skipped, %pending\n* %error, %skipped and %pending are a subset of %failure\n* %pending is a subset of %skipped\n* %new matches tests that are run for the very first time\n\n&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ {8}/</span>, <span class="ruby-value str">''</span>) <span class="ruby-comment cmt">#                           |&lt;- 80 cols ends here</span>
+202:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
 203: 
-204:       <span class="ruby-identifier">description</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\e.*?m/</span>, <span class="ruby-value str">''</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">colors</span>
-205: 
-206:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
-207:     <span class="ruby-keyword kw">end</span></pre>
+204:       <span class="ruby-identifier">puts</span> <span class="ruby-identifier">description</span>
+205:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
 
 		
 			<div id="version-method" class="method-detail ">
-				<a name="M000050"></a>
+				<a name="M000044"></a>
 
 				<div class="method-heading">
 				
@@ -1133,16 +1185,18 @@ Show the baretest executable and library versions.
 					<div class="method-source-code"
 						id="version-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 286</span>
-286:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">version</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
-287:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;baretest executable version #{Version}&quot;</span>,
-288:            <span class="ruby-node">&quot;library version #{BareTest::VERSION}&quot;</span>,
-289:            <span class="ruby-node">&quot;ruby version #{RUBY_VERSION}&quot;</span>,
-290:            <span class="ruby-value str">&quot;&quot;</span>
-291:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/commandline.rb, line 282</span>
+282:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">version</span>(<span class="ruby-identifier">arguments</span>, <span class="ruby-identifier">options</span>)
+283:       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;baretest executable version #{Version}&quot;</span>,
+284:            <span class="ruby-node">&quot;library version #{BareTest::VERSION}&quot;</span>,
+285:            <span class="ruby-node">&quot;ruby version #{RUBY_VERSION}&quot;</span>,
+286:            <span class="ruby-value str">&quot;&quot;</span>
+287:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

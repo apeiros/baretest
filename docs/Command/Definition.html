@@ -22,6 +22,16 @@
 <body class="class">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -214,27 +224,27 @@
 			
 				<dt><a name="RequiredOptionArgument">RequiredOptionArgument</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="OptionArgument">OptionArgument</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="ShortOption">ShortOption</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="NegationSequence">NegationSequence</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="LongOption">LongOption</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 			</dl>
@@ -257,7 +267,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -272,7 +282,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -287,7 +297,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -302,7 +312,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -317,7 +327,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -332,7 +342,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -347,7 +357,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -362,7 +372,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -377,7 +387,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -392,7 +402,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -419,7 +429,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -427,7 +437,7 @@
 						id="create-argument-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/command/definition.rb, line 23</span>
-23:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">create_argument</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+23:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">create_argument</span>(*<span class="ruby-identifier">args</span>)
 24:       <span class="ruby-identifier">name</span>        = <span class="ruby-constant">Symbol</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
 25:       <span class="ruby-identifier">usage</span>       = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
 26:       <span class="ruby-identifier">bare</span>        = <span class="ruby-identifier">usage</span>[<span class="ruby-regexp re">/\w+/</span>]
@@ -439,6 +449,8 @@
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -469,42 +481,51 @@ valid arguments:
 short can be
 </p>
 <ul>
-<li>&#8217;-?&#8217; (short option without argument)
-
+<li><p>
+&#8217;-?&#8217; (short option without argument)
+</p>
 </li>
-<li>&#8217;-? REQUIRED&#8217; (short option with required argument)
-
+<li><p>
+&#8217;-? REQUIRED&#8217; (short option with required argument)
+</p>
 </li>
-<li>&#8217;-? [OPTIONAL]&#8217; (short option with optional
-
+<li><p>
+&#8217;-? [OPTIONAL]&#8217; (short option with optional
+</p>
 </li>
 </ul>
 <p>
 where ? is any of A-Za-z examples:
 </p>
 <ul>
-<li>&#8217;-a&#8217;
-
+<li><p>
+&#8217;-a&#8217;
+</p>
 </li>
-<li>&#8217;-a [OPTIONAL_ARG]&#8217;
-
+<li><p>
+&#8217;-a [OPTIONAL_ARG]&#8217;
+</p>
 </li>
-<li>&#8217;-a REQUIRED_ARG&#8216;
-
+<li><p>
+&#8217;-a REQUIRED_ARG&#8216;
+</p>
 </li>
 </ul>
 <p>
 long can be
 </p>
 <ul>
-<li>&#8217;&#8212;?&#8217; (short option without argument)
-
+<li><p>
+&#8217;&#8212;?&#8217; (short option without argument)
+</p>
 </li>
-<li>&#8217;&#8212;? REQUIRED&#8217; (short option with required argument)
-
+<li><p>
+&#8217;&#8212;? REQUIRED&#8217; (short option with required argument)
+</p>
 </li>
-<li>&#8217;&#8212;? [OPTIONAL]&#8217; (short option with optional
-
+<li><p>
+&#8217;&#8212;? [OPTIONAL]&#8217; (short option with optional
+</p>
 </li>
 </ul>
 <p>
@@ -513,17 +534,21 @@ which is one of &#8217;[no-]&#8217;, &#8217;[with-]&#8217;,
 &#8217;[without-]&#8217; examples:
 </p>
 <ul>
-<li>&#8217;&#8212;colored&#8217;
-
+<li><p>
+&#8217;&#8212;colored&#8217;
+</p>
 </li>
-<li>&#8217;&#8212;[no-]colors&#8217;
-
+<li><p>
+&#8217;&#8212;[no-]colors&#8217;
+</p>
 </li>
-<li>&#8217;&#8212;port PORT&#8217;
-
+<li><p>
+&#8217;&#8212;port PORT&#8217;
+</p>
 </li>
-<li>&#8217;&#8212;foo [OPTIONAL_ARG]&#8217;
-
+<li><p>
+&#8217;&#8212;foo [OPTIONAL_ARG]&#8217;
+</p>
 </li>
 </ul>
 <p>
@@ -535,57 +560,72 @@ there&#8217;s no long at all.
 type can be
 </p>
 <ul>
-<li>:Virtual
-
+<li><p>
+:Virtual
+</p>
 </li>
-<li>:Boolean
-
+<li><p>
+:Boolean
+</p>
 </li>
-<li>:String (default)
-
+<li><p>
+:String (default)
+</p>
 </li>
-<li>:Integer
-
+<li><p>
+:Integer
+</p>
 </li>
-<li>:Float
-
+<li><p>
+:Float
+</p>
 </li>
-<li>:Octal
-
+<li><p>
+:Octal
+</p>
 </li>
-<li>:Hex
-
+<li><p>
+:Hex
+</p>
 </li>
-<li>:File - requires the provided path to exist and be a file
-
+<li><p>
+:File - requires the provided path to exist and be a file
+</p>
 </li>
-<li>:Directory - requires the provided path to exist and be a directory
-
+<li><p>
+:Directory - requires the provided path to exist and be a directory
+</p>
 </li>
-<li>:Path
-
+<li><p>
+:Path
+</p>
 </li>
 </ul>
 <p>
 Exceptions (incomplete):
 </p>
 <ul>
-<li>ArgumentError with single argument if it doesn&#8217;t identify an
+<li><p>
+ArgumentError with single argument if it doesn&#8217;t identify an
 inheritable option
-
+</p>
 </li>
-<li>ArgumentError on invalid short definition
-
+<li><p>
+ArgumentError on invalid short definition
+</p>
 </li>
-<li>ArgumentError on invalid long definition
-
+<li><p>
+ArgumentError on invalid long definition
+</p>
 </li>
-<li>ArgumentError on option argument declaration in both, short and long
+<li><p>
+ArgumentError on option argument declaration in both, short and long
 definition
-
+</p>
 </li>
-<li>ArgumentError on invalid/unsupported type
-
+<li><p>
+ArgumentError on invalid/unsupported type
+</p>
 </li>
 </ul>
 					
@@ -595,7 +635,7 @@ definition
 						id="create-option-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 82</span>
- 82:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">create_option</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+ 82:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">create_option</span>(<span class="ruby-identifier">name</span>, *<span class="ruby-identifier">args</span>)
  83:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-regexp re">/\A-[^- ]/</span> <span class="ruby-keyword kw">then</span>
  84:         <span class="ruby-identifier">short</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
  85:       <span class="ruby-keyword kw">end</span>
@@ -605,7 +645,7 @@ definition
  89:       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-constant">Symbol</span> <span class="ruby-keyword kw">then</span>
  90:         <span class="ruby-identifier">type</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
  91:       <span class="ruby-keyword kw">end</span>
- 92:       <span class="ruby-identifier">declaration</span> = <span class="ruby-identifier">short</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">short</span>,<span class="ruby-identifier">long</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-node">&quot;    #{long}&quot;</span>
+ 92:       <span class="ruby-identifier">declaration</span> = <span class="ruby-identifier">short</span> <span class="ruby-operator">?</span> [<span class="ruby-identifier">short</span>,<span class="ruby-identifier">long</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-node">&quot;    #{long}&quot;</span>
  93:       <span class="ruby-identifier">description</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
  94: 
  95:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Too many arguments&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
@@ -613,20 +653,20 @@ definition
  97:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;Invalid long declaration: #{long.inspect}&quot;</span> <span class="ruby-keyword kw">unless</span> (<span class="ruby-identifier">long</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">long</span> <span class="ruby-operator">=~</span> <span class="ruby-constant">LongOption</span>)
  98:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Argument declaration must only be in one of short and long&quot;</span> <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">short</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">long</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">short</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\s/</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">long</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\s/</span>)
  99: 
-100:       <span class="ruby-identifier">necessity</span>        = <span class="ruby-identifier">:none</span>
+100:       <span class="ruby-identifier">necessity</span>        = <span class="ruby-value">:none</span>
 101:       <span class="ruby-identifier">extract_argument</span> = <span class="ruby-keyword kw">nil</span>
 102:       <span class="ruby-identifier">extract_argument</span> = <span class="ruby-identifier">short</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">short</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\s/</span>
 103:       <span class="ruby-identifier">extract_argument</span> = <span class="ruby-identifier">long</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">long</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\s/</span>
 104:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">extract_argument</span> <span class="ruby-keyword kw">then</span>
-105:         <span class="ruby-identifier">flag</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">argument</span> = <span class="ruby-identifier">extract_argument</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/ /</span>)
+105:         <span class="ruby-identifier">flag</span>, *<span class="ruby-identifier">argument</span> = <span class="ruby-identifier">extract_argument</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/ /</span>)
 106:         <span class="ruby-identifier">extract_argument</span>.<span class="ruby-identifier">replace</span>(<span class="ruby-identifier">flag</span>) <span class="ruby-comment cmt"># long/short should only contain the flag, not the argument declaration as well</span>
 107:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Multiple arguments for an option not yet supported&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">argument</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>
 108:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">argument</span>.<span class="ruby-identifier">empty?</span>
-109:           <span class="ruby-identifier">necessity</span> = <span class="ruby-identifier">:none</span>
+109:           <span class="ruby-identifier">necessity</span> = <span class="ruby-value">:none</span>
 110:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">argument</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\A\[.*\]\z/</span> <span class="ruby-keyword kw">then</span>
-111:           <span class="ruby-identifier">necessity</span> = <span class="ruby-identifier">:optional</span>
+111:           <span class="ruby-identifier">necessity</span> = <span class="ruby-value">:optional</span>
 112:         <span class="ruby-keyword kw">else</span>
-113:           <span class="ruby-identifier">necessity</span> = <span class="ruby-identifier">:required</span>
+113:           <span class="ruby-identifier">necessity</span> = <span class="ruby-value">:required</span>
 114:         <span class="ruby-keyword kw">end</span>
 115:       <span class="ruby-keyword kw">end</span>
 116: 
@@ -641,6 +681,8 @@ definition
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -659,7 +701,7 @@ definition
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -667,7 +709,7 @@ definition
 						id="new-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 138</span>
-138:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">default_command</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">default_options</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+138:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">default_command</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">default_options</span>={}, &amp;<span class="ruby-identifier">block</span>)
 139:       <span class="ruby-ivar">@default_command</span>   = <span class="ruby-identifier">default_command</span>
 140:       <span class="ruby-ivar">@default_options</span>   = <span class="ruby-constant">DecoratingHash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@parent</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@parent</span>.<span class="ruby-identifier">default_options</span>).<span class="ruby-identifier">update</span>(<span class="ruby-identifier">default_options</span>)
 141:       <span class="ruby-ivar">@elements</span>          = []
@@ -681,11 +723,13 @@ definition
 149:       <span class="ruby-ivar">@text</span>              = []
 150:       <span class="ruby-ivar">@placeholders</span>      = {}
 151:       <span class="ruby-ivar">@content_for</span>       = [<span class="ruby-ivar">@elements</span>]
-152:       <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+152:       <span class="ruby-identifier">instance_eval</span>(&amp;<span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
 153:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -710,7 +754,7 @@ definition
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -719,11 +763,13 @@ definition
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 155</span>
 155:     <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">command</span>)
-156:       <span class="ruby-identifier">command</span> <span class="ruby-value">? </span><span class="ruby-ivar">@commands_by_name</span>[<span class="ruby-identifier">command</span>] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>
+156:       <span class="ruby-identifier">command</span> <span class="ruby-operator">?</span> <span class="ruby-ivar">@commands_by_name</span>[<span class="ruby-identifier">command</span>] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>
 157:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -742,7 +788,7 @@ definition
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -750,7 +796,7 @@ definition
 						id="argument-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 216</span>
-216:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">argument</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+216:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">argument</span>(*<span class="ruby-identifier">args</span>)
 217:       <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@argument_position</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>]
 218:         <span class="ruby-ivar">@argument_position</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>] = <span class="ruby-ivar">@argument_position</span>.<span class="ruby-identifier">size</span>
 219:       <span class="ruby-keyword kw">end</span>
@@ -759,7 +805,7 @@ definition
 222:         <span class="ruby-identifier">argument</span>   = <span class="ruby-ivar">@arguments_by_name</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>]
 223:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;No argument with name #{args.first.inspect} in any parent found.&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">argument</span>
 224:       <span class="ruby-keyword kw">else</span>
-225:         <span class="ruby-identifier">argument</span>    = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">create_argument</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+225:         <span class="ruby-identifier">argument</span>    = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">create_argument</span>(*<span class="ruby-identifier">args</span>)
 226:         <span class="ruby-ivar">@arguments_by_name</span>[<span class="ruby-identifier">argument</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">argument</span>
 227:       <span class="ruby-keyword kw">end</span>
 228:       <span class="ruby-ivar">@content_for</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">argument</span>
@@ -769,6 +815,8 @@ definition
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -787,7 +835,7 @@ definition
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -795,14 +843,16 @@ definition
 						id="command-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 288</span>
-288:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">command</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-289:       <span class="ruby-identifier">definition</span> = <span class="ruby-constant">Definition</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+288:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">command</span>(*<span class="ruby-identifier">args</span>, &amp;<span class="ruby-identifier">block</span>)
+289:       <span class="ruby-identifier">definition</span> = <span class="ruby-constant">Definition</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, *<span class="ruby-identifier">args</span>, &amp;<span class="ruby-identifier">block</span>)
 290:       <span class="ruby-ivar">@commands_by_name</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>] = <span class="ruby-identifier">definition</span>
 291:       <span class="ruby-ivar">@content_for</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">definition</span>
 292:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -821,7 +871,7 @@ definition
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -840,6 +890,8 @@ definition
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -856,7 +908,7 @@ definition
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -872,6 +924,8 @@ definition
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -890,14 +944,18 @@ definition
 
 				<div class="method-description">
 					
-					<p>
-Alias for <a href="Definition.html#M000151">option</a>
-</p>
+					
 					
 
 					
 				</div>
 
+				
+
+				
+				<div class="aliases">
+          Alias for: <a href="Definition.html#M000151">option</a>
+				</div>
 				
 			</div>
 
@@ -915,7 +973,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -923,7 +981,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 						id="option-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 246</span>
-246:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+246:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option</span>(*<span class="ruby-identifier">args</span>)
 247:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
 248:         <span class="ruby-identifier">inherited_option</span> = <span class="ruby-ivar">@options_by_name</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>]
 249:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;No inherited option #{args.first.inspect}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">inherited_option</span>
@@ -931,7 +989,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 251: 
 252:         <span class="ruby-identifier">inherited_option</span>
 253:       <span class="ruby-keyword kw">else</span>
-254:         <span class="ruby-identifier">option</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">create_option</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+254:         <span class="ruby-identifier">option</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">create_option</span>(*<span class="ruby-identifier">args</span>)
 255: 
 256:         <span class="ruby-ivar">@options_by_name</span>[<span class="ruby-identifier">option</span>.<span class="ruby-identifier">name</span>]    = <span class="ruby-identifier">option</span>
 257:         <span class="ruby-ivar">@options_by_flag</span>[<span class="ruby-identifier">option</span>.<span class="ruby-identifier">short</span>]   = <span class="ruby-identifier">option</span>
@@ -951,6 +1009,8 @@ Alias for <a href="Definition.html#M000151">option</a>
 					Also aliased as: <a href="Definition.html#M000152">o</a>
 				</div>
 				
+
+				
 			</div>
 
 		
@@ -967,7 +1027,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -981,6 +1041,8 @@ Alias for <a href="Definition.html#M000151">option</a>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -999,7 +1061,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -1007,9 +1069,9 @@ Alias for <a href="Definition.html#M000151">option</a>
 						id="text-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 267</span>
-267:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+267:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text</span>(*<span class="ruby-identifier">args</span>)
 268:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span> <span class="ruby-keyword kw">then</span>
-269:         <span class="ruby-identifier">indent</span>, <span class="ruby-identifier">text</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>
+269:         <span class="ruby-identifier">indent</span>, <span class="ruby-identifier">text</span> = *<span class="ruby-identifier">args</span>
 270:         <span class="ruby-identifier">text</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^/</span>, <span class="ruby-identifier">indent</span>)
 271:       <span class="ruby-keyword kw">else</span>
 272:         <span class="ruby-identifier">text</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
@@ -1020,6 +1082,8 @@ Alias for <a href="Definition.html#M000151">option</a>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -1038,7 +1102,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -1047,11 +1111,13 @@ Alias for <a href="Definition.html#M000151">option</a>
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 212</span>
 212:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">usage</span>
-213:       <span class="ruby-ivar">@content_for</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">:usage</span>
+213:       <span class="ruby-ivar">@content_for</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">:usage</span>
 214:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -1070,7 +1136,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -1095,7 +1161,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 180: 
 181:       <span class="ruby-identifier">elements</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
 182:         <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">e</span>
-183:           <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:usage</span>
+183:           <span class="ruby-keyword kw">when</span> <span class="ruby-value">:usage</span>
 184:             <span class="ruby-node">&quot;Usage: #{File.basename($0)} #{arguments.map{|a|a.usage}.join(' ')}\n&quot;</span>
 185:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Symbol</span> <span class="ruby-comment cmt"># placeholder</span>
 186:             <span class="ruby-identifier">usage_text</span>(<span class="ruby-ivar">@placeholders</span>[<span class="ruby-identifier">e</span>])
@@ -1112,7 +1178,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 197:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
 198:             <span class="ruby-identifier">e</span><span class="ruby-operator">+</span><span class="ruby-value str">&quot;\n&quot;</span>
 199:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Argument</span>
-200:             <span class="ruby-identifier">indent</span> = <span class="ruby-value str">&quot;\n     &quot;</span><span class="ruby-operator">+</span>(<span class="ruby-value str">&quot; &quot;</span><span class="ruby-operator">*</span><span class="ruby-identifier">longest_arg_bare</span>)
+200:             <span class="ruby-identifier">indent</span> = <span class="ruby-value str">&quot;\n     &quot;</span><span class="ruby-operator">+</span>(<span class="ruby-value str">&quot; &quot;</span>*<span class="ruby-identifier">longest_arg_bare</span>)
 201:             <span class="ruby-identifier">sprintf</span> <span class="ruby-value str">&quot;  %*s%s\n&quot;</span>,
 202:                     <span class="ruby-operator">-</span>(<span class="ruby-identifier">longest_arg_bare</span><span class="ruby-operator">+</span><span class="ruby-value">3</span>),
 203:                     <span class="ruby-node">&quot;#{e.bare}:&quot;</span>,
@@ -1126,6 +1192,8 @@ Alias for <a href="Definition.html#M000151">option</a>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -1144,7 +1212,7 @@ Alias for <a href="Definition.html#M000151">option</a>
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -1152,12 +1220,12 @@ Alias for <a href="Definition.html#M000151">option</a>
 						id="virtual-argument-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/definition.rb, line 233</span>
-233:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_argument</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+233:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_argument</span>(*<span class="ruby-identifier">args</span>)
 234:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span>
 235:         <span class="ruby-identifier">argument</span>   = <span class="ruby-ivar">@arguments_by_name</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>]
 236:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;No argument with name #{args.first.inspect} in any parent found.&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">argument</span>
 237:       <span class="ruby-keyword kw">else</span>
-238:         <span class="ruby-identifier">argument</span>    = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">create_argument</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+238:         <span class="ruby-identifier">argument</span>    = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">create_argument</span>(*<span class="ruby-identifier">args</span>)
 239:         <span class="ruby-ivar">@arguments_by_name</span>[<span class="ruby-identifier">argument</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">argument</span>
 240:       <span class="ruby-keyword kw">end</span>
 241: 
@@ -1167,6 +1235,8 @@ Alias for <a href="Definition.html#M000151">option</a>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

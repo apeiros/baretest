@@ -22,6 +22,16 @@
 <body class="class">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -184,25 +194,30 @@ of exceptions, the exception itself and in what phase it occurred An
 assertion or suite has 9 possible states:
 </p>
 <table>
-<tr><td valign="top">:success:</td><td>The assertion passed. This means the block returned a trueish value.
-
+<tr><td valign="top">:success</td><td><p>
+The assertion passed. This means the block returned a trueish value.
+</p>
 </td></tr>
-<tr><td valign="top">:failure:</td><td>The assertion failed. This means the block returned a falsish value.
+<tr><td valign="top">:failure</td><td><p>
+The assertion failed. This means the block returned a falsish value.
 Alternatively it raised an <a
 href="Assertion/Failure.html">Assertion::Failure</a>. The latter has the
 advantage that it can provide nicer diagnostics.
-
+</p>
 </td></tr>
-<tr><td valign="top">:pending:</td><td>No block given to the assertion to be run
-
+<tr><td valign="top">:pending</td><td><p>
+No block given to the assertion to be run
+</p>
 </td></tr>
-<tr><td valign="top">:skipped:</td><td>If one of the parent suites is missing a dependency, its assertions will be
+<tr><td valign="top">:skipped</td><td><p>
+If one of the parent suites is missing a dependency, its assertions will be
 skipped Alternatively it raised an <a
 href="Assertion/Skip.html">Assertion::Skip</a>.
-
+</p>
 </td></tr>
-<tr><td valign="top">:error:</td><td>The assertion errored out. This means the block raised an exception
-
+<tr><td valign="top">:error</td><td><p>
+The assertion errored out. This means the block raised an exception
+</p>
 </td></tr>
 </table>
 
@@ -316,7 +331,7 @@ Detailed reason for failing. Array or nil.
 				
 				<p>
 If an exception occured in <a
-href="Assertion.html#M000020">Assertion#execute</a>, this will contain the
+href="Assertion.html#M000031">Assertion#execute</a>, this will contain the
 Exception object raised.
 </p>
 				
@@ -346,20 +361,24 @@ Exception object raised.
 				<div class="method-description">
 					
 					<table>
-<tr><td valign="top">entity:</td><td>The suite or <a href="Assertion.html">Assertion</a> this <a
+<tr><td valign="top">entity</td><td><p>
+The suite or <a href="Assertion.html">Assertion</a> this <a
 href="Status.html">Status</a> belongs to
-
+</p>
 </td></tr>
-<tr><td valign="top">status:</td><td>The status identifier
-
+<tr><td valign="top">status</td><td><p>
+The status identifier
+</p>
 </td></tr>
-<tr><td valign="top"><a href="Status.html#skip_reason">skip_reason</a>:</td><td>Why the <a href="Assertion.html">Assertion</a> or <a
+<tr><td valign="top"><a href="Status.html#skip_reason">skip_reason</a></td><td><p>
+Why the <a href="Assertion.html">Assertion</a> or <a
 href="Suite.html">Suite</a> failed. Array, String or nil.
-
+</p>
 </td></tr>
-<tr><td valign="top"><a href="Status.html#failure_reason">failure_reason</a>:</td><td>Why the <a href="Assertion.html">Assertion</a> or <a
+<tr><td valign="top"><a href="Status.html#failure_reason">failure_reason</a></td><td><p>
+Why the <a href="Assertion.html">Assertion</a> or <a
 href="Suite.html">Suite</a> was skipped. Array, String or nil.
-
+</p>
 </td></tr>
 </table>
 					
@@ -380,6 +399,8 @@ href="Suite.html">Suite</a> was skipped. Array, String or nil.
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -409,17 +430,21 @@ The failure/error/skipping/pending reason. Returns nil if there&#8217;s no
 reason, a string otherwise Options:
 </p>
 <table>
-<tr><td valign="top">:default:</td><td>Reason to return if no reason is present
-
+<tr><td valign="top">:default</td><td><p>
+Reason to return if no reason is present
+</p>
 </td></tr>
-<tr><td valign="top">:separator:</td><td>String used to separate multiple reasons
-
+<tr><td valign="top">:separator</td><td><p>
+String used to separate multiple reasons
+</p>
 </td></tr>
-<tr><td valign="top">:indent:</td><td>A String, the indentation to use. Prefixes every line.
-
+<tr><td valign="top">:indent</td><td><p>
+A String, the indentation to use. Prefixes every line.
+</p>
 </td></tr>
-<tr><td valign="top">:first_indent:</td><td>A String, used to indent the first line only (replaces indent).
-
+<tr><td valign="top">:first_indent</td><td><p>
+A String, used to indent the first line only (replaces indent).
+</p>
 </td></tr>
 </table>
 					
@@ -432,7 +457,7 @@ reason, a string otherwise Options:
 66:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reason</span>(<span class="ruby-identifier">opt</span>=<span class="ruby-keyword kw">nil</span>)
 67:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opt</span> <span class="ruby-keyword kw">then</span>
 68:         <span class="ruby-identifier">default</span>, <span class="ruby-identifier">separator</span>, <span class="ruby-identifier">indent</span>, <span class="ruby-identifier">first_indent</span> = 
-69:           <span class="ruby-operator">*</span><span class="ruby-identifier">opt</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-identifier">:default</span>, <span class="ruby-identifier">:separator</span>, <span class="ruby-identifier">:indent</span>, <span class="ruby-identifier">:first_indent</span>)
+69:           *<span class="ruby-identifier">opt</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-value">:default</span>, <span class="ruby-value">:separator</span>, <span class="ruby-value">:indent</span>, <span class="ruby-value">:first_indent</span>)
 70:         <span class="ruby-identifier">reason</span> = <span class="ruby-ivar">@skip_reason</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@failure_reason</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">default</span>
 71:         <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">reason</span>
 72:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">reason</span> <span class="ruby-operator">:</span> [<span class="ruby-identifier">reason</span>]
@@ -441,12 +466,14 @@ reason, a string otherwise Options:
 75:         <span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/\A#{Regexp.escape(indent)}/</span>, <span class="ruby-identifier">first_indent</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">first_indent</span>
 76:         <span class="ruby-identifier">reason</span>
 77:       <span class="ruby-keyword kw">else</span>
-78:         <span class="ruby-ivar">@reason</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@reason</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+78:         <span class="ruby-ivar">@reason</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@reason</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
 79:       <span class="ruby-keyword kw">end</span>
 80:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

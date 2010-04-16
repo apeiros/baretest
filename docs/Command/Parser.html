@@ -22,6 +22,16 @@
 <body class="class">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -213,7 +223,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -228,7 +238,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -243,7 +253,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -258,7 +268,7 @@
 
 				<div class="method-description">
 				
-				<p class="missing-docs">(Not documented)</p>
+				
 				
 				</div>
 			</div>
@@ -285,7 +295,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -298,7 +308,7 @@
 18:       <span class="ruby-ivar">@argv</span>       = <span class="ruby-identifier">argv</span>
 19:       <span class="ruby-ivar">@affix</span>      = [] <span class="ruby-comment cmt"># arguments after '--'</span>
 20:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">i</span> = <span class="ruby-identifier">argv</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">'--'</span>)
-21:         <span class="ruby-ivar">@affix</span>     = <span class="ruby-identifier">argv</span>[(<span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+21:         <span class="ruby-ivar">@affix</span>     = <span class="ruby-identifier">argv</span>[(<span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)<span class="ruby-operator">..</span><span class="ruby-value">1</span>]
 22:         <span class="ruby-ivar">@arguments</span> = <span class="ruby-identifier">argv</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">i</span>)
 23:       <span class="ruby-keyword kw">else</span>
 24:         <span class="ruby-ivar">@arguments</span> = <span class="ruby-ivar">@argv</span>.<span class="ruby-identifier">dup</span>
@@ -308,6 +318,8 @@
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -332,7 +344,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -348,6 +360,8 @@
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -366,7 +380,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -380,6 +394,8 @@
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -398,7 +414,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -420,6 +436,8 @@
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -436,7 +454,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -450,18 +468,18 @@
 56:       <span class="ruby-ivar">@arguments</span> = []
 57:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">parse_argv</span>.<span class="ruby-identifier">shift</span>
 58:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\A-([^-]{2,})/</span> <span class="ruby-keyword kw">then</span>
-59:           <span class="ruby-identifier">flags</span>  = <span class="ruby-identifier">$1</span>
+59:           <span class="ruby-identifier">flags</span>  = <span class="ruby-node">$1</span>
 60:           <span class="ruby-keyword kw">until</span> <span class="ruby-identifier">flags</span>.<span class="ruby-identifier">empty?</span>
 61:             <span class="ruby-identifier">flag</span> = <span class="ruby-identifier">flags</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>,<span class="ruby-value">1</span>)
 62:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opt</span>  = <span class="ruby-identifier">options</span>[<span class="ruby-node">&quot;-#{flag}&quot;</span>] <span class="ruby-keyword kw">then</span>
 63:               <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opt</span>.<span class="ruby-identifier">necessity</span>
-64:                 <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:required</span>
+64:                 <span class="ruby-keyword kw">when</span> <span class="ruby-value">:required</span>
 65:                   <span class="ruby-ivar">@arguments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;-#{flag}&quot;</span>
 66:                   <span class="ruby-ivar">@arguments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">flags</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">flags</span>.<span class="ruby-identifier">empty?</span>
 67:                   <span class="ruby-identifier">flags</span> = <span class="ruby-value str">&quot;&quot;</span>
-68:                 <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:optional</span>
+68:                 <span class="ruby-keyword kw">when</span> <span class="ruby-value">:optional</span>
 69:                   <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Invalid option - can't merge short options with optional arguments&quot;</span>
-70:                 <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:none</span>
+70:                 <span class="ruby-keyword kw">when</span> <span class="ruby-value">:none</span>
 71:                   <span class="ruby-ivar">@arguments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;-#{flag}&quot;</span>
 72:                 <span class="ruby-keyword kw">else</span>
 73:                   <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Unknown necessity #{opt.necessity.inspect} for option #{opt}&quot;</span>
@@ -480,6 +498,8 @@
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -496,7 +516,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -510,6 +530,8 @@
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -528,7 +550,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -536,8 +558,8 @@
 						id="options--source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/parser.rb, line 85</span>
- 85:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">flags</span>)
- 86:       <span class="ruby-identifier">ignore_invalid_options</span> = <span class="ruby-identifier">flags</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:ignore_invalid_options</span>)
+ 85:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options!</span>(*<span class="ruby-identifier">flags</span>)
+ 86:       <span class="ruby-identifier">ignore_invalid_options</span> = <span class="ruby-identifier">flags</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:ignore_invalid_options</span>)
  87:       <span class="ruby-identifier">options</span>                = <span class="ruby-ivar">@definition</span>[<span class="ruby-ivar">@command</span>].<span class="ruby-identifier">options_by_flag</span> <span class="ruby-comment cmt"># options available to this command</span>
  88:       <span class="ruby-identifier">env</span>                    = <span class="ruby-ivar">@definition</span>[<span class="ruby-ivar">@command</span>].<span class="ruby-identifier">env_by_variable</span> <span class="ruby-comment cmt"># options available to this command</span>
  89:       <span class="ruby-identifier">defaults</span>               = <span class="ruby-ivar">@definition</span>[<span class="ruby-ivar">@command</span>].<span class="ruby-identifier">default_options</span> <span class="ruby-comment cmt"># options available to this command</span>
@@ -562,15 +584,15 @@
 108:       <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">parse_argv</span>.<span class="ruby-identifier">shift</span>
 109:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">arg</span>] <span class="ruby-keyword kw">then</span>
 110:           <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">option</span>.<span class="ruby-identifier">necessity</span>
-111:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:required</span>
+111:             <span class="ruby-keyword kw">when</span> <span class="ruby-value">:required</span>
 112:               <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>.<span class="ruby-identifier">process!</span>(<span class="ruby-identifier">parse_argv</span>.<span class="ruby-identifier">shift</span>)
-113:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:optional</span>
+113:             <span class="ruby-keyword kw">when</span> <span class="ruby-value">:optional</span>
 114:               <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parse_argv</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">parse_argv</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/\A-/</span> <span class="ruby-keyword kw">then</span>
 115:                 <span class="ruby-identifier">value</span> = <span class="ruby-identifier">option</span>.<span class="ruby-identifier">process!</span>(<span class="ruby-identifier">parse_argv</span>.<span class="ruby-identifier">shift</span>)
 116:               <span class="ruby-keyword kw">else</span>
 117:                 <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">true</span>
 118:               <span class="ruby-keyword kw">end</span>
-119:             <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:none</span>
+119:             <span class="ruby-keyword kw">when</span> <span class="ruby-value">:none</span>
 120:               <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">true</span>
 121:           <span class="ruby-keyword kw">end</span>
 122:           <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">option</span>.<span class="ruby-identifier">name</span>] = (<span class="ruby-identifier">arg</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">option</span>.<span class="ruby-identifier">negated</span>) <span class="ruby-operator">?</span> <span class="ruby-operator">!</span><span class="ruby-identifier">value</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">value</span>
@@ -589,6 +611,8 @@
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -605,7 +629,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -613,15 +637,17 @@
 						id="parse-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/command/parser.rb, line 138</span>
-138:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">flags</span>)
+138:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(*<span class="ruby-identifier">flags</span>)
 139:       <span class="ruby-identifier">command!</span>
-140:       <span class="ruby-identifier">options!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">flags</span>)
+140:       <span class="ruby-identifier">options!</span>(*<span class="ruby-identifier">flags</span>)
 141: 
 142:       <span class="ruby-identifier">result</span>
 143:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -640,7 +666,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -654,6 +680,8 @@
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

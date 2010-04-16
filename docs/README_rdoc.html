@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: README.rdoc [baretest-0.4.0]</title>
+	<title>File: README.rdoc [baretest-0.4.1]</title>
 
 	<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet" />
 
@@ -22,6 +22,16 @@
 
 <body class="file">
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="project-metadata">
 			
 			
@@ -135,11 +145,13 @@ tests.
 </p>
 <h2>Also See</h2>
 <table>
-<tr><td valign="top">Executable Docs:</td><td><a href="doc/baretest_rdoc.html">doc/baretest.rdoc</a>
-
+<tr><td valign="top">Executable Docs</td><td><p>
+<a href="doc/baretest_rdoc.html">doc/baretest.rdoc</a>
+</p>
 </td></tr>
-<tr><td valign="top">IRC:</td><td>The channel ruby-lang on irc.freenode.org
-
+<tr><td valign="top">IRC</td><td><p>
+The channel ruby-lang on irc.freenode.org
+</p>
 <p>
 I&#8217;m there under the nick apeiros.
 </p>
@@ -155,63 +167,79 @@ Baretest is a Testframework that tries to stay out of your way, but support
 you when you want it. In order to do so it has a load of features:
 </p>
 <ul>
-<li>Straightforward and terse assertions (just a block whose return value
+<li><p>
+Straightforward and terse assertions (just a block whose return value
 defines success/failure)
-
+</p>
 </li>
-<li>Easy grouping of assertions into suites
-
+<li><p>
+Easy grouping of assertions into suites
+</p>
 </li>
-<li>BDD style specifications/test descriptions (NOT code), also extractable
-
+<li><p>
+BDD style specifications/test descriptions (NOT code), also extractable
+</p>
 </li>
-<li>Uncomplicated dependency testing and skipping
-
+<li><p>
+Uncomplicated dependency testing and skipping
+</p>
 </li>
-<li>Helpers to deal painlessly with raising, throwing, float imprecision,
+<li><p>
+Helpers to deal painlessly with raising, throwing, float imprecision,
 unordered collections etc.
-
+</p>
 </li>
-<li>Ships with colored Shell formatter, Diagnostic-, XML- and TAP formatter
-
+<li><p>
+Ships with colored Shell formatter, Diagnostic-, XML- and TAP formatter
+</p>
 </li>
-<li>Interactive mode - drops you into an irb session within failed assertion
+<li><p>
+Interactive mode - drops you into an irb session within failed assertion
 with all setup methods executed, so you can inspect interactively why it
 failed.
-
+</p>
 </li>
-<li>Trivial to add new formatters (the standard formatters are only roughly
+<li><p>
+Trivial to add new formatters (the standard formatters are only roughly
 20-50 lines of code each)
-
+</p>
 </li>
-<li>Teardown and Setup for suites
-
+<li><p>
+Teardown and Setup for suites
+</p>
 </li>
-<li>Callbacks to integrate mock libraries
-
+<li><p>
+Callbacks to integrate mock libraries
+</p>
 </li>
-<li>API to use it from code, such as rake tasks (comes with an example
+<li><p>
+API to use it from code, such as rake tasks (comes with an example
 rake-task)
-
+</p>
 </li>
-<li>baretest executable to run tests on multiple files at once
-
+<li><p>
+baretest executable to run tests on multiple files at once
+</p>
 </li>
-<li>Diagnostic assertion helpers (e.g. same(:a, :b) will give you
+<li><p>
+Diagnostic assertion helpers (e.g. same(:a, :b) will give you
 &#8216;Expected :a but got :b&#8217; as diagnostic)
-
+</p>
 </li>
 </ul>
 <h2>Quick Try</h2>
 <ol>
-<li>Download from github and unpack (or clone)
-
+<li><p>
+Download from github and unpack (or clone)
+</p>
 </li>
-<li>Change into the baretest directory: `cd the/baretest/directory`
-
+<li><p>
+Change into the baretest directory: `cd the/baretest/directory`
+</p>
 </li>
-<li>Run the examples: `./bin/baretest examples/test.rb`
-
+<li><p>
+Run the examples: `./bin/baretest examples/test.rb`
+</p>
 </li>
 </ol>
 <p>
@@ -220,26 +248,31 @@ with formatters: `./bin/baretest -f tap`
 </p>
 <h2>Install</h2>
 <ol>
-<li>run `gem install baretest`, alternatively run `sudo gem install baretest`
-
+<li><p>
+run `gem install baretest`, alternatively run `sudo gem install baretest`
+</p>
 </li>
-<li>There is no 2.
-
+<li><p>
+There is no 2.
+</p>
 </li>
 </ol>
 <p>
 To get baretest edge, use:
 </p>
 <ol>
-<li>Download from github and unpack (or clone)
-
+<li><p>
+Download from github and unpack (or clone)
+</p>
 </li>
-<li>Change into the baretest directory: `cd the/baretest/directory`
-
+<li><p>
+Change into the baretest directory: `cd the/baretest/directory`
+</p>
 </li>
-<li>Run the installation task: `rake gem:install` (alternatively `rake
+<li><p>
+Run the installation task: `rake gem:install` (alternatively `rake
 install:lib`)
-
+</p>
 </li>
 </ol>
 <p>
@@ -266,11 +299,11 @@ Usage:
                    baretest -- test/suite/a -test/suite/a/x @tag -@other %failure -%pending
                  Defaults to 'test/{suite,unit,integration,system}
                  See `baretest selectors` to get more information
-
+    
     Default command is 'run', which runs the testsuite or the provided testfiles.
-
+    
     Options:
-
+    
           --commands       overview over the commands
       -d, --debug          set debugging flags (set $DEBUG to true)
       -i, --interactive    drop into IRB on error or failure. Use 'help!' in the irb session for more information
@@ -280,19 +313,19 @@ Usage:
       -h, --help           help for usage and flags
       -v, --version        print the version and exit
           --init           Deprecated form for `baretest --init`
-
+    
     Options for 'CLI' formatter:
-
+    
       -c, --[no-]color    Enable/disable output coloring
       -p, --[no-]profile  Enable/disable profiling assertions
-
+    
     Environment variables for 'CLI' formatter:
-
+    
     * COLOR    Enable/disable output coloring
     * PROFILE  Enable/disable profiling assertions
-
+    
     Environment variables:
-
+    
     * FORMAT       use FORMAT for output, see `baretest formats`
     * VERBOSE      turn warnings on for your script
     * INTERACTIVE  drop into IRB on error or failure. Use 'help!' in the irb session for more information
@@ -310,7 +343,7 @@ adding features not found in other projects.
 </p>
 <h2>Example Testsuite</h2>
 <p>
-From examples/test.rb:
+From examples/tests/01_basics_I.rb:
 </p>
 <pre>
   BareTest.suite do
@@ -322,23 +355,23 @@ From examples/test.rb:
         true
       end
     end
-
+  
     suite &quot;Failure&quot; do
       assert &quot;An assertion returning a falsish value (nil/false) is a failure&quot; do
         false
       end
     end
-
+  
     suite &quot;Pending&quot; do
       assert &quot;An assertion without a block is pending&quot;
     end
-
+  
     suite &quot;Error&quot; do
       assert &quot;Uncaught exceptions in an assertion are an error&quot; do
         raise &quot;Error!&quot;
       end
     end
-
+  
     suite &quot;Special assertions&quot; do
       assert &quot;Assert a block to raise&quot; do
         raises do
@@ -346,13 +379,13 @@ From examples/test.rb:
           raise &quot;If this raises then the assertion is a success&quot;
         end
       end
-
+  
       assert &quot;Assert a float to be close to another&quot; do
         a = 0.18 - 0.01
         b = 0.17
         within_delta a, b, 0.001
       end
-
+  
       suite &quot;Nested suite&quot; do
         assert &quot;Assert two randomly ordered arrays to contain the same values&quot; do
           a = [*&quot;A&quot;..&quot;Z&quot;] # an array with values from A to Z
@@ -361,41 +394,41 @@ From examples/test.rb:
         end
       end
     end
-
+  
     suite &quot;Setup &amp; Teardown&quot; do
       setup do
         @foo = &quot;foo&quot;
         @bar = &quot;bar&quot;
       end
-
+  
       assert &quot;@foo should be set&quot; do
         @foo == &quot;foo&quot;
       end
-
+  
       suite &quot;Nested suite&quot; do
         setup do
           @bar = &quot;inner bar&quot;
           @baz = &quot;baz&quot;
         end
-
+  
         assert &quot;@foo is inherited&quot; do
           @foo == &quot;foo&quot;
         end
-
+  
         assert &quot;@bar is overridden&quot; do
           @bar == &quot;inner bar&quot;
         end
-
+  
         assert &quot;@baz is defined only for inner&quot; do
           @baz == &quot;baz&quot;
         end
       end
-
+  
       teardown do
         @foo = nil # not that it'd make much sense, just to demonstrate
       end
     end
-
+  
     suite &quot;Dependencies&quot;, :requires =&gt; ['foo', 'bar'] do
       assert &quot;Will be skipped, due to unsatisfied dependencies&quot; do
         failure &quot;Why the heck do you have a 'foo/bar' file?&quot;
@@ -405,42 +438,63 @@ From examples/test.rb:
 </pre>
 <h2>Credits &amp; Contributions</h2>
 <ul>
-<li>dominikh
-
+<li><p>
+dominikh
+</p>
 <ul>
-<li>adding mocha integration
-
+<li><p>
+adding mocha integration
+</p>
 </li>
-<li>showing me every dirty little bit I did wrong
-
+</ul>
+<ul>
+<li><p>
+showing me every dirty little bit I did wrong
+</p>
 </li>
-<li>fixes
-
+</ul>
+<ul>
+<li><p>
+fixes
+</p>
 </li>
-<li>added line number on failures
-
+</ul>
+<ul>
+<li><p>
+added line number on failures
+</p>
 </li>
 </ul>
 </li>
-<li>Tass
-
+<li><p>
+Tass
+</p>
 <ul>
-<li>adding rr integration
-
+<li><p>
+adding rr integration
+</p>
 </li>
-<li>reporting bugs
-
+</ul>
+<ul>
+<li><p>
+reporting bugs
+</p>
 </li>
 </ul>
 </li>
-<li>robgleeson
-
+<li><p>
+robgleeson
+</p>
 <ul>
-<li>Introducing me to rack-test
-
+<li><p>
+Introducing me to rack-test
+</p>
 </li>
-<li>Feedback
-
+</ul>
+<ul>
+<li><p>
+Feedback
+</p>
 </li>
 </ul>
 </li>
@@ -451,25 +505,29 @@ Currently none.
 </p>
 <h2>Known issues</h2>
 <ul>
-<li>A setup that raises an exception will cause all teardowns to not be
+<li><p>
+A setup that raises an exception will cause all teardowns to not be
 executed. This will change in a future release as follows: a setup that
 raises an exception will only cause teardowns defined on the same suite not
 to be executed.
-
+</p>
 </li>
-<li>&#8212;interactive can&#8217;t be used to investigate problems in setup or
+<li><p>
+&#8212;interactive can&#8217;t be used to investigate problems in setup or
 teardown
-
+</p>
 </li>
-<li>Inherited skip reasons are not reported
-
+<li><p>
+Inherited skip reasons are not reported
+</p>
 </li>
 </ul>
 <h2>Foot Notes</h2>
 <table>
-<tr><td valign="top"><sup>1</sup>:</td><td>The abbreviated form without support code and output formatters. The normal
+<tr><td valign="top"><sup>1</sup></td><td><p>
+The abbreviated form without support code and output formatters. The normal
 code is expanded to more lines for readability.
-
+</p>
 </td></tr>
 </table>
 

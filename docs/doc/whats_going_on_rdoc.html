@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: whats_going_on.rdoc [baretest-0.4.0]</title>
+	<title>File: whats_going_on.rdoc [baretest-0.4.1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -22,6 +22,16 @@
 
 <body class="file">
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="project-metadata">
 			
 			
@@ -138,12 +148,12 @@ With the following test definition:
     setup do
       @x = 1
     end
-
+  
     suite &quot;B&quot; do
       setup do
         @y = 2
       end
-
+      
       assert &quot;Foo&quot; do
         @x == foo(@y)
       end
@@ -170,8 +180,7 @@ Is this approximately as if you&#8217;d execute following code:
     status  = :skipped
   rescue Exception # catch-all for the rest
     status  = :error
-  end
-</pre>
+  end</pre>
 
 	</div>
 

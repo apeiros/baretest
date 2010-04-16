@@ -22,23 +22,30 @@
 <body class="class">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
 				<div class="section-body">
 					<ul>
 					
-						<li><a href="../lib/baretest/run/minimal_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="lib/baretest/run/minimal.rb">lib/baretest/run/minimal.rb</a></li>
-					
 						<li><a href="../lib/baretest/run/cli_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/run/cli.rb">lib/baretest/run/cli.rb</a></li>
 					
+						<li><a href="../lib/baretest/run/minimal_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/baretest/run/minimal.rb">lib/baretest/run/minimal.rb</a></li>
+					
 						<li><a href="../lib/baretest/run/none_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/run/none.rb">lib/baretest/run/none.rb</a></li>
-					
-						<li><a href="../lib/baretest/run/profile_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="lib/baretest/run/profile.rb">lib/baretest/run/profile.rb</a></li>
 					
 						<li><a href="../lib/baretest/run/spec_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/baretest/run/spec.rb">lib/baretest/run/spec.rb</a></li>
@@ -82,8 +89,6 @@
 					<li><span class="type">MODULE</span> <a href="Run/Minimal.html">BareTest::Run::Minimal</a></li>
 					
 					<li><span class="type">MODULE</span> <a href="Run/None.html">BareTest::Run::None</a></li>
-					
-					<li><span class="type">MODULE</span> <a href="Run/Profile.html">BareTest::Run::Profile</a></li>
 					
 					<li><span class="type">MODULE</span> <a href="Run/Spec.html">BareTest::Run::Spec</a></li>
 					
@@ -239,19 +244,23 @@ should be used and other runner related toolsets. Your formatter can
 override:
 </p>
 <table>
-<tr><td valign="top">:<a href="Run.html#M000082">run_all</a>:</td><td>Invoked once, before the first <a href="Run.html#M000083">run_suite</a> is
+<tr><td valign="top">:<a href="Run.html#M000082">run_all</a></td><td><p>
+Invoked once, before the first <a href="Run.html#M000083">run_suite</a> is
 ran. No arguments.
-
+</p>
 </td></tr>
-<tr><td valign="top">:<a href="Run.html#M000083">run_suite</a>:</td><td>Invoked per suite. Takes the suite to run as argument.
-
+<tr><td valign="top">:<a href="Run.html#M000083">run_suite</a></td><td><p>
+Invoked per suite. Takes the suite to run as argument.
+</p>
 </td></tr>
-<tr><td valign="top">:<a href="Run.html#M000084">run_test_variants</a>:</td><td>Invoked per assertion. Takes the assertion to execute as argument.
-
+<tr><td valign="top">:<a href="Run.html#M000084">run_test_variants</a></td><td><p>
+Invoked per assertion. Takes the assertion to execute as argument.
+</p>
 </td></tr>
-<tr><td valign="top">:<a href="Run.html#M000085">run_test</a>:</td><td>Invoked per setup variation of each assertion. Takes the assertion to
+<tr><td valign="top">:<a href="Run.html#M000085">run_test</a></td><td><p>
+Invoked per setup variation of each assertion. Takes the assertion to
 execute and the setup blocks to use as arguments.
-
+</p>
 </td></tr>
 </table>
 <p>
@@ -318,15 +327,18 @@ The initialisation blocks of extenders
 Some statistics, standard count keys are:
 </p>
 <table>
-<tr><td valign="top">:test:</td><td>the number of tests executed until now
-
+<tr><td valign="top">:test</td><td><p>
+the number of tests executed until now
+</p>
 </td></tr>
-<tr><td valign="top">:suite:</td><td>the number of suites executed until now
-
+<tr><td valign="top">:suite</td><td><p>
+the number of suites executed until now
+</p>
 </td></tr>
-<tr><td valign="top"><status>:</td><td>the number of tests with that status (see BareTest::StatusOrder for a list
+<tr><td valign="top"><status></td><td><p>
+the number of tests with that status (see BareTest::StatusOrder for a list
 of states)
-
+</p>
 </td></tr>
 </table>
 				
@@ -362,32 +374,38 @@ a block that calls <a href="Run.html#M000083">run_suite</a> with the
 yielded argument (which should be the toplevel suite). Options accepted:
 </p>
 <ul>
-<li>:extenders: An Array of Modules, will be used as argument to self.extend,
+<li><p>
+:extenders:   An Array of Modules, will be used as argument to self.extend,
 useful e.g. for mock integration
-
+</p>
 </li>
-<li>:format: A string with the basename (without suffix) of the formatter to
-use - or a Module
-
+<li><p>
+:format:      A string with the basename (without suffix) of the formatter
+to use - or a Module
+</p>
 </li>
-<li>:interactive: true/false, will switch this Test::Run instance into IRB
+<li><p>
+:interactive: true/false, will switch this Test::Run instance into IRB
 mode, where an error will cause an irb session to be started in the context
 of a clean copy of the assertion with all setup callbacks invoked
-
+</p>
 </li>
 </ul>
 <p>
 The order of extensions is:
 </p>
 <ul>
-<li>:extender
-
+<li><p>
+:extender
+</p>
 </li>
-<li>:format (extends with the formatter module)
-
+<li><p>
+:format (extends with the formatter module)
+</p>
 </li>
-<li>:interactive (extends with IRBMode)
-
+<li><p>
+:interactive (extends with IRBMode)
+</p>
 </li>
 </ul>
 					
@@ -401,37 +419,37 @@ The order of extensions is:
  62:       <span class="ruby-ivar">@suite</span>           = <span class="ruby-identifier">suite</span>
  63:       <span class="ruby-ivar">@inits</span>           = []
  64:       <span class="ruby-ivar">@options</span>         = <span class="ruby-identifier">opts</span> <span class="ruby-operator">||</span> {}
- 65:       <span class="ruby-ivar">@count</span>           = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:count</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">0</span>)
+ 65:       <span class="ruby-ivar">@count</span>           = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:count</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">0</span>)
  66:       <span class="ruby-ivar">@provided</span>        = [] <span class="ruby-comment cmt"># Array's set operations are the fastest</span>
- 67:       <span class="ruby-ivar">@include_tags</span>    = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:include_tags</span>]   <span class="ruby-comment cmt"># nil is ok here</span>
- 68:       <span class="ruby-ivar">@exclude_tags</span>    = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:exclude_tags</span>]   <span class="ruby-comment cmt"># nil is ok here</span>
- 69:       <span class="ruby-identifier">include_states</span>   = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:include_states</span>] <span class="ruby-comment cmt"># nil is ok here</span>
- 70:       <span class="ruby-identifier">exclude_states</span>   = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:exclude_states</span>] <span class="ruby-comment cmt"># nil is ok here</span>
- 71:       <span class="ruby-ivar">@states</span>          = [<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">*</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">StatusOrder</span>]
+ 67:       <span class="ruby-ivar">@include_tags</span>    = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:include_tags</span>]   <span class="ruby-comment cmt"># nil is ok here</span>
+ 68:       <span class="ruby-ivar">@exclude_tags</span>    = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:exclude_tags</span>]   <span class="ruby-comment cmt"># nil is ok here</span>
+ 69:       <span class="ruby-identifier">include_states</span>   = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:include_states</span>] <span class="ruby-comment cmt"># nil is ok here</span>
+ 70:       <span class="ruby-identifier">exclude_states</span>   = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:exclude_states</span>] <span class="ruby-comment cmt"># nil is ok here</span>
+ 71:       <span class="ruby-ivar">@states</span>          = [<span class="ruby-keyword kw">nil</span>, *<span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">StatusOrder</span>]
  72:       <span class="ruby-ivar">@skipped</span>         = {}
  73:       <span class="ruby-ivar">@last_run_states</span> = {}
- 74:       <span class="ruby-ivar">@persistence</span>     = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:persistence</span>]
+ 74:       <span class="ruby-ivar">@persistence</span>     = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:persistence</span>]
  75: 
  76:       <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">include_states</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">exclude_states</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span>((<span class="ruby-identifier">include_states</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">include_states</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">exclude_states</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">exclude_states</span>.<span class="ruby-identifier">empty?</span>)) <span class="ruby-keyword kw">then</span>
  77:         [<span class="ruby-identifier">include_states</span>, <span class="ruby-identifier">exclude_states</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">states</span><span class="ruby-operator">|</span>
- 78:           <span class="ruby-identifier">states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:new</span>)
- 79:           <span class="ruby-identifier">states</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">:error</span>, <span class="ruby-identifier">:skipped</span>, <span class="ruby-identifier">:pending</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:failure</span>)
- 80:           <span class="ruby-identifier">states</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:new</span>)
- 81:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:skipped</span>) <span class="ruby-keyword kw">then</span>
- 82:             <span class="ruby-identifier">states</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:skipped</span>)
- 83:             <span class="ruby-identifier">states</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">:pending</span>, <span class="ruby-identifier">:manually_skipped</span>, <span class="ruby-identifier">:dependency_missing</span>, <span class="ruby-identifier">:library_missing</span>, <span class="ruby-identifier">:component_missing</span>)
+ 78:           <span class="ruby-identifier">states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:new</span>)
+ 79:           <span class="ruby-identifier">states</span>.<span class="ruby-identifier">push</span>(<span class="ruby-value">:error</span>, <span class="ruby-value">:skipped</span>, <span class="ruby-value">:pending</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:failure</span>)
+ 80:           <span class="ruby-identifier">states</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:new</span>)
+ 81:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">states</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value">:skipped</span>) <span class="ruby-keyword kw">then</span>
+ 82:             <span class="ruby-identifier">states</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:skipped</span>)
+ 83:             <span class="ruby-identifier">states</span>.<span class="ruby-identifier">push</span>(<span class="ruby-value">:pending</span>, <span class="ruby-value">:manually_skipped</span>, <span class="ruby-value">:dependency_missing</span>, <span class="ruby-value">:library_missing</span>, <span class="ruby-value">:component_missing</span>)
  84:           <span class="ruby-keyword kw">end</span>
  85:           <span class="ruby-identifier">states</span>.<span class="ruby-identifier">uniq!</span>
  86:         <span class="ruby-keyword kw">end</span>
  87:         <span class="ruby-ivar">@states</span> = (<span class="ruby-identifier">include_states</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@states</span>) <span class="ruby-operator">-</span> (<span class="ruby-identifier">exclude_states</span> <span class="ruby-operator">||</span> [])
  88:       <span class="ruby-keyword kw">end</span>
  89: 
- 90:       (<span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">extender</span><span class="ruby-operator">+</span><span class="ruby-constant">Array</span>(<span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:extender</span>])).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">extender</span><span class="ruby-operator">|</span>
+ 90:       (<span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">extender</span><span class="ruby-operator">+</span><span class="ruby-constant">Array</span>(<span class="ruby-ivar">@options</span>[<span class="ruby-value">:extender</span>])).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">extender</span><span class="ruby-operator">|</span>
  91:         <span class="ruby-identifier">extend</span>(<span class="ruby-identifier">extender</span>)
  92:       <span class="ruby-keyword kw">end</span>
  93: 
  94:       <span class="ruby-comment cmt"># Extend with the output formatter</span>
- 95:       <span class="ruby-identifier">format</span> = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:format</span>]
+ 95:       <span class="ruby-identifier">format</span> = <span class="ruby-ivar">@options</span>[<span class="ruby-value">:format</span>]
  96:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">format</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-keyword kw">then</span>
  97:         <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;baretest/run/#{format}&quot;</span>
  98:         <span class="ruby-identifier">extend</span>(<span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">format</span>[<span class="ruby-node">&quot;baretest/run/#{format}&quot;</span>])
@@ -440,14 +458,16 @@ The order of extensions is:
 101:       <span class="ruby-keyword kw">end</span>
 102: 
 103:       <span class="ruby-comment cmt"># Extend with irb dropout code</span>
-104:       <span class="ruby-identifier">extend</span>(<span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">IRBMode</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:interactive</span>]
+104:       <span class="ruby-identifier">extend</span>(<span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">IRBMode</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:interactive</span>]
 105: 
 106:       <span class="ruby-comment cmt"># Initialize extenders</span>
-107:       <span class="ruby-ivar">@inits</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">init</span><span class="ruby-operator">|</span> <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">init</span>) }
+107:       <span class="ruby-ivar">@inits</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">init</span><span class="ruby-operator">|</span> <span class="ruby-identifier">instance_eval</span>(&amp;<span class="ruby-identifier">init</span>) }
 108:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -488,16 +508,18 @@ href="Run.html#M000088">global_status</a> is success
 					<div class="method-source-code"
 						id="global-status-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 240</span>
-240:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">global_status</span>
-241:       <span class="ruby-identifier">status_counts</span>         = <span class="ruby-ivar">@count</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">StatusOrder</span>)
-242:       <span class="ruby-identifier">most_important_status</span> = <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">StatusOrder</span>.<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">status_counts</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">status</span>, <span class="ruby-identifier">count</span><span class="ruby-operator">|</span>
-243:         <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-244:       } <span class="ruby-operator">||</span> <span class="ruby-identifier">:success</span>
-245:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 237</span>
+237:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">global_status</span>
+238:       <span class="ruby-identifier">status_counts</span>         = <span class="ruby-ivar">@count</span>.<span class="ruby-identifier">values_at</span>(*<span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">StatusOrder</span>)
+239:       <span class="ruby-identifier">most_important_status</span> = <span class="ruby-constant">BareTest</span><span class="ruby-operator">::</span><span class="ruby-constant">StatusOrder</span>.<span class="ruby-identifier">zip</span>(<span class="ruby-identifier">status_counts</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">status</span>, <span class="ruby-identifier">count</span><span class="ruby-operator">|</span>
+240:         <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+241:       } <span class="ruby-operator">||</span> <span class="ruby-value">:success</span>
+242:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -527,8 +549,7 @@ instance_eval&#8216;d at the end of initialize. Example usage:
          # do some initialization stuff for this module
        end
     end
-  end
-</pre>
+  end</pre>
 					
 
 					
@@ -536,12 +557,14 @@ instance_eval&#8216;d at the end of initialize. Example usage:
 						id="init-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 120</span>
-120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+120:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">init</span>(&amp;<span class="ruby-identifier">block</span>)
 121:       <span class="ruby-ivar">@inits</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">block</span>
 122:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -563,7 +586,7 @@ instance_eval&#8216;d at the end of initialize. Example usage:
 					<p>
 Get an assertions&#8217; interpolated description for a given Array of
 Setup instances. See <a
-href="Assertion.html#M000018">Assertion#interpolated_description</a>
+href="Assertion.html#M000030">Assertion#interpolated_description</a>
 </p>
 					
 
@@ -571,16 +594,18 @@ href="Assertion.html#M000018">Assertion#interpolated_description</a>
 					<div class="method-source-code"
 						id="interpolated-description-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 250</span>
-250:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">interpolated_description</span>(<span class="ruby-identifier">assertion</span>, <span class="ruby-identifier">setups</span>)
-251:       <span class="ruby-identifier">setups</span> = <span class="ruby-identifier">setups</span> <span class="ruby-value">? </span><span class="ruby-identifier">setups</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">component</span> } <span class="ruby-operator">:</span> []
-252:       <span class="ruby-identifier">substitutes</span> = {}
-253:       <span class="ruby-identifier">setups</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">setup</span><span class="ruby-operator">|</span> <span class="ruby-identifier">substitutes</span>[<span class="ruby-identifier">setup</span>.<span class="ruby-identifier">component</span>] = <span class="ruby-identifier">setup</span>.<span class="ruby-identifier">substitute</span> <span class="ruby-keyword kw">end</span>
-254:       <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">interpolated_description</span>(<span class="ruby-identifier">substitutes</span>)
-255:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 247</span>
+247:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">interpolated_description</span>(<span class="ruby-identifier">assertion</span>, <span class="ruby-identifier">setups</span>)
+248:       <span class="ruby-identifier">setups</span> = <span class="ruby-identifier">setups</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">setups</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">component</span> } <span class="ruby-operator">:</span> []
+249:       <span class="ruby-identifier">substitutes</span> = {}
+250:       <span class="ruby-identifier">setups</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">setup</span><span class="ruby-operator">|</span> <span class="ruby-identifier">substitutes</span>[<span class="ruby-identifier">setup</span>.<span class="ruby-identifier">component</span>] = <span class="ruby-identifier">setup</span>.<span class="ruby-identifier">substitute</span> <span class="ruby-keyword kw">end</span>
+251:       <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">interpolated_description</span>(<span class="ruby-identifier">substitutes</span>)
+252:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -621,6 +646,8 @@ beginning. Gets the toplevel suite as single argument.
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -651,7 +678,7 @@ nested suites.
      <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 138</span>
 138:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_suite</span>(<span class="ruby-identifier">suite</span>)
 139:       <span class="ruby-identifier">missing_tags</span>     = <span class="ruby-ivar">@include_tags</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@include_tags</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">suite</span>.<span class="ruby-identifier">tags</span>
-140:       <span class="ruby-identifier">superfluous_tags</span> = <span class="ruby-ivar">@exclude_tags</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">suite</span>.<span class="ruby-identifier">tags</span> <span class="ruby-operator">&amp;</span> <span class="ruby-ivar">@exclude_tags</span>
+140:       <span class="ruby-identifier">superfluous_tags</span> = <span class="ruby-ivar">@exclude_tags</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">suite</span>.<span class="ruby-identifier">tags</span> &amp; <span class="ruby-ivar">@exclude_tags</span>
 141:       <span class="ruby-identifier">ignored</span>          = (<span class="ruby-identifier">missing_tags</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">missing_tags</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">||</span> (<span class="ruby-identifier">superfluous_tags</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">superfluous_tags</span>.<span class="ruby-identifier">empty?</span>)
 142: 
 143:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">ignored</span> <span class="ruby-keyword kw">then</span>
@@ -677,18 +704,20 @@ nested suites.
 163:       <span class="ruby-identifier">states</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">suites</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span>(<span class="ruby-identifier">description</span>, <span class="ruby-identifier">subsuite</span>)<span class="ruby-operator">|</span>
 164:         <span class="ruby-identifier">run_suite</span>(<span class="ruby-identifier">subsuite</span>)
 165:       })
-166:       <span class="ruby-ivar">@count</span>[<span class="ruby-identifier">:suite</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+166:       <span class="ruby-ivar">@count</span>[<span class="ruby-value">:suite</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
 167: 
 168:       <span class="ruby-comment cmt"># || in case the suite contains no tests or suites</span>
-169:       <span class="ruby-identifier">final_status</span> = <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">most_important_status</span>(<span class="ruby-identifier">states</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">:pending</span>
+169:       <span class="ruby-identifier">final_status</span> = <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">most_important_status</span>(<span class="ruby-identifier">states</span>) <span class="ruby-operator">||</span> <span class="ruby-value">:pending</span>
 170: 
-171:       <span class="ruby-ivar">@provided</span> <span class="ruby-operator">|=</span> <span class="ruby-identifier">suite</span>.<span class="ruby-identifier">provides</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">final_status</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:success</span>
+171:       <span class="ruby-ivar">@provided</span> <span class="ruby-operator">|=</span> <span class="ruby-identifier">suite</span>.<span class="ruby-identifier">provides</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">final_status</span> <span class="ruby-operator">==</span> <span class="ruby-value">:success</span>
 172: 
 173:       <span class="ruby-constant">Status</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">suite</span>, <span class="ruby-identifier">final_status</span>)
 174:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -717,17 +746,19 @@ variation of an assertion. Gets the assertion to run as single argument.
 					<div class="method-source-code"
 						id="run-test-source">
 <pre>
-     <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 208</span>
-208:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_test</span>(<span class="ruby-identifier">assertion</span>, <span class="ruby-identifier">setup</span>)
-209:       <span class="ruby-identifier">rv</span> = <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">setup</span>, <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestry_teardown</span>)
-210:       <span class="ruby-ivar">@count</span>[<span class="ruby-identifier">:test</span>]     <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
-211:       <span class="ruby-ivar">@count</span>[<span class="ruby-identifier">rv</span>.<span class="ruby-identifier">status</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
-212: 
-213:       <span class="ruby-identifier">rv</span>
-214:     <span class="ruby-keyword kw">end</span></pre>
+     <span class="ruby-comment cmt"># File lib/baretest/run.rb, line 205</span>
+205:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_test</span>(<span class="ruby-identifier">assertion</span>, <span class="ruby-identifier">setup</span>)
+206:       <span class="ruby-identifier">rv</span> = <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">execute</span>(<span class="ruby-identifier">setup</span>, <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestry_teardown</span>)
+207:       <span class="ruby-ivar">@count</span>[<span class="ruby-value">:test</span>]     <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+208:       <span class="ruby-ivar">@count</span>[<span class="ruby-identifier">rv</span>.<span class="ruby-identifier">status</span>] <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+209: 
+210:       <span class="ruby-identifier">rv</span>
+211:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -762,29 +793,28 @@ assertion and invokes <a href="Run.html#M000085">run_test</a> for each.
 181:       <span class="ruby-identifier">skipped</span> = <span class="ruby-ivar">@skipped</span>[<span class="ruby-identifier">assertion</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">skipped?</span>
 182: 
 183:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ignored</span> <span class="ruby-keyword kw">then</span>
-184:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Ignored assertion #{assertion} (last run state: #{@last_run_states[assertion.id]}, required: #{@states.join(', ')}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:verbose</span>]
-185:         <span class="ruby-identifier">overall_status</span> = <span class="ruby-keyword kw">nil</span>
-186:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">skipped</span> <span class="ruby-keyword kw">then</span>
-187:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Skipped assertion #{assertion}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:verbose</span>]
-188:         <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">component_variant_count</span>) { <span class="ruby-identifier">run_test</span>(<span class="ruby-identifier">assertion</span>, []) }
-189:         <span class="ruby-ivar">@last_run_states</span>[<span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">:manually_skipped</span>
-190:         <span class="ruby-identifier">overall_status</span>                 = <span class="ruby-identifier">:manually_skipped</span>
-191:       <span class="ruby-keyword kw">else</span>
-192:         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Running assertion #{assertion}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:verbose</span>]
-193:         <span class="ruby-identifier">states</span> = []
-194:         <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">each_component_variant</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">setups</span><span class="ruby-operator">|</span>
-195:           <span class="ruby-identifier">rv</span> = <span class="ruby-identifier">run_test</span>(<span class="ruby-identifier">assertion</span>, <span class="ruby-identifier">setups</span>)
-196:           <span class="ruby-identifier">states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rv</span>.<span class="ruby-identifier">status</span>
-197:         <span class="ruby-keyword kw">end</span>
-198:         <span class="ruby-identifier">overall_status</span>                 = <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">most_important_status</span>(<span class="ruby-identifier">states</span>)
-199:       <span class="ruby-keyword kw">end</span>
-200:       <span class="ruby-ivar">@last_run_states</span>[<span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">overall_status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">overall_status</span>
-201: 
-202:       <span class="ruby-identifier">overall_status</span>
-203:     <span class="ruby-keyword kw">end</span></pre>
+184:         <span class="ruby-identifier">overall_status</span> = <span class="ruby-keyword kw">nil</span>
+185:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">skipped</span> <span class="ruby-keyword kw">then</span>
+186:         <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">component_variant_count</span>) { <span class="ruby-identifier">run_test</span>(<span class="ruby-identifier">assertion</span>, []) }
+187:         <span class="ruby-ivar">@last_run_states</span>[<span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-value">:manually_skipped</span>
+188:         <span class="ruby-identifier">overall_status</span>                 = <span class="ruby-value">:manually_skipped</span>
+189:       <span class="ruby-keyword kw">else</span>
+190:         <span class="ruby-identifier">states</span> = []
+191:         <span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">each_component_variant</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">setups</span><span class="ruby-operator">|</span>
+192:           <span class="ruby-identifier">rv</span> = <span class="ruby-identifier">run_test</span>(<span class="ruby-identifier">assertion</span>, <span class="ruby-identifier">setups</span>)
+193:           <span class="ruby-identifier">states</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rv</span>.<span class="ruby-identifier">status</span>
+194:         <span class="ruby-keyword kw">end</span>
+195:         <span class="ruby-identifier">overall_status</span>                 = <span class="ruby-constant">BareTest</span>.<span class="ruby-identifier">most_important_status</span>(<span class="ruby-identifier">states</span>)
+196:       <span class="ruby-keyword kw">end</span>
+197:       <span class="ruby-ivar">@last_run_states</span>[<span class="ruby-identifier">assertion</span>.<span class="ruby-identifier">id</span>] = <span class="ruby-identifier">overall_status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">overall_status</span>
+198: 
+199:       <span class="ruby-identifier">overall_status</span>
+200:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

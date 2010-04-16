@@ -22,6 +22,16 @@
 <body class="module">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../../index.html">Home</a>
+          <a href="../../index.html#classes">Classes</a>
+          <a href="../../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -282,6 +292,8 @@ Prints the original assertion&#8217;s backtrace
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -321,6 +333,8 @@ being properly indented.
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -348,11 +362,13 @@ Returns an array of all class variable names
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 134</span>
 134:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cv!</span>
-135:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_variables</span>.<span class="ruby-identifier">sort</span>
+135:         <span class="ruby-identifier">puts</span> *<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_variables</span>.<span class="ruby-identifier">sort</span>
 136:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -389,6 +405,8 @@ Prints a string of the original assertion&#8217;s nesting within suites
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -422,6 +440,8 @@ Prints the original assertion&#8217;s error message and backtrace
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -464,6 +484,8 @@ Prints the original assertion&#8217;s error message
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -480,7 +502,7 @@ Prints the original assertion&#8217;s error message
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -503,7 +525,7 @@ Prints the original assertion&#8217;s error message
 190:             <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Number must be between 1 and #{total_lines}&quot;</span>
 191:           <span class="ruby-keyword kw">else</span>
 192:             <span class="ruby-identifier">from</span> <span class="ruby-operator">-=</span> <span class="ruby-identifier">first_line</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>
-193:             <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Evaluating: &quot;</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">code</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)[<span class="ruby-identifier">from</span>, <span class="ruby-identifier">number</span>]
+193:             <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Evaluating: &quot;</span>, *<span class="ruby-identifier">code</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)[<span class="ruby-identifier">from</span>, <span class="ruby-identifier">number</span>]
 194:             <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">code</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)[<span class="ruby-identifier">from</span>, <span class="ruby-identifier">number</span>].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>), <span class="ruby-identifier">explicit_binding</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">workspace</span>.<span class="ruby-identifier">binding</span>) <span class="ruby-comment cmt"># this 'context' comes from irb</span>
 195:           <span class="ruby-keyword kw">end</span>
 196:         <span class="ruby-keyword kw">else</span>
@@ -513,6 +535,8 @@ Prints the original assertion&#8217;s error message
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -549,6 +573,8 @@ Returns the original assertion&#8217;s file
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -576,11 +602,13 @@ Returns an array of all global variable names
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 139</span>
 139:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gv!</span>(<span class="ruby-identifier">remove_standard</span>=<span class="ruby-keyword kw">true</span>)
-140:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span>(<span class="ruby-identifier">global_variables</span><span class="ruby-operator">-</span>(<span class="ruby-identifier">remove_standard</span> <span class="ruby-value">? </span><span class="ruby-constant">IRBMode</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoveGlobals</span> <span class="ruby-operator">:</span> [])).<span class="ruby-identifier">sort</span>
+140:         <span class="ruby-identifier">puts</span> *(<span class="ruby-identifier">global_variables</span><span class="ruby-operator">-</span>(<span class="ruby-identifier">remove_standard</span> <span class="ruby-operator">?</span> <span class="ruby-constant">IRBMode</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoveGlobals</span> <span class="ruby-operator">:</span> [])).<span class="ruby-identifier">sort</span>
 141:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -642,6 +670,8 @@ Prints a list of available helper methods
 					Also aliased as: <a href="IRBContext.html#M000053">help!</a>
 				</div>
 				
+
+				
 			</div>
 
 		
@@ -658,14 +688,18 @@ Prints a list of available helper methods
 
 				<div class="method-description">
 					
-					<p>
-Alias for <a href="IRBContext.html#M000052">help</a>
-</p>
+					
 					
 
 					
 				</div>
 
+				
+
+				
+				<div class="aliases">
+          Alias for: <a href="IRBContext.html#M000052">help</a>
+				</div>
 				
 			</div>
 
@@ -694,11 +728,13 @@ Returns an array of all instance variable names
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 129</span>
 129:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">iv!</span>
-130:         <span class="ruby-identifier">puts</span> <span class="ruby-operator">*</span><span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
+130:         <span class="ruby-identifier">puts</span> *<span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">sort</span>
 131:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -735,6 +771,8 @@ Returns the original assertion&#8217;s line
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -762,11 +800,13 @@ Prints a string of the original assertion&#8217;s nesting within suites
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/irb_mode.rb, line 164</span>
 164:       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nesting!</span>
-165:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestors</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' &gt; '</span>)
+165:         <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@__assertion__</span>.<span class="ruby-identifier">suite</span>.<span class="ruby-identifier">ancestors</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">2</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">description</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' &gt; '</span>)
 166:       <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -803,6 +843,8 @@ Returns the original assertion&#8217;s line
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -835,6 +877,8 @@ Quit - an alias to irb&#8217;s exit
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -871,6 +915,8 @@ Returns the original assertion&#8217;s status
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -903,6 +949,8 @@ Returns the original assertion&#8217;s status code
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

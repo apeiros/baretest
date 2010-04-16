@@ -6,7 +6,7 @@
 <head>
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
-	<title>File: quickref.rdoc [baretest-0.4.0]</title>
+	<title>File: quickref.rdoc [baretest-0.4.1]</title>
 
 	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
 
@@ -22,6 +22,16 @@
 
 <body class="file">
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="project-metadata">
 			
 			
@@ -134,8 +144,9 @@ the examples and baretests own test directory.
 </p>
 <h2>Setup baretest</h2>
 <ol>
-<li>Install baretest
-
+<li><p>
+Install baretest
+</p>
 </li>
 </ol>
 <pre>
@@ -148,11 +159,13 @@ the examples and baretests own test directory.
     Then try step 3 again. Also you must have nokogiri and rdoc &gt;=2.3 installed.
 </pre>
 <ol>
-<li>Change into the project directory
-
+<li><p>
+Change into the project directory
+</p>
 </li>
-<li>`baretest init` to create the basic test-directory layout
-
+<li><p>
+`baretest init` to create the basic test-directory layout
+</p>
 </li>
 </ol>
 <h2>Location of testfiles</h2>
@@ -189,7 +202,7 @@ A testfile commonly looks like this:
       setup do
         # things used by most nested suites
       end
-
+      
       suite &quot;ModuleName::class_method_name&quot; do
         assert &quot;does this&quot; do
           ...
@@ -204,7 +217,7 @@ A testfile commonly looks like this:
         ...
       end
     end
-
+    
     suite &quot;class ClassName&quot; do # this is class ModuleName::ClassName
       suite &quot;Class methods&quot; do
         ...
@@ -275,12 +288,14 @@ assertions and suites.
 You can skip a suite by:
 </p>
 <ul>
-<li>Creating the suite with a :skip option, like `suite &#8220;MySuite&#8221;,
+<li><p>
+Creating the suite with a :skip option, like `suite &#8220;MySuite&#8221;,
 :skip => &#8220;I want to skip this suite&#8221; do`
-
+</p>
 </li>
-<li>Calling skip in the suite, like suite &#8220;MySuite&#8221; do
-
+<li><p>
+Calling skip in the suite, like suite &#8220;MySuite&#8221; do
+</p>
 <pre>
   skip &quot;I want to skip this suite&quot;
 </pre>
@@ -293,10 +308,11 @@ end You can call skip at any point in the suite.
 You can ignore a suite by:
 </p>
 <ul>
-<li>Adding one or more tags to the suite, like `suite &#8220;MySuite&#8221;,
+<li><p>
+Adding one or more tags to the suite, like `suite &#8220;MySuite&#8221;,
 :tags => [:set_x, :set_y]` And then specify any of those tags to be
 ignored, like: `baretest &#8212; -:set_x`
-
+</p>
 </li>
 </ul>
 <p>
@@ -306,16 +322,19 @@ An assertion is pending if it has no block.
 You can skip an assertion by:
 </p>
 <ul>
-<li>Having it in a suite that is skipped
-
+<li><p>
+Having it in a suite that is skipped
+</p>
 </li>
-<li>Creating the assertion with a :skip option, like `assert
+<li><p>
+Creating the assertion with a :skip option, like `assert
 &#8220;Something&#8221;, :skip => &#8220;I want to skip this
 assertion&#8221; do`
-
+</p>
 </li>
-<li>Calling skip in the assertion, like assert &#8220;Something&#8221; do
-
+<li><p>
+Calling skip in the assertion, like assert &#8220;Something&#8221; do
+</p>
 <pre>
   skip &quot;I want to skip this assertion&quot;
 </pre>
@@ -328,8 +347,9 @@ end You can call skip at any point in the assertion.
 You can ignore an assertion by:
 </p>
 <ul>
-<li>Having it in a suite that is ignored
-
+<li><p>
+Having it in a suite that is ignored
+</p>
 </li>
 </ul>
 <h2>Assertion helper methods</h2>
@@ -344,122 +364,138 @@ message=nil) can alternatively be used with named arguments:
   foo :expected =&gt; a, :actual =&gt; b, :message =&gt; &quot;message&quot;
 </pre>
 <ul>
-<li>skip(message, *args) Description: Skips the assertion, uses sprintf with
-message and *args Success: not possible Failure: not possible
-
+<li><p>
+skip(message, *args) Description: Skips the assertion, uses sprintf with
+message and *args Success:     not possible Failure:     not possible
+</p>
 </li>
-<li>failure(message, *args) Description: Lets the assertion fail, uses sprintf
-with message and *args Success: not possible Failure: failure(&#8220;%p was
-not the inverse of %p&#8221;, 2, 5)
-
+<li><p>
+failure(message, *args) Description: Lets the assertion fail, uses sprintf
+with message and *args Success:     not possible Failure:    
+failure(&#8220;%p was not the inverse of %p&#8221;, 2, 5)
+</p>
 </li>
-<li>same(expected, actual, message=nil) Description: Uses
-expected.equal?(actual), which tests for object identity Success:
-same(:foo, :foo) Failure: same(&#8220;foo&#8221;, &#8220;foo&#8221;)
-
+<li><p>
+same(expected, actual, message=nil) Description: Uses
+expected.equal?(actual), which tests for object identity Success:    
+same(:foo, :foo) Failure:     same(&#8220;foo&#8221;, &#8220;foo&#8221;)
+</p>
 </li>
-<li>hash_key_equal(expected, actual, message=nil) Description: Uses
-expected.eql?(actual), which is used for hash key equality. Success:
-hash_key_equal(&#8220;foo&#8221;, &#8220;foo&#8221;) Failure:
+<li><p>
+hash_key_equal(expected, actual, message=nil) Description: Uses
+expected.eql?(actual), which is used for hash key equality. Success:    
+hash_key_equal(&#8220;foo&#8221;, &#8220;foo&#8221;) Failure:    
 hash_key_equal(1.0, 1)
-
+</p>
 </li>
-<li>equal(expected, actual, message=nil) (alias: order_equal) Description: Uses
-expected == actual, which is used for order-equality. Success: equal(1.0,
-1) Failure: equal(1, &#8220;1&#8221;)
-
+<li><p>
+equal(expected, actual, message=nil) (alias: order_equal) Description: Uses
+expected == actual, which is used for order-equality. Success:    
+equal(1.0, 1) Failure:     equal(1, &#8220;1&#8221;)
+</p>
 </li>
-<li>case_equal(expected, actual, message=nil) Description: Uses expected ===
-actual, which is used in case/whens. Success: case_equal(String,
-&#8220;foo&#8221;) Failure: case_equal(String, 1)
-
+<li><p>
+case_equal(expected, actual, message=nil) Description: Uses expected ===
+actual, which is used in case/whens. Success:     case_equal(String,
+&#8220;foo&#8221;) Failure:     case_equal(String, 1)
+</p>
 </li>
-<li>equal_unordered(expected, actual, message=nil) Description: Compares
+<li><p>
+equal_unordered(expected, actual, message=nil) Description: Compares
 unordered enumerables, on the enumerable it uses each,
-
+</p>
 <pre>
              on the items it uses hash and eql?
 </pre>
 <p>
-Success: equal_unordered([1,2], [2,1]) Failure: equal_unordered([1,2],
-[2,1,2])
+Success:     equal_unordered([1,2], [2,1]) Failure:    
+equal_unordered([1,2], [2,1,2])
 </p>
 </li>
-<li>within_delta(a, b, delta) Description: Tests whether the difference between
-a and b is less than delta Success: within_delta(0.5, Math.sin(Math::PI/6),
-1e-6)
-
+<li><p>
+within_delta(a, b, delta) Description: Tests whether the difference between
+a and b is less than delta Success:     within_delta(0.5,
+Math.sin(Math::PI/6), 1e-6)
+</p>
 <pre>
              # equal(0.5, Math.sin(Math::PI/6)) would fail
 </pre>
 <p>
-Failure: within_delta(0.5, 0.6, 0.05)
+Failure:     within_delta(0.5, 0.6, 0.05)
 </p>
 </li>
-<li>kind_of(expected, actual, message=nil) (alias: is_a) Description: Uses
-actual.kind_of?(expected) Success: kind_of(String, &#8220;foo&#8221;)
-Failure: kind_of(String, 1)
-
+<li><p>
+kind_of(expected, actual, message=nil) (alias: is_a) Description: Uses
+actual.kind_of?(expected) Success:     kind_of(String, &#8220;foo&#8221;)
+Failure:     kind_of(String, 1)
+</p>
 </li>
-<li>throws(symbol) Description: Test whether the block throws the given symbol
-Success: throws(:foo) do throw(:foo) end Failure: throws(:foo) do
+<li><p>
+throws(symbol) Description: Test whether the block throws the given symbol
+Success:     throws(:foo) do throw(:foo) end Failure:     throws(:foo) do
 throw(:bar) end
-
+</p>
 <pre>
              throws(:foo) do nil end
 </pre>
 </li>
-<li>throws_nothing Description: Test whether a piece of code really throws
-nothing Success: throws_nothing do nil end Failure: throws_nothing do
-throw(:foo) end
-
+<li><p>
+throws_nothing Description: Test whether a piece of code really throws
+nothing Success:     throws_nothing do nil end Failure:     throws_nothing
+do throw(:foo) end
+</p>
 </li>
-<li>raises(exception_class=StandardError, opts={}) Description: Test whether
-the block raises Success: raises do raise &#8220;foo&#8221; end
-
+<li><p>
+raises(exception_class=StandardError, opts={}) Description: Test whether
+the block raises Success:     raises do raise &#8220;foo&#8221; end
+</p>
 <pre>
              raises ArgumentError do &quot;12&quot;.to_i(10, :superfluous) end
 </pre>
 <p>
-Failure: raises do nil end
+Failure:     raises do nil end
 </p>
 <pre>
              raises ArgumentError do &quot;12&quot;.to_i(10) end
 </pre>
 </li>
-<li>raises_nothing Description: Test whether the block doesn&#8217;t raise
-Success: raise_nothing do nil end Failure: raise_nothing do raise
+<li><p>
+raises_nothing Description: Test whether the block doesn&#8217;t raise
+Success:     raise_nothing do nil end Failure:     raise_nothing do raise
 &#8220;foo&#8221; end
-
+</p>
 </li>
-<li>touch(thing=nil) Description: Mark reaching a point in code, e.g. that a
-block was invoked Success: -> see touched Failure: -> see touched
-
+<li><p>
+touch(thing=nil) Description: Mark reaching a point in code, e.g. that a
+block was invoked Success:     -> see touched Failure:     -> see touched
+</p>
 </li>
-<li>touched(thing=nil, times=nil) Description: test whether a mark for reached
+<li><p>
+touched(thing=nil, times=nil) Description: test whether a mark for reached
 code was set, optionally test
-
+</p>
 <pre>
              whether it was set the expected number of times
 </pre>
 <p>
-Success: touch; touched
+Success:     touch; touched
 </p>
 <pre>
              touch :thing; touched :thing
              touch :thing; touch :thing; touched :thing, 2
 </pre>
 <p>
-Failure: touched
+Failure:     touched
 </p>
 <pre>
              touch :thing; touched :something
              touch :thing; touched :thing, 2
 </pre>
 </li>
-<li>not_touched(thing=nil) Description: same as touched(thing, 0) Success: see
-touched Failure: see touched
-
+<li><p>
+not_touched(thing=nil) Description: same as touched(thing, 0) Success:    
+see touched Failure:     see touched
+</p>
 </li>
 </ul>
 <h2>Running tests</h2>
@@ -467,27 +503,33 @@ touched Failure: see touched
 baretest&#8217;s test-cycle is:
 </p>
 <ol>
-<li>Create the toplevel suite
-
+<li><p>
+Create the toplevel suite
+</p>
 </li>
-<li>Load PROJECT/test/setup.rb
-
+<li><p>
+Load PROJECT/test/setup.rb
+</p>
 </li>
-<li>Find every file as required by the command line flags (defaults to
+<li><p>
+Find every file as required by the command line flags (defaults to
 PROJECT/test/{suite,unit,integration,system}/*<b>/</b>.rb)
-
+</p>
 </li>
-<li>Load each file found in 3., but for every file, see whether
+<li><p>
+Load each file found in 3., but for every file, see whether
 PROJECT/test/helpers/*<b>/</b>.rb exists and load that first if it does
 (e.g. for PROJECT/test/suite/foo.rb load PROJECT/test/helpers/suite/foo.rb)
-
+</p>
 </li>
-<li>Create a <a href="../BareTest/Run.html">BareTest::Run</a> instance with the
+<li><p>
+Create a <a href="../BareTest/Run.html">BareTest::Run</a> instance with the
 toplevel suite and the passed options
-
+</p>
 </li>
-<li>Invoke run_all on that Run instance.
-
+<li><p>
+Invoke run_all on that Run instance.
+</p>
 </li>
 </ol>
 <p>
@@ -502,52 +544,67 @@ Use `baretest -i` to run baretest in interactive mode. Try it with
 occurs, you have access to the following commands:
 </p>
 <table>
-<tr><td valign="top">help!:</td><td>overview over all the commands
-
+<tr><td valign="top">help!</td><td><p>
+overview over all the commands
+</p>
 </td></tr>
-<tr><td valign="top">s!:</td><td>the assertions&#8217; original status
-
+<tr><td valign="top">s!</td><td><p>
+the assertions&#8217; original status
+</p>
 </td></tr>
-<tr><td valign="top">sc!:</td><td>the assertions&#8217; original status code
-
+<tr><td valign="top">sc!</td><td><p>
+the assertions&#8217; original status code
+</p>
 </td></tr>
-<tr><td valign="top">e!:</td><td>prints the error message and full backtrace
-
+<tr><td valign="top">e!</td><td><p>
+prints the error message and full backtrace
+</p>
 </td></tr>
-<tr><td valign="top">em!:</td><td>prints the error message
-
+<tr><td valign="top">em!</td><td><p>
+prints the error message
+</p>
 </td></tr>
-<tr><td valign="top">bt!:</td><td>prints the full backtrace
-
+<tr><td valign="top">bt!</td><td><p>
+prints the full backtrace
+</p>
 </td></tr>
-<tr><td valign="top">lv!:</td><td>lists all available local variables
-
+<tr><td valign="top">lv!</td><td><p>
+lists all available local variables
+</p>
 </td></tr>
-<tr><td valign="top">iv!:</td><td>lists all available instance variables
-
+<tr><td valign="top">iv!</td><td><p>
+lists all available instance variables
+</p>
 </td></tr>
-<tr><td valign="top">cv!:</td><td>lists all available class variables
-
+<tr><td valign="top">cv!</td><td><p>
+lists all available class variables
+</p>
 </td></tr>
-<tr><td valign="top">gv!:</td><td>lists all available global variables, per default dropping rubys standard
+<tr><td valign="top">gv!</td><td><p>
+lists all available global variables, per default dropping rubys standard
 globals (use gv!(false) to avoid that)
-
+</p>
 </td></tr>
-<tr><td valign="top">file!:</td><td>the file this assertion was defined in
-
+<tr><td valign="top">file!</td><td><p>
+the file this assertion was defined in
+</p>
 </td></tr>
-<tr><td valign="top">line!:</td><td>the line number in the file where this assertion&#8217;s definition starts
-
+<tr><td valign="top">line!</td><td><p>
+the line number in the file where this assertion&#8217;s definition starts
+</p>
 </td></tr>
-<tr><td valign="top">nesting!:</td><td>a &#8217;>&#8217;-separated list of suite descriptions this assertion is
+<tr><td valign="top">nesting!</td><td><p>
+a &#8217;>&#8217;-separated list of suite descriptions this assertion is
 nested in
-
+</p>
 </td></tr>
-<tr><td valign="top">description!:</td><td>this assertion&#8217;s description
-
+<tr><td valign="top">description!</td><td><p>
+this assertion&#8217;s description
+</p>
 </td></tr>
-<tr><td valign="top">code!:</td><td>code of this assertion
-
+<tr><td valign="top">code!</td><td><p>
+code of this assertion
+</p>
 </td></tr>
 </table>
 

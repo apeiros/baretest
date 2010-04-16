@@ -22,6 +22,16 @@
 <body class="module">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="./index.html">Home</a>
+          <a href="./index.html#classes">Classes</a>
+          <a href="./index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -34,11 +44,11 @@
 						<li><a href="./lib/command/decoratinghash_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/command/decoratinghash.rb">lib/command/decoratinghash.rb</a></li>
 					
-						<li><a href="./lib/command/directorynotfounderror_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
-							class="thickbox" title="lib/command/directorynotfounderror.rb">lib/command/directorynotfounderror.rb</a></li>
-					
 						<li><a href="./lib/command/definition_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/command/definition.rb">lib/command/definition.rb</a></li>
+					
+						<li><a href="./lib/command/directorynotfounderror_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/command/directorynotfounderror.rb">lib/command/directorynotfounderror.rb</a></li>
 					
 						<li><a href="./lib/command/env_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
 							class="thickbox" title="lib/command/env.rb">lib/command/env.rb</a></li>
@@ -114,9 +124,9 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000170">::define</a></li>
+					<li><a href="#M000168">::define</a></li>
 					
-					<li><a href="#M000171">::with</a></li>
+					<li><a href="#M000169">::with</a></li>
 					
 				</ul>
 			</div>
@@ -232,7 +242,7 @@
 		<h1 class="module">Command</h1>
 
 		<div id="description">
-			<hr size="1"></hr>
+			
 		</div>
 
 		<!-- Constants -->
@@ -243,27 +253,27 @@
 			
 				<dt><a name="Argument">Argument</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="Env">Env</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="Option">Option</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="Result">Result</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 				<dt><a name="Types">Types</a></dt>
 				
-				<dd class="description missing-docs">(Not documented)</dd>
+				<dd class="description"></dd>
 				
 			
 			</dl>
@@ -280,7 +290,7 @@
 
 		
 			<div id="define-method" class="method-detail ">
-				<a name="M000170"></a>
+				<a name="M000168"></a>
 
 				<div class="method-heading">
 				
@@ -292,7 +302,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -300,8 +310,8 @@
 						id="define-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/command.rb, line 26</span>
-26:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">define</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-27:     <span class="ruby-ivar">@main</span> = <span class="ruby-constant">Definition</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+26:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">define</span>(*<span class="ruby-identifier">args</span>, &amp;<span class="ruby-identifier">block</span>)
+27:     <span class="ruby-ivar">@main</span> = <span class="ruby-constant">Definition</span>.<span class="ruby-identifier">new</span>(*<span class="ruby-identifier">args</span>, &amp;<span class="ruby-identifier">block</span>)
 28:     <span class="ruby-ivar">@main</span>
 29:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
@@ -309,11 +319,13 @@
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="with-method" class="method-detail ">
-				<a name="M000171"></a>
+				<a name="M000169"></a>
 
 				<div class="method-heading">
 				
@@ -325,7 +337,7 @@
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -333,14 +345,16 @@
 						id="with-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/command.rb, line 31</span>
-31:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">with</span>(<span class="ruby-identifier">argv</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">with</span>(<span class="ruby-identifier">argv</span>, &amp;<span class="ruby-identifier">block</span>)
 32:     <span class="ruby-identifier">parser</span> = <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">$command</span>, <span class="ruby-identifier">argv</span>)
-33:     <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+33:     <span class="ruby-identifier">parser</span>.<span class="ruby-identifier">instance_eval</span>(&amp;<span class="ruby-identifier">block</span>)
 34:     <span class="ruby-identifier">parser</span>
 35:   <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

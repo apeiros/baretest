@@ -22,6 +22,16 @@
 <body class="module">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -52,13 +62,13 @@
 				<h3 class="section-header">Methods</h3>
 				<ul class="link-list">
 					
-					<li><a href="#M000047">#env_option</a></li>
+					<li><a href="#M000049">#env_option</a></li>
 					
-					<li><a href="#M000048">#option</a></li>
+					<li><a href="#M000050">#option</a></li>
 					
-					<li><a href="#M000045">#option_defaults</a></li>
+					<li><a href="#M000047">#option_defaults</a></li>
 					
-					<li><a href="#M000046">#text</a></li>
+					<li><a href="#M000048">#text</a></li>
 					
 				</ul>
 			</div>
@@ -218,7 +228,7 @@ Provides access to the command/options/arguments related information.
 
 		
 			<div id="env-option-method" class="method-detail ">
-				<a name="M000047"></a>
+				<a name="M000049"></a>
 
 				<div class="method-heading">
 				
@@ -234,8 +244,7 @@ Provides access to the command/options/arguments related information.
 Use an env-variable and map it to an option. Example:
 </p>
 <pre>
-  env_option :indent, &quot;INDENT&quot;
-</pre>
+  env_option :indent, &quot;INDENT&quot;</pre>
 					
 
 					
@@ -243,19 +252,21 @@ Use an env-variable and map it to an option. Example:
 						id="env-option-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/baretest/formatter.rb, line 48</span>
-48:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">env_option</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-49:       <span class="ruby-ivar">@command</span>[<span class="ruby-identifier">:elements</span>] <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:env_option</span>, <span class="ruby-identifier">args</span>]
+48:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">env_option</span>(*<span class="ruby-identifier">args</span>)
+49:       <span class="ruby-ivar">@command</span>[<span class="ruby-value">:elements</span>] <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-value">:env_option</span>, <span class="ruby-identifier">args</span>]
 50:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="option-method" class="method-detail ">
-				<a name="M000048"></a>
+				<a name="M000050"></a>
 
 				<div class="method-heading">
 				
@@ -278,19 +289,21 @@ href="../Command/Definition.html#M000151">Command::Definition#option</a>
 						id="option-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/baretest/formatter.rb, line 54</span>
-54:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-55:       <span class="ruby-ivar">@command</span>[<span class="ruby-identifier">:elements</span>] <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:option</span>, <span class="ruby-identifier">args</span>]
+54:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option</span>(*<span class="ruby-identifier">args</span>)
+55:       <span class="ruby-ivar">@command</span>[<span class="ruby-value">:elements</span>] <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-value">:option</span>, <span class="ruby-identifier">args</span>]
 56:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="option-defaults-method" class="method-detail ">
-				<a name="M000045"></a>
+				<a name="M000047"></a>
 
 				<div class="method-heading">
 				
@@ -307,8 +320,7 @@ Define default values for options. Example:
 </p>
 <pre>
   option_defaults :colors =&gt; false,
-                  :indent =&gt; 3
-</pre>
+                  :indent =&gt; 3</pre>
 					
 
 					
@@ -317,18 +329,20 @@ Define default values for options. Example:
 <pre>
     <span class="ruby-comment cmt"># File lib/baretest/formatter.rb, line 36</span>
 36:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">option_defaults</span>(<span class="ruby-identifier">defaults</span>={})
-37:       <span class="ruby-ivar">@command</span>[<span class="ruby-identifier">:option_defaults</span>].<span class="ruby-identifier">update</span>(<span class="ruby-identifier">defaults</span>)
+37:       <span class="ruby-ivar">@command</span>[<span class="ruby-value">:option_defaults</span>].<span class="ruby-identifier">update</span>(<span class="ruby-identifier">defaults</span>)
 38:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
 
 				
+
+				
 			</div>
 
 		
 			<div id="text-method" class="method-detail ">
-				<a name="M000046"></a>
+				<a name="M000048"></a>
 
 				<div class="method-heading">
 				
@@ -350,12 +364,14 @@ Inject a piece of text into the helptext.
 						id="text-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/baretest/formatter.rb, line 41</span>
-41:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-42:       <span class="ruby-ivar">@command</span>[<span class="ruby-identifier">:elements</span>] <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:text</span>, <span class="ruby-identifier">args</span>]
+41:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">text</span>(*<span class="ruby-identifier">args</span>)
+42:       <span class="ruby-ivar">@command</span>[<span class="ruby-value">:elements</span>] <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-value">:text</span>, <span class="ruby-identifier">args</span>]
 43:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>

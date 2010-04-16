@@ -22,6 +22,16 @@
 <body class="class">
 
 	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
 		<div id="file-metadata">
 			<div id="file-list-section" class="section">
 				<h3 class="section-header">In Files</h3>
@@ -298,7 +308,7 @@ project.
     <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 32</span>
 32:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-identifier">project_dir</span>)
 33:       <span class="ruby-identifier">found</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-node">&quot;#{project_dir}/.baretest_id_*&quot;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
-34:         <span class="ruby-keyword kw">break</span> <span class="ruby-identifier">$1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/id_([A-Fa-f0-9]{32})$/</span>
+34:         <span class="ruby-keyword kw">break</span> <span class="ruby-node">$1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/id_([A-Fa-f0-9]{32})$/</span>
 35:       }
 36:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">found</span> <span class="ruby-keyword kw">then</span>
 37:         <span class="ruby-identifier">found</span> = <span class="ruby-constant">UID</span>.<span class="ruby-identifier">hex_uid</span>
@@ -307,18 +317,18 @@ project.
 40:           <span class="ruby-comment cmt"># add a little bit of explaining text in case somebody wonders about</span>
 41:           <span class="ruby-comment cmt"># the purpose of this file.</span>
 42:           <span class="ruby-identifier">fh</span>.<span class="ruby-identifier">write</span>(
-43:             <span class="ruby-value str">&quot;This file is used by baretest to find the persisted data in your ~/.baretest directory.\n&quot;</span> \
-44:             <span class="ruby-value str">&quot;Deleting this file will result in orphaned persistence data.\n&quot;</span> \
-45:             <span class="ruby-value str">&quot;See `baretest help reset`.&quot;</span>
-46:           )
-47:         }
-48:       <span class="ruby-keyword kw">end</span>
-49: 
-50:       <span class="ruby-identifier">found</span>
-51:     <span class="ruby-keyword kw">end</span></pre>
+43:             <span class="ruby-value str">&quot;This file is used by baretest to find the persisted data in your ~/.baretest directory.\n&quot;</span>              <span class="ruby-value str">&quot;Deleting this file will result in orphaned persistence data.\n&quot;</span>              <span class="ruby-value str">&quot;See `baretest help reset`.&quot;</span>
+44:           )
+45:         }
+46:       <span class="ruby-keyword kw">end</span>
+47: 
+48:       <span class="ruby-identifier">found</span>
+49:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -341,12 +351,14 @@ project.
 Arguments:
 </p>
 <table>
-<tr><td valign="top"><a href="Persistence.html#project_dir">project_dir</a>:</td><td>The directory of the project
-
+<tr><td valign="top"><a href="Persistence.html#project_dir">project_dir</a></td><td><p>
+The directory of the project
+</p>
 </td></tr>
-<tr><td valign="top"><a href="Persistence.html#storage_dir">storage_dir</a>:</td><td>The directory where this <a href="Persistence.html">Persistence</a>
+<tr><td valign="top"><a href="Persistence.html#storage_dir">storage_dir</a></td><td><p>
+The directory where this <a href="Persistence.html">Persistence</a>
 instance should store its data
-
+</p>
 </td></tr>
 </table>
 					
@@ -362,14 +374,16 @@ instance should store its data
 69:       <span class="ruby-ivar">@project_id</span>  = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">determine_project_id</span>(<span class="ruby-ivar">@project_dir</span>)
 70:       <span class="ruby-identifier">stat</span>         = <span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-ivar">@project_dir</span>)
 71:       <span class="ruby-identifier">store</span>(<span class="ruby-value str">'project'</span>, {
-72:         <span class="ruby-identifier">:project_directory</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@project_dir</span>,
-73:         <span class="ruby-identifier">:project_directory_inode</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>.<span class="ruby-identifier">ino</span>,
-74:         <span class="ruby-identifier">:project_directory_device</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>.<span class="ruby-identifier">dev</span>
+72:         <span class="ruby-value">:project_directory</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@project_dir</span>,
+73:         <span class="ruby-value">:project_directory_inode</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>.<span class="ruby-identifier">ino</span>,
+74:         <span class="ruby-value">:project_directory_device</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">stat</span>.<span class="ruby-identifier">dev</span>
 75:       })
 76:     <span class="ruby-keyword kw">end</span></pre>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -404,6 +418,8 @@ The default storage path base (~/.baretest)
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -446,6 +462,8 @@ Remove all files that store state, cache things etc.
 				</div>
 
 				
+
+				
 			</div>
 
 		
@@ -466,12 +484,13 @@ Remove all files that store state, cache things etc.
 Deletes the file for the given filename.
 </p>
 <table>
-<tr><td valign="top">filename:</td><td>A relative path. Empty directories are recursively deleted up to (but
+<tr><td valign="top">filename</td><td><p>
+A relative path. Empty directories are recursively deleted up to (but
 without) <a
 href="Persistence.html#storage_dir">Persistence#storage_dir</a>. The path
 is relative to <a
 href="Persistence.html#storage_dir">Persistence#storage_dir</a>
-
+</p>
 </td></tr>
 </table>
 					
@@ -482,7 +501,7 @@ href="Persistence.html#storage_dir">Persistence#storage_dir</a>
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 118</span>
 118:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">filename</span>)
-119:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A\.\./|/\.\./\z}</span>
+119:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%{\A\.\./|/\.\./\z}</span>
 120:       <span class="ruby-identifier">project_storage_dir</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}&quot;</span>
 121:       <span class="ruby-identifier">path</span>                = <span class="ruby-node">&quot;#{project_storage_dir}/#{filename}.yaml&quot;</span>
 122: 
@@ -501,6 +520,8 @@ href="Persistence.html#storage_dir">Persistence#storage_dir</a>
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -523,14 +544,16 @@ href="Persistence.html#storage_dir">Persistence#storage_dir</a>
 Reads and deserializes the data in a given filename.
 </p>
 <table>
-<tr><td valign="top">filename:</td><td>A relative path. Directories are created on the fly if necessary. Must not
+<tr><td valign="top">filename</td><td><p>
+A relative path. Directories are created on the fly if necessary. Must not
 be an absolute path. The path is relative to <a
 href="Persistence.html#storage_dir">Persistence#storage_dir</a>
-
+</p>
 </td></tr>
-<tr><td valign="top">default:</td><td>The value to return in case the file does not exist. Alternatively you can
+<tr><td valign="top">default</td><td><p>
+The value to return in case the file does not exist. Alternatively you can
 pass a block that calculates the default.
-
+</p>
 </td></tr>
 </table>
 					
@@ -541,7 +564,7 @@ pass a block that calculates the default.
 <pre>
      <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 101</span>
 101:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">default</span>=<span class="ruby-keyword kw">nil</span>)
-102:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A\.\./|/\.\./\z}</span>
+102:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%{\A\.\./|/\.\./\z}</span>
 103:       <span class="ruby-identifier">path</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}/#{filename}.yaml&quot;</span>
 104: 
 105:       <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">path</span>)
@@ -555,6 +578,8 @@ pass a block that calculates the default.
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -578,14 +603,16 @@ Stores data to a file.
 </p>
 <h3>Arguments</h3>
 <table>
-<tr><td valign="top">filename:</td><td>A relative path. Directories are created on the fly if necessary. Must not
+<tr><td valign="top">filename</td><td><p>
+A relative path. Directories are created on the fly if necessary. Must not
 be an absolute path. The path is relative to <a
 href="Persistence.html#storage_dir">Persistence#storage_dir</a>
-
+</p>
 </td></tr>
-<tr><td valign="top">data:</td><td>The data to store. Anything that can be serialized by YAML. This excludes
+<tr><td valign="top">data</td><td><p>
+The data to store. Anything that can be serialized by YAML. This excludes
 IOs and Procs.
-
+</p>
 </td></tr>
 </table>
 					
@@ -596,7 +623,7 @@ IOs and Procs.
 <pre>
     <span class="ruby-comment cmt"># File lib/baretest/persistence.rb, line 86</span>
 86:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">data</span>)
-87:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%r{\A[A-Za-z0-9_-][A-Za-z0-9_-]*\z}</span>
+87:       <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid filename: #{filename}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">%{\A[A-Za-z0-9_-][A-Za-z0-9_-]*\z}</span>
 88:       <span class="ruby-identifier">dir</span> = <span class="ruby-node">&quot;#{@storage_dir}/#{@project_id}&quot;</span>
 89:       <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">dir</span>)
 90:       <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{dir}/#{filename}.yaml&quot;</span>, <span class="ruby-value str">&quot;w&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">fh</span><span class="ruby-operator">|</span>
@@ -606,6 +633,8 @@ IOs and Procs.
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
@@ -630,7 +659,7 @@ IOs and Procs.
 
 				<div class="method-description">
 					
-					<p class="missing-docs">(Not documented)</p>
+					
 					
 
 					
@@ -643,6 +672,8 @@ IOs and Procs.
 					</div>
 					
 				</div>
+
+				
 
 				
 			</div>
