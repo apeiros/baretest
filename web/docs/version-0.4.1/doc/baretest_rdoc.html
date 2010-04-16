@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>File: baretest.rdoc [baretest-0.4.1]</title>
+
+	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+</head>
+
+<body class="file">
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
+				
+					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/baretest_rdoc.html">baretest.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../BareTest.html">BareTest</a></li>
+				
+					<li><a href="../BareTest/Assertion.html">BareTest::Assertion</a></li>
+				
+					<li><a href="../BareTest/Assertion/Context.html">BareTest::Assertion::Context</a></li>
+				
+					<li><a href="../BareTest/Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+				
+					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
+				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
+					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
+				
+					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
+				
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
+				
+					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
+				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
+					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
+				
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
+				
+					<li><a href="../Kernel.html">Kernel</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1>The baretest executable</h1>
+<h2>1. Usage</h2>
+<p>
+Basic Usage:
+</p>
+<pre>
+  baretest [options] [glob, ...]
+</pre>
+<p>
+Either you provide a `glob` (or a directory, which is equivalent to
+DIRECTORY/**/*.rb), then baretest will load all the files it matches and
+invoke BareTest.run in the end. Or you use the standard way and let
+baretest use convention. For that you should run baretest within the
+project, preferably the toplevel. Baretest will then search the directory
+tree upwards until it finds &#8216;test/setup.rb&#8217;. It will then use
+the default layout of a project, which should look roughly like this:
+</p>
+<pre>
+  |-- bin
+  |   `-- ...
+  |-- doc
+  |   `-- ...
+  |-- examples
+  |   `-- ...
+  |-- lib
+  |   `-- ...
+  |-- rake
+  |   `-- ...
+  `-- test
+      |-- external
+      |   `-- ...
+      |-- helper
+      |   `-- ...
+      |-- setup.rb
+      `-- suite
+          |-- bin
+          |   `-- ...
+          `-- lib
+              `-- ...
+</pre>
+<p>
+The important part are the directories under &#8216;test&#8217;. The
+directory &#8216;test/suite&#8217; should mirror your project, but instead
+of the real files contain the files that test their counterparts. For
+example, the file &#8216;YOURPROJECT/lib/yourproject.rb&#8217; has its
+tests in &#8216;YOURPROJECT/test/suite/lib/yourproject.rb&#8217;.
+Additionally, baretest will in that mode look for a file
+&#8216;YOURPROJECT/test/helper/suite/lib/yourproject.rb&#8217; and load it
+if found.
+</p>
+<h2>2. Options</h2>
+<h3>Getting information about baretest:</h3>
+<table>
+<tr><td valign="top">-F, --formats</td><td><p>
+Lists the available output formatters
+</p>
+</td></tr>
+<tr><td valign="top">-v</td><td><p>
+Prints the baretest executables and the libs version number
+</p>
+</td></tr>
+</table>
+<h3>Running tests:</h3>
+<table>
+<tr><td valign="top">-i, --interactive</td><td><p>
+drop into IRB on error or failure
+</p>
+</td></tr>
+<tr><td valign="top">-d, --debug</td><td><p>
+Set debugging flags.
+</p>
+<p>
+This sets $DEBUG to true, same as rubys -d switch.
+</p>
+</td></tr>
+<tr><td valign="top">-f, --format FORMAT</td><td><p>
+Use the formatter specified in FORMAT, defaults to &#8216;cli&#8217;
+</p>
+</td></tr>
+<tr><td valign="top">-s, --setup FILE</td><td><p>
+specify setup file
+</p>
+<p>
+This option allows you to tell baretest where it finds the setup.rb file.
+</p>
+<p>
+Defaults to test/setup.rb.
+</p>
+</td></tr>
+<tr><td valign="top">-w, --warn</td><td><p>
+Turn warnings on for your script.
+</p>
+<p>
+This sets $VERBOSE to true, same as rubys -w switch.
+</p>
+<p>
+Additionally, some formatters will provide more information (e.g. full
+backtraces on errors) when $VERBOSE is set.
+</p>
+</td></tr>
+</table>
+<h3>3. The interactive mode</h3>
+<p>
+In interactive mode, baretest will stop execution when an error or a
+failure is hit. It then prints out the status, the assertions description,
+its code and then drops you into an irb-shell in the context of the failed
+assertion, with setup already executed. You can then try out what caused
+the assertion to fail.
+</p>
+<p>
+Be aware that printing the code relies on your indentation.
+</p>
+<h3>4. Writing a formatter</h3>
+<p>
+This section will follow. For now, just take a look at the existing
+formatters. They are pretty simple.
+</p>
+
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+</body>
+</html>
+

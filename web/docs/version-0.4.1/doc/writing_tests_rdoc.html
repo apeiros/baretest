@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>File: writing_tests.rdoc [baretest-0.4.1]</title>
+
+	<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+</head>
+
+<body class="file">
+	<div id="metadata">
+		<div id="home-metadata">
+			<div id="home-section" class="section">
+        <h3 class="section-header">
+          <a href="../index.html">Home</a>
+          <a href="../index.html#classes">Classes</a>
+          <a href="../index.html#methods">Methods</a>
+        </h3>
+			</div>
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="../MANIFEST_txt.html">MANIFEST.txt</a></li>
+				
+					<li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/baretest_rdoc.html">baretest.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/mocking_stubbing_test_doubles_rdoc.html">mocking_stubbing_test_doubles.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/quickref_rdoc.html">quickref.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/whats_going_on_rdoc.html">whats_going_on.rdoc</a></li>
+				
+					<li class="file"><a href="../doc/writing_tests_rdoc.html">writing_tests.rdoc</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../BareTest.html">BareTest</a></li>
+				
+					<li><a href="../BareTest/Assertion.html">BareTest::Assertion</a></li>
+				
+					<li><a href="../BareTest/Assertion/Context.html">BareTest::Assertion::Context</a></li>
+				
+					<li><a href="../BareTest/Assertion/Failure.html">BareTest::Assertion::Failure</a></li>
+				
+					<li><a href="../BareTest/Assertion/Skip.html">BareTest::Assertion::Skip</a></li>
+				
+					<li><a href="../BareTest/Assertion/Support.html">BareTest::Assertion::Support</a></li>
+				
+					<li><a href="../BareTest/CommandLine.html">BareTest::CommandLine</a></li>
+				
+					<li><a href="../BareTest/Formatter.html">BareTest::Formatter</a></li>
+				
+					<li><a href="../BareTest/IRBMode/IRBContext.html">BareTest::IRBMode::IRBContext</a></li>
+				
+					<li><a href="../BareTest/InvalidSelectors.html">BareTest::InvalidSelectors</a></li>
+				
+					<li><a href="../BareTest/Persistence.html">BareTest::Persistence</a></li>
+				
+					<li><a href="../BareTest/Run.html">BareTest::Run</a></li>
+				
+					<li><a href="../BareTest/Status.html">BareTest::Status</a></li>
+				
+					<li><a href="../BareTest/Suite.html">BareTest::Suite</a></li>
+				
+					<li><a href="../BareTest/UID.html">BareTest::UID</a></li>
+				
+					<li><a href="../BareTest/VERSION.html">BareTest::VERSION</a></li>
+				
+					<li><a href="../Command.html">Command</a></li>
+				
+					<li><a href="../Command/DecoratingHash.html">Command::DecoratingHash</a></li>
+				
+					<li><a href="../Command/Definition.html">Command::Definition</a></li>
+				
+					<li><a href="../Command/DirectoryNotFoundError.html">Command::DirectoryNotFoundError</a></li>
+				
+					<li><a href="../Command/FileNotFoundError.html">Command::FileNotFoundError</a></li>
+				
+					<li><a href="../Command/NoDirectoryError.html">Command::NoDirectoryError</a></li>
+				
+					<li><a href="../Command/NoFileError.html">Command::NoFileError</a></li>
+				
+					<li><a href="../Command/Parser.html">Command::Parser</a></li>
+				
+					<li><a href="../Command/VERSION.html">Command::VERSION</a></li>
+				
+					<li><a href="../Kernel.html">Kernel</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1>Writing Tests</h1>
+<p>
+This tutorial assumes you have basic ruby knowledge. It is an introduction
+into baretest and testing itself. If you&#8217;re a quick study and have
+already good knowledge about ruby and testing, you may be more interested
+in just reading the examples and the doc/quickref.rdoc.
+</p>
+<h2>1. In the beginning there was the project</h2>
+<p>
+The first step is of course the project. Baretest was written with the
+assumption of a standard ruby project layout (should work fine without too,
+though - might just require a bit more work on your part). The standard
+directory layout looks like this:
+</p>
+<pre>
+  |-- bin (executables)
+  |-- doc (additional documentation)
+  |-- ext (native extension code will be here)
+  |-- examples (for the users of the lib)
+  |-- lib (contains the library)
+  |-- rake (contains rake relevant stuff)
+  `-- Rakefile
+</pre>
+<p>
+In your project directory, you can invoke `baretest init`, this will create
+the &#8216;test&#8217; directory. It will mirror your project directory.
+That is, it will recreate all directories nested in bin and lib within
+test/suite. The directory layout of &#8216;test&#8217; is as follows:
+</p>
+<pre>
+  `-- test
+      |-- external (baretest ignores this directory)
+      |-- helper (baretest loads helper/lib/foo.rb when loading suite/lib/foo.rb)
+      |-- setup.rb (setup.rb is loaded as the first file when running baretest)
+      `-- suite (in here are the tests itself)
+          |-- bin (the tests for bin, PROJECT/bin is replicated here)
+          `-- lib (the tests for lib, PROJECT/lib is replicated here)
+</pre>
+<h2>2. Writing the tests</h2>
+<p>
+Assume you have `lib/foo.rb` containing the class &#8216;Foo&#8217;. To
+test it, you create the file `test/suite/lib/foo.rb`. You start out by
+creating a suite for your class:
+</p>
+<pre>
+  BareTest.suite &quot;class Foo&quot; do
+  end
+</pre>
+<p>
+You&#8217;re in no way limited in how you name the suites. It&#8217;s an
+arbitrary String. Now lets assume &#8216;lib/foo.rb&#8217; contains the
+following code:
+</p>
+<pre>
+  class Foo
+    def bar
+      &quot;bar&quot;
+    end
+  end
+</pre>
+<p>
+Then follows the next step, we write the first assertion:
+</p>
+<pre>
+  BareTest.suite do
+    suite &quot;class Foo&quot; do
+      assert &quot;bar returns 'bar'&quot; do
+        Foo.new.bar == 'bar'
+      end
+    end
+  end
+</pre>
+<p>
+As you can see, the assertion is plain ruby code. The return value of the
+block decides whether the assertion is considered a success (trueish value,
+that is all but false and nil) or a failure (falseish value, that is false
+or nil).
+</p>
+<h2>3. Running the tests</h2>
+<p>
+First you change the directory to your project&#8217;s root directory.
+There you run `baretest`. That&#8217;s it. Baretest will now load the
+&#8216;test/setup.rb&#8217; file, then it&#8217;ll search in
+&#8216;test/suite&#8217; for files and find
+&#8216;test/suite/lib/foo.rb&#8217;. Before loading that file, it&#8217;ll
+see if there&#8217;s also a file
+&#8216;test/helpers/suite/lib/foo.rb&#8217;. If there was, it&#8217;d load
+that first. After that, it loads the &#8216;test/suite/lib/foo.rb&#8217;
+file. When all testfiles are discovered and loaded, it&#8217;ll run the
+tests.
+</p>
+<h2>4. Separating parts of the test</h2>
+<p>
+A classical test consists of four phases:
+</p>
+<ol>
+<li><p>
+setup
+</p>
+</li>
+<li><p>
+exercise
+</p>
+</li>
+<li><p>
+validate
+</p>
+</li>
+<li><p>
+teardown
+</p>
+</li>
+</ol>
+<p>
+Baretest has setup and teardown on suites, which will be run for every
+assertion the suite contains. Exercise and validate is currently combined
+in the &#8216;assert&#8217; method.
+</p>
+<p>
+So let&#8217;s make use of that and rewrite our previous test:
+</p>
+<pre>
+  BareTest.suite do
+    suite &quot;class Foo&quot; do
+      setup do
+        @foo = Foo.new
+      end
+
+      assert &quot;bar returns 'bar'&quot; do
+        @foo.bar == 'bar'
+      end
+    end
+  end
+</pre>
+<p>
+In this simplistic example, this may seem like wasted time. The more
+complex the setup becomes and the more assertions need the same setup, the
+more time a separate setup phase saves. It additionally helps in making
+intent clear: this is setup, and this is test. The setup and teardown is
+run (via instance_eval) in the same context as the assertion. Local
+variables however are NOT shared. To pass data from the setup to the
+assertion, use instance variables as shown here.
+</p>
+<h2>5. When troubles strike</h2>
+<p>
+If one of your assertions fails or errors, you can use `baretest -i` to
+investigate the issue. It will throw you into an irb session, with self
+being the failing/erroring assertion context and with several helpful
+methods (use `help` in the irb session to get a list of those).
+</p>
+<h2>Things left to be written out</h2>
+<p>
+This is not part of the tutorial but things the author of this tutorial
+should still add to the tutorial itself.
+</p>
+<ul>
+<li><p>
+toplevel suite may have a name/description too, it&#8217;ll act the same as
+if there was a suite in an unnamed toplevel suite
+</p>
+</li>
+<li><dl>
+<dt>setup</dt><dd><p>
+They will also be run for every nested suite&#8217;s assertion,
+</p>
+</dd>
+</dl>
+<p>
+where the outermost setup is run first, the innermost last.
+</p>
+</li>
+<li><p>
+using stubs &amp; mocks
+</p>
+</li>
+<li><p>
+Suites with the same name and nesting are considered the same and become
+merged
+</p>
+<p>
+Example:
+</p>
+<pre>
+  BareTest.suite &quot;Foo&quot; do
+    suite &quot;Bar&quot; do
+      assert &quot;x&quot;
+    end
+  end
+  BareTest.suite &quot;Foo&quot; do
+    suite &quot;Bar&quot; do
+      assert &quot;y&quot;
+    end
+  end
+</pre>
+<p>
+Now the suite &#8220;Foo&#8221; > &#8220;Bar&#8221; has two assertions,
+&#8220;x&#8221; and &#8220;y&#8220;
+</p>
+</li>
+</ul>
+
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+</body>
+</html>
+
