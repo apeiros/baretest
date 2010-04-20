@@ -132,20 +132,16 @@ module BareTest
     # will generate a full Status instance.
     # This is for practical reasons - it means you can go through several
     # phases, looking for the first non-nil one.
-    def execute_phase(name, context, code, handlers=nil)
+    def execute_phase(phase, context, code, handlers=nil)
       status         = nil
       skip_reason    = nil
       failure_reason = nil
       exception      = nil
 
       begin
-        if code.is_a?(Array) then
-          code.each do |args, block| context.instance_exec(*args, &block) end
-        else
-          unless context.instance_eval(&code)
-            failure_reason = "Assertion failed" 
-            status         = :failure
-          end
+        unless phase.execute(self)
+          failure_reason = "Assertion failed" 
+          status         = :failure
         end
       rescue *PassthroughExceptions
         raise # passthrough-exceptions must be passed through

@@ -20,11 +20,9 @@ module BareTest
   # Suites can also be nested. Nested suites will inherit setup and teardown.
   class Suite
 
-    # Nested suites, in the order of definition
-    attr_reader   :suites
-
-    # All assertions in this suite
-    attr_reader   :assertions
+    # This suites identifier, usable for persistence. Determined by its
+    # description and parent id
+    attr_reader   :id
 
     # Whether this suite has been manually skipped (either via
     # Suite.new(..., :skip => reason) or via Suite#skip)
@@ -49,7 +47,10 @@ module BareTest
     # All things this suite is tagged with, see Suite::new for more information
     attr_reader   :tags
 
-    attr_reader   :verification_exception_handlers # :nodoc:
+    attr_reader   :setup
+    attr_reader   :ancestral_setup
+    attr_reader   :teardown
+    attr_reader   :ancestral_teardown
 
     # A list of valid options Suite::new accepts
     ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
@@ -84,42 +85,53 @@ module BareTest
     #               definition of this assertion. See Suite#suite and
     #               Suite#assert.
     def initialize(description=nil, parent=nil, opts=nil, &block)
-      @description = description
-      @parent      = parent
-      @suites      = [] # [["description", subsuite, skipped], ["description2", ...], ...] - see Array#assoc
-      @assertions  = []
-      @skipped     = false
-      @setup       = {nil => []}
-      @components  = []
-      @teardown    = []
-      @verification_exception_handlers = {}
-      if @parent then
-        @ancestors   = [self, *@parent.ancestors]
-        @depends_on  = @parent.depends_on
-        @tags        = @parent.tags
-      else
-        @ancestors   = [self]
-        @depends_on  = []
-        @tags        = []
-      end
-      @provides    = []
-      @reason      = [] # skip reason
-      if opts then
-        raise ArgumentError, "Invalid option(s): #{(opts.keys - ValidOptions).inspect}" unless (opts.keys - ValidOptions).empty?
-        skip, requires, use, provides, depends_on, tags = opts.values_at(*ValidOptions)
-        skip(skip == true ? nil : skip) if skip
-        use(*use) if use
-        requires(*requires) if requires
-        @depends_on |= Array(depends_on) if depends_on
-        @provides   |= Array(provides) if provides
-        @tags       |= Array(tags) if tags
-      end
+      @id                 = parent ? "#{parent.id}\f#{description}" : description.to_s # to_s because of nil descriptions
+      @description        = description
+      @parent             = parent
+      @ancestors          = parent ? [self, *@parent.ancestors] : [self]
+      @children           = []
+      @setup              = []
+      @teardown           = []
+      @ancestral_setup    = []
+      @ancestral_teardown = []
+      @by_name            = {} # named setups use Symbols, Suites and Assertions use Strings
+
+      @skipped            = false
+      @depends_on         = []
+      @tags               = []
+      @provides           = []
+      @reason             = [] # skip reason
+      @options            = nil
+
+      merge_options(opts) if opts
       instance_eval(&block) if block
     end
 
-    # An ID, usable for persistence
-    def id
-      @id ||= ancestors.map { |suite| suite.description }.join("\f")
+    # Add options of an options hash to this suite
+    def merge_options(opts)
+      warn "Multiple option sources" if @options # FIXME: improve warning message
+      @options = true
+
+      raise ArgumentError, "Invalid option(s): #{(opts.keys - ValidOptions).inspect}" unless (opts.keys - ValidOptions).empty?
+      skip, requires, use, provides, depends_on, tags = opts.values_at(*ValidOptions)
+
+      skip(skip == true ? nil : skip) if skip
+      use(*use) if use
+      requires(*requires) if requires
+
+      @depends_on |= Array(depends_on) if depends_on
+      @provides   |= Array(provides) if provides
+      @tags       |= Array(tags) if tags
+    end
+
+    def finish
+      if @parent then
+        @depends_on         = @parent.depends_on
+        @tags               = @parent.tags
+        @ancestral_setup    = @parent.ancestral_setup+@parent.setup
+        @ancestral_teardown = @parent.ancestral_teardown+@parent.teardown
+      end
+      @children.each do |child| child.finish end
     end
 
     # Instruct this suite to use the given components.
@@ -135,42 +147,27 @@ module BareTest
       end
     end
 
-    # Experimental
-    # Define handlers for specific exception classes. The handler gets
-    # the assertion, the phase and the exception yielded and is expected
-    # to return a BareTest::Status.
-    def handle_verification_exceptions(*exception_classes, &block) # :nodoc:
-      exception_classes.each do |exception_class|
-        raise "Already registered a verification exception handler for class #{exception_class}" if @verification_exception_handlers[exception_class]
-        @verification_exception_handlers[exception_class] = block
-      end
-    end
-
     # Instruct this suite to require the given files.
     # The suite is skipped if a file can't be loaded.
     def requires(*paths)
-      paths.each do |file|
-        begin
-          require file
-        rescue LoadError => e
-          skip("Missing source file: #{file} (#{e})")
-        end
-      end
+      paths.each do |file| setup SetupRequire.new(file) end
     end
 
-    # Returns whether this suite has all the passed tags
+    # Returns whether this Suite has all the passed tags
+    # Must be an Array of Symbols.
     def tagged?(tags)
-      (@tags-tags).empty?
+      (tags-@tags).empty?
     end
 
-    # Marks this suite as manually skipped.
+    # Marks this Suite as manually skipped.
     def skip(reason=nil)
+      reason    = [reason || 'Manually skipped'] unless reason.kind_of?(Array)
       @skipped  = true
-      @reason  |= reason ? Array(reason) : ['Manually skipped']
+      @reason  |= reason
       true
     end
 
-    # Returns whether this assertion has been marked as manually skipped.
+    # Returns whether this Suite has been marked as manually skipped.
     def skipped?
       @skipped
     end
@@ -178,14 +175,14 @@ module BareTest
     # The failure/error/skipping/pending reason.
     # Returns nil if there's no reason, a string otherwise
     # Options:
-    # :default::      Reason to return if no reason is present
     # :separator::    String used to separate multiple reasons
     # :indent::       A String, the indentation to use. Prefixes every line.
     # :first_indent:: A String, used to indent the first line only (replaces indent).
     def reason(opt=nil)
       if opt then
-        default, separator, indent, first_indent = 
-          *opt.values_at(:default, :separator, :indent, :first_indent)
+        invalid_keys = opt.keys-[:separator, :indent, :first_indent]
+        raise ArgumentError, "Unknown options: #{invalid_keys.inspect}" unless invalid_keys.empty?
+        separator, indent, first_indent = *opt.values_at(:separator, :indent, :first_indent)
         reason = @reason
         reason = Array(default) if reason.empty? && default
         return nil if reason.empty?
@@ -205,39 +202,18 @@ module BareTest
     #
     # See Suite::new - all arguments are passed to it verbatim, and self is
     # added as parent.
-    def suite(description=nil, *args, &block)
-      suite          = self.class.new(description, self, *args, &block)
-      existing_suite = @suites.assoc(description)
+    def suite(description=nil, opts=nil, &block)
+      existing_suite = @by_name[description]
       if existing_suite then
-        existing_suite.last.update(suite)
+        existing_suite.merge_options(opts) if opts
+        existing_suite.instance_eval(&block) if block
+        suite = existing_suite
       else
-        @suites << [description, suite]
+        suite = self.class.new(description, self, opts, &block)
+        @by_name[description] = suite
+        @children            << suite
       end
       suite
-    end
-
-    # Performs a recursive merge with the given suite.
-    #
-    # Used to merge suites with the same description.
-    def update(with_suite)
-      assertions, setup, teardown, provides, depends_on, skipped, reason, suites =
-        *with_suite.merge_attributes
-      @assertions.concat(assertions)
-      @setup.update(setup) do |k,v1,v2| v1+v2 end
-      @teardown.concat(teardown)
-      @provides   |= provides
-      @depends_on |= depends_on
-      @skipped   ||= skipped
-      @reason.concat(reason)
-      suites.each { |description, suite|
-        if append_to = @suites.assoc(description) then
-          append_to.last.update(suite)
-        else
-          @suites << [description, suite]
-        end
-      }
-
-      self
     end
 
     # All setups in the order of their definition and nesting (outermost first,

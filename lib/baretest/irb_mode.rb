@@ -150,8 +150,8 @@ module BareTest
         puts @__assertion__.line
       end
 
-      # Returns the original assertion's line
-      def open!
+      # Fiendish hack to open the assertion in my favourite editor
+      def open! # :nodoc:
         `bbedit '#{@__assertion__.file}:#{@__assertion__.line}'`
       end
 
