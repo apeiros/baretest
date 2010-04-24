@@ -7,26 +7,20 @@
 
 
 module BareTest
-  module Phase
-    class SetupRequire
+  class Phase
+    class SetupRequire < Setup
       def initialize(path)
-        @path = path
-      end
-
-      def description_variables
-        {}
-      end
-
-      def length
-        1
-      end
-
-      def setup(assertion, context)
-        require @path
-      rescue LoadError => e
-        assertion.skip("Missing source file: #{@path} (#{e})")
-      else
-        true
+        super do
+          begin
+            require path
+          rescue LoadError => load_error
+            if load_error.message[-path.length,path.length] == path then
+              skip("Missing source file: #{path}")
+            else
+              raise
+            end
+          end
+        end
       end
 
       def inspect

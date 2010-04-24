@@ -3,27 +3,45 @@
 BareTest.suite do
 
   # The individual tests can be grouped into suites
-  suite "Success" do
+  suite "In order to get a success" do
+    exercise "Do your exercise" do
+      # but since this is only an example, there's nothing here
+    end
 
-    # A test is defined via
-    #   assert "description of what we assert" do
-    #     (the assertion itself)
-    #   end
-    # Where the return value (and/or whether it raises or throws something)
-    # defines its status
-    assert "Returning a trueish value (non nil/false) is a success" do
+    verify "and return a trueish value (non nil/false) in verify" do
       true
     end
   end
 
-  suite "Failure" do
-    assert "Returning a falsish value (nil/false) is a failure" do
+  suite "In order to get a failure" do
+    exercise "Do your exercise" do
+      # but since this is only an example, there's nothing here
+    end
+
+    verify "and return a falsish value (nil/false) in verify" do
       false
+    end
+
+    verify "and invoke fail in verify" do
+      fail "And provide a custom failure message"
     end
   end
 
-  suite "Pending" do
-    assert "Without a block is pending"
+  suite "In order to get a pending" do
+    exercise "Have an exercise without a block"
+    exercise "Have an exercise with a block" do
+      # the content of this block doesn't matter
+    end
+    verify "and have a verify without a block"
+    exercise "Have an exercise with a block and the :pending option set", :pending => true do
+      # the content of this block doesn't matter
+    end
+    exercise "Have an exercise with a block" do
+      # the content of this block doesn't matter
+    end
+    verify "and have a verify with the :pending option set", :pending => true do
+      # the content of this block doesn't matter
+    end
   end
 
   suite "Error" do

@@ -47,9 +47,9 @@ module BareTest
     # All things this suite is tagged with, see Suite::new for more information
     attr_reader   :tags
 
-    attr_reader   :setup
+    attr_reader   :nesting_level
+
     attr_reader   :ancestral_setup
-    attr_reader   :teardown
     attr_reader   :ancestral_teardown
 
     # A list of valid options Suite::new accepts
@@ -89,9 +89,10 @@ module BareTest
       @description        = description
       @parent             = parent
       @ancestors          = parent ? [self, *@parent.ancestors] : [self]
+      @nesting_level      = @ancestors.length-1
       @children           = []
-      @setup              = []
-      @teardown           = []
+      @setups             = []
+      @teardowns          = []
       @ancestral_setup    = []
       @ancestral_teardown = []
       @by_name            = {} # named setups use Symbols, Suites and Assertions use Strings
@@ -150,7 +151,7 @@ module BareTest
     # Instruct this suite to require the given files.
     # The suite is skipped if a file can't be loaded.
     def requires(*paths)
-      paths.each do |file| setup SetupRequire.new(file) end
+      @setups.concat(paths.map { |file| SetupRequire.new(file) })
     end
 
     # Returns whether this Suite has all the passed tags
@@ -216,117 +217,73 @@ module BareTest
       suite
     end
 
-    # All setups in the order of their definition and nesting (outermost first,
-    # innermost last)
-    def ancestry_setup
-      @parent ? @parent.ancestry_setup.merge(@setup) { |k,v1,v2|
-        v1+v2
-      } : @setup
+    def exercise(description, &code)
+      exercise           = Phase::Exercise.new(description, &code)
+      @children         << exercise
+      @current_exercise  = exercise
+      exercise
     end
 
-    # All setup-components in the order of their definition and nesting
-    # (outermost first, innermost last)
-    def ancestry_components
-      @parent ? @parent.ancestry_components|@components : @components
+    def verify(description, &code)
+      verification = Phase::Verification.new(description, &code)
+      @current_exercise.out_of_order(verfication)
+      verification
     end
 
-    # All teardowns in the order of their nesting (innermost first, outermost last)
-    def ancestry_teardown
-      ancestors.map { |suite| suite.teardown }.flatten
+    def then_verify(description, &code)
+      verification = Phase::Verification.new(description, &code)
+      @current_exercise.in_order(verfication)
+      verification
     end
 
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
-    def setup(component=nil, multiplexed=nil, &block)
-      if component.nil? && block then
-        @setup[nil] << ::BareTest::Setup.new(nil, nil, nil, block)
-      elsif block then
-        @components << component unless @setup.has_key?(component)
-        @setup[component] ||= []
-
-        case multiplexed
-          when nil, String
-            @setup[component] << ::BareTest::Setup.new(component, multiplexed, nil, block)
-          when Array
-            multiplexed.each do |substitute|
-              @setup[component] << BareTest::Setup.new(component, substitute.to_s, substitute, block)
-            end
-          when Hash
-            multiplexed.each do |substitute, value|
-              @setup[component] << BareTest::Setup.new(component, substitute, value, block)
-            end
-          else
-            raise TypeError, "multiplexed must be an instance of NilClass, String, Array or Hash, but #{multiplexed.class} given."
-        end
-      elsif component || multiplexed
-        raise ArgumentError, "With component or multiplexed given, a block must be provided too."
-      end
-
-      @setup
-    end
+#     def setup(*args, &code)
+#       if args.empty? && code then # common setup case
+#       else
+#       if args.first.is_a?(Symbol) then
+#         id = args.shift
+#         
+#     end
 
     # Define a teardown block for this suite. The block will be ran after every
     # assertion once, even for nested suites.
-    def teardown(&block)
-      block ? @teardown << block : @teardown
+    def teardown(&code)
+      teardown    = Teardown.new(&code)
+      @teardowns << teardown
+      teardown
     end
 
     # Returns the number of possible setup variations.
     # See #each_component_variant
-    def component_variant_count
-      ancestry_setup.values_at(*ancestry_components).inject(1) { |r,f| r*f.size }
+    def number_of_setup_variants
+      return 0 if @setups.empty?
+      @setups.inject(1) { |count, setup| count*setup.length }
     end
 
     # Yields all possible permutations of setup components.
-    def each_component_variant
-      setups     = ancestry_setup
-      components = ancestry_components
-      base       = setups[nil]
-
-      if components.empty?
-        yield(base)
+    def each_setup_variant
+      if @setups.empty? then
+        yield([])
       else
-        setup_in_order = setups.values_at(*components)
-        maximums       = setup_in_order.map { |i| i.size }
-        iterations     = maximums.inject { |r,f| r*f } || 0
-
-        iterations.times do |i|
-          process = maximums.map { |e| i,e=i.divmod(e); e }
-          yield base+setup_in_order.zip(process).map { |variants, current|
-            variants[current]
-          }
+        maximums = @setups.map { |setup| setup.length }
+        number_of_setup_variants.times do |i|
+          yield(setup_variant(i, maximums))
         end
       end
 
       self
     end
 
-    # Return only the first of all possible setup variation permutations.
-    def first_component_variant
-      setups, *comps = ancestry_setup.values_at(nil, *ancestry_components)
-      setups = setups+comps.map { |comp| comp.first }
-      yield(setups) if block_given?
-
-      setups
+    # Return the component variants
+    def setup_variant(index, maximums=nil)
+      maximums ||= @setups.map { |setup| setup.length }
+      process    = maximums.map { |e|
+        index, partial = index.divmod(e)
+        partial
+      }
+      @setups.zip(process).map { |setup, partial| setup[partial] }
     end
-
-    # Define an assertion. The block is supposed to return a trueish value
-    # (anything but nil or false).
-    #
-    # See Assertion for more info.
-    def assert(description=nil, opts=nil, &block)
-      assertion = Assertion.new(self, description, opts, &block)
-      if match = caller.first.match(/^(.*):(\d+)(?::.+)?$/) then
-        file, line = match.captures
-        file = File.expand_path(file)
-        if File.exist?(file) then
-          assertion.file = file
-          assertion.line = line.to_i
-        end
-      end
-      @assertions << assertion
-    end
-    alias guard assert # TODO: This is temporary, guards should become first class citizens
 
     def to_s #:nodoc:
       sprintf "%s %s", self.class, @description
@@ -334,19 +291,6 @@ module BareTest
 
     def inspect #:nodoc:
       sprintf "#<%s:%08x %p>", self.class, object_id>>1, @description
-    end
-
-  protected
-    # All attributes that are required when merging two suites
-    def merge_attributes
-      return @assertions,
-             @setup,
-             @teardown,
-             @provides,
-             @depends_on,
-             @skipped,
-             @reason,
-             @suites
     end
   end
 end

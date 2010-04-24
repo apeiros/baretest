@@ -7,19 +7,22 @@
 
 
 module BareTest
-  module Phase
-    BasicSetup = Struct.new(:block) do
+  class Phase
+    class Setup < Phase
+      def initialize(&block)
+        @code = block
+      end
+
+      def phase
+        :setup
+      end
+
       def description_variables
         {}
       end
 
       def length
         1
-      end
-
-      def setup(context)
-        context.instance_eval(&block)
-        true
       end
 
       def inspect

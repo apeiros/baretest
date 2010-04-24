@@ -6,15 +6,15 @@
 
 
 
-require 'baretest/assertion'
-require 'baretest/commandline'
-require 'baretest/formatter'
-require 'baretest/invalidselectors'
-require 'baretest/irb_mode'
-require 'baretest/run'
+# require 'baretest/assertion'
+# require 'baretest/commandline'
+# require 'baretest/formatter'
+# require 'baretest/invalidselectors'
+# require 'baretest/irb_mode'
+# require 'baretest/run'
 require 'baretest/suite'
-require 'baretest/version'
-require 'ruby/kernel'
+# require 'baretest/version'
+# require 'ruby/kernel'
 # See bottom for more requires
 
 
@@ -273,6 +273,19 @@ module BareTest
   # Returns the absolute path to the test directory
   def self.test_directory
     File.expand_path(path, 'test')
+  end
+
+  def self.file_and_line_from_caller(caller_line)
+    exists, file, line = nil
+
+    match = caller_line.match(/^(.*):(\d+)(?::.+)?$/)
+    if match then
+      file, line = match.captures
+      file       = File.expand_path(file)
+      exists     = File.exist?(file)
+    end
+
+    return exists, file, line
   end
 end
 

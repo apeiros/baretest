@@ -1,10 +1,11 @@
-BareTest.new_component :support do
+BareTest.new_component :basic_verifications do
+  BareTest.require 'baretest/component/basic_verifications'
+
   setup do
-    require 'baretest/assertion/support'
-    extend BareTest::Assertion::Support
+    extend BareTest::Component::BasicVerifications
   end
 
   teardown do
-    ::BareTest.clean_touches(self) # instance evaled, self is the assertion
+    BareTest.clean_touches(self) # instance evaled, self is the context
   end
 end

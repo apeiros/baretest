@@ -7,7 +7,7 @@
 
 
 module BareTest
-  class Assertion
+  class Phase
 
     # BareTest::Assertion::Skip can be raised within an assertion to indicate that the
     # assertion is to be skipped. Unlike all other exceptions, this one will not set the Assertion's
@@ -15,7 +15,10 @@ module BareTest
     # Assertion#reason.
     # Also see BareTest::Assertion::Support#skip
     #
-    class Skip < StandardError
+    class Skip < Abortion
+      def status
+        :pending
+      end
     end
   end
 end

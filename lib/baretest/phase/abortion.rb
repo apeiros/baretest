@@ -8,14 +8,16 @@
 
 module BareTest
   class Phase
-    class TabularDataSetup < Setup
-      def execute(context, unit)
-        context.instance_eval(&@block)
-        true
+    class Abortion < StandardError
+      attr_reader :phase
+
+      def initialize(phase, message)
+        super(message)
+        @phase = phase
       end
 
-      def inspect
-        sprintf "#<%s>", self.class
+      def status
+        :error
       end
     end
   end

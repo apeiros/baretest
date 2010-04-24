@@ -6,14 +6,6 @@
 
 
 
-require 'baretest/assertion/failure'
-require 'baretest/assertion/skip'
-begin
-  require 'thread'
-rescue LoadError; end # no thread support in this ruby
-
-
-
 module BareTest
   @touch = {}
 
@@ -36,13 +28,14 @@ module BareTest
     @touch.delete(assertion)
   end
 
-  class Assertion
+  module Component
 
-    # BareTest::Assertion::Support is per default included into BareTest::Assertion.
+    # BareTest::Component::BasicVerifications is part of the
+    # :basic_verifications component and per default added to test/setup.rb
+    # by `baretest init`.
     # It provides several methods to make it easier to write assertions.
     #
-    module Support
-
+    module BasicVerifications
       # FIXME: undocumented and untested
       # It's really ugly. You should use a mock instead.
       def yields(subject, meth, args, *expected)
@@ -404,10 +397,23 @@ module BareTest
           args.first(named.size)
         end
       end
-    end # Support
 
-    class Context
-      include ::BareTest::Assertion::Support
-    end
-  end # Assertion
+      def extract_args2(args, named, defaults=[])
+        max = named.length
+        min = max-defaults.size
+        if args.size == 1 && Hash === args.first then
+          args    = args.first
+          unknown = args.keys-named
+          raise ArgumentError, "Unknown arguments: #{unknown.join(', ')}", caller(1) unless unknown.empty?
+          missing = named.first(min)-args.keys
+          raise ArgumentError, "missing arguments: #{missing.join(', ')}", caller(1) unless missing.empty?
+          # TODO: defaultize hash args
+          args    = args.values_at(*named)
+        else
+          raise ArgumentError, "wrong number of arguments (#{args.size} for #{args.size > max ? max : min})", caller(1) unless args.size.between?(min,max)
+          args+defaults.last(max-args.size)
+        end
+      end
+    end # BasicVerifications
+  end # Comonent
 end # BareTest
