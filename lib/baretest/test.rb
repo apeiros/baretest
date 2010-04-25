@@ -6,43 +6,43 @@
 
 
 
-require 'baretest/assertion/context'
-require 'baretest/assertion/failure'
-require 'baretest/assertion/skip'
-require 'baretest/status'
+require 'baretest/context'
 
 
 
 module BareTest
   class Test
+    attr_reader :unit
     attr_reader :setups
-    attr_reader :execute
+    attr_reader :exercise
     attr_reader :verification
     attr_reader :teardowns
 
-    attr_accessor :status
-
-    def initialize(suite, setups, execute, verification, teardowns)
-      @suite        = suite
+    def initialize(unit, setups, exercise, verification, teardowns)
+      @unit         = unit
       @setups       = setups
-      @execute      = execute
+      @exercise     = exercise
       @verification = verification
       @teardowns    = teardowns
-      @status       = status
     end
 
     def nesting_level
-      @suite.nesting_level+1
+      @unit.nesting_level
+    end
+
+    def custom_handler(exception)
+      # handled_by      = handlers && handlers.find { |handling, handler| exception_class <= handling }
+      nil
     end
 
     def description
       variables = {}
-      @setups.each do |setup|
+      @setups.each do |setups| setups.each do |setup|
         variables.update(setup.variables)
-      end
+      end end
       
       [
-        interpolate(@execute.description, variables),
+        interpolate(@exercise.description, variables),
         interpolate(@verification.description, variables)
       ]
     end

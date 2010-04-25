@@ -6,16 +6,10 @@
 
 
 
-require 'baretest/phase'
-
-
-
 module BareTest
-  class Phase
-    class Teardown < Phase
-      def phase
-        :teardown
-      end
+  class Formatter
+    class None < Formatter
+      register 'baretest/formatter/none'
     end
   end
 end

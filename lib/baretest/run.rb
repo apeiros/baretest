@@ -6,7 +6,11 @@
 
 
 
+require 'baretest/formatter'
 require 'baretest/persistence'
+require 'baretest/status'
+require 'baretest/statuscollection'
+require 'baretest/test'
 
 
 
@@ -40,6 +44,8 @@ module BareTest
     # <status>:: the number of tests with that status (see
     #            BareTest::StatusOrder for a list of states)
     attr_reader :count
+
+    attr_reader :global_status
 
     # Run the passed suite.
     # Calls run_all with the toplevel suite as argument and a block that
@@ -92,13 +98,8 @@ module BareTest
       end
 
       # Extend with the output formatter
-      format = @options[:format]
-      if format.is_a?(String) then
-        require "baretest/run/#{format}"
-        extend(BareTest.format["baretest/run/#{format}"])
-      elsif format.is_a?(Module) then
-        extend(format)
-      end
+      formatter  = @options[:format] || 'none'
+      @formatter = BareTest::Formatter.load(formatter).new(self, $stdout, $stdin)
 
       # Extend with irb dropout code
       extend(BareTest::IRBMode) if @options[:interactive]
@@ -121,134 +122,88 @@ module BareTest
       @inits << block
     end
 
-    # Formatter callback.
-    # Invoked once at the beginning.
-    # Gets the toplevel suite as single argument.
-    def run_all
-      @last_run_states = @persistence ? @persistence.read('final_states', {}) : {}
-      @skipped         = {}
-      run_suite(@suite)
-      @persistence.store('final_states', @last_run_states) if @persistence
+    def run
+      start  = Time.now
+      @formatter.start_all
+      @global_status = run_suite(@suite)
+      @formatter.end_all(@global_status, Time.now-start)
     end
 
-    # Formatter callback.
-    # Invoked once for every suite.
-    # Gets the suite to run as single argument.
-    # Runs all assertions and nested suites.
     def run_suite(suite)
-      missing_tags     = @include_tags && @include_tags - suite.tags
-      superfluous_tags = @exclude_tags && suite.tags & @exclude_tags
-      ignored          = (missing_tags && !missing_tags.empty?) || (superfluous_tags && !superfluous_tags.empty?)
-
-      unless ignored then
-        unmet_dependencies  = (suite.depends_on-@provided)
-        manually_skipped    = suite.skipped?
-        recursively_skipped = !unmet_dependencies.empty? || manually_skipped
-        skipped             = @skipped[suite] || recursively_skipped
-
-        if recursively_skipped then
-          skip_recursively(suite, "Ancestor was skipped")
-        elsif skipped then
-          skip_suite(suite, "Container was skipped")
+      #p :run_suite => suite.description
+      start  = Time.now
+      status = StatusCollection.new(suite)
+      @formatter.start_suite(suite)
+      suite.children.each do |child|
+        case child
+          when BareTest::Suite
+            status.update(run_suite(child))
+          when BareTest::Unit
+            status.update(run_unit(child))
         end
       end
+      @formatter.end_suite(suite, status, Time.now-start)
+      status
+    end
 
-      if ignored then
-        states = []
-      else
-        states = suite.assertions.map do |test|
-          run_test_variants(test)
+    def run_unit(unit)
+      #p :run_unit_in_suite => unit.suite.description
+      start  = Time.now
+      status = StatusCollection.new(unit)
+      @formatter.start_unit(unit)
+      unit.verifications.each do |out_of_order_verifications|
+        out_of_order_verifications.each do |verification|
+          setups    = unit.suite.ancestral_setup
+          exercise  = unit.exercise
+          teardowns = unit.suite.ancestral_teardown
+          # setup variants
+            #p :suite => unit.suite.description, :exercise => unit.exercise.description, :verification => verification.description, :setup => unit.suite.ancestral_setup, :teardown => unit.suite.ancestral_teardown
+            test    = Test.new(unit, setups, exercise, verification, teardowns)
+            status << run_test(test)
+          # end setup variants
         end
       end
-      states.concat(suite.suites.map { |(description, subsuite)|
-        run_suite(subsuite)
-      })
-      @count[:suite] += 1
-
-      # || in case the suite contains no tests or suites
-      final_status = BareTest.most_important_status(states) || :pending
-
-      @provided |= suite.provides if final_status == :success
-
-      Status.new(suite, final_status)
+      @formatter.end_unit(unit, status, Time.now-start)
+      status
     end
 
-    # Invoked once for every assertion.
-    # Iterates over all variants of an assertion and invokes run_test
-    # for each.
-    def run_test_variants(assertion)
-      ignored = !@states.include?(@last_run_states[assertion.id])
-      skipped = @skipped[assertion] || assertion.skipped?
+    def run_test(test)
+      start   = Time.now
+      @formatter.start_test(test)
+      context = BareTest::Context.new(test)
+      status  = nil
 
-      if ignored then
-        overall_status = nil
-      elsif skipped then
-        Array.new(assertion.suite.component_variant_count) { run_test(assertion, []) }
-        @last_run_states[assertion.id] = :manually_skipped
-        overall_status                 = :manually_skipped
-      else
-        states = []
-        assertion.suite.each_component_variant do |setups|
-          rv = run_test(assertion, setups)
-          states << rv.status
-        end
-        overall_status                 = BareTest.most_important_status(states)
-      end
-      @last_run_states[assertion.id] = overall_status if overall_status
+      # run setups as far as we get without an exception
+      level   = (0...test.setups.size).find { |level|
+        status = test.setups[level].find { |setups|
+          setups.find { |setup|
+            p :setup => setup
+            setup.execute(context, test)
+          }
+        }
+      }
 
-      overall_status
-    end
+      # run exercise and verify
+      status ||= test.exercise.execute(context, test)
+      status ||= test.verification.execute(context, test)
 
-    # Formatter callback.
-    # Invoked once for every variation of an assertion.
-    # Gets the assertion to run as single argument.
-    def run_test(assertion, setup)
-      rv = assertion.execute(setup, assertion.suite.ancestry_teardown)
-      @count[:test]     += 1
-      @count[rv.status] += 1
+      # run teardowns from the highest we got when running the setups
+      level  ||= test.setups.size-1
+      level.downto(0) { |level|
+        teardown_status = test.teardowns[level].find { |teardowns|
+          teardowns.find { |teardown|
+            teardown.execute(context, test)
+          }
+        }
+        status = teardown_status if teardown_status # teardown overrides any previous status, fixme, accumulate instead
+      }
 
-      rv
-    end
+      # if nothing has yet set a status, then it's a success, hurray.
+      status ||= Status.new(test, :success)
 
-    # Marks all assertion within this suite as skipped and the suite itself too.
-    def skip_suite(suite, reason) # :nodoc:
-      suite.skip(reason)
-      reason = suite.reason
-      suite.assertions.each do |test|
-        test.skip(reason)
-      end
-    end
+      @formatter.end_test(test, status, Time.now-start)
 
-    # Marks all tests, suites and their subsuites within this suite as skipped.
-    def skip_recursively(suite, reason) # :nodoc:
-      skip_suite(suite, reason)
-      suite.suites.each do |description, subsuite|
-        skip_recursively(subsuite, reason)
-      end
-    end
-
-    # Status over all tests ran up to now
-    # Can be :error, :failure, :incomplete or :success
-    # The algorithm is a simple fall through:
-    # if any test errored, then global_status is :error,
-    # if not, then if any test failed, global_status is :failure,
-    # if not, then if any test was pending or skipped, global_status is :incomplete,
-    # if not, then global_status is success
-    def global_status
-      status_counts         = @count.values_at(*BareTest::StatusOrder)
-      most_important_status = BareTest::StatusOrder.zip(status_counts) { |status, count|
-        break status if count > 0
-      } || :success
-    end
-
-    # Get an assertions' interpolated description for a given Array of Setup
-    # instances.
-    # See Assertion#interpolated_description
-    def interpolated_description(assertion, setups)
-      setups = setups ? setups.select { |s| s.component } : []
-      substitutes = {}
-      setups.each do |setup| substitutes[setup.component] = setup.substitute end
-      assertion.interpolated_description(substitutes)
+      status
     end
   end
 end

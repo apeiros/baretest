@@ -8,7 +8,7 @@
 
 
 
-Version = "0.4.0" # Executable version
+Version = "0.5.0" # Executable version
 
 # assume baretest is not installed and this is a cold-run from source
 lib_dir = File.expand_path("#{__FILE__}/../../lib")
@@ -19,7 +19,8 @@ $LOAD_PATH.unshift(lib_dir) if File.directory?(lib_dir)
 
 
 require 'command'
-require 'baretest'
+require 'baretest/commandline'
+require 'baretest/invalidselectors'
 
 
 
@@ -137,12 +138,12 @@ Command.with(ARGV) do
   if set = [:help, :commands, :version].find { |flag| options[flag] } then
     run_command = set.to_s
   elsif options[:init]
-    abort "`#{$0} --init` is depreciated, please use `baretest init`."
+    abort "`#{$PROGRAM_NAME} --init` is depreciated, please use `#{$PROGRAM_NAME} init`."
   else
     run_command = command
   end
   if %w[run help].include?(command) then
-    formatter = BareTest::CommandLine.load_formatter(options[:format])
+    formatter = BareTest::Formatter.load(options[:format])
 
     definition[command].content_for :format_options do |d|
       if formatter.is_a?(BareTest::Formatter) then

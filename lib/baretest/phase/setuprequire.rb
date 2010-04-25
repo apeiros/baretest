@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/phase/setup'
+
+
+
 module BareTest
   class Phase
     class SetupRequire < Setup

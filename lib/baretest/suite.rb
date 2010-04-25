@@ -6,7 +6,8 @@
 
 
 
-require 'baretest/setup'
+require 'baretest/phase'
+require 'baretest/unit'
 
 
 
@@ -33,6 +34,7 @@ module BareTest
 
     # This suites direct parent. Nil if toplevel suite.
     attr_reader   :parent
+    attr_reader   :children
 
     # An Array containing the suite itself (first element), then its direct
     # parent suite, then that suite's parent and so on
@@ -129,8 +131,8 @@ module BareTest
       if @parent then
         @depends_on         = @parent.depends_on
         @tags               = @parent.tags
-        @ancestral_setup    = @parent.ancestral_setup+@parent.setup
-        @ancestral_teardown = @parent.ancestral_teardown+@parent.teardown
+        @ancestral_setup    = @parent.ancestral_setup+[@setups]
+        @ancestral_teardown = @parent.ancestral_teardown+[@teardowns]
       end
       @children.each do |child| child.finish end
     end
@@ -218,21 +220,22 @@ module BareTest
     end
 
     def exercise(description, &code)
-      exercise           = Phase::Exercise.new(description, &code)
-      @children         << exercise
-      @current_exercise  = exercise
+      exercise       = Phase::Exercise.new(description, &code)
+      unit           = Unit.new(self, exercise)
+      @children     << unit
+      @current_unit  = unit
       exercise
     end
 
     def verify(description, &code)
       verification = Phase::Verification.new(description, &code)
-      @current_exercise.out_of_order(verfication)
+      @current_unit.out_of_order(verification)
       verification
     end
 
     def then_verify(description, &code)
       verification = Phase::Verification.new(description, &code)
-      @current_exercise.in_order(verfication)
+      @current_unit.in_order(verfication)
       verification
     end
 

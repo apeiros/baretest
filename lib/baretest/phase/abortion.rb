@@ -22,3 +22,10 @@ module BareTest
     end
   end
 end
+
+
+
+require 'baretest/phase/error'
+require 'baretest/phase/failure'
+require 'baretest/phase/pending'
+require 'baretest/phase/skip'

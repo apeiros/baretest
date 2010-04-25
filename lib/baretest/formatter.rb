@@ -12,8 +12,29 @@ module BareTest
   # convenience methods to define the custom options.
   # See Command's documentation for more information.
   class Formatter
-    @classes = {}
-    class <<self; attr_reader :classes; end
+    Inflect = {
+      'Suite'   => Hash.new('Suites').update(1 => 'Suite'),
+      'suite'   => Hash.new('suites').update(1 => 'suite'),
+      'Unit'    => Hash.new('Units').update(1 => 'Unit'),
+      'unit'    => Hash.new('units').update(1 => 'unit'),
+      'Test'    => Hash.new('Tests').update(1 => 'Test'),
+      'test'    => Hash.new('tests').update(1 => 'test'),
+      'success' => Hash.new('successes').update(1 => 'success'),
+      'pending' => Hash.new('pendings').update(1 => 'pending'),
+      'skipped' => Hash.new('skipped'),
+      'failure' => Hash.new('failures').update(1 => 'failure'),
+      'error'   => Hash.new('errors').update(1 => 'error'),
+    }
+
+    @by_path = {}
+    class <<self; attr_reader :by_path; end
+
+    # Load a formatter
+    def self.load(format)
+      return format if format.is_a?(BareTest::Formatter) # FIXME, ducktype this
+      require "baretest/formatter/#{format}"
+      Formatter.by_path["baretest/formatter/#{format}"]
+    end
 
     # Invoke Formatter#initialize_options
     def self.inherited(obj) # :nodoc:
@@ -32,7 +53,7 @@ module BareTest
     end
 
     def self.register(path)
-      Formatter.classes[self] = path
+      Formatter.by_path[path] = self
     end
 
     # Define default values for options.
@@ -61,24 +82,35 @@ module BareTest
       @command[:elements] << [:option, args]
     end
 
-    def initialize(output_device)
+    def initialize(runner, output_device=$stdout, input_device=nil)
+      @runner            = runner
       @output_device     = output_device
-      @interactive       = @output_device.tty? rescue false
+      @input_device      = input_device
+      @interactive       = input_device.tty? rescue false
       @auto_strip_colors = !@interactive
       @deferred          = []
       @indent_string     = '  '
     end
 
+    def start_all; end
+    def start_suite(suite); end
+    def start_unit(unit); end
+    def start_test(test); end
+    def end_test(test, status, elapsed_time); end
+    def end_unit(unit, status_collection, elapsed_time); end
+    def end_suite(suite, status_collection, elapsed_time); end
+    def end_all(status_collection, elapsed_time); end
+
     def puts(*args)
-      @output_device.puts(auto_strip_colors(*args))
+      @output_device.puts(*auto_strip_colors(*args))
     end
 
     def print(*args)
-      @output_device.print(auto_strip_colors(*args))
+      @output_device.print(*auto_strip_colors(*args))
     end
 
     def printf(*args)
-      @output_device.printf(auto_strip_colors(*args))
+      @output_device.printf(*auto_strip_colors(*args))
     end
 
     def auto_strip_colors(*args)
@@ -86,8 +118,8 @@ module BareTest
       args.map { |arg| arg.gsub(/\e\[[^m]*m/, '') }
     end
 
-    def indent(item)
-      @indent_string*item.nesting_level
+    def indent(item, offset=0)
+      @indent_string*(item.nesting_level+offset)
     end
 
     # Add data to output, but mark it as deferred

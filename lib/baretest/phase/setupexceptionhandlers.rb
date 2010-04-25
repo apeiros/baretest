@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/phase/setup'
+
+
+
 module BareTest
   class Phase
     # Experimental
@@ -20,7 +24,7 @@ module BareTest
         end
       end
 
-      def execute(context, unit)
+      def execute(context, test)
         # do nothing
       end
 

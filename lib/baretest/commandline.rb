@@ -6,9 +6,10 @@
 
 
 
-require 'baretest/assertion/context'
-require 'baretest/assertion/failure'
-require 'baretest/assertion/skip'
+require 'baretest'
+require 'baretest/run'
+require 'baretest/version'
+require 'baretest/formatter'
 
 
 
@@ -19,12 +20,8 @@ module BareTest
   # It in fact even is what the baretest executable itself uses.
   module CommandLine
 
-    # Load a formatter (see Run::new)
-    def load_formatter(format)
-      require "baretest/run/#{format}" if String === format
-      BareTest.format["baretest/run/#{format}"]
-    end
-    module_function :load_formatter
+    # every method in CommandLine is a module_function
+  module_function
 
     # Run the tests and display information about them.
     # * arguments: array of dirs/globs of files to load and run as tests
@@ -50,13 +47,13 @@ module BareTest
       # Run the tests
       puts if options[:verbose]
       ARGV.clear # IRB is being stupid
+      BareTest.toplevel_suite.finish
       runner = BareTest::Run.new(BareTest.toplevel_suite, options)
-      runner.run_all
+      runner.run
 
       # Return whether all tests ran successful
-      runner.global_status == :success
+      runner.global_status.code == :success
     end
-    module_function :run
 
     # Create a basic skeleton of directories and files to contain baretests
     # test-suite. Non-destructive (existing files won't be overriden or
@@ -126,14 +123,12 @@ module BareTest
         end
       end
     end
-    module_function :init
 
     # Remove all files that store state, cache things etc. from persistence.
     def reset(arguments, options)
       options[:persistence] ||= Persistence.new
       options[:persistence].clear
     end
-    module_function :reset
 
     # Shows all formats available in run's -f/--format option.
     def formats(arguments, options)
@@ -142,7 +137,6 @@ module BareTest
         puts "- #{File.basename(path, '.rb')}"
       }
     end
-    module_function :formats
 
     # List the available commands.
     def commands(arguments, options)
@@ -191,7 +185,6 @@ module BareTest
 
       puts description
     end
-    module_function :commands
 
     # Detailed information about the selectors available to run's arguments.
     def selectors(arguments, options)
@@ -245,7 +238,6 @@ module BareTest
 
       puts description
     end
-    module_function :selectors
 
     # Provides help for all commands. Describes options, arguments and env
     # variables each command accepts.
@@ -264,7 +256,6 @@ module BareTest
 
       puts description
     end
-    module_function :help
 
     # Show the baretest environment. This contains all data that influences
     # baretests behaviour. That is: ruby version, ruby engine, determined test
@@ -276,7 +267,6 @@ module BareTest
            "* ruby #{RUBY_VERSION}",
            ""
     end
-    module_function :env
 
     # Show the baretest executable and library versions.
     def version(arguments, options)
@@ -285,6 +275,5 @@ module BareTest
            "ruby version #{RUBY_VERSION}",
            ""
     end
-    module_function :version
   end
 end

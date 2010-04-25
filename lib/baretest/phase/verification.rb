@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/phase'
+
+
+
 module BareTest
   class Phase
     class Verification < Phase
@@ -20,9 +24,25 @@ module BareTest
         :verification
       end
 
-      def execute(*arguments)
-        failure "Verification failed (evaluated to nil or false)" unless super
-        true
+      def execute(context, test)
+        return pending(context, test, "No code provided") unless @code # no code? that means pending
+        return_value = nil
+        begin
+          return_value = context.instance_eval(&@code)
+        rescue *PassthroughExceptions
+          raise # passthrough-exceptions must be passed through
+        rescue ::BareTest::Phase::Abortion => abortion
+          BareTest::Status.new(test, abortion.status, context) # FIXME, add reasons & exception
+        rescue Exception => exception
+          handler = test.custom_handler(exception)
+          if handler then
+            handler.call(self, context, exception)
+          else
+            error(context, test, exception)
+          end
+        else
+          return_value ? nil : fail(context, test, "Verification failed (evaluated to nil or false)")
+        end
       end
 
       def inspect

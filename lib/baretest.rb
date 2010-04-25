@@ -275,6 +275,12 @@ module BareTest
     File.expand_path(path, 'test')
   end
 
+  def self.ruby_description
+    engine  = Object.const_defined?(:RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
+    version = RUBY_VERSION
+    "#{engine} #{version}"
+  end
+
   def self.file_and_line_from_caller(caller_line)
     exists, file, line = nil
 
@@ -288,8 +294,3 @@ module BareTest
     return exists, file, line
   end
 end
-
-
-
-# At bottom due to dependencies
-require 'baretest/assertion/support' # Needs Test.extender to be defined

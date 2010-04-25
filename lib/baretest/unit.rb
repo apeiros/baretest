@@ -6,26 +6,27 @@
 
 
 
-require 'baretest/assertion/context'
-require 'baretest/assertion/failure'
-require 'baretest/assertion/skip'
-require 'baretest/status'
+require 'baretest/context'
 
 
 
 module BareTest
   class Unit
-    attr_reader :setups
-    attr_reader :execute
+    attr_reader :suite
+    attr_reader :exercise
     attr_reader :verifications
-    attr_reader :teardowns
 
-    def initialize(suite, execute)
+    def initialize(suite, exercise)
       @suite         = suite
-      @setups        = nil
-      @execute       = execute
+      @exercise      = exercise
       @verifications = []
-      @teardowns     = nil
+    end
+
+    def finish
+    end
+
+    def nesting_level
+      @suite.nesting_level+1
     end
 
     def out_of_order(verification)

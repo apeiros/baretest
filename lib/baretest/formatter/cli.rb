@@ -15,6 +15,14 @@ module BareTest
     # It prints colored output (requires ANSI colors compatible terminal).
     #
     class CLI < Formatter
+      Labels = {
+        :pending => "\e[43m Pending \e[0m",
+        :skipped => "\e[43m Skipped \e[0m",
+        :success => "\e[42m Success \e[0m",
+        :failure => "\e[41m Failure \e[0m",
+        :error   => "\e[37;40;1m  Error  \e[0m"  # ]]]]]]]]]]]]]]]]]]]] - bbedit hates open brackets...
+      }
+
       register 'baretest/formatter/cli'
 
       option_defaults :color   => true,
@@ -30,12 +38,29 @@ module BareTest
       env_option      :color,   'COLOR'
       env_option      :profile, 'PROFILE'
 
-      def start_suite(suite)
-        puts "             #{indent(suite)}#{suite.description}"
+      def start_all
+        puts "Running tests in #{File.expand_path(Dir.getwd)}"
+        puts "Using #{BareTest.ruby_description} with baretest #{BareTest::VERSION}"
       end
 
-      def end_test(test, status)
-        puts " [#{status.to_s.center(9)}] #{indent(test)}#{test.description.join(' ')}"
+      def start_suite(suite)
+        puts "          #{indent(suite, -1)}\e[1m#{suite.description}\e[0m" if suite.description
+      end
+
+      def end_test(test, status, elapsed_time)
+        puts "#{Labels[status.code]} #{indent(test, -1)}#{test.description.join(' ')}"
+      end
+
+      def end_all(status_collection, elapsed_time)
+        success, pending, skipped, failure, error = *status_collection.values_at(:success, :pending, :skipped, :failure, :error)
+        printf "0 #{Inflect['test'][0]} run in %.1fs\n", elapsed_time
+        printf "%d %s, %d %s, %d %s, %d %s, %d %s\n",
+          success, Inflect['success'][success],
+          pending, Inflect['pending'][pending],
+          skipped, Inflect['skipped'][skipped],
+          failure, Inflect['failure'][failure],
+          error,   Inflect['error'][error]
+        printf "Final status: %s\n", Labels[status_collection.code]
       end
     end
   end

@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/status'
+
+
+
 module BareTest
   class Phase
     # The exceptions baretest will not rescue
@@ -15,45 +19,56 @@ module BareTest
     # SystemExit::      the process terminates
     PassthroughExceptions = [::NoMemoryError, ::SignalException, ::Interrupt, ::SystemExit]
 
+    def initialize(&code)
+      @code = code
+    end
+
     def phase
       raise "Your Phase subclass must override #phase."
     end
 
-    def custom_handler(exception)
-# handled_by      = handlers && handlers.find { |handling, handler| exception_class <= handling }
-      nil
-    end
-
-    def execute(context)
-      pending "No code provided" unless @code # no code? that means pending
+    def execute(context, test)
+      return pending(context, test, "No code provided") unless @code # no code? that means pending
       begin
         context.instance_eval(&@code)
-      rescue *PassthroughExceptions, ::BareTest::Phase::Abortion
+      rescue *PassthroughExceptions
         raise # passthrough-exceptions must be passed through
+      rescue ::BareTest::Phase::Abortion => abortion
+        BareTest::Status.new(test, abortion.status, context) # FIXME, add reasons & exception
       rescue Exception => exception
-        handler = custom_handler(exception)
+        handler = test.custom_handler(exception)
         if handler then
           handler.call(self, context, exception)
         else
-          error(exception)
+          error(context, test, exception)
         end
+      else
+        nil
       end
     end
 
-    def pending(reason)
-      raise ::BareTest::Phase::Pending.new(phase, reason)
+    def pending(context, test, reason)
+      BareTest::Status.new(test, :pending, context) # FIXME, add reasons & exception
     end
 
-    def skip(reason)
-      raise ::BareTest::Phase::Skip.new(phase, reason)
+    def skip(context, test, reason)
+      BareTest::Status.new(test, :skip, context) # FIXME, add reasons & exception
     end
 
-    def fail(reason)
-      raise ::BareTest::Phase::Failure.new(phase, reason)
+    def fail(context, test, reason)
+      BareTest::Status.new(test, :failure, context) # FIXME, add reasons & exception
     end
 
-    def error(exception)
-      raise ::BareTest::Phase::Error.new(phase, error)
+    def error(context, test, exception)
+      BareTest::Status.new(test, :error, context) # FIXME, add reasons & exception
     end
   end
 end
+
+
+
+require 'baretest/phase/setup'
+require 'baretest/phase/exercise'
+require 'baretest/phase/verification'
+require 'baretest/phase/teardown'
+require 'baretest/phase/abortion'

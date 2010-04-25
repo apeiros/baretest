@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/phase'
+
+
+
 module BareTest
   class Phase
     class Setup < Phase
@@ -31,3 +35,10 @@ module BareTest
     end
   end
 end
+
+
+
+require 'baretest/phase/setupblock'
+require 'baretest/phase/setupexceptionhandlers'
+require 'baretest/phase/setuprequire'
+require 'baretest/phase/setuptabulardata'

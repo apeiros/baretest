@@ -21,13 +21,23 @@ module BareTest
     end
 
     def update(status_collection)
+      @count[status_collection.entity] += 1
       @count.update(status_collection.count) do |key, my_value, other_value|
         my_value+other_value
       end
       self
     end
 
-    def status
+    def <<(status)
+      @count[status.entity] += 1
+      @count[status.code]   += 1
+    end
+
+    def values_at(*args)
+      @count.values_at(*args)
+    end
+
+    def code
       BareTest::StatusOrder.find { |status| @count[status] > 0 } || :pending
     end
 

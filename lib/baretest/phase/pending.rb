@@ -6,6 +6,10 @@
 
 
 
+require 'baretest/phase/abortion'
+
+
+
 module BareTest
   class Phase
 

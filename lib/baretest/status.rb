@@ -29,7 +29,7 @@ module BareTest
     attr_reader :context
 
     # The status identifier, see BareTest::Status. Symbol.
-    attr_reader :status
+    attr_reader :code
 
     # Detailed reason for skipping. Array or nil.
     attr_reader :skip_reason
@@ -47,9 +47,9 @@ module BareTest
     #                  Array, String or nil.
     # failure_reason:: Why the Assertion or Suite was skipped.
     #                  Array, String or nil.
-    def initialize(entity, status, context=nil, skip_reason=nil, failure_reason=nil, exception=nil)
+    def initialize(entity, code, context=nil, skip_reason=nil, failure_reason=nil, exception=nil)
       @entity         = entity
-      @status         = status
+      @code           = code
       @context        = context
       @skip_reason    = skip_reason
       @failure_reason = failure_reason

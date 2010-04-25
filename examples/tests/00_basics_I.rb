@@ -1,6 +1,6 @@
 # To start the test definition you do `BareTest.suite do ...`, read the
 # documentation on BareTest::Suite::new for more information
-BareTest.suite do
+BareTest.suite "Basics 01" do
 
   # In the exercise, you perform the behaviour you want to test
   exercise "Adding 1 and 2" do
@@ -41,6 +41,7 @@ BareTest.suite do
       end
 
       verify "it returns an Array" do
+        #@array.is_a?(Array)
         kind_of @array, Array
         # To remember order: all Component::Support methods use the same order
         # as their ruby counterparts. It'd be @array.kind_of?(Array) ->

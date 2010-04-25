@@ -12,12 +12,12 @@ module BareTest
   class Context
 
     # The Assertion instance this Context was created for
-    attr_reader :__assertion__
+    attr_reader :__test__
 
     # Accepts the Assertion instance this Context is created for as first
     # and only argument.
-    def initialize(assertion)
-      @__assertion__ = assertion
+    def initialize(test)
+      @__test__ = test
     end
   end
 end
