@@ -1,29 +1,41 @@
 BareTest.suite do
-  suite "Setup & Teardown" do
-    # All setup blocks are executed, so adding another setup block will not
-    # replace an existing one. They are executed in order of definition and
-    # before *each* execution of an assert.
+  suite "Setup & Teardown", :requires => 'stringio' do
     setup do
-      @foo = "foo"
+      @io = StringIO.new
     end
 
-    assert "@foo should be set" do
-      equal("foo", @foo)
+    exercise "After writing to the IO and rewinding it" do
+      @data = "hello"
+      @io.write(@data)
+      @io.rewind
+    end
+
+    verify "the written data can be read from it" do
+      equal(@data, @io.read)
     end
 
     # All teardown blocks are executed, so adding another teardown block will
     # not replace an existing one. They are executed in order of definition and
     # after *each* execution of an assert.
     teardown do
-      @foo = nil # setting an instance variable to nil isn't really necessary,
-                 # but f.ex. closing an open file handle or similar is a good
-                 # idea.
+      @io.close # closing a StringIO isn't really necessary,
+                # but f.ex. closing an open file handle or similar is a good
+                # idea.
     end
+  end
+
+  suite "Chained Setup" do
   end
 
   suite "Nested Setup & Teardown" do
     setup do
       @outer_setup = "outer foo"
+    end
+
+    # All setup blocks are executed, so adding another setup block will not
+    # replace an existing one. They are executed in order of definition and
+    # before *each* execution of an assert.
+    setup do
       @bar         = "outer bar"
     end
 

@@ -222,16 +222,16 @@ module BareTest
       suite
     end
 
-    def exercise(description, &code)
-      exercise       = Phase::Exercise.new(description, &code)
+    def exercise(description, options=nil, &code)
+      exercise       = Phase::Exercise.new(description, options, &code)
       unit           = Unit.new(self, exercise)
       @children     << unit
       @current_unit  = unit
       exercise
     end
 
-    def verify(description, &code)
-      verification = Phase::Verification.new(description, &code)
+    def verify(description, options=nil, &code)
+      verification = Phase::Verification.new(description, options, &code)
       @current_unit.out_of_order(verification)
       verification
     end

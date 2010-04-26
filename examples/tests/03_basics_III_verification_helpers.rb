@@ -1,25 +1,49 @@
 BareTest.suite do
-  assert "The given block raises" do
-    raises do
-      raise "If this raises then the assertion is a success"
+  suite "Testing exceptions" do
+    exercise "Calling gsub without an argument on a string" do
+      @string.gsub
+    end
+
+    verify "raises" do
+      raised
+    end
+
+    then_verify "raises an ArgumentError" do
+      raised ArgumentError
+    end
+
+    then_verify "raises an Argument error with the message 'wrong number of arguments (0 for 2)'" do
+      raised ArgumentError, "wrong number of arguments (0 for 2)"
     end
   end
 
-  assert "The given block raises a specific exception" do
-    raises ArgumentError do # if you want to use {} instead of do/end, you must use parens: raises(ArgumentError) { ... }
-      raise ArgumentError, "If this raises then the assertion is a success"
+  suite "Testing floats" do
+    exercise "Subtracting 0.01 from 0.18" do
+      @a = 0.18 - 0.01
+      @b = 0.17
+    end
+
+    verify "results in a value that is NOT equal 0.17" do
+      @a != @b # floats are approximations, the result differs after a few the decimal positions
+    end
+
+    then_verify "results in a value that is close to 0.17" do
+      within_delta a, b, 0.001 # using a == b would be false, because a == 0.169... and b == 0.170...
     end
   end
 
-  assert "Assert a float to be close to another" do
-    a = 0.18 - 0.01
-    b = 0.17
-    within_delta a, b, 0.001 # using a == b would be false, because a == 0.169... and b == 1.70...
-  end
+  suite "Testing unordered collections" do
+    exercise "Two randomly ordered arrays to contain the same values" do
+      @a = [*"A".."Z"] # an array with values from A to Z
+      @b = @a.sort_by { rand }
+    end
 
-  assert "Assert two randomly ordered arrays to contain the same values" do
-    a = [*"A".."Z"] # an array with values from A to Z
-    b = a.sort_by { rand }
-    equal_unordered(a, b) # can be used with any Enumerable, uses hash-key identity
+    verify "are not equal" do
+      @a != @b
+    end
+
+    then_verify "are unordered_equal" do
+      unordered_equal(@a, @b) # can be used with any Enumerable, uses hash-key identity
+    end
   end
 end

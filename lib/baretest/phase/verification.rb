@@ -15,7 +15,12 @@ module BareTest
     class Verification < Phase
       attr_reader :description
 
-      def initialize(description, &code)
+      def initialize(description, options=nil, &code)
+        if options then
+          code = proc {
+            raise BareTest::Phase::Pending.new(:verification, "Tagged as pending (#{options[:pending]})")
+          } if options[:pending]
+        end
         @description = description
         @code        = code
       end
@@ -28,11 +33,12 @@ module BareTest
         return pending(context, test, "No code provided") unless @code # no code? that means pending
         return_value = nil
         begin
+          context.__phase__ = phase
           return_value = context.instance_eval(&@code)
         rescue *PassthroughExceptions
           raise # passthrough-exceptions must be passed through
         rescue ::BareTest::Phase::Abortion => abortion
-          BareTest::Status.new(test, abortion.status, context) # FIXME, add reasons & exception
+          BareTest::Status.new(test, abortion.status, context, abortion.message, abortion)
         rescue Exception => exception
           handler = test.custom_handler(exception)
           if handler then

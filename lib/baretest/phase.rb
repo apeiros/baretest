@@ -30,11 +30,12 @@ module BareTest
     def execute(context, test)
       return pending(context, test, "No code provided") unless @code # no code? that means pending
       begin
+        context.__phase__ = phase
         context.instance_eval(&@code)
       rescue *PassthroughExceptions
         raise # passthrough-exceptions must be passed through
       rescue ::BareTest::Phase::Abortion => abortion
-        BareTest::Status.new(test, abortion.status, context) # FIXME, add reasons & exception
+        BareTest::Status.new(test, abortion.status, context, abortion.message, abortion)
       rescue Exception => exception
         handler = test.custom_handler(exception)
         if handler then
@@ -48,19 +49,19 @@ module BareTest
     end
 
     def pending(context, test, reason)
-      BareTest::Status.new(test, :pending, context, reason) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :pending, context, reason)
     end
 
     def skip(context, test, reason)
-      BareTest::Status.new(test, :skip, context, reason) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :skip, context, reason)
     end
 
     def fail(context, test, reason)
-      BareTest::Status.new(test, :failure, context, reason) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :failure, context, reason)
     end
 
     def error(context, test, exception)
-      BareTest::Status.new(test, :error, context, exception.message, exception) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :error, context, "#{exception.class}: #{exception}", exception)
     end
   end
 end

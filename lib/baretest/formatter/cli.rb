@@ -49,10 +49,14 @@ module BareTest
 
       def end_test(test, status, elapsed_time)
         puts "#{Labels[status.code]} #{indent(test, -1)}#{test.description.join(' ')}"
-        if [:failure, :error].include?(status.code) then
-          indent = "          #{indent(test)}"
-          puts status.reason(:indent => indent)
-          puts backtrace(status).join("\n").gsub(/^/, indent)
+        case status.code
+          when :pending, :skipped, :failure
+            puts status.reason(:indent => "          #{indent(test)}")
+          when :error
+            indent = "          #{indent(test)}"
+            puts status.reason(:indent => indent)
+            puts backtrace(status).join("\n").gsub(/^/, indent)
+          # no else needed, only :pending, :skipped, :failure and :error require additional output
         end
       end
 

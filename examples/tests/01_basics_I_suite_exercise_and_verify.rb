@@ -1,6 +1,6 @@
 # To start the test definition you do `suite do ...`, read the
 # documentation on BareTest::Suite::new for more information.
-suite "Basics 01" do
+suite "Basics I - Suite, Exercise and Verifications" do
 
   # In the exercise, you perform the behaviour you want to test
   exercise "Adding 1 and 2" do

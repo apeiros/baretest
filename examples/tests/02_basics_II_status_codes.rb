@@ -1,11 +1,11 @@
 # To start the test definition you do `BareTest.suite do ...`, see
 # BareTest::Suite::new for more
-BareTest.suite do
+BareTest.suite "Basics II - Status Codes", :use => :basic_verifications do
 
   # The individual tests can be grouped into suites
   suite "In order to get a success" do
     exercise "Do your exercise" do
-      # but since this is only an example, there's nothing here
+      # but since this is only an example, there's nothing here to exercise
     end
 
     verify "and return a trueish value (non nil/false) in verify" do
@@ -44,9 +44,14 @@ BareTest.suite do
     end
   end
 
-  suite "Error" do
-    assert "Uncaught exceptions are an error" do
-      raise "Error!"
+  suite "In order to get an error" do
+    exercise "Have an exercise that raises an error" do
+      raise "Whoops, something went (for demonstration purposes) wrong"
+    end
+
+    verify "and verify will never be invoked" do
+      # The verify must still be present however, otherwise the exercise
+      # is pending (See above).
     end
   end
 end

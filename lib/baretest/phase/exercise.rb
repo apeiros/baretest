@@ -15,7 +15,12 @@ module BareTest
     class Exercise < Phase
       attr_reader :description
 
-      def initialize(description, &code)
+      def initialize(description, options, &code)
+        if options then
+          code = proc {
+            raise BareTest::Phase::Pending.new(:exercise, "Tagged as pending (#{options[:pending]})")
+          } if options[:pending]
+        end
         super(&code)
         @description   = description
       end

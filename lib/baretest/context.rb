@@ -13,11 +13,13 @@ module BareTest
 
     # The Assertion instance this Context was created for
     attr_reader :__test__
+    attr_accessor :__phase__
 
     # Accepts the Assertion instance this Context is created for as first
     # and only argument.
     def initialize(test)
-      @__test__ = test
+      @__test__  = test
+      @__phase__ = :creation
     end
   end
 end

@@ -54,7 +54,7 @@ module BareTest
         passed = false
         catch(symbol) {
           yield
-          failure "Expected the code to throw %p, but nothing was thrown", symbol
+          fail "Expected the code to throw %p, but nothing was thrown", symbol
         }
         return true
       # throw raises a NameError if no catch with appropriate symbol is set up
@@ -64,7 +64,7 @@ module BareTest
         # ruby 1.9.1: ArgumentError, "uncaught throw :symbol"
         threw_instead = e.message[/\Auncaught throw `(.*)'\z/, 1] || e.message[/\Auncaught throw :(.*)\z/, 1]
         if threw_instead then
-          failure "Expected the code to throw %p, but it threw %p instead", symbol, threw_instead.to_sym
+          fail "Expected the code to throw %p, but it threw %p instead", symbol, threw_instead.to_sym
         else
           # It was some other name error, reraise
           raise
@@ -91,9 +91,9 @@ module BareTest
         yield
       rescue exception_class => exception
         if expected_exception_class && exception.class != expected_exception_class then
-          failure "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
+          fail "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
         elsif with_message && !(with_message === exception.message) then
-          failure "Expected the code to raise with the message %p, but the message was %p",
+          fail "Expected the code to raise with the message %p, but the message was %p",
                   with_message, exception.message
         else
           true
@@ -101,12 +101,12 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue => exception
-        failure "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
+        fail "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
       else
         if expected_exception_class then
-          failure "Expected the code to raise #{expected_exception_class}, but nothing was raised"
+          fail "Expected the code to raise #{expected_exception_class}, but nothing was raised"
         else
-          failure "Expected the code to raise, but nothing was raised"
+          fail "Expected the code to raise, but nothing was raised"
         end
       end
 
@@ -116,7 +116,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
-        failure "Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})"
+        fail "Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})"
       else
         true
       end
@@ -127,14 +127,14 @@ module BareTest
       def within_delta(a, b, delta)
         actual_delta = (a-b).abs
         if actual_delta >= delta then
-          failure "Expected %p and %p to differ less than %p, but they were different by %p", a, b, delta, actual_delta
+          fail "Expected %p and %p to differ less than %p, but they were different by %p", a, b, delta, actual_delta
         else
           true
         end
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not compare %p with %p due to %s", a, b, e
+        fail "Could not compare %p with %p due to %s", a, b, e
       end
 
       # Use this method to test whether certain code (e.g. a callback) was reached.
@@ -159,16 +159,16 @@ module BareTest
         if times then
           unless touched_times == times then
             if thing then
-              failure "Expected the code to touch %p %s times, but did %s times", thing, times, touched_times
+              fail "Expected the code to touch %p %s times, but did %s times", thing, times, touched_times
             else
-              failure "Expected the code to touch %s times, but did %s times", times, touched_times
+              fail "Expected the code to touch %s times, but did %s times", times, touched_times
             end
           end
         elsif touched_times < 1 then
           if thing then
-            failure "Expected the code to touch %p, but it was not touched", thing
+            fail "Expected the code to touch %p, but it was not touched", thing
           else
-            failure "Expected the code to touch, but no touch happened"
+            fail "Expected the code to touch, but no touch happened"
           end
         end
         true
@@ -191,9 +191,9 @@ module BareTest
 
         unless expected.equal?(actual) then
           if message then
-            failure "Expected %s to be the same (equal?) as %p but was %p", message, expected, actual
+            fail "Expected %s to be the same (equal?) as %p but was %p", message, expected, actual
           else
-            failure "Expected %p but got %p", expected, actual
+            fail "Expected %p but got %p", expected, actual
           end
         end
         true
@@ -201,7 +201,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not compare %p with %p due to %s", expected, actual, e
+        fail "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # Uses eql? to test whether the objects are equal
@@ -214,9 +214,9 @@ module BareTest
 
         unless expected.eql?(actual) then
           if message then
-            failure "Expected %s to be hash-key equal (eql?) to %p but was %p", message, expected, actual
+            fail "Expected %s to be hash-key equal (eql?) to %p but was %p", message, expected, actual
           else
-            failure "Expected %p but got %p", expected, actual
+            fail "Expected %p but got %p", expected, actual
           end
         end
         true
@@ -224,7 +224,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not compare %p with %p due to %s", expected, actual, e
+        fail "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # Uses == to test whether the objects are equal
@@ -237,9 +237,9 @@ module BareTest
 
         unless expected == actual then
           if message then
-            failure "Expected %s to be order equal (==) to %p but was %p", message, expected, actual
+            fail "Expected %s to be order equal (==) to %p but was %p", message, expected, actual
           else
-            failure "Expected %p but got %p", expected, actual
+            fail "Expected %p but got %p", expected, actual
           end
         end
         true
@@ -247,7 +247,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not compare %p with %p due to %s", expected, actual, e
+        fail "Could not compare %p with %p due to %s", expected, actual, e
       end
       alias equal order_equal
 
@@ -260,7 +260,7 @@ module BareTest
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
         unless expected === actual then
-          failure_with_optional_message \
+          fail_with_optional_message \
             "Expected %s to be case equal (===) to %p but was %p",
             "Expected %p but got %p",
             message, expected, actual
@@ -270,7 +270,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not compare %p with %p due to %s", expected, actual, e
+        fail "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # To compare two collections (which must implement #each)
@@ -287,11 +287,11 @@ module BareTest
           only_in_expected = count.select { |ele, n| n > 0 }.map { |ele, n| ele }
           only_in_actual   = count.select { |ele, n| n < 0 }.map { |ele, n| ele }
           if message then
-            failure "Expected %s to have the same items the same number of times, " \
+            fail "Expected %s to have the same items the same number of times, " \
                     "but %p are only in expected, and %p only in actual",
                     message, only_in_expected, only_in_actual
           else
-            failure "Expected %p and %p to have the same items the same number of times, " \
+            fail "Expected %p and %p to have the same items the same number of times, " \
                     "but %p are only in expected, and %p only in actual",
                     expected, actual, only_in_expected, only_in_actual
           end
@@ -301,7 +301,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not compare %p with %p due to %s", expected, actual, e
+        fail "Could not compare %p with %p due to %s", expected, actual, e
       end
 
       # Raises a Failure if the given object is not an instance of the given class
@@ -309,7 +309,7 @@ module BareTest
       def kind_of(*args)
         expected, actual, message = extract_args(args, :expected, :actual, :message)
         unless actual.kind_of?(expected) then
-          failure_with_optional_message \
+          fail_with_optional_message \
             "Expected %1$s to be a kind of %3$p, but was a %4$p",
             "Expected %2$p to be a kind of %1$p, but was a %3$p",
             message, expected, actual, actual.class
@@ -319,14 +319,14 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not test whether %p is a kind of %p due to %s", actual, expected, e
+        fail "Could not test whether %p is a kind of %p due to %s", actual, expected, e
       end
 
       # Raises a Failure if the given object is not an instance of the given class
       def instance_of(*args)
         expected, actual, message = extract_args(args, :expected, :actual, :message)
         unless actual.instance_of?(expected) then
-          failure_with_optional_message \
+          fail_with_optional_message \
             "Expected %1$s to be an instance of %3$p, but was a %4$p",
             "Expected %2$p to be an instance of %1$p, but was a %3$p",
             message, expected, actual, actual.class
@@ -336,7 +336,7 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not test whether %p is an instance of %p due to %s", actual, expected, e
+        fail "Could not test whether %p is an instance of %p due to %s", actual, expected, e
       end
 
       # Raises a Failure if the given object does not respond to all of the given
@@ -346,7 +346,7 @@ module BareTest
         unless not_responded_to.empty? then
           must_respond_to  = methods.map { |m| m.to_sym.inspect }.join(', ')
           not_responded_to = not_responded_to.map { |m| m.to_sym.inspect }.join(', ')
-          failure "Expected %1$s to respond to all of %2$s, but it did not respond to %3$s",
+          fail "Expected %1$s to respond to all of %2$s, but it did not respond to %3$s",
              obj, must_respond_to, not_responded_to
         end
         true
@@ -354,30 +354,30 @@ module BareTest
       rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
-        failure "Could not test whether %p responds to %p due to %s", obj, methods, e
+        fail "Could not test whether %p responds to %p due to %s", obj, methods, e
       end
 
       # A method to make raising failures that only optionally have a message easier.
-      def failure_with_optional_message(with_message, without_message, message, *args)
+      def fail_with_optional_message(with_message, without_message, message, *args)
         if message then
-          failure(with_message, message, *args)
+          fail(with_message, message, *args)
         else
-          failure(without_message, *args)
+          fail(without_message, *args)
         end
       end
 
-      # Raises Test::Assertion::Failure, which causes the Assertion to get the
+      # Raises BareTest::Phase::Failure, which causes the Test to get the
       # status :failure. Runs sprintf over message with *args
       # Particularly useful with %p and %s.
-      def failure(message="Assertion failed", *args)
-        raise ::BareTest::Assertion::Failure, sprintf(message, *args)
+      def fail(message="Verification failed", *args)
+        raise ::BareTest::Phase::Failure.new(@__phase__, sprintf(message, *args))
       end
 
-      # Raises Test::Assertion::Skip, which causes the Assertion to get the
+      # Raises BareTest::Phase::Skip, which causes the Test to get the
       # status :skipped. Runs sprintf over message with *args
       # Particularly useful with %p and %s.
-      def skip(message="Assertion was skipped", *args)
-        raise ::BareTest::Assertion::Skip, sprintf(message, *args)
+      def skip(message="Test was skipped", *args)
+        raise ::BareTest::Phase::Skip.new(@__phase__, sprintf(message, *args))
       end
 
       # extract arg allows to use named or positional args

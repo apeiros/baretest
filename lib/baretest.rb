@@ -228,9 +228,9 @@ module BareTest
   # if a description was given, a suite with the given description is created, added to the toplevel
   # suite, and all the contained assertions and suites are added to the created suite.
   def self.suite(description=nil, *args, &block)
-    if description then
+    if description && description.is_a?(String) then
       @toplevel_suite.suite(description, *args, &block)
-    elsif !args.empty?
+    elsif description || !args.empty?
       raise ArgumentError, "Suites with options must have names"
     else
       @toplevel_suite.instance_eval(&block)
