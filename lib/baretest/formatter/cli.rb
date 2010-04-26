@@ -49,6 +49,11 @@ module BareTest
 
       def end_test(test, status, elapsed_time)
         puts "#{Labels[status.code]} #{indent(test, -1)}#{test.description.join(' ')}"
+        if [:failure, :error].include?(status.code) then
+          indent = "          #{indent(test)}"
+          puts status.reason(:indent => indent)
+          puts backtrace(status).join("\n").gsub(/^/, indent)
+        end
       end
 
       def end_all(status_collection, elapsed_time)

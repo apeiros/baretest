@@ -48,19 +48,19 @@ module BareTest
     end
 
     def pending(context, test, reason)
-      BareTest::Status.new(test, :pending, context) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :pending, context, reason) # FIXME, add reasons & exception
     end
 
     def skip(context, test, reason)
-      BareTest::Status.new(test, :skip, context) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :skip, context, reason) # FIXME, add reasons & exception
     end
 
     def fail(context, test, reason)
-      BareTest::Status.new(test, :failure, context) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :failure, context, reason) # FIXME, add reasons & exception
     end
 
     def error(context, test, exception)
-      BareTest::Status.new(test, :error, context) # FIXME, add reasons & exception
+      BareTest::Status.new(test, :error, context, exception.message, exception) # FIXME, add reasons & exception
     end
   end
 end

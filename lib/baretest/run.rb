@@ -65,19 +65,21 @@ module BareTest
     # * :format (extends with the formatter module)
     # * :interactive (extends with IRBMode)
     def initialize(suite, opts=nil)
-      @suite           = suite
-      @inits           = []
-      @options         = opts || {}
-      @count           = @options[:count] || Hash.new(0)
-      @provided        = [] # Array's set operations are the fastest
-      @include_tags    = @options[:include_tags]   # nil is ok here
-      @exclude_tags    = @options[:exclude_tags]   # nil is ok here
-      include_states   = @options[:include_states] # nil is ok here
-      exclude_states   = @options[:exclude_states] # nil is ok here
-      @states          = [nil, *BareTest::StatusOrder]
-      @skipped         = {}
-      @last_run_states = {}
-      @persistence     = @options[:persistence]
+      @suite              = suite
+      @inits              = []
+      @options            = opts || {}
+      @options[:input]  ||= $stdin
+      @options[:output] ||= $stdout
+      @count              = @options[:count] || Hash.new(0)
+      @provided           = [] # Array's set operations are the fastest
+      @include_tags       = @options[:include_tags]   # nil is ok here
+      @exclude_tags       = @options[:exclude_tags]   # nil is ok here
+      include_states      = @options[:include_states] # nil is ok here
+      exclude_states      = @options[:exclude_states] # nil is ok here
+      @states             = [nil, *BareTest::StatusOrder]
+      @skipped            = {}
+      @last_run_states    = {}
+      @persistence        = @options[:persistence]
 
       if (include_states || exclude_states) && !((include_states && include_states.empty?) && (exclude_states && exclude_states.empty?)) then
         [include_states, exclude_states].compact.each do |states|
@@ -99,7 +101,7 @@ module BareTest
 
       # Extend with the output formatter
       formatter  = @options[:format] || 'none'
-      @formatter = BareTest::Formatter.load(formatter).new(self, $stdout, $stdin)
+      @formatter = BareTest::Formatter.load(formatter).new(self, @options)
 
       # Extend with irb dropout code
       extend(BareTest::IRBMode) if @options[:interactive]
@@ -167,6 +169,37 @@ module BareTest
       status
     end
 
+    # Returns the number of possible setup variations.
+    # See #each_component_variant
+    def number_of_setup_variants
+      return 0 if @setups.empty?
+      @setups.inject(1) { |count, setup| count*setup.length }
+    end
+
+    # Yields all possible permutations of setup components.
+    def each_setup_variant
+      if @setups.empty? then
+        yield([])
+      else
+        maximums = @setups.map { |setup| setup.length }
+        number_of_setup_variants.times do |i|
+          yield(setup_variant(i, maximums))
+        end
+      end
+
+      self
+    end
+
+    # Return the component variants
+    def setup_variant(index, maximums=nil)
+      maximums ||= @setups.map { |setup| setup.length }
+      process    = maximums.map { |e|
+        index, partial = index.divmod(e)
+        partial
+      }
+      @setups.zip(process).map { |setup, partial| setup[partial] }
+    end
+
     def run_test(test)
       start   = Time.now
       @formatter.start_test(test)
@@ -175,11 +208,8 @@ module BareTest
 
       # run setups as far as we get without an exception
       level   = (0...test.setups.size).find { |level|
-        status = test.setups[level].find { |setups|
-          setups.find { |setup|
-            p :setup => setup
-            setup.execute(context, test)
-          }
+        status = test.setups[level].find { |setup|
+          setup.execute(context, test)
         }
       }
 
@@ -190,10 +220,8 @@ module BareTest
       # run teardowns from the highest we got when running the setups
       level  ||= test.setups.size-1
       level.downto(0) { |level|
-        teardown_status = test.teardowns[level].find { |teardowns|
-          teardowns.find { |teardown|
-            teardown.execute(context, test)
-          }
+        teardown_status = test.teardowns[level].find { |teardown|
+          teardown.execute(context, test)
         }
         status = teardown_status if teardown_status # teardown overrides any previous status, fixme, accumulate instead
       }

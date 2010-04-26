@@ -82,11 +82,12 @@ module BareTest
       @command[:elements] << [:option, args]
     end
 
-    def initialize(runner, output_device=$stdout, input_device=nil)
+    def initialize(runner, options)
       @runner            = runner
-      @output_device     = output_device
-      @input_device      = input_device
-      @interactive       = input_device.tty? rescue false
+      @options           = options
+      @output_device     = options[:output] || $stdout
+      @input_device      = options[:input] || nil
+      @interactive       = @input_device && @input_device.tty? rescue false
       @auto_strip_colors = !@interactive
       @deferred          = []
       @indent_string     = '  '
@@ -120,6 +121,11 @@ module BareTest
 
     def indent(item, offset=0)
       @indent_string*(item.nesting_level+offset)
+    end
+
+    def backtrace(status)
+      return ['No backtrace'] unless backtrace = status.exception && status.exception.backtrace
+      @options[:verbose] ? backtrace : backtrace.first(1)
     end
 
     # Add data to output, but mark it as deferred

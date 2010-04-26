@@ -38,7 +38,7 @@ module BareTest
     def description
       variables = {}
       @setups.each do |setups| setups.each do |setup|
-        variables.update(setup.variables)
+        variables.update(setup.description_variables)
       end end
       
       [

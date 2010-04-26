@@ -27,6 +27,13 @@ module Kernel
   module_function :BareTest
 end
 
+class <<self
+  def suite(*args, &block) # :nodoc:
+    BareTest.suite(*args, &block)
+  end
+  private :suite
+end
+
 
 
 module BareTest
@@ -66,9 +73,6 @@ module BareTest
     # A hash of components - available via BareTest::use(name) and
     # Suite#suite :use => name
     attr_reader :components
-
-    # A hash of formatters (require-string => module) to be used with Test::Run.
-    attr_reader :format
 
     # For mock integration and others, append modules that should extend the Test::Run instance.
     attr_reader :extender
@@ -201,7 +205,6 @@ module BareTest
   # Needed for bootstrapped selftest
   def self.init # :nodoc:
     @components     = {}
-    @format         = {}
     @extender       = []
     @toplevel_suite = BareTest::Suite.new
     @required_file  = ["", *$LOAD_PATH].map { |path|
@@ -224,10 +227,10 @@ module BareTest
   # If no description was given, it adds the contained assertions and suites to the toplevel suite,
   # if a description was given, a suite with the given description is created, added to the toplevel
   # suite, and all the contained assertions and suites are added to the created suite.
-  def self.suite(description=nil, opts={}, &block)
+  def self.suite(description=nil, *args, &block)
     if description then
-      @toplevel_suite.suite(description, opts, &block)
-    elsif opts && !opts.empty?
+      @toplevel_suite.suite(description, *args, &block)
+    elsif !args.empty?
       raise ArgumentError, "Suites with options must have names"
     else
       @toplevel_suite.instance_eval(&block)

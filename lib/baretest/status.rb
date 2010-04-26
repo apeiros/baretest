@@ -47,13 +47,12 @@ module BareTest
     #                  Array, String or nil.
     # failure_reason:: Why the Assertion or Suite was skipped.
     #                  Array, String or nil.
-    def initialize(entity, code, context=nil, skip_reason=nil, failure_reason=nil, exception=nil)
-      @entity         = entity
-      @code           = code
-      @context        = context
-      @skip_reason    = skip_reason
-      @failure_reason = failure_reason
-      @exception      = exception
+    def initialize(entity, code, context=nil, reason=nil, exception=nil)
+      @entity    = entity
+      @code      = code
+      @context   = context
+      @reason    = reason
+      @exception = exception
     end
 
     # The failure/error/skipping/pending reason.
@@ -67,7 +66,7 @@ module BareTest
       if opt then
         default, separator, indent, first_indent = 
           *opt.values_at(:default, :separator, :indent, :first_indent)
-        reason = @skip_reason || @failure_reason || default
+        reason = @reason || default
         return nil unless reason
         reason = reason.kind_of?(Array) ? reason : [reason]
         reason = reason.join(separator || "\n")

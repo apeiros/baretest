@@ -133,6 +133,9 @@ module BareTest
         @tags               = @parent.tags
         @ancestral_setup    = @parent.ancestral_setup+[@setups]
         @ancestral_teardown = @parent.ancestral_teardown+[@teardowns]
+      else
+        @ancestral_setup    = [@setups]
+        @ancestral_teardown = [@teardowns]
       end
       @children.each do |child| child.finish end
     end
@@ -241,51 +244,32 @@ module BareTest
 
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
-#     def setup(*args, &code)
-#       if args.empty? && code then # common setup case
-#       else
-#       if args.first.is_a?(Symbol) then
-#         id = args.shift
-#         
-#     end
+    def setup(*args, &code)
+      id       = args.first.is_a?(Symbol) ? args.shift : nil
+      existing = id && @by_name[id]
+      created  = create_setup(*args, &code)
+      if existing then
+        existing << created
+      else
+        @by_name[id]  = created if id
+        @setups      << created
+      end
+
+      created
+    end
+
+    def create_setup(*args, &code)
+      if args.empty? then
+        Phase::SetupBlock.new(&code)
+      end
+    end
 
     # Define a teardown block for this suite. The block will be ran after every
     # assertion once, even for nested suites.
     def teardown(&code)
-      teardown    = Teardown.new(&code)
+      teardown    = Phase::Teardown.new(&code)
       @teardowns << teardown
       teardown
-    end
-
-    # Returns the number of possible setup variations.
-    # See #each_component_variant
-    def number_of_setup_variants
-      return 0 if @setups.empty?
-      @setups.inject(1) { |count, setup| count*setup.length }
-    end
-
-    # Yields all possible permutations of setup components.
-    def each_setup_variant
-      if @setups.empty? then
-        yield([])
-      else
-        maximums = @setups.map { |setup| setup.length }
-        number_of_setup_variants.times do |i|
-          yield(setup_variant(i, maximums))
-        end
-      end
-
-      self
-    end
-
-    # Return the component variants
-    def setup_variant(index, maximums=nil)
-      maximums ||= @setups.map { |setup| setup.length }
-      process    = maximums.map { |e|
-        index, partial = index.divmod(e)
-        partial
-      }
-      @setups.zip(process).map { |setup, partial| setup[partial] }
     end
 
     def to_s #:nodoc:
