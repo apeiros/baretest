@@ -17,6 +17,9 @@ module BareTest
     attr_reader :exercise
     attr_reader :verification
     attr_reader :teardowns
+    attr_reader :context
+
+    attr_accessor :status
 
     def initialize(unit, setups, exercise, verification, teardowns)
       @unit         = unit
@@ -24,27 +27,34 @@ module BareTest
       @exercise     = exercise
       @verification = verification
       @teardowns    = teardowns
+      @context      = BareTest::Context.new(self)
+      @status       = nil
+      @handlers     = nil
     end
 
     def nesting_level
       @unit.nesting_level
     end
 
+    def register_custom_handler(exception_class, &handler)
+      @handlers ||= {}
+      raise ArgumentError, "Multiple handlers defined for #{exception_class}" if @handlers.has_key?(exception_class)
+      @handlers[exception_class] = handler
+    end
+
     def custom_handler(exception)
-      # handled_by      = handlers && handlers.find { |handling, handler| exception_class <= handling }
-      nil
+      return nil unless @handlers
+      @handlers.values_at(*exception.class.ancestors).compact.first
     end
 
     def description
+      template  = "#{@exercise.description} #{@verification.description}"
       variables = {}
       @setups.each do |setups| setups.each do |setup|
         variables.update(setup.description_variables)
       end end
-      
-      [
-        interpolate(@exercise.description, variables),
-        interpolate(@verification.description, variables)
-      ]
+
+      interpolate(template, variables)
     end
 
     def interpolate(description, variables)

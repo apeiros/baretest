@@ -13,8 +13,8 @@ require 'baretest/phase/setup'
 module BareTest
   class Phase
     class TabularDataSetup < Setup
-      def execute(context, test)
-        context.instance_eval(&@block)
+      def execute(test)
+        test.context.instance_eval(&@block)
         true
       end
 

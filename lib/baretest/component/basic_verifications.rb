@@ -86,27 +86,23 @@ module BareTest
       #   raises :with_message => "bar" do raise "bar" end # => true
       #   raises SomeException, :with_message => "bar"; raise SomeException, "bar" end # => true
       #   raises :with_message => /\Aknown \w+\z/; raise "known unknown" end # => true
-      def raises(expected_exception_class=nil, with_message=nil, opts={})
-        exception_class = expected_exception_class || StandardError
-        yield
-      rescue exception_class => exception
-        if expected_exception_class && exception.class != expected_exception_class then
-          fail "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
+      def raises(exception_class=nil, with_message=nil, opts=nil)
+        status    = @__test__.status
+        exception = status && status.exception
+        if !exception then
+          if expected_exception_class then
+            fail "Expected the code to raise #{exception_class}, but nothing was raised"
+          else
+            fail "Expected the code to raise, but nothing was raised"
+          end
+        elsif exception_class && exception.class != exception_class then
+          fail "Expected the code to raise #{exception_class}, but it raised #{exception.class} instead"
         elsif with_message && !(with_message === exception.message) then
           fail "Expected the code to raise with the message %p, but the message was %p",
                   with_message, exception.message
         else
+          @__test__.status = nil
           true
-        end
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
-        ::Kernel.raise
-      rescue => exception
-        fail "Expected the code to raise #{expected_exception_class}, but it raised #{exception.class} instead"
-      else
-        if expected_exception_class then
-          fail "Expected the code to raise #{expected_exception_class}, but nothing was raised"
-        else
-          fail "Expected the code to raise, but nothing was raised"
         end
       end
 

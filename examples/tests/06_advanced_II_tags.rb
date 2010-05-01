@@ -1,11 +1,17 @@
 BareTest.suite do
   suite "focus", :tags => :focus do
-    assert "a" do
+    exercise "Doing nothing in focus" do
+    end
+
+    verify "works fine" do
       true
     end
   end
   suite "hocus", :tags => :hocus do
-    assert "b" do
+    exercise "Doing nothing in hocus" do
+    end
+
+    verify "works fine" do
       true
     end
   end

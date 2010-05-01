@@ -27,41 +27,47 @@ module BareTest
       raise "Your Phase subclass must override #phase."
     end
 
-    def execute(context, test)
-      return pending(context, test, "No code provided") unless @code # no code? that means pending
+    def execute(test)
+      return pending(test, "No code provided") unless @code # no code? that means pending
+
+      context = test.context
       begin
         context.__phase__ = phase
         context.instance_eval(&@code)
       rescue *PassthroughExceptions
         raise # passthrough-exceptions must be passed through
       rescue ::BareTest::Phase::Abortion => abortion
-        BareTest::Status.new(test, abortion.status, context, abortion.message, abortion)
+        test.status = BareTest::Status.new(test, abortion.status, context, abortion.message, abortion)
       rescue Exception => exception
         handler = test.custom_handler(exception)
         if handler then
-          handler.call(self, context, exception)
+          handler.call(self, test, exception)
         else
-          error(context, test, exception)
+          error(test, exception)
         end
       else
         nil
       end
     end
 
-    def pending(context, test, reason)
-      BareTest::Status.new(test, :pending, context, reason)
+    def pending(test, reason)
+      test.status = BareTest::Status.new(test, :pending, phase, reason)
     end
 
-    def skip(context, test, reason)
-      BareTest::Status.new(test, :skip, context, reason)
+    def skip(test, reason)
+      test.status = BareTest::Status.new(test, :skip, phase, reason)
     end
 
-    def fail(context, test, reason)
-      BareTest::Status.new(test, :failure, context, reason)
+    def fail(test, reason)
+      test.status = BareTest::Status.new(test, :failure, phase, reason)
     end
 
-    def error(context, test, exception)
-      BareTest::Status.new(test, :error, context, "#{exception.class}: #{exception}", exception)
+    def error(test, exception)
+      test.status = BareTest::Status.new(test, :error, phase, "#{exception.class}: #{exception}", exception)
+    end
+
+    def status(test, code, reason=nil, exception=nil)
+      test.status = BareTest::Status.new(test, code, phase, reason, exception)
     end
   end
 end

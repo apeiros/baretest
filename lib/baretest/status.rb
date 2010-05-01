@@ -23,19 +23,17 @@ module BareTest
   class Status
 
     # The assertion or suite this status belongs to. Assertion or Suite.
-    attr_reader :entity
+    attr_reader :test
+    alias entity test
 
     # The assertions execute context.
-    attr_reader :context
+    attr_reader :phase
 
-    # The status identifier, see BareTest::Status. Symbol.
+    # The status identifier. Symbol.
     attr_reader :code
 
-    # Detailed reason for skipping. Array or nil.
-    attr_reader :skip_reason
-
-    # Detailed reason for failing. Array or nil.
-    attr_reader :failure_reason
+    # Detailed reason for the status. Success usually has no reason. String or nil.
+    attr_reader :reason
 
     # If an exception occured in Assertion#execute, this will contain the
     # Exception object raised.
@@ -47,35 +45,12 @@ module BareTest
     #                  Array, String or nil.
     # failure_reason:: Why the Assertion or Suite was skipped.
     #                  Array, String or nil.
-    def initialize(entity, code, context=nil, reason=nil, exception=nil)
-      @entity    = entity
+    def initialize(test, code, phase, reason=nil, exception=nil)
+      @test      = test
       @code      = code
-      @context   = context
+      @phase     = phase
       @reason    = reason
       @exception = exception
-    end
-
-    # The failure/error/skipping/pending reason.
-    # Returns nil if there's no reason, a string otherwise
-    # Options:
-    # :default::      Reason to return if no reason is present
-    # :separator::    String used to separate multiple reasons
-    # :indent::       A String, the indentation to use. Prefixes every line.
-    # :first_indent:: A String, used to indent the first line only (replaces indent).
-    def reason(opt=nil)
-      if opt then
-        default, separator, indent, first_indent = 
-          *opt.values_at(:default, :separator, :indent, :first_indent)
-        reason = @reason || default
-        return nil unless reason
-        reason = reason.kind_of?(Array) ? reason : [reason]
-        reason = reason.join(separator || "\n")
-        reason = reason.gsub(/^/, indent) if indent
-        reason = reason.gsub(/\A#{Regexp.escape(indent)}/, first_indent) if first_indent
-        reason
-      else
-        @reason.empty? ? nil : @reason.join("\n")
-      end
     end
 
     def inspect # :nodoc:

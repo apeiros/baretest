@@ -14,7 +14,7 @@ module BareTest
   class Phase
     class SetupRequire < Setup
       def initialize(path)
-        super do
+        super() do
           begin
             require path
           rescue LoadError => load_error

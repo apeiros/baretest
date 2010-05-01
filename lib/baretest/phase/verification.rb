@@ -29,8 +29,10 @@ module BareTest
         :verification
       end
 
-      def execute(context, test)
-        return pending(context, test, "No code provided") unless @code # no code? that means pending
+      def execute(test)
+        return pending(test, "No code provided") unless @code # no code? that means pending
+
+        context      = test.context
         return_value = nil
         begin
           context.__phase__ = phase
@@ -38,16 +40,16 @@ module BareTest
         rescue *PassthroughExceptions
           raise # passthrough-exceptions must be passed through
         rescue ::BareTest::Phase::Abortion => abortion
-          BareTest::Status.new(test, abortion.status, context, abortion.message, abortion)
+          test.status = BareTest::Status.new(test, abortion.status, phase, abortion.message, abortion)
         rescue Exception => exception
           handler = test.custom_handler(exception)
           if handler then
-            handler.call(self, context, exception)
+            handler.call(self, test, exception)
           else
-            error(context, test, exception)
+            error(test, exception)
           end
         else
-          return_value ? nil : fail(context, test, "Verification failed (evaluated to nil or false)")
+          test.status = return_value ? nil : fail(test, "Verification failed (evaluated to nil or false)")
         end
       end
 

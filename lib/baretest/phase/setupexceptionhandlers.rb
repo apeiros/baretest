@@ -24,7 +24,7 @@ module BareTest
         end
       end
 
-      def execute(context, test)
+      def execute(test)
         # do nothing
       end
 

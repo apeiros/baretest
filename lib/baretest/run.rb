@@ -203,35 +203,35 @@ module BareTest
     def run_test(test)
       start   = Time.now
       @formatter.start_test(test)
-      context = BareTest::Context.new(test)
       status  = nil
 
       # run setups as far as we get without an exception
       level   = (0...test.setups.size).find { |level|
-        status = test.setups[level].find { |setup|
-          setup.execute(context, test)
+        test.setups[level].find { |setup|
+          setup.execute(test)
         }
       }
+      level ||= test.setups.size-1 # all ran through
 
       # run exercise and verify
-      status ||= test.exercise.execute(context, test)
-      status ||= test.verification.execute(context, test)
+      unless test.status then
+        test.exercise.execute(test)
+        test.verification.execute(test)
+      end
 
       # run teardowns from the highest we got when running the setups
-      level  ||= test.setups.size-1
       level.downto(0) { |level|
         teardown_status = test.teardowns[level].find { |teardown|
-          teardown.execute(context, test)
+          teardown.execute(test)
         }
-        status = teardown_status if teardown_status # teardown overrides any previous status, fixme, accumulate instead
       }
 
       # if nothing has yet set a status, then it's a success, hurray.
-      status ||= Status.new(test, :success)
+      test.status ||= Status.new(test, :success, :cleanup)
 
-      @formatter.end_test(test, status, Time.now-start)
+      @formatter.end_test(test, test.status, Time.now-start)
 
-      status
+      test.status
     end
   end
 end

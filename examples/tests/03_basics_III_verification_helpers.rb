@@ -1,19 +1,19 @@
-BareTest.suite do
+BareTest.suite "Basics III - Verification helpers", :use => :basic_verifications do
   suite "Testing exceptions" do
     exercise "Calling gsub without an argument on a string" do
-      @string.gsub
+      "some string".gsub
     end
 
     verify "raises" do
-      raised
+      raises
     end
 
     then_verify "raises an ArgumentError" do
-      raised ArgumentError
+      raises ArgumentError
     end
 
     then_verify "raises an Argument error with the message 'wrong number of arguments (0 for 2)'" do
-      raised ArgumentError, "wrong number of arguments (0 for 2)"
+      raises ArgumentError, "wrong number of arguments (0 for 2)"
     end
   end
 
@@ -28,7 +28,7 @@ BareTest.suite do
     end
 
     then_verify "results in a value that is close to 0.17" do
-      within_delta a, b, 0.001 # using a == b would be false, because a == 0.169... and b == 0.170...
+      within_delta @a, @b, 0.001 # using @a == @b would be false, because @a == 0.169... and @b == 0.170...
     end
   end
 
@@ -43,7 +43,7 @@ BareTest.suite do
     end
 
     then_verify "are unordered_equal" do
-      unordered_equal(@a, @b) # can be used with any Enumerable, uses hash-key identity
+      equal_unordered(@a, @b) # can be used with any Enumerable, uses hash-key identity
     end
   end
 end

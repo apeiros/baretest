@@ -156,7 +156,7 @@ module BareTest
     # Instruct this suite to require the given files.
     # The suite is skipped if a file can't be loaded.
     def requires(*paths)
-      @setups.concat(paths.map { |file| SetupRequire.new(file) })
+      @setups.concat(paths.map { |file| BareTest::Phase::SetupRequire.new(file) })
     end
 
     # Returns whether this Suite has all the passed tags
@@ -238,7 +238,7 @@ module BareTest
 
     def then_verify(description, &code)
       verification = Phase::Verification.new(description, &code)
-      @current_unit.in_order(verfication)
+      @current_unit.in_order(verification)
       verification
     end
 

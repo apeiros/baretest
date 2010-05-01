@@ -1,4 +1,4 @@
-BareTest.suite do
+BareTest.suite "Basics IV - The four classical test phases", :use => :basic_verifications do
   suite "Setup & Teardown", :requires => 'stringio' do
     setup do
       @io = StringIO.new
@@ -45,20 +45,25 @@ BareTest.suite do
         @bar         = "inner bar"
       end
 
-      assert "@outer_setup is inherited" do
+      exercise "nothing" do
+      end
+
+      verify "@outer_setup is inherited" do
         equal("outer foo", @outer_setup)
       end
 
-      assert "@inner_setup is defined" do
+      verify "@inner_setup is defined" do
         equal("inner foo", @inner_setup)
       end
 
-      assert "@bar is overridden" do
+      verify "@bar is overridden" do
         equal(@bar, "inner bar")
       end
     end
 
-    assert "@inner_setup is not defined in outer suite" do
+    exercise "" do
+    end
+    verify "@inner_setup is not defined in outer suite" do
       !defined?(@inner_setup)
     end
   end
