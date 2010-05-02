@@ -14,19 +14,19 @@ module BareTest
 
   # We don't want to litter in Assertion
   # Touches are associated with
-  # Used by BareTest::Assertion::Support#touch
+  # Used by BareTest::Phase::Support#touch
   def self.touch(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)
     @touch[assertion][thing] += 1
   end
 
-  # Used by BareTest::Assertion::Support#touched
+  # Used by BareTest::Phase::Support#touched
   def self.touched(assertion, thing=nil) # :nodoc:
     @touch[assertion] ||= Hash.new(0)
     @touch[assertion][thing]
   end
 
-  # Used by BareTest::Assertion::Support
+  # Used by BareTest::Phase::Support
   def self.clean_touches(assertion) # :nodoc:
     @touch.delete(assertion)
   end
@@ -109,7 +109,7 @@ module BareTest
       # Will raise a Failure if the given block raises.
       def raises_nothing
         yield
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
         fail "Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})"
@@ -127,7 +127,7 @@ module BareTest
         else
           true
         end
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", a, b, e
@@ -194,7 +194,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -217,7 +217,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -240,7 +240,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -263,7 +263,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -294,7 +294,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -312,7 +312,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p is a kind of %p due to %s", actual, expected, e
@@ -329,7 +329,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p is an instance of %p due to %s", actual, expected, e
@@ -347,7 +347,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Assertion::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p responds to %p due to %s", obj, methods, e

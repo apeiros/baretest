@@ -7,6 +7,7 @@
 
 
 require 'baretest/phase/setup'
+require 'baretest/phase/failure'
 
 
 
@@ -19,7 +20,7 @@ module BareTest
             require path
           rescue LoadError => load_error
             if load_error.message[-path.length,path.length] == path then
-              skip("Missing source file: #{path}")
+              raise BareTest::Phase::Failure.new(@__phase__, "Missing source file: #{path}")
             else
               raise
             end

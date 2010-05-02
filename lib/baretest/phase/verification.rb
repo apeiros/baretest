@@ -49,7 +49,9 @@ module BareTest
             error(test, exception)
           end
         else
-          test.status = return_value ? nil : fail(test, "Verification failed (evaluated to nil or false)")
+          unless test.status then
+            test.status = return_value ? nil : fail(test, "Verification failed (evaluated to nil or false)")
+          end
         end
       end
 

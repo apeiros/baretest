@@ -19,7 +19,10 @@ BareTest.suite do
       @number = '1.23'
     end
 
-    assert ":number should be a numeric" do
+    exercise "->" do
+    end
+
+    verify ":number should be a numeric" do
       @number.numeric?
     end
   end
@@ -29,7 +32,10 @@ BareTest.suite do
       @number = number
     end
 
-    assert ":number should be a numeric" do
+    exercise "->" do
+    end
+
+    verify ":number should be a numeric" do
       @number.numeric?
     end
   end
@@ -39,7 +45,10 @@ BareTest.suite do
       @number = number
     end
 
-    assert ":number should be a numeric" do
+    exercise "" do
+    end
+
+    verify ":number should be a numeric" do
       @number.numeric?
     end
   end
