@@ -133,12 +133,10 @@ module BareTest
     end
 
     def finish
-      maximums                   = @setups.map { |setup| setup.length }
-      variants                   = maximums.inject { |a,b| a*b } || 0
       blocks                     = @setups.size
       @ancestral_setup           = @setups
-      @ancestral_maximums        = maximums
-      @ancestral_variants        = variants
+      @ancestral_maximums        = @setups.map { |setup| setup.length }
+      @ancestral_variants        = @ancestral_maximums.inject { |a,b| a*b }
       @ancestral_setup_counts    = [@setups.length]
       @ancestral_teardown        = @teardowns
       @ancestral_teardown_counts = [@teardowns.length]
@@ -147,8 +145,8 @@ module BareTest
         @depends_on                = @parent.depends_on
         @tags                      = @parent.tags
         @ancestral_setup           = @parent.ancestral_setup+@ancestral_setup
-        @ancestral_maximums        = @parent.ancestral_maximums+maximums
-        @ancestral_variants        = @parent.ancestral_variants == 0 ? variants : @parent.ancestral_variants*variants
+        @ancestral_maximums        = @parent.ancestral_maximums+@ancestral_maximums
+        @ancestral_variants        = @parent.ancestral_variants ? @parent.ancestral_variants*(@ancestral_variants||1) : @ancestral_variants
         @ancestral_setup_counts    = @parent.ancestral_setup_counts+[@ancestral_setup_counts.last+@parent.ancestral_setup_counts.last]
         @ancestral_teardown        = @parent.ancestral_teardown+@ancestral_teardown
         @ancestral_teardown_counts = @parent.ancestral_teardown_counts+[@ancestral_teardown_counts.last+@parent.ancestral_teardown_counts.last]
@@ -158,7 +156,7 @@ module BareTest
     end
 
     def each_setup_variation
-      if @ancestral_variants.zero? then
+      unless @ancestral_variants then
         yield([])
       else
         @ancestral_variants.times do |variant|
@@ -277,23 +275,37 @@ module BareTest
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
     def setup(*args, &code)
-      id       = args.first.is_a?(Symbol) ? args.shift : nil
-      existing = id && @by_name[id]
-      created  = create_setup(*args, &code)
-      if existing then
-        existing << created
+      warn "Setup should be at the beginning of a suite, before any exercise or verify" unless @children.empty?
+      id     = args.first.is_a?(Symbol) ? args.first : nil
+      result = id && @by_name[id]
+      if result then
+        result.add_variant(*args, &code)
       else
-        @by_name[id]  = created if id
-        @setups      << created
+        result        = create_setup(*args, &code)
+        @by_name[id]  = result if id
+        @setups      << result
       end
 
-      created
+      result
     end
 
     def create_setup(*args, &code)
-      if args.empty? then
-        Phase::SetupBlock.new(&code)
+      setup = nil
+      case args.size
+        when 0
+          setup = Phase::Setup.new(&code)
+        when 1,2
+          if args[0].is_a?(Symbol) && code then
+            case args[1]
+              when nil, String, Array, Hash
+                setup = Phase::SetupBlockVariants.new(*args, &code)
+              # case
+            end
+          end
+        # case
       end
+      raise "Illegal use of setup" unless setup
+      setup
     end
 
     # Define a teardown block for this suite. The block will be ran after every

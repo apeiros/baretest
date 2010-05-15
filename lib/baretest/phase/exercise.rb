@@ -20,6 +20,9 @@ module BareTest
           code = proc {
             raise BareTest::Phase::Pending.new(:exercise, "Tagged as pending (#{options[:pending]})")
           } if options[:pending]
+          code = proc {
+            raise BareTest::Phase::Skip.new(:exercise, "Tagged as skipped (#{options[:skip]})")
+          } if options[:skip]
         end
         super(&code)
         @description   = description

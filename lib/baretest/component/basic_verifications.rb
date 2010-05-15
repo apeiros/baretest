@@ -109,7 +109,7 @@ module BareTest
       # Will raise a Failure if the given block raises.
       def raises_nothing
         yield
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
         fail "Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})"
@@ -127,7 +127,7 @@ module BareTest
         else
           true
         end
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", a, b, e
@@ -194,7 +194,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -217,7 +217,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -240,7 +240,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -263,7 +263,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -294,7 +294,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -312,7 +312,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p is a kind of %p due to %s", actual, expected, e
@@ -329,7 +329,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p is an instance of %p due to %s", actual, expected, e
@@ -347,7 +347,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Phase::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p responds to %p due to %s", obj, methods, e
@@ -360,20 +360,6 @@ module BareTest
         else
           fail(without_message, *args)
         end
-      end
-
-      # Raises BareTest::Phase::Failure, which causes the Test to get the
-      # status :failure. Runs sprintf over message with *args
-      # Particularly useful with %p and %s.
-      def fail(message="Verification failed", *args)
-        raise ::BareTest::Phase::Failure.new(@__phase__, sprintf(message, *args))
-      end
-
-      # Raises BareTest::Phase::Skip, which causes the Test to get the
-      # status :skipped. Runs sprintf over message with *args
-      # Particularly useful with %p and %s.
-      def skip(message="Test was skipped", *args)
-        raise ::BareTest::Phase::Skip.new(@__phase__, sprintf(message, *args))
       end
 
       # extract arg allows to use named or positional args

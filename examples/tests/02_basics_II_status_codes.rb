@@ -49,9 +49,11 @@ BareTest.suite "Basics II - Status Codes", :use => :basic_verifications do
       raise "Whoops, something went (for demonstration purposes) wrong"
     end
 
-    verify "and verify will never be invoked" do
-      # The verify must still be present however, otherwise the exercise
-      # is pending (See above).
+    verify "and a verify that does not reset the status" do
+      # The verify *can* clear the status, e.g. to verify whether an expected
+      # exception was raised. However, if it doesn't actively do that, the
+      # exercise fails with status :error
+      true
     end
   end
 end

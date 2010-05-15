@@ -12,6 +12,13 @@ require 'baretest/context'
 
 module BareTest
   class Test
+    # The exceptions baretest will not rescue
+    # NoMemoryError::   a no-memory error means we don't have enough memory to continue
+    # SignalException:: something sent the process a signal to terminate
+    # Interrupt::       Ctrl-C was issued, the process should terminate immediatly
+    # SystemExit::      the process terminates
+    PassthroughExceptions = [::NoMemoryError, ::SignalException, ::Interrupt, ::SystemExit]
+
     def self.interpolate(description, variables)
       if variables.empty? then
         description
@@ -50,14 +57,41 @@ module BareTest
     end
 
     def setup
-      count          = @setups.find_index { |setup| setup.execute(self) }
+      count          = @setups.find_index { |setup| !execute(setup) }
       @teardown_from = @unit.teardown_count_for_setup_count(count)
+    end
+
+    def exercise_and_verify
+      unless @status then
+        execute(@exercise)
+        execute(@verification)
+      end
     end
 
     def teardown
       @teardowns.first(@teardown_from).reverse.find { |teardown|
-        teardown.execute(self)
+        !execute(teardown)
       }
+      @status_unchangeable = !!@status
+    end
+
+    # Returns true on success, false on every other status
+    def execute(phase)
+      phase.execute(self)
+      true
+    rescue *PassthroughExceptions
+      raise # passthrough-exceptions must be passed through
+    rescue ::BareTest::Phase::Abortion => abortion
+      @status = BareTest::Status.new(self, abortion.status, @context, abortion.message, abortion) unless @status_unchangeable
+      false
+    rescue Exception => exception
+      handler = custom_handler(exception)
+      if handler then
+        handler.call(phase, self, exception)
+      else
+        @status = BareTest::Status.new(self, :error, phase.phase, "#{exception.class}: #{exception}", exception) unless @status_unchangeable
+      end
+      false
     end
 
     def nesting_level

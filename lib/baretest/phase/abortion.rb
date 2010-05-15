@@ -11,9 +11,12 @@ module BareTest
     class Abortion < StandardError
       attr_reader :phase
 
-      def initialize(phase, message)
+      # Runs sprintf over message with *args if additional args are given.
+      # Particularly useful with %p and %s.
+      def initialize(phase, message, *variables)
+        @phase  = phase
+        message = sprintf message, *variables unless variables.empty?
         super(message)
-        @phase = phase
       end
 
       def status

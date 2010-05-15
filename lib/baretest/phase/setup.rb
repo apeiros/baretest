@@ -13,8 +13,13 @@ require 'baretest/phase'
 module BareTest
   class Phase
     class Setup < Phase
-      def initialize(&block)
-        @code = block
+      attr_reader :id
+
+      def initialize(id=nil, variables=nil, &block)
+        @id                        = id
+        @code                      = block
+        @has_description_variables = !!variables
+        @description_variables     = variables
       end
 
       def phase
@@ -22,11 +27,11 @@ module BareTest
       end
 
       def description_variables?
-        false
+        @has_description_variables
       end
 
       def description_variables
-        {}
+        @description_variables || {}
       end
 
       def length
@@ -46,7 +51,7 @@ end
 
 
 
-require 'baretest/phase/setupblock'
+require 'baretest/phase/setupblockvariants'
 require 'baretest/phase/setupexceptionhandlers'
 require 'baretest/phase/setuprequire'
 require 'baretest/phase/setuptabulardata'

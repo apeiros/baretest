@@ -162,18 +162,9 @@ module BareTest
     def run_test(test)
       start   = Time.now
       @formatter.start_test(test)
-      status  = nil
 
-      # run setups
       test.setup
-
-      # run exercise and verify
-      unless test.status then
-        test.exercise.execute(test)
-        test.verification.execute(test)
-      end
-
-      # run teardowns
+      test.exercise_and_verify
       test.teardown
 
       # if nothing has yet set a status, then it's a success, hurray.
