@@ -17,11 +17,16 @@ module BareTest
     # The current phase being executed
     attr_accessor :__phase__
 
+    # The value returned by exercise
+    attr_accessor :__returned__
+    alias returned __returned__
+
     # Accepts the Assertion instance this Context is created for as first
     # and only argument.
     def initialize(test)
-      @__test__  = test
-      @__phase__ = :creation
+      @__test__     = test
+      @__phase__    = :creation
+      @__returned__ = nil
     end
 
     # Raises BareTest::Phase::Failure, which causes the Test to get the

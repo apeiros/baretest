@@ -14,30 +14,32 @@ require 'baretest/phase/setupblockwithdata'
 module BareTest
   class Phase
     class SetupBlockVariants < Setup
-      def initialize(id, variant, &block)
+      def initialize(id, variant=nil, &block)
         super(id, &nil)
         @multiple = []
-        add_variant(id, variant, &block)
+        add_variant(variant, &block)
       end
 
       def length
         @multiple.length
       end
 
-      def add_variant(id, variant, &block)
+      def add_variant(variant, &block)
         case variant
+          when nil
+            @multiple << Setup.new(@id, &block)
           when String
-            @multiple << SetupBlockWithData.new(id, variant, variant, &block)
+            @multiple << SetupBlockWithData.new(@id, variant, variant, &block)
           when Array
             @multiple.concat variant.map { |value|
-              SetupBlockWithData.new(id, value, value, &block)
+              SetupBlockWithData.new(@id, value, value, &block)
             }
           when Hash
             @multiple.concat variant.map { |key, value|
-              SetupBlockWithData.new(id, key, value, &block)
+              SetupBlockWithData.new(@id, key, value, &block)
             }
         end
-        
+
         self
       end
 

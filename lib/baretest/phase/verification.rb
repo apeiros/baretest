@@ -18,16 +18,19 @@ module BareTest
       def initialize(description, options=nil, &code)
         if options then
           code = proc {
-            raise ::BareTest::Phase::Pending.new(:verification, "Tagged as pending (#{options[:pending]})")
+            raise BareTest::Phase::Pending.new(:verification, "Tagged as pending (#{options[:pending]})")
           } if options[:pending]
+          code = proc {
+            raise BareTest::Phase::Skip.new(:verification, "Tagged as skipped (#{options[:skip]})")
+          } if options[:skip]
         end
         code ||= proc { pending("No code provided") }
 
         @description = description
-        @code        = proc {
+        super() do
           value = instance_eval(&code)
           raise ::BareTest::Phase::Failure.new(:verification, "Verification failed (evaluated to #{value.inspect})") unless value
-        }
+        end
       end
 
       def phase

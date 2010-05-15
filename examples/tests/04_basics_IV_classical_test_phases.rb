@@ -1,7 +1,6 @@
 BareTest.suite "Basics IV - The four classical test phases", :use => :basic_verifications do
   suite "Setup & Teardown", :requires => 'stringio' do
     setup do
-      p :setup
       @io = StringIO.new
     end
 

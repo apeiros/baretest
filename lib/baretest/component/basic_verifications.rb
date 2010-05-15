@@ -90,7 +90,7 @@ module BareTest
         status    = @__test__.status
         exception = status && status.exception
         if !exception then
-          if expected_exception_class then
+          if exception_class then
             fail "Expected the code to raise #{exception_class}, but nothing was raised"
           else
             fail "Expected the code to raise, but nothing was raised"
@@ -177,6 +177,29 @@ module BareTest
         touched(thing, 0)
       end
 
+      # Uses == to test whether the objects are equal
+      #
+      # Can be used in either of the following ways:
+      #   returns expected[, message]
+      #   returns :expected => expected, :message => message
+      def returns(*args)
+        expected, message = extract_args(args, :expected, :message)
+        actual = @__returned__
+
+        unless expected == actual then
+          fail_with_optional_message \
+            "Expected the return value of %s to be equal (==) to %p but was %p",
+            "Expected %p but got %p",
+            message, expected, actual
+        end
+        true
+
+      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+        ::Kernel.raise
+      rescue Exception => e
+        fail "Could not compare %p with %p due to %s", expected, actual, e
+      end
+
       # Uses equal? to test whether the objects are the same
       #
       # Can be used in either of the following ways:
@@ -186,11 +209,10 @@ module BareTest
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
         unless expected.equal?(actual) then
-          if message then
-            fail "Expected %s to be the same (equal?) as %p but was %p", message, expected, actual
-          else
-            fail "Expected %p but got %p", expected, actual
-          end
+          fail_with_optional_message \
+            "Expected %s to be the same (equal?) as %p but was %p",
+            "Expected %p but got %p",
+            message, expected, actual
         end
         true
 
@@ -209,11 +231,10 @@ module BareTest
         expected, actual, message = extract_args(args, :expected, :actual, :message)
 
         unless expected.eql?(actual) then
-          if message then
-            fail "Expected %s to be hash-key equal (eql?) to %p but was %p", message, expected, actual
-          else
-            fail "Expected %p but got %p", expected, actual
-          end
+          fail_with_optional_message \
+            "Expected %s to be hash-key equal (eql?) to %p but was %p",
+            "Expected %p but got %p",
+            message, expected, actual
         end
         true
 

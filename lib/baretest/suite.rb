@@ -8,6 +8,7 @@
 
 require 'baretest/phase'
 require 'baretest/unit'
+require 'baretest/setupconstructor'
 
 
 
@@ -261,12 +262,14 @@ module BareTest
     end
 
     def verify(description, options=nil, &code)
+      raise "You must define an exercise before defining verifications" unless @current_unit
       verification = Phase::Verification.new(description, options, &code)
       @current_unit.out_of_order(verification)
       verification
     end
 
     def then_verify(description, &code)
+      raise "You must define an exercise before defining verifications" unless @current_unit
       verification = Phase::Verification.new(description, &code)
       @current_unit.in_order(verification)
       verification
@@ -274,37 +277,24 @@ module BareTest
 
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
-    def setup(*args, &code)
-      warn "Setup should be at the beginning of a suite, before any exercise or verify" unless @children.empty?
-      id     = args.first.is_a?(Symbol) ? args.first : nil
-      result = id && @by_name[id]
-      if result then
-        result.add_variant(*args, &code)
+    def setup(id=nil, variables=nil, &code)
+      existing = id && @by_name[id]
+      if code then
+        if existing then
+          existing.add_variant(variables, &code)
+        elsif id then
+          add_setup Phase::SetupBlockVariants.new(id, variables, &code)
+        else
+          add_setup Phase::Setup.new(id, &code)
+        end
       else
-        result        = create_setup(*args, &code)
-        @by_name[id]  = result if id
-        @setups      << result
+        SetupConstructor.new(self, id, existing)
       end
-
-      result
     end
 
-    def create_setup(*args, &code)
-      setup = nil
-      case args.size
-        when 0
-          setup = Phase::Setup.new(&code)
-        when 1,2
-          if args[0].is_a?(Symbol) && code then
-            case args[1]
-              when nil, String, Array, Hash
-                setup = Phase::SetupBlockVariants.new(*args, &code)
-              # case
-            end
-          end
-        # case
-      end
-      raise "Illegal use of setup" unless setup
+    def add_setup(setup)
+      @by_name[setup.id]  = setup if setup.id
+      @setups << setup
       setup
     end
 

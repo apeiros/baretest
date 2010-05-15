@@ -24,8 +24,12 @@ module BareTest
             raise BareTest::Phase::Skip.new(:exercise, "Tagged as skipped (#{options[:skip]})")
           } if options[:skip]
         end
-        super(&code)
-        @description   = description
+        code ||= proc { pending("No code provided") }
+
+        @description = description
+        super() do
+          @__returned__ = instance_eval(&code)
+        end
       end
 
       def phase

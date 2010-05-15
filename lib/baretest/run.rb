@@ -132,16 +132,14 @@ module BareTest
     end
 
     def run_suite(suite)
-      #p :run_suite => suite.description
       start  = Time.now
       status = StatusCollection.new(suite)
       @formatter.start_suite(suite)
       suite.children.each do |child|
         case child
-          when BareTest::Suite
-            status.update(run_suite(child))
-          when BareTest::Unit
-            status.update(run_unit(child))
+          when BareTest::Suite then status.update(run_suite(child))
+          when BareTest::Unit  then status.update(run_unit(child))
+          else raise TypeError, "Unknown type of child #{child.class} for #{suite}"
         end
       end
       @formatter.end_suite(suite, status, Time.now-start)

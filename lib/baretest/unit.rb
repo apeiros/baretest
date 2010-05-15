@@ -58,12 +58,11 @@ module BareTest
     end
 
     def out_of_order(verification)
-      @verifications      << []
-      @verifications.last << verification
+      @verifications << [verification]
     end
 
     def in_order(verification)
-      @verifications      << [] if @verifications.empty?
+      raise "Must have a 'verify' before any 'then_verify'" if @verifications.empty?
       @verifications.last << verification
     end
   end

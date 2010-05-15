@@ -25,11 +25,18 @@ module BareTest
       else
         keys_group = /(#{Regexp.union(variables.keys)})/
         match_keys = /
-          [:@]#{keys_group}\b  |
-          [:@]\{#{keys_group}\}
+          :#{keys_group}\b  |
+          :\{#{keys_group}\}
+        /x
+        description = description.gsub(match_keys) { |m|
+          variables[($1 || $2)].to_s
+        }
+        match_keys = /
+          @#{keys_group}\b  |
+          @\{#{keys_group}\}
         /x
         description.gsub(match_keys) { |m|
-          variables[($1 || $2)]
+          variables[($1 || $2)].inspect
         }
       end
     end
