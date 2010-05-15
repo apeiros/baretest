@@ -15,7 +15,8 @@ suite "Basics I - Suite, Exercise and Verifications" do
     # Check the various components for other helpful methods
   end
 
-  # All verifies belong to the same exercise
+  # All verifies following an exercise belong to that same exercise, so this
+  # verify belongs to "Adding 1 and 2" as well
   verify "returns 3" do
     @actual_result == 3
     # you could write: equal 3, @actual_result
@@ -28,21 +29,23 @@ suite "Basics I - Suite, Exercise and Verifications" do
     @actual_result = 2 + 5
   end
 
+  # Whis means that this verify belongs to "Adding 2 and 5"
   verify "returns a Fixnum" do
     @actual_result.is_a?(Fixnum)
   end
 
+  # And this verify belongs to "Adding 2 and 5" as well
   verify "returns 7" do
     @actual_result == 7
   end
 
 
-  # The individual tests can be grouped into suites
-  # It is recommended that you group by Module/Class namespaces first
+  # Exercises can be grouped into suites
+  # It is recommended that you group by Module/Class namespaces first, then
+  # by method and last by topic.
+  # Use documentation nomenclature (::name for class methods, #name for instance
+  # methods)
   suite "Array" do
-
-    # Then by method, using documentation nomenclature (:: for class methods,
-    # # for instance methods
     suite "::new", :use => :basic_verifications do
       exercise "When invoked without arguments" do
         @array = Array.new
@@ -54,9 +57,13 @@ suite "Basics I - Suite, Exercise and Verifications" do
         # that is: expected, actual, message.
       end
 
-      # Using 'and_then_' you can impose order, which is useful if verifications
-      # only make sense if the previous one was successful
-      verify "the returned Array is empty" do
+      # Generally there is no guarantee on the order in which verifies are
+      # executed. But using 'then_verify' you can impose order, which is useful
+      # when verifications only make sense if the previous one was successful.
+      #
+      # This one for example only makes sense if the returned value is indeed
+      # an Array
+      then_verify "the returned Array is empty" do
         @array.empty?
       end
     end

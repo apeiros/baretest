@@ -13,26 +13,11 @@
 # require 'baretest/irb_mode'
 # require 'baretest/run'
 require 'baretest/suite'
+require 'baretest/ruby_compatibility'
+require 'baretest/ruby_extensions'
 # require 'baretest/version'
 # require 'ruby/kernel'
 # See bottom for more requires
-
-
-
-module Kernel
-  # Execute a piece of code in the context of BareTest
-  def BareTest(&block)
-    BareTest.instance_eval(&block)
-  end
-  module_function :BareTest
-end
-
-class <<self
-  def suite(*args, &block) # :nodoc:
-    BareTest.suite(*args, &block)
-  end
-  private :suite
-end
 
 
 

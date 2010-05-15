@@ -149,55 +149,14 @@ module BareTest
     end
 
     def run_unit(unit)
-      #p :run_unit_in_suite => unit.suite.description
       start  = Time.now
       status = StatusCollection.new(unit)
       @formatter.start_unit(unit)
-      unit.verifications.each do |out_of_order_verifications|
-        out_of_order_verifications.each do |verification|
-          setups    = unit.suite.ancestral_setup
-          exercise  = unit.exercise
-          teardowns = unit.suite.ancestral_teardown
-          # setup variants
-            #p :suite => unit.suite.description, :exercise => unit.exercise.description, :verification => verification.description, :setup => unit.suite.ancestral_setup, :teardown => unit.suite.ancestral_teardown
-            test    = Test.new(unit, setups, exercise, verification, teardowns)
-            status << run_test(test)
-          # end setup variants
-        end
+      unit.each_test do |test|
+        status << run_test(test)
       end
       @formatter.end_unit(unit, status, Time.now-start)
       status
-    end
-
-    # Returns the number of possible setup variations.
-    # See #each_component_variant
-    def number_of_setup_variants
-      return 0 if @setups.empty?
-      @setups.inject(1) { |count, setup| count*setup.length }
-    end
-
-    # Yields all possible permutations of setup components.
-    def each_setup_variant
-      if @setups.empty? then
-        yield([])
-      else
-        maximums = @setups.map { |setup| setup.length }
-        number_of_setup_variants.times do |i|
-          yield(setup_variant(i, maximums))
-        end
-      end
-
-      self
-    end
-
-    # Return the component variants
-    def setup_variant(index, maximums=nil)
-      maximums ||= @setups.map { |setup| setup.length }
-      process    = maximums.map { |e|
-        index, partial = index.divmod(e)
-        partial
-      }
-      @setups.zip(process).map { |setup, partial| setup[partial] }
     end
 
     def run_test(test)
@@ -205,13 +164,8 @@ module BareTest
       @formatter.start_test(test)
       status  = nil
 
-      # run setups as far as we get without an exception
-      level   = (0...test.setups.size).find { |level|
-        test.setups[level].find { |setup|
-          setup.execute(test)
-        }
-      }
-      level ||= test.setups.size-1 # all ran through
+      # run setups
+      test.setup
 
       # run exercise and verify
       unless test.status then
@@ -219,12 +173,8 @@ module BareTest
         test.verification.execute(test)
       end
 
-      # run teardowns from the highest we got when running the setups
-      level.downto(0) { |level|
-        teardown_status = test.teardowns[level].find { |teardown|
-          teardown.execute(test)
-        }
-      }
+      # run teardowns
+      test.teardown
 
       # if nothing has yet set a status, then it's a success, hurray.
       test.status ||= Status.new(test, :success, :cleanup)

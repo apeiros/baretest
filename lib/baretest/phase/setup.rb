@@ -21,12 +21,20 @@ module BareTest
         :setup
       end
 
+      def description_variables?
+        false
+      end
+
       def description_variables
         {}
       end
 
       def length
         1
+      end
+
+      def [](index)
+        self
       end
 
       def inspect

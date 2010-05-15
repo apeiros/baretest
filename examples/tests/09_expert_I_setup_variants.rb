@@ -5,7 +5,7 @@ class String
   end
 end
 
-BareTest.suite do
+BareTest.suite "Expert I - Setup variants", :use => :basic_verifications do
   suite "Variations - Notation I" do
     setup :number, '123' do |number|
       @number = '123'

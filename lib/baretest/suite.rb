@@ -52,7 +52,11 @@ module BareTest
     attr_reader   :nesting_level
 
     attr_reader   :ancestral_setup
+    attr_reader   :ancestral_maximums
+    attr_reader   :ancestral_variants
+    attr_reader   :ancestral_setup_counts
     attr_reader   :ancestral_teardown
+    attr_reader   :ancestral_teardown_counts
 
     # A list of valid options Suite::new accepts
     ValidOptions = [:skip, :requires, :use, :provides, :depends_on, :tags]
@@ -98,6 +102,7 @@ module BareTest
       @ancestral_setup    = []
       @ancestral_teardown = []
       @by_name            = {} # named setups use Symbols, Suites and Assertions use Strings
+      @setup_variants     = 0
 
       @skipped            = false
       @depends_on         = []
@@ -128,16 +133,43 @@ module BareTest
     end
 
     def finish
+      maximums                   = @setups.map { |setup| setup.length }
+      variants                   = maximums.inject { |a,b| a*b } || 0
+      blocks                     = @setups.size
+      @ancestral_setup           = @setups
+      @ancestral_maximums        = maximums
+      @ancestral_variants        = variants
+      @ancestral_setup_counts    = [@setups.length]
+      @ancestral_teardown        = @teardowns
+      @ancestral_teardown_counts = [@teardowns.length]
+
       if @parent then
-        @depends_on         = @parent.depends_on
-        @tags               = @parent.tags
-        @ancestral_setup    = @parent.ancestral_setup+[@setups]
-        @ancestral_teardown = @parent.ancestral_teardown+[@teardowns]
-      else
-        @ancestral_setup    = [@setups]
-        @ancestral_teardown = [@teardowns]
+        @depends_on                = @parent.depends_on
+        @tags                      = @parent.tags
+        @ancestral_setup           = @parent.ancestral_setup+@ancestral_setup
+        @ancestral_maximums        = @parent.ancestral_maximums+maximums
+        @ancestral_variants        = @parent.ancestral_variants == 0 ? variants : @parent.ancestral_variants*variants
+        @ancestral_setup_counts    = @parent.ancestral_setup_counts+[@ancestral_setup_counts.last+@parent.ancestral_setup_counts.last]
+        @ancestral_teardown        = @parent.ancestral_teardown+@ancestral_teardown
+        @ancestral_teardown_counts = @parent.ancestral_teardown_counts+[@ancestral_teardown_counts.last+@parent.ancestral_teardown_counts.last]
       end
+
       @children.each do |child| child.finish end
+    end
+
+    def each_setup_variation
+      if @ancestral_variants.zero? then
+        yield([])
+      else
+        @ancestral_variants.times do |variant|
+          setups_variant = []
+          @ancestral_setup.zip(@ancestral_maximums) do |setup, maximum|
+            variant, partial = variant.divmod(maximum)
+            setups_variant << setup[partial]
+          end
+          yield(setups_variant)
+        end
+      end
     end
 
     # Instruct this suite to use the given components.

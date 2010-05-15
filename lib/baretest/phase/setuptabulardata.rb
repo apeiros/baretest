@@ -18,6 +18,10 @@ module BareTest
         true
       end
 
+      def description_variables?
+        true
+      end
+
       def inspect
         sprintf "#<%s>", self.class
       end

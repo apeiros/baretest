@@ -6,7 +6,27 @@
 
 
 
+class <<self
+  # This method is only and only available on toplevel, enabling to use suite
+  # on toplevel too to define the toplevel suite, without polluting neither
+  # Kernel nor Object
+  def suite(*args, &block) # :nodoc:
+    BareTest.suite(*args, &block)
+  end
+  private :suite
+end
+
+
+
 module Kernel
+  # Execute a piece of code in the context of BareTest
+  def BareTest(&block)
+    BareTest.instance_eval(&block)
+  end
+  module_function :BareTest
+
+
+
   # All extensions Kernel#require_path and Kernel#expanded_require_path will try
   # for a given filename
   RequireExtensions = %w[.rb .so .dll .bundle .dylib]
