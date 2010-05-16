@@ -18,8 +18,8 @@ module BareTest
       def initialize(id=nil, variables=nil, &block)
         @id                        = id
         @code                      = block
-        @has_description_variables = !!variables
-        @description_variables     = variables
+        @description_variables   ||= variables
+        @has_description_variables = !!@description_variables
       end
 
       def phase
