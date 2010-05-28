@@ -1,0 +1,88 @@
+Test
+  setup
+  exercise
+  verify
+  teardown
+
+
+BareTest
+  Suite
+    - requires
+    - tags
+    - components
+    - provides
+    - depends_on
+    - manual_skip
+    - verification_exception_handlers
+    - Setup
+    - Setup (permuted)
+    - Exercise
+    - Verify
+
+  Context
+    - component methods
+    - IRB methods
+
+  Setup < TestPhase
+    RequireSetup
+    HelperFileSetup
+    ComponentSetup
+    CodeSetup
+    VariableVariantsSetup
+    - description values
+    - length
+
+  Exercise < TestPhase
+    - description
+    - code
+  Verification < TestPhase
+    - description
+    - code
+  Teardown < TestPhase
+    - code
+
+  Run
+    - persistence (last-run-stats etc.)
+    - run-stats (successes, errors etc.)
+    - run-data (provides)
+    - run/fork logic
+    - formatter-callbacks
+    Stack
+    - run-status per suite/nesting
+
+  Format
+    - all
+    - start_suite(suite)
+    - start_setup(suite)
+    - done_setup(suite)
+    - start_exercise(exercise)
+    - stop_exercise(exercise)
+    - prefered_start_suite(suite)
+    - prefered_start_test(suite)
+    - done_suite
+    - done_test
+
+
+
+Process command line arguments
+Load persistence
+Load all test files
+On demand: count all assertions and number of variants
+---
+execute top level suite
+--- per suite
+On demand: start measuring time
+execute all nested entities (suites & assertions)
+On demand: stop measuring time
+--- per assertion
+On demand: start measuring time
+iterate over all setup variants
+On demand: stop measuring time
+--- per setup variant
+On demand: start measuring time
+determine description of variant
+setup context
+exercise context
+verify context
+teardown context
+On demand: stop measuring time

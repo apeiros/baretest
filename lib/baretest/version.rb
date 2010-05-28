@@ -15,13 +15,13 @@ module BareTest
     MAJOR      = 0
 
     # The minor version number
-    MINOR      = 4
+    MINOR      = 5
 
     # The tiny version number
-    TINY       = 1
+    TINY       = 0
 
     # Prerelease number - nil for release versions
-    PRERELEASE = nil
+    PRERELEASE = 1
 
     # The version as a string
     STRING     = %{#{MAJOR}.#{MINOR||0}.#{TINY||0}#{".pre#{PRERELEASE}" if PRERELEASE}}

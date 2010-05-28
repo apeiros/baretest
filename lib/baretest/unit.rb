@@ -49,7 +49,7 @@ module BareTest
       end
     end
 
-    def finish
+    def finish_loading(all_tags)
       @length = 0
     end
 

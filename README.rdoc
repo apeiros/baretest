@@ -267,9 +267,3 @@ Currently none.
   executed.
 * --interactive can't be used to investigate problems in setup or teardown
 * Inherited skip reasons are not reported
-
-
-
-== Foot Notes
-<sup>1</sup>:: The abbreviated form without support code and output formatters.
-               The normal code is expanded to more lines for readability.

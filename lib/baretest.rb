@@ -30,10 +30,7 @@ module BareTest
   StatusOrder         = :error,
                         :failure,
                         :pending,
-                        :manually_skipped,
-                        :dependency_missing,
-                        :library_missing,
-                        :component_missing,
+                        :skipped,
                         :ignored,
                         :success
 
@@ -49,7 +46,7 @@ module BareTest
   end
 
   # The standard glob used by baretest to load test files
-  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb' # :nodoc:
+  DefaultGlobPattern = 'test/{suite,unit,isolation,integration,system}/**/*.rb' # :nodoc:
 
   # Selectors that are valid to be passed into process_selectors
   ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending] # :nodoc:
@@ -132,17 +129,36 @@ module BareTest
     (StatusOrder & states).first # requires Array#& to be stable (keep order of first operand)
   end
 
-  # Convert an array of selectors into a hash with those selectors preprocessed
-  # as far as possible.
-  # Example:
-  #   BareTest.process_selectors %w[-some/**/glob/*.rb %failure :tag1 -:tag2]
-  #   # => {
-  #   #      :files          => ...an array with paths...,
-  #   #      :include_tags   => [:tag1],
-  #   #      :exclude_tags   => [:tag2],
-  #   #      :include_states => [:failure]
-  #   #      :exclude_states => nil,
-  #   #    }
+  def self.process_globs(base, glob_sets, default_pattern=DefaultGlobPattern)
+    files     = (glob_sets.empty? || glob_sets.first.first == :-) ? Dir.glob(default_pattern) : []
+    glob_sets.each do |operation, globs|
+      if operation == :+ then
+        globs.each do |pattern|
+          files += Dir.glob(File.expand_path(pattern, base))
+        end
+      else
+        globs.each do |pattern|
+          files -= Dir.glob(File.expand_path(pattern, base))
+        end
+      end
+    end
+
+    files
+  end
+
+  def self.process_tags(all_tags, tags)
+    all_tags = [all_tags+[:~]].uniq
+    result = (tags.empty? || t  ags.first.first == :-) ? all_tags : []
+    globs.each do |operation, tag_set|
+      if operation == :+ then
+        result |= tag_set
+      else
+        result -= tag_set
+      end
+    end
+    result
+  end
+
   def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
     files           = []
     include_tags    = []

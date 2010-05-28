@@ -44,10 +44,14 @@ module BareTest
       end
 
       def start_suite(suite)
-        puts "          #{indent(suite, -1)}\e[1m#{suite.description}\e[0m" if suite.description
+        defer do
+          puts "\n          #{indent(suite, -1)}\e[1m#{suite.description}\e[0m" if suite.description
+        end
       end
 
       def end_test(test, status, elapsed_time)
+        apply_deferred
+
         puts "#{Labels[status.code]} #{indent(test, -1)}#{test.description}"
         case status.code
           when :pending, :skipped, :failure
@@ -58,6 +62,10 @@ module BareTest
             puts backtrace(status).join("\n").gsub(/^/, indent)
           # no else needed, only :pending, :skipped, :failure and :error require additional output
         end
+      end
+
+      def end_suite(suite, *args)
+        drop_last_deferred
       end
 
       def end_all(status_collection, elapsed_time)

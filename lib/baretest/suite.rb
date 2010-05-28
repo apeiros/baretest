@@ -133,7 +133,8 @@ module BareTest
       @tags       |= Array(tags) if tags
     end
 
-    def finish
+    def finish_loading(all_tags)
+      all_tags.concat(@tags)
       blocks                     = @setups.size
       @ancestral_setup           = @setups
       @ancestral_maximums        = @setups.map { |setup| setup.length }
@@ -144,7 +145,7 @@ module BareTest
 
       if @parent then
         @depends_on                = @parent.depends_on
-        @tags                      = @parent.tags
+        @tags                      = @tags | @parent.tags
         @ancestral_setup           = @parent.ancestral_setup+@ancestral_setup
         @ancestral_maximums        = @parent.ancestral_maximums+@ancestral_maximums
         @ancestral_variants        = @parent.ancestral_variants ? @parent.ancestral_variants*(@ancestral_variants||1) : @ancestral_variants
@@ -153,7 +154,7 @@ module BareTest
         @ancestral_teardown_counts = @parent.ancestral_teardown_counts+[@ancestral_teardown_counts.last+@parent.ancestral_teardown_counts.last]
       end
 
-      @children.each do |child| child.finish end
+      @children.each do |child| child.finish_loading(all_tags) end
     end
 
     def each_setup_variation

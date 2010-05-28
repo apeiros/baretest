@@ -31,28 +31,58 @@ module BareTest
     # :interactive => Boolean - activate interactive mode (drops into irb on failure/error)
     # :verbose     => Boolean - provide verbose output
     def run(arguments, options)
-      setup_path              = nil
-      selectors               = BareTest.process_selectors(arguments)
-      options                 = selectors.merge(options)
+      globs, tags, states     = selectors_to_arithmetic_sets(arguments)
       options[:persistence] ||= Persistence.new
 
       # Load the setup file, all helper files and all test files
       BareTest.load_standard_test_files(
         :verbose    => options[:verbose],
         :setup_path => options[:setup_path],
-        :files      => options[:files],
+        :globs      => options[:files],
         :chdir      => '.'
       )
 
+      # Complete the loading process
+      all_tags = []
+      BareTest.toplevel_suite.finish_loading(all_tags)
+      BareTest.process_tags(tags, all_tags)
+
       # Run the tests
       puts if options[:verbose]
-      ARGV.clear # IRB is being stupid
-      BareTest.toplevel_suite.finish
       runner = BareTest::Run.new(BareTest.toplevel_suite, options)
       runner.run
 
       # Return whether all tests ran successful
       runner.global_status.code == :success
+    end
+
+    # Parse selectors passed via command line into arithmetic sets.
+    # An arithmetic set is an Array of operation (:+ or :-) objects tuples.
+    # Example of e.g. a tags set: [[:+, [:a, :b, :c]], [:-, [:x, :y, :z]]]
+    # @return [Array] The sets for globs, tags and states.
+    def selectors_to_arithmetic_sets(selectors)
+      globs  = []
+      tags   = []
+      states = []
+  
+      selectors.each do |selector|
+        target, operation, value = case selector
+          when /\A-%(.*)/   then [states, :-, $1.to_sym]
+          when /\A-:(.*)/   then [tags,   :-, $1.to_sym]
+          when /\A-(.*)/    then [globs,  :-, $1]
+          when /\A\+?%(.*)/ then [states, :+, $1.to_sym]
+          when /\A\+?:(.*)/ then [tags,   :+, $1.to_sym]
+          when /\A\+?(.*)/  then [globs,  :+, $1]
+          else raise "Should never reach else - selector: #{selector.inspect}"
+        end
+        if target.last && target.last.first == operation then
+          target.last.last << value
+        else
+          target << [operation, [value]]
+        end
+      end
+  
+      [globs, tags, states]
     end
 
     # Create a basic skeleton of directories and files to contain baretests

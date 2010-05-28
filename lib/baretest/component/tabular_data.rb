@@ -2,6 +2,24 @@ require 'strscan'
 require 'bigdecimal'
 
 module BareTest
+
+  # Recognized classes:
+  #   nil                 # nil
+  #   true                # true
+  #   false               # false
+  #   -123                # Fixnum/Bignum (decimal)
+  #   0b1011              # Fixnum/Bignum (binary)
+  #   0755                # Fixnum/Bignum (octal)
+  #   0xff                # Fixnum/Bignum (hexadecimal)
+  #   120.30              # BigDecimal
+  #   1e0                 # Float
+  #   "foo"               # String, no interpolation, but \t etc. work
+  #   'foo'               # String, only \\ and \' are escaped
+  #   /foo/               # Regexp
+  #   :foo                # Symbol
+  #   :"foo"              # Symbol
+  #   2010-05-23          # Date
+  #   2010-05-23T06:45:00 # DateTime
   class TabularData
     RNil           = /nil/
     RFalse         = /false/

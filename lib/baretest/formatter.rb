@@ -132,11 +132,11 @@ module BareTest
     # We defer in order to be able to ignore suites. Ignored suites that
     # contain unignored suites/assertions must be displayed, ignored suites
     # that don't, will be popped from the deferred-stack
-    def defer(&block)
-      @deferred << block
+    def defer(deferred=true, &block)
+      @deferred << (deferred ? block : proc{})
     end
 
-    def drop_deferred
+    def drop_last_deferred
       @deferred.pop
     end
 

@@ -20,6 +20,9 @@ module BareTest
       @count  = Hash.new(0)
     end
 
+    # Merge another StatusCollection into this StatusCollection
+    # Sums up all counts and increases the count for status_collection.entity
+    # by one.
     def update(status_collection)
       @count[status_collection.entity] += 1
       @count.update(status_collection.count) do |key, my_value, other_value|

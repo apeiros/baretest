@@ -31,3 +31,7 @@ Last Run States
 * unrun
   * new (the test didn't exist in the last run)
   * deselected (via glob, last-run-state or tag)
+
+
+The smallest unit that has a last-run-state is Unit, NOT Test. So all test
+variants of a unit are either run or ignored.
