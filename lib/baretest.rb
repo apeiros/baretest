@@ -6,26 +6,18 @@
 
 
 
-require 'baretest/assertion'
-require 'baretest/commandline'
-require 'baretest/formatter'
-require 'baretest/invalidselectors'
-require 'baretest/irb_mode'
-require 'baretest/run'
+# require 'baretest/assertion'
+# require 'baretest/commandline'
+# require 'baretest/formatter'
+# require 'baretest/invalidselectors'
+# require 'baretest/irb_mode'
+# require 'baretest/run'
 require 'baretest/suite'
-require 'baretest/version'
-require 'ruby/kernel'
+require 'baretest/ruby_compatibility'
+require 'baretest/ruby_extensions'
+# require 'baretest/version'
+# require 'ruby/kernel'
 # See bottom for more requires
-
-
-
-module Kernel
-  # Execute a piece of code in the context of BareTest
-  def BareTest(&block)
-    BareTest.instance_eval(&block)
-  end
-  module_function :BareTest
-end
 
 
 
@@ -38,10 +30,7 @@ module BareTest
   StatusOrder         = :error,
                         :failure,
                         :pending,
-                        :manually_skipped,
-                        :dependency_missing,
-                        :library_missing,
-                        :component_missing,
+                        :skipped,
                         :ignored,
                         :success
 
@@ -57,7 +46,7 @@ module BareTest
   end
 
   # The standard glob used by baretest to load test files
-  DefaultInitialPositiveGlob = 'test/{suite,unit,isolation,integration,system}/**/*.rb' # :nodoc:
+  DefaultGlobPattern = 'test/{suite,unit,isolation,integration,system}/**/*.rb' # :nodoc:
 
   # Selectors that are valid to be passed into process_selectors
   ValidStateSelectors = [:new, :success, :failure, :error, :skipped, :pending] # :nodoc:
@@ -66,9 +55,6 @@ module BareTest
     # A hash of components - available via BareTest::use(name) and
     # Suite#suite :use => name
     attr_reader :components
-
-    # A hash of formatters (require-string => module) to be used with Test::Run.
-    attr_reader :format
 
     # For mock integration and others, append modules that should extend the Test::Run instance.
     attr_reader :extender
@@ -143,65 +129,11 @@ module BareTest
     (StatusOrder & states).first # requires Array#& to be stable (keep order of first operand)
   end
 
-  # Convert an array of selectors into a hash with those selectors preprocessed
-  # as far as possible.
-  # Example:
-  #   BareTest.process_selectors %w[-some/**/glob/*.rb %failure :tag1 -:tag2]
-  #   # => {
-  #   #      :files          => ...an array with paths...,
-  #   #      :include_tags   => [:tag1],
-  #   #      :exclude_tags   => [:tag2],
-  #   #      :include_states => [:failure]
-  #   #      :exclude_states => nil,
-  #   #    }
-  def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
-    files           = []
-    include_tags    = []
-    exclude_tags    = []
-    include_states  = []
-    exclude_states  = []
-
-    default_initial_positive_glob ||= DefaultInitialPositiveGlob
-    Dir.chdir(base_directory) do
-      selectors.each do |selector|
-        case selector
-          when /\A-%(.*)/   then exclude_states << $1.to_sym
-          when /\A-:(.*)/   then exclude_tags << $1.to_sym
-          when /\A\+?%(.*)/ then include_states << $1.to_sym
-          when /\A\+?:(.*)/ then include_tags << $1.to_sym
-          when /\A-(.*)/    then
-            files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
-            glob   = File.directory?($1) ? "#{$1}/**/*.rb" : $1
-            files -= Dir[glob]
-          when /\A\+?(.*)/  then
-            glob   = File.directory?(selector) ? "#{selector}/**/*.rb" : selector
-            files |= Dir[glob]
-          else
-            raise "Should never reach else - selector: #{selector.inspect}"
-        end
-      end
-      files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
-      files.map! do |path| File.expand_path(path) end
-    end
-
-    invalid_states = (include_states|exclude_states)-ValidStateSelectors
-    raise InvalidSelectors.new(invalid_states) unless invalid_states.empty?
-
-    return {
-      :files          => files,
-      :include_tags   => include_tags,
-      :exclude_tags   => exclude_tags,
-      :include_states => include_states.empty? ? nil : include_states,
-      :exclude_states => exclude_states.empty? ? nil : exclude_states
-    }
-  end
-
   # Initializes BareTest, is automatically called
   #
   # Needed for bootstrapped selftest
   def self.init # :nodoc:
     @components     = {}
-    @format         = {}
     @extender       = []
     @toplevel_suite = BareTest::Suite.new
     @required_file  = ["", *$LOAD_PATH].map { |path|
@@ -224,10 +156,10 @@ module BareTest
   # If no description was given, it adds the contained assertions and suites to the toplevel suite,
   # if a description was given, a suite with the given description is created, added to the toplevel
   # suite, and all the contained assertions and suites are added to the created suite.
-  def self.suite(description=nil, opts={}, &block)
-    if description then
-      @toplevel_suite.suite(description, opts, &block)
-    elsif opts && !opts.empty?
+  def self.suite(description=nil, *args, &block)
+    if description && description.is_a?(String) then
+      @toplevel_suite.suite(description, *args, &block)
+    elsif description || !args.empty?
       raise ArgumentError, "Suites with options must have names"
     else
       @toplevel_suite.instance_eval(&block)
@@ -274,9 +206,23 @@ module BareTest
   def self.test_directory
     File.expand_path(path, 'test')
   end
+
+  def self.ruby_description
+    engine  = Object.const_defined?(:RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
+    version = RUBY_VERSION
+    "#{engine} #{version}"
+  end
+
+  def self.file_and_line_from_caller(caller_line)
+    exists, file, line = nil
+
+    match = caller_line.match(/^(.*):(\d+)(?::.+)?$/)
+    if match then
+      file, line = match.captures
+      file       = File.expand_path(file)
+      exists     = File.exist?(file)
+    end
+
+    return exists, file, line
+  end
 end
-
-
-
-# At bottom due to dependencies
-require 'baretest/assertion/support' # Needs Test.extender to be defined

@@ -12,9 +12,9 @@ end
 
 BareTest.new_component :demo_component do
   # Make our components' assertion helpers available in assertions
-  BareTest::Assertion::Context.send :include, DemoComponent::DemoMethods
 
   setup do
+    extend DemoComponent::DemoMethods
     @demo_component = :setup
   end
 
@@ -24,22 +24,27 @@ BareTest.new_component :demo_component do
 end
 
 
-BareTest.suite do
+BareTest.suite "Advanced IV - Components", :use => :basic_verifications do
   suite "Using DemoComponent", :use => :demo_component do
-    assert "Successful assertions must use the 'demo' method" do
-      demo
+    exercise "->" do
     end
 
-    assert "Fails if 'demo' is not invoked, even if otherwise successful" do
+    verify "Successful assertions must use the 'demo' method" do
+      demo
       true
     end
 
-    assert "Fails if @demo_component was changed prior to calling 'demo'" do
-      @demo_component = :unexpected
-      demo
+    verify "Fails if 'demo' is not invoked, even if otherwise successful" do
+      true
     end
 
-    assert "Fails if @demo_component was changed after to calling 'demo'" do
+    verify "Fails if @demo_component was changed prior to calling 'demo'" do
+      @demo_component = :unexpected
+      demo
+      true
+    end
+
+    verify "Fails if @demo_component was changed after to calling 'demo'" do
       demo
       @demo_component = :unexpected
       true

@@ -8,7 +8,7 @@
 
 
 
-Version = "0.4.0" # Executable version
+Version = "0.5.0" # Executable version
 
 # assume baretest is not installed and this is a cold-run from source
 lib_dir = File.expand_path("#{__FILE__}/../../lib")
@@ -19,7 +19,8 @@ $LOAD_PATH.unshift(lib_dir) if File.directory?(lib_dir)
 
 
 require 'command'
-require 'baretest'
+require 'baretest/commandline'
+require 'baretest/invalidselectors'
 
 
 
@@ -33,7 +34,6 @@ Command "run" do
   o :commands,    nil,  '--commands', :Boolean, "overview over the commands"
   o :help,        '-h', '--help',     :Boolean, "help for usage and flags"
   o :version,     '-v', '--version',  :Boolean, "print the version and exit"
-  o :init,        nil,  '--init',     "Deprecated form for `baretest --init`"
 
   # specify the 'run' command, its default options, its options and helptext
   command "run", :format => 'cli', :interactive => false, :verbose => false do
@@ -57,7 +57,6 @@ Command "run" do
     o :verbose,     '-w', '--warn',          :Boolean, "turn warnings on for your script"
     o :help
     o :version
-    o :init
 
     text ""
 
@@ -136,13 +135,11 @@ Command.with(ARGV) do
   # command
   if set = [:help, :commands, :version].find { |flag| options[flag] } then
     run_command = set.to_s
-  elsif options[:init]
-    abort "`#{$0} --init` is depreciated, please use `baretest init`."
   else
     run_command = command
   end
   if %w[run help].include?(command) then
-    formatter = BareTest::CommandLine.load_formatter(options[:format])
+    formatter = BareTest::Formatter.load(options[:format])
 
     definition[command].content_for :format_options do |d|
       if formatter.is_a?(BareTest::Formatter) then

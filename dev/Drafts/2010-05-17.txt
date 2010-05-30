@@ -1,0 +1,19 @@
+exercise "Foo#bar" do
+  Foo.new.method(:bar)
+end
+
+verify.arity(2..3)
+verify.stdout("Hello")
+verify.stderr("BUG")
+
+
+
+
+Setup:
+  A modify context (e.g. add methods, add data)
+  B modify test (e.g. add exception handlers)
+  C modify environment (e.g. add classes, require files, create directories/files)
+  D modify baretest (preparations for e.g. test doubles)
+
+A & B are handled by isolation
+C & D require explicit teardown (D only if something has to act upon that data)

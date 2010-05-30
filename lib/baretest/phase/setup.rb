@@ -6,20 +6,40 @@
 
 
 
+require 'baretest/phase'
+
+
+
 module BareTest
-  module Phase
-    BasicSetup = Struct.new(:block) do
+  class Phase
+    class Setup < Phase
+      attr_reader :id
+
+      def initialize(id=nil, variables=nil, &block)
+        @id                        = id
+        @code                      = block
+        @description_variables   ||= variables
+        @has_description_variables = !!@description_variables
+      end
+
+      def phase
+        :setup
+      end
+
+      def description_variables?
+        @has_description_variables
+      end
+
       def description_variables
-        {}
+        @description_variables || {}
       end
 
       def length
         1
       end
 
-      def setup(context)
-        context.instance_eval(&block)
-        true
+      def [](index)
+        self
       end
 
       def inspect
@@ -28,3 +48,10 @@ module BareTest
     end
   end
 end
+
+
+
+require 'baretest/phase/setupblockvariants'
+require 'baretest/phase/setupexceptionhandlers'
+require 'baretest/phase/setuprequire'
+require 'baretest/phase/setuptabulardata'
