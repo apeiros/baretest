@@ -397,9 +397,19 @@ module BareTest
       #   foo(:x => 1, :y => 2, :z => 3) # equivalent to the one above
       #
       def extract_args(args, *named)
+        actual_index = named.index(:actual)
         if args.size == 1 && Hash === args.first then
-          args.first.values_at(*named)
+          if actual_index && !hash_args.has_key?(:actual) then
+            hash_args = args.first.merge(:actual => @__returned__)
+          else
+            hash_args = args.first
+          end
+          hash_args.values_at(*named)
         else
+          if actual_index && args.size <= actual_index then
+            args = args.dup
+            args[actual_index] = @__returned__
+          end
           args.first(named.size)
         end
       end
