@@ -64,6 +64,7 @@ lib/baretest/run/none.rb
 lib/baretest/run/spec.rb
 lib/baretest/run/tap.rb
 lib/baretest/run/xml.rb
+lib/baretest/selectors.rb
 lib/baretest/setupconstructor.rb
 lib/baretest/status.rb
 lib/baretest/statuscollection.rb

@@ -107,10 +107,15 @@ module BareTest
     end
 
     def run
+      @provided           = [] # Array's set operations are the fastest
+      @skipped            = {}
+      @last_run_states    = {}
+
       start  = Time.now
       @formatter.start_all
       @global_status = run_suite(@suite)
       @formatter.end_all(@global_status, Time.now-start)
+      @persistence.store('final_states', @last_run_states)
     end
 
     def run_suite(suite)
@@ -135,6 +140,7 @@ module BareTest
       unit.each_test do |test, previous_verification_failed|
         status << run_test(test, previous_verification_failed)
       end
+      @last_run_states[unit.id] = status.code
       @formatter.end_unit(unit, status, Time.now-start)
       status
     end

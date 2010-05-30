@@ -25,7 +25,7 @@ module BareTest
       @exercise      = exercise
       @verifications = []
       @length        = 0
-      @id            = @suite ? "#{@suite.id}\f#{@exercise.description}" : @exercise.description.to_s # to_s because of nil descriptions
+      @id            = "#{@suite && @suite.id}\f\f#{@exercise.description}"
     end
 
     # yields each combination of setup variant and verify as a BareTest::Test

@@ -3,7 +3,7 @@ require 'bigdecimal'
 
 module BareTest
 
-  # Recognized classes:
+  # Recognizes constants and the following literals:
   #   nil                 # nil
   #   true                # true
   #   false               # false
@@ -20,6 +20,10 @@ module BareTest
   #   :"foo"              # Symbol
   #   2010-05-23          # Date
   #   2010-05-23T06:45:00 # DateTime
+  #
+  # TODO
+  # 32bit ruby raises RangeError for too big/small Time instances - should we
+  # degrade to DateTime for those?
   class TabularData
     RConstant      = /[A-Z]\w*(?:::[A-Z]\w*)*/
     RNil           = /nil/

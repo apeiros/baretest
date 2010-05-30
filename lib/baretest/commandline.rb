@@ -52,7 +52,7 @@ module BareTest
         units.each do |unit|
           unit.last_run_status = last_run_states[unit.id] || :new
         end
-        #puts units.map { |u| "%-20s%s" % [u.last_run_status, u.id.tr("\f", ">")] }
+        puts units.map { |u| "%-20s%s" % [u.last_run_status, u.id.tr("\f", ">")] }
         units = Selectors.select_by_last_run_status(units, states)
       end
 
