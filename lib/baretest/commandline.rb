@@ -8,6 +8,7 @@
 
 require 'baretest'
 require 'baretest/run'
+require 'baretest/selectors'
 require 'baretest/version'
 require 'baretest/formatter'
 
@@ -31,58 +32,28 @@ module BareTest
     # :interactive => Boolean - activate interactive mode (drops into irb on failure/error)
     # :verbose     => Boolean - provide verbose output
     def run(arguments, options)
-      globs, tags, states     = selectors_to_arithmetic_sets(arguments)
       options[:persistence] ||= Persistence.new
+      options[:chdir]       ||= '.'
+      globs, tags, states     = Selectors.parse_argv_selectors(arguments)
+      files                   = Dir.chdir(options[:chdir]) { Selectors.expand_globs(globs) }
 
       # Load the setup file, all helper files and all test files
-      BareTest.load_standard_test_files(
-        :verbose    => options[:verbose],
-        :setup_path => options[:setup_path],
-        :globs      => options[:files],
-        :chdir      => '.'
-      )
+      BareTest.load_standard_test_files(options.merge(:files => files))
 
       # Complete the loading process
-      all_tags = []
-      BareTest.toplevel_suite.finish_loading(all_tags)
-      BareTest.process_tags(tags, all_tags)
+      BareTest.toplevel_suite.finish_loading
+
+      # Figure which tests are to be ignored due to tag & state selectors
+      #units = BareTest.toplevel_suite.all_units
+      ignored = {}
 
       # Run the tests
       puts if options[:verbose]
-      runner = BareTest::Run.new(BareTest.toplevel_suite, options)
+      runner = BareTest::Run.new(BareTest.toplevel_suite, ignored, options)
       runner.run
 
       # Return whether all tests ran successful
       runner.global_status.code == :success
-    end
-
-    # Parse selectors passed via command line into arithmetic sets.
-    # An arithmetic set is an Array of operation (:+ or :-) objects tuples.
-    # Example of e.g. a tags set: [[:+, [:a, :b, :c]], [:-, [:x, :y, :z]]]
-    # @return [Array] The sets for globs, tags and states.
-    def selectors_to_arithmetic_sets(selectors)
-      globs  = []
-      tags   = []
-      states = []
-  
-      selectors.each do |selector|
-        target, operation, value = case selector
-          when /\A-%(.*)/   then [states, :-, $1.to_sym]
-          when /\A-:(.*)/   then [tags,   :-, $1.to_sym]
-          when /\A-(.*)/    then [globs,  :-, $1]
-          when /\A\+?%(.*)/ then [states, :+, $1.to_sym]
-          when /\A\+?:(.*)/ then [tags,   :+, $1.to_sym]
-          when /\A\+?(.*)/  then [globs,  :+, $1]
-          else raise "Should never reach else - selector: #{selector.inspect}"
-        end
-        if target.last && target.last.first == operation then
-          target.last.last << value
-        else
-          target << [operation, [value]]
-        end
-      end
-  
-      [globs, tags, states]
     end
 
     # Create a basic skeleton of directories and files to contain baretests

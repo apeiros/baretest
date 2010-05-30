@@ -64,36 +64,18 @@ module BareTest
     # * :extender
     # * :format (extends with the formatter module)
     # * :interactive (extends with IRBMode)
-    def initialize(suite, opts=nil)
+    def initialize(suite, ignore, opts=nil)
       @suite              = suite
       @inits              = []
       @options            = opts || {}
       @options[:input]  ||= $stdin
       @options[:output] ||= $stdout
       @count              = @options[:count] || Hash.new(0)
+      @ignore             = ignore
       @provided           = [] # Array's set operations are the fastest
-      @include_tags       = @options[:include_tags]   # nil is ok here
-      @exclude_tags       = @options[:exclude_tags]   # nil is ok here
-      include_states      = @options[:include_states] # nil is ok here
-      exclude_states      = @options[:exclude_states] # nil is ok here
-      @states             = [nil, *BareTest::StatusOrder]
       @skipped            = {}
       @last_run_states    = {}
       @persistence        = @options[:persistence]
-
-      if (include_states || exclude_states) && !((include_states && include_states.empty?) && (exclude_states && exclude_states.empty?)) then
-        [include_states, exclude_states].compact.each do |states|
-          states << nil if states.include?(:new)
-          states.push(:error, :skipped, :pending) if states.include?(:failure)
-          states.delete(:new)
-          if states.include?(:skipped) then
-            states.delete(:skipped)
-            states.push(:pending, :manually_skipped, :dependency_missing, :library_missing, :component_missing)
-          end
-          states.uniq!
-        end
-        @states = (include_states || @states) - (exclude_states || [])
-      end
 
       (BareTest.extender+Array(@options[:extender])).each do |extender|
         extend(extender)

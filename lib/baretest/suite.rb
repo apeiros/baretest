@@ -133,8 +133,7 @@ module BareTest
       @tags       |= Array(tags) if tags
     end
 
-    def finish_loading(all_tags)
-      all_tags.concat(@tags)
+    def finish_loading
       blocks                     = @setups.size
       @ancestral_setup           = @setups
       @ancestral_maximums        = @setups.map { |setup| setup.length }
@@ -154,7 +153,7 @@ module BareTest
         @ancestral_teardown_counts = @parent.ancestral_teardown_counts+[@ancestral_teardown_counts.last+@parent.ancestral_teardown_counts.last]
       end
 
-      @children.each do |child| child.finish_loading(all_tags) end
+      @children.each do |child| child.finish_loading end
     end
 
     def each_setup_variation

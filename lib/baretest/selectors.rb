@@ -91,7 +91,7 @@ module BareTest
       globs  = []
       tags   = []
       states = []
-    
+
       argv_selectors.each do |selector|
         raise "Invalid selector #{selector}" unless selector =~ ArgvSelectorMatch
         case
@@ -104,13 +104,24 @@ module BareTest
           else raise "Should never be reached"
         end
       end
-    
+
       [globs, tags, states]
     end
-    
-    def resolve_globs(globs, default_glob)
+
+    def units_by_tag(units)
+      by_tag = Hash.new { |hash, key| hash[key] = [] }
+      units.each do |unit|
+        unit.tags.each do |tag|
+          by_tag[tag] << test
+        end
+      end
+
+      by_tag
+    end
+
+    def expand_globs(globs, default_glob=BareTest::DefaultGlobPattern)
       return Dir.glob(default_glob) if globs.empty?
-    
+
       files = globs.first.first == :+ ? [] : Dir.glob(default_glob)
       globs.each do |op, glob|
         glob   = "#{glob}/**/*.rb" if File.directory?(glob)
@@ -120,13 +131,11 @@ module BareTest
           files -= Dir.glob(glob)
         end
       end
-    
+
       files
     end
 
     def select_by_last_run_state(units, last_run_state_selectors)
-      return units if last_run_state_selectors.empty?
-
       state_set = last_run_state_selectors.first.first == :+ ? [] : LastRunStateSets.keys
       last_run_state_selectors.each do |op, state|
         raise "Invalid state: #{state}" unless LastRunStateSets.include?(state)
@@ -140,16 +149,7 @@ module BareTest
       units.select { |unit| state_set.include?(unit.last_run_state) }
     end
 
-    def select_by_tags(units, tag_selectors)
-      return units if tag_selectors.empty?
-
-      units_by_tag = Hash.new { |hash, key| hash[key] = [] }
-      units.each do |unit|
-        unit.tags.each do |tag|
-          units_by_tag[tag] << test
-        end
-      end
-
+    def select_by_tags(units, units_by_tag, tag_selectors)
       units_set = tag_selectors.first.first == :+ ? [] : units
       tag_selectors.each do |op, tag|
         if op == :+ then

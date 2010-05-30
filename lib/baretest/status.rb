@@ -57,7 +57,7 @@ module BareTest
       sprintf "#<%s:0x%08x status=%p exception=%p skip_reason=%p failure_reason=%p entity=%p>",
         self.class,
         object_id>>1,
-        @status,
+        @code,
         @exception,
         @skip_reason,
         @failure_reason,
