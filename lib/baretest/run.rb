@@ -132,20 +132,25 @@ module BareTest
       start  = Time.now
       status = StatusCollection.new(unit)
       @formatter.start_unit(unit)
-      unit.each_test do |test|
-        status << run_test(test)
+      unit.each_test do |test, previous_verification_failed|
+        status << run_test(test, previous_verification_failed)
       end
       @formatter.end_unit(unit, status, Time.now-start)
       status
     end
 
-    def run_test(test)
+    def run_test(test, previous_verification_failed)
       start   = Time.now
       @formatter.start_test(test)
 
-      test.setup
-      test.exercise_and_verify
-      test.teardown
+      #p :previous_verification_failed => previous_verification_failed
+      if previous_verification_failed then
+        test.status = Status.new(test, :skipped, :creation, "Previous verification failed")
+      else
+        test.setup
+        test.exercise_and_verify
+        test.teardown
+      end
 
       # if nothing has yet set a status, then it's a success, hurray.
       test.status ||= Status.new(test, :success, :cleanup)

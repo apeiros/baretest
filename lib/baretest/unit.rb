@@ -34,9 +34,12 @@ module BareTest
       teardowns = @suite.ancestral_teardown
       exercise  = @exercise
       @verifications.each do |out_of_order_verifications| # those may be randomized. Optional randomization might be offered by a setting.
-        out_of_order_verifications.each do |verification| # these must be executed in order and propagate failures.
-          @suite.each_setup_variation do |setups|
-            yield(Test.new(self, setups, exercise, verification, teardowns))
+        @suite.each_setup_variation do |setups|
+          previous_verification_failed = false
+          out_of_order_verifications.each do |verification| # these must be executed in order and propagate failures.
+            test = Test.new(self, setups, exercise, verification, teardowns)
+            yield(test, previous_verification_failed)
+            previous_verification_failed = true unless test.status.code == :success
           end
         end
       end
