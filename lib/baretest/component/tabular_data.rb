@@ -21,6 +21,7 @@ module BareTest
   #   2010-05-23          # Date
   #   2010-05-23T06:45:00 # DateTime
   class TabularData
+    RConstant      = /[A-Z]\w*(?:::[A-Z]\w*)*/
     RNil           = /nil/
     RFalse         = /false/
     RTrue          = /true/
@@ -38,7 +39,7 @@ module BareTest
     RTimeZone      = /(Z|[A-Z]{3,4}|[+-]\d{4})/
     RTime          = /(\d{2}):(\d{2}):(\d{2})(?:RTimeZone)?/
     RDateTime      = /#{RDate}T#{RTime}/
-    RSeparator     = /[^\#nft\d:'"\/+-]+|$/
+    RSeparator     = /[^A-Z\#nft\d:'"\/+-]+|$/
     RTerminator    = /\s*(?:\#.*)?(?:\n|\r\n?|\Z)/
 
     RIdentifier    = /[A-Za-z_]\w*/
@@ -98,6 +99,7 @@ module BareTest
       data    = []
       until scanner.eos?
         data << case
+          when scanner.scan(RConstant)      then eval("::#{scanner[0]}") # yes, I know it's evil, but it's sane due to the regex, also it's less annoying than deep_const_get
           when scanner.scan(RNil)           then nil
           when scanner.scan(RTrue)          then true
           when scanner.scan(RFalse)         then false
