@@ -30,7 +30,7 @@ module BareTest
     RHexInteger    = /[+-]?0x[A-Fa-f\d][A-Fa-f\d'_,]*/
     ROctalInteger  = /[+-]?0[0-7][0-7'_,]*/
     RBigDecimal    = /#{RInteger}\.\d+/
-    RFloat         = /#{RBigDecimal}e#{RInteger}/
+    RFloat         = /#{RBigDecimal}(?:f|e#{RInteger})/
     RSString       = /'(?:[^\\']+|\\.)*'/
     RDString       = /"(?:[^\\"]+|\\.)*"/
     RRegexp        = %r{/((?:[^\\/]+|\\.)*)/([imxnNeEsSuU]*)}

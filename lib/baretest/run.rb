@@ -143,7 +143,6 @@ module BareTest
       start   = Time.now
       @formatter.start_test(test)
 
-      #p :previous_verification_failed => previous_verification_failed
       if previous_verification_failed then
         test.status = Status.new(test, :skipped, :creation, "Previous verification failed")
       else
