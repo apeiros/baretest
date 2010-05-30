@@ -156,6 +156,17 @@ module BareTest
       @children.each do |child| child.finish_loading end
     end
 
+    def all_units
+      units = []
+      @children.each do |child|
+        case child
+          when Suite then units.concat(child.all_units)
+          when Unit then  units << child
+        end
+      end
+      units
+    end
+
     def each_setup_variation
       unless @ancestral_variants then
         yield([])

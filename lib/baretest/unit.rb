@@ -12,16 +12,20 @@ require 'baretest/context'
 
 module BareTest
   class Unit
-    attr_reader :suite
-    attr_reader :exercise
-    attr_reader :verifications
-    attr_reader :length
+    attr_reader   :id
+    attr_reader   :suite
+    attr_reader   :exercise
+    attr_reader   :verifications
+    attr_reader   :length
+    attr_reader   :tags
+    attr_accessor :last_run_status
 
     def initialize(suite, exercise)
       @suite         = suite
       @exercise      = exercise
       @verifications = []
       @length        = 0
+      @id            = @suite ? "#{@suite.id}\f#{@exercise.description}" : @exercise.description.to_s # to_s because of nil descriptions
     end
 
     # yields each combination of setup variant and verify as a BareTest::Test
@@ -51,6 +55,7 @@ module BareTest
 
     def finish_loading
       @length = 0
+      @tags   = @suite ? @suite.tags : []
     end
 
     def nesting_level

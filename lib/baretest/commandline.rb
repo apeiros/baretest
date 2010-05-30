@@ -36,20 +36,41 @@ module BareTest
       options[:chdir]       ||= '.'
       globs, tags, states     = Selectors.parse_argv_selectors(arguments)
       files                   = Dir.chdir(options[:chdir]) { Selectors.expand_globs(globs) }
+      deselected_units        = {}
+      persistence             = options[:persistence]
 
       # Load the setup file, all helper files and all test files
       BareTest.load_standard_test_files(options.merge(:files => files))
 
       # Complete the loading process
       BareTest.toplevel_suite.finish_loading
+      units = BareTest.toplevel_suite.all_units
 
-      # Figure which tests are to be ignored due to tag & state selectors
-      #units = BareTest.toplevel_suite.all_units
-      ignored = {}
+      # Figure which units are ignored due to run-state selectors
+      unless states.empty? then
+        last_run_states = persistence.read('final_states', {})
+        units.each do |unit|
+          unit.last_run_status = last_run_states[unit.id] || :new
+        end
+        #puts units.map { |u| "%-20s%s" % [u.last_run_status, u.id.tr("\f", ">")] }
+        units = Selectors.select_by_last_run_status(units, states)
+      end
+
+      # Figure which units are ignored due to tag selectors
+      unless tags.empty? then
+        units_by_tag = Selectors.units_by_tag(units)
+        units        = Selectors.select_by_tags(units, units_by_tag, tags)
+      end
+
+#       puts "Selected (#{units.size}):"
+#       p *units.map { |u| u.id.tr("\f", ">") }
+#       puts "-----"*12
+      selected_units = {}
+      units.each do |unit| selected_units[unit] = true end
 
       # Run the tests
       puts if options[:verbose]
-      runner = BareTest::Run.new(BareTest.toplevel_suite, ignored, options)
+      runner = BareTest::Run.new(BareTest.toplevel_suite, selected_units, options)
       runner.run
 
       # Return whether all tests ran successful

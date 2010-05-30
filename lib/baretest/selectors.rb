@@ -135,7 +135,7 @@ module BareTest
       files
     end
 
-    def select_by_last_run_state(units, last_run_state_selectors)
+    def select_by_last_run_status(units, last_run_state_selectors)
       state_set = last_run_state_selectors.first.first == :+ ? [] : LastRunStateSets.keys
       last_run_state_selectors.each do |op, state|
         raise "Invalid state: #{state}" unless LastRunStateSets.include?(state)
@@ -146,7 +146,7 @@ module BareTest
         end
       end
 
-      units.select { |unit| state_set.include?(unit.last_run_state) }
+      units.select { |unit| state_set.include?(unit.last_run_status) }
     end
 
     def select_by_tags(units, units_by_tag, tag_selectors)
