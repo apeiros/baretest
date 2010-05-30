@@ -25,26 +25,29 @@ unless Object.method_defined?(:instance_exec)
 
     include InstanceExecMethods
 
-    # Evaluate the block with the given arguments within the context of
-    # this object, so self is set to the method receiver.
-    #
-    # From Mauricio's http://eigenclass.org/hiki/bounded+space+instance_exec
-    #
-    # This version has been borrowed from Rails for compatibility sake.
+    # Improved version of Mauricio's implementation on
+    # http://eigenclass.org/hiki/bounded+space+instance_exec
+    # Should be faster for recursive instance_exec's and doesn't interrupt the
+    # scheduler
     def instance_exec(*args, &block)
       begin
-        old_critical, Thread.critical = Thread.critical, true
-        n = object_id
-        n += 1 while respond_to?(method_name = "__instance_exec#{n}")
-        InstanceExecMethods.module_eval { define_method(method_name, &block) }
-      ensure
-        Thread.critical = old_critical
+        current_thread = Thread.current
+        method_number  = current_thread[:instance_exec_method_number]
+        if method_number then
+          current_thread[:instance_exec_method_number] = method_number+1
+        else
+          method_number = 0
+          current_thread[:instance_exec_method_number] = 1
+        end
+        method_name    = "__instance_exec_#{current_thread.object_id}_#{method_number}"
+
+        InstanceExecMethods.send(:define_method, method_name, &block)
       end
 
       begin
         send(method_name, *args)
       ensure
-        InstanceExecMethods.module_eval { remove_method(method_name) } rescue nil
+        InstanceExecMethods.send(:remove_method, method_name) rescue nil
       end
     end
   end

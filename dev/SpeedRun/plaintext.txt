@@ -1,0 +1,222 @@
+A Speedrun into BareTest
+========================
+
+
+WHAT IS BARETEST?
+- A testframework
+- Powerful:
+  Developer centric - the most important person with regards to tests is the developer. Enable him to efficiently write good tests that make a clear statement and can easily be read
+- Well understood and proven:
+  Uses and encourages the classic test structure definition of the 4 phases setup, exercise, verify, teardown
+- Extensible:
+  Helpers (called 'components') and Formatters can easily be added. But all you need to start with is included already.
+
+HOW DOES IT LOOK?
+
+Most simple example of a test-file:
+
+  suite "Example" do
+    exercise "Adding 1 and 2" do
+      1+2
+    end
+
+    verify "returns 3" do
+      returns 3
+    end
+  end
+
+Output (ascii-fied):
+              Example
+  [ Success ]   Adding 1 and 2 returns 3
+
+  1 test, 1 success
+
+What happened?
+-> The exercise and the verify build a test. That test's description is the combined description of exercise and verify
+-> The exercise code is run first
+-> The verify code is run second, its return value (or the exception it raises) determines whether the test was a success
+All phases (setup, exercise, verify, teardown) are run in the same Context instance. Meaning they share instance variables which is used to share state.
+
+WELL UNDERSTOOD AND PROVEN
+
+Why classic test phases?
+
+They are well understood and proven. It enables a very clean mental model of the tests. It also provides excellent feedback on where something breaks.
+Setup:
+  In Setup, you prepare the whole environment for the test. In more complex setups that might mean to start up a webserver, to initialize a database etc.
+  In most unit tests it simply means to prepare the data that is being worked with.
+Exercise:
+  We perform a single action, the actual action we want to test
+Verify:
+  We verify all aspects of the exercise, whether it behaves as expected
+Teardown:
+  Clean up anything that needs to be cleaned up. This is actually a very rare step in baretest. An example might be if you test something that interacts with the filesystem and you want to remove files you created during the test.
+  Another use case are mock libs that will verify the expectations using a teardown
+
+There is a lot of material available on these four test phases and why it is a good idea to use them.
+
+MORE EXAMPLES
+
+  suite "Integer" :use => :tabular_data do
+    suite "#/" do
+      suite "Valid divisions"
+        setup.tabular_data %{
+          @divident  | @divisor  | @expected_quotient
+          1          | 1         | 1
+          6          | 2         | 3
+          6          | 3         | 2
+          6          | 4         | 1
+        }
+  
+        exercise "@divident divided by @divisor" do
+          @actual_quotient = @divident/@divisor
+        end
+  
+        verify "returns an Integer" do
+          kind_of Integer, @actual_quotient
+          # can be written more concise, using the exercise's return value
+          # as the value for the 'actual' argument:
+          #   kind_of Integer
+        end
+  
+        then_verify "equals @expected_quotient" do
+          equal @expected_quotient, @actual_quotient
+            # can be written more concise, using the exercise's return value
+            # as the value for the 'actual' argument:
+            #   equal @expected_quotient
+            # can also use 'returns', as it's just 'equal' too:
+            #   returns @expected_quotient
+        end
+      end
+
+      suite "Invalid divisions" do
+        exercise "5 divided by '2'" do
+          5/'2'
+        end
+
+        verify "raises a TypeError" do
+          raises TypeError
+        end
+      end
+    end
+  end
+(--> NOTE - maybe show the more concise variant in a 2nd slide?)
+
+Output (ascii-fied):
+              Integer
+                #/
+                  Valid divisions
+  [ Success ]       1 divided by 1 returns an Integer
+  [ Success ]       1 divided by 1 equals 1
+  [ Success ]       6 divided by 2 returns an Integer
+  [ Success ]       6 divided by 2 equals 3
+  [ Success ]       6 divided by 3 returns an Integer
+  [ Success ]       6 divided by 3 equals 2
+  [ Success ]       6 divided by 4 returns an Integer
+  [ Success ]       6 divided by 4 equals 1
+
+                  Invalid divisions
+  [ Success ]       5 divided by '2' raises a TypeError
+
+  9 tests, 9 successes
+
+
+What happened? Why 9 tests?
+-> an exercise is run with every verify that follows it (until the end of the suite or the next exercise)
+-> every such exercise/verify combination is ran with every setup iteration (the given setup.tabular_data provides 4 iterations)
+-> setup can provide variables for the test description, making the test output very intelligible
+
+DEVELOPER CENTRIC
+
+How does baretest help the developer?
+-> Its structuring makes it easy to think about tests and therefore write them
+-> There is no need to learn a new language or any magic, plain ruby does it too, for example the following test is perfectly valid:
+  suite "Plain Ruby" do
+    setup do
+      @a = 1
+      @b = 2
+      @expected_result = 3
+      @expected_type   = Integer
+    end
+
+    exercise "Adding 1 and 2" do
+      @actual_result = @a + @b
+    end
+
+    verify "returns an Integer" do
+      @actual_result.kind_of?(@expected_type)
+    end
+
+    verify "returns 3" do
+      @actual_result == @expected_result
+    end
+  end
+
+-> It embedds into the developers flow. When your project grows sufficiently big you'll no longer want to run all tests all the time. However, you'll not want to manually manage a truckload of tags. That's where last-run-state comes into play:
+  baretest -- %new %run -%success
+This runs all tests that are new (you'll probably want to run those), also all the tests that have been run the last time, but not those that were a success. You can of course use simpler expressions too, this is just to show off the power it has ;-)
+
+-> It provides irb integration
+Wait! What? IRB integration? What do you mean by that?
+
+Example:
+...comming up...
+
+
+EXTENSIBLE
+
+BareTest supports components that enable simple integration of new functionality:
+
+  suite "Some AR Model test", :use => :rails do
+    setup do
+      # Fake Time.now so we have a controlled test
+      @time_now = Time.method(:now)
+      def Time.now; Time.mktime(2010,5,30); end
+      @birthday = Time.mktime(1980, 1,1)
+      @age      = 20
+    end
+
+    exercise "Person with a birthday" do
+      @person = Person.new :birthday => @birthday
+    end
+
+    verify "has a correctly calculated age" do
+      equal @age, @person.age
+    end
+
+    teardown do
+      # Restore original Time.now
+      Time.define_method(:now, @time_now)
+    end
+  end
+
+So the simple :use => :rails loads the whole rails environment (NOTE: not currently included in baretest, still under construction, final :rails component is slated for baretest 0.6).
+
+Now we had a nasty thing in that code - we faked out Time.now and had to be careful about restoring it. That's where one of baretest's strongest feature comes into play - test isolation.
+We can completly drop the teardown using :isolate => true!
+
+  DemoObject = Object.new
+  def DemoObject.demo!
+    "demo!"
+  end
+
+  suite "Isolation Demo", :isolate => :true do
+    exercise "Altering DemoObject.demo! to return 'not now'" do
+      def DemoObject.demo!
+        "not now"
+      end
+    end
+
+    verify "makes DemoObject.demo! return 'not now'" do
+      equal 'not now', DemoObject.demo!
+    end
+
+    exercise "Not altering DemoObject.demo!" do
+      # well, we don't alter it, so we do nothing actually...
+      # rather uncommon for a test ;-)
+    end
+
+    verify "lets DemoObject.demo! return 'demo!', regardeless of the previous redefinition" do
+      equal 'demo!', DemoObject.demo!
+    end
+  end

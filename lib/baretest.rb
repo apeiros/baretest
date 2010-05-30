@@ -160,20 +160,18 @@ module BareTest
   end
 
   def self.process_selectors(selectors, base_directory=".", default_initial_positive_glob=nil)
-    files           = []
-    include_tags    = []
-    exclude_tags    = []
-    include_states  = []
-    exclude_states  = []
+    files  = []
+    tags   = []
+    states = []
 
     default_initial_positive_glob ||= DefaultInitialPositiveGlob
     Dir.chdir(base_directory) do
       selectors.each do |selector|
         case selector
-          when /\A-%(.*)/   then exclude_states << $1.to_sym
-          when /\A-:(.*)/   then exclude_tags << $1.to_sym
-          when /\A\+?%(.*)/ then include_states << $1.to_sym
-          when /\A\+?:(.*)/ then include_tags << $1.to_sym
+          when /\A-%(.*)/   then states << [:-, $1.to_sym]
+          when /\A-:(.*)/   then tags   << [:-, $1.to_sym]
+          when /\A\+?%(.*)/ then states << [:+, $1.to_sym]
+          when /\A\+?:(.*)/ then tags   << [:+, $1.to_sym]
           when /\A-(.*)/    then
             files  = Dir[default_initial_positive_glob] if files.empty? && default_initial_positive_glob
             glob   = File.directory?($1) ? "#{$1}/**/*.rb" : $1
@@ -193,11 +191,9 @@ module BareTest
     raise InvalidSelectors.new(invalid_states) unless invalid_states.empty?
 
     return {
-      :files          => files,
-      :include_tags   => include_tags,
-      :exclude_tags   => exclude_tags,
-      :include_states => include_states.empty? ? nil : include_states,
-      :exclude_states => exclude_states.empty? ? nil : exclude_states
+      :files  => files,
+      :tags   => tags,
+      :states => last_run_states
     }
   end
 
