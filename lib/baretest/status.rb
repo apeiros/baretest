@@ -54,10 +54,11 @@ module BareTest
     end
 
     def inspect # :nodoc:
-      sprintf "#<%s:0x%08x status=%p exception=%p skip_reason=%p failure_reason=%p entity=%p>",
+      sprintf "#<%s:0x%08x status=%p phase=%p exception=%p skip_reason=%p failure_reason=%p entity=%p>",
         self.class,
         object_id>>1,
         @code,
+        @phase,
         @exception,
         @skip_reason,
         @failure_reason,

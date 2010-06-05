@@ -28,7 +28,10 @@ module BareTest
 
         @description = description
         super() do
-          @__returned__ = instance_eval(&code)
+          returned          = instance_eval(&code)
+          @__returned__     = returned
+          @__has_returned__ = true
+          returned
         end
       end
 

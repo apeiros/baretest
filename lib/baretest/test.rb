@@ -17,7 +17,12 @@ module BareTest
     # SignalException:: something sent the process a signal to terminate
     # Interrupt::       Ctrl-C was issued, the process should terminate immediatly
     # SystemExit::      the process terminates
-    PassthroughExceptions = [::NoMemoryError, ::SignalException, ::Interrupt, ::SystemExit]
+    PassthroughExceptions = [
+      ::NoMemoryError,
+      ::SignalException,
+      ::Interrupt,
+      ::SystemExit,
+    ]
 
     def self.interpolate(description, variables)
       if variables.empty? then
@@ -47,39 +52,90 @@ module BareTest
     attr_reader :verification
     attr_reader :teardowns
     attr_reader :context
-
-    attr_accessor :status
+    attr_reader :status
 
     def initialize(unit, setups, exercise, verification, teardowns)
-      @unit          = unit
-      @setups        = setups
-      @exercise      = exercise
-      @verification  = verification
-      @teardowns     = teardowns
+      @unit                = unit
+      @setups              = setups
+      @exercise            = exercise
+      @verification        = verification
+      @teardowns           = teardowns
+      @context             = BareTest::Context.new(self)
+      @status              = nil
+      @handlers            = nil
+      @level               = nil
+      @teardown_from       = nil
+      @status_final = false
+    end
+
+    def initialize_copy(original)
       @context       = BareTest::Context.new(self)
       @status        = nil
-      @handlers      = nil
-      @level         = nil
       @teardown_from = nil
     end
 
-    def setup
+    # * The return value is only considered in 'verify' blocks. Those have to
+    #   return a trueish value. Nil and false make the verify fail.
+    # * Setting the test status to failure is only allowed in verify and teardown.
+    # * Setting the test status to pending is always final
+    # * Setting the test status to skipped is always final
+    # * Setting the test status to error is final in setup, verify and teardown,
+    #   but NOT in exercise (this is to allow testing for exceptions being raised)
+    # * If there's no test status set at the end of all phases, the test status
+    #   becomes set to success
+    def set_status(status)
+      unless @status_final then
+        @status       = status
+        if status then
+          case status.code
+            when :pending, :skipped
+              @status_final = true
+            when :error
+              @status_final = true if [:setup, :verification, :teardown].include?(status.phase)
+            when :failure
+              unless [:setup, :verification, :teardown].include?(status.phase) then
+                raise "Invalid operation, tried to set test-status to failure "\
+                      "while neither in verify nor teardown"
+              end
+            when :success
+              @status ||= status
+              @status_final = true
+          end
+        end
+      end
+    end
+
+    def status_final!
+      @status_final = true
+    end
+
+    def run_setup
       count          = @setups.find_index { |setup| !execute(setup) }
       @teardown_from = @unit.teardown_count_for_setup_count(count)
     end
 
-    def exercise_and_verify
+    def run_exercise_and_verify
       unless @status then
-        execute(@exercise)
-        execute(@verification)
+        run_exercise
+        run_verify
       end
     end
 
-    def teardown
+    def run_exercise
+      execute(@exercise)
+      #p :post_exercise => @status
+    end
+
+    def run_verify
+      execute(@verification)
+      #p :post_verify => @status
+    end
+
+    def run_teardown
       @teardowns.first(@teardown_from).reverse.find { |teardown|
         !execute(teardown)
       }
-      @status_unchangeable = !!@status
+      @status_final = !!@status
     end
 
     # Returns true on success, false on every other status
@@ -89,14 +145,18 @@ module BareTest
     rescue *PassthroughExceptions
       raise # passthrough-exceptions must be passed through
     rescue ::BareTest::Phase::Abortion => abortion
-      @status = BareTest::Status.new(self, abortion.status, @context, abortion.message, abortion) unless @status_unchangeable
+      set_status(BareTest::Status.new(self, abortion.status, phase.phase, abortion.message, abortion))
+      false
+    rescue ::BareTest::Context::NotReturned
       false
     rescue Exception => exception
+      #p :rescued => exception, :phase => phase.phase
       handler = custom_handler(exception)
       if handler then
         handler.call(phase, self, exception)
       else
-        @status = BareTest::Status.new(self, :error, phase.phase, "#{exception.class}: #{exception}", exception) unless @status_unchangeable
+        set_status(BareTest::Status.new(self, :error, phase.phase, "#{exception.class}: #{exception}", exception)) unless @status_final
+        #p :rescue_set_state => @status, :status_final => @status_final
       end
       false
     end

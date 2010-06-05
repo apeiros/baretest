@@ -10,6 +10,7 @@ module BareTest
   # Serves as the container where all phases are executed in.
   # Components which define helpers will want to extend this class.
   class Context
+    class NotReturned < StandardError; end
 
     # The Assertion instance this Context was created for
     attr_reader :__test__
@@ -17,16 +18,27 @@ module BareTest
     # The current phase being executed
     attr_accessor :__phase__
 
-    # The value returned by exercise
-    attr_accessor :__returned__
-    alias returned __returned__
-
     # Accepts the Assertion instance this Context is created for as first
     # and only argument.
     def initialize(test)
-      @__test__     = test
-      @__phase__    = :creation
-      @__returned__ = nil
+      @__test__         = test
+      @__phase__        = :creation
+      @__returned__     = nil
+      @__has_returned__ = false
+    end
+
+    def __returned__=(value)
+      @__returned__ = value
+    end
+
+    def __returned__
+      raise NotReturned unless @__has_returned__
+      @__returned__
+    end
+    alias returned __returned__
+
+    def returned?
+      @__has_returned__
     end
 
     # Raises BareTest::Phase::Failure, which causes the Test to get the

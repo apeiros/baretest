@@ -11,6 +11,7 @@ require 'baretest/persistence'
 require 'baretest/status'
 require 'baretest/statuscollection'
 require 'baretest/test'
+require 'baretest/irb_mode'
 
 
 
@@ -150,15 +151,15 @@ module BareTest
       @formatter.start_test(test)
 
       if previous_verification_failed then
-        test.status = Status.new(test, :skipped, :creation, "Previous verification failed")
+        test.set_status(Status.new(test, :skipped, :creation, "Previous verification failed"))
       else
-        test.setup
-        test.exercise_and_verify
-        test.teardown
+        test.run_setup
+        test.run_exercise_and_verify
+        test.run_teardown
       end
 
       # if nothing has yet set a status, then it's a success, hurray.
-      test.status ||= Status.new(test, :success, :cleanup)
+      test.set_status(Status.new(test, :success, :cleanup))
 
       @formatter.end_test(test, test.status, Time.now-start)
 

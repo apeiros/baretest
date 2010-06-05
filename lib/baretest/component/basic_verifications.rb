@@ -101,7 +101,7 @@ module BareTest
           fail "Expected the code to raise with the message %p, but the message was %p",
                   with_message, exception.message
         else
-          @__test__.status = nil
+          @__test__.set_status(nil)
           true
         end
       end
@@ -109,7 +109,7 @@ module BareTest
       # Will raise a Failure if the given block raises.
       def raises_nothing
         yield
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => exception
         fail "Expected the code to raise nothing, but it raised #{exception.class} (#{exception.message})"
@@ -127,7 +127,7 @@ module BareTest
         else
           true
         end
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", a, b, e
@@ -177,29 +177,6 @@ module BareTest
         touched(thing, 0)
       end
 
-      # Uses == to test whether the objects are equal
-      #
-      # Can be used in either of the following ways:
-      #   returns expected[, message]
-      #   returns :expected => expected, :message => message
-      def returns(*args)
-        expected, message = extract_args(args, :expected, :message)
-        actual = @__returned__
-
-        unless expected == actual then
-          fail_with_optional_message \
-            "Expected the return value of %s to be equal (==) to %p but was %p",
-            "Expected %p but got %p",
-            message, expected, actual
-        end
-        true
-
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
-        ::Kernel.raise
-      rescue Exception => e
-        fail "Could not compare %p with %p due to %s", expected, actual, e
-      end
-
       # Uses equal? to test whether the objects are the same
       #
       # Can be used in either of the following ways:
@@ -216,7 +193,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -238,7 +215,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -261,12 +238,13 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
       end
       alias equal order_equal
+      alias returns order_equal
 
       # Uses === to test whether the objects are equal
       #
@@ -284,7 +262,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -315,7 +293,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not compare %p with %p due to %s", expected, actual, e
@@ -333,7 +311,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p is a kind of %p due to %s", actual, expected, e
@@ -350,7 +328,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p is an instance of %p due to %s", actual, expected, e
@@ -368,7 +346,7 @@ module BareTest
         end
         true
 
-      rescue ::BareTest::Phase::Failure, *::BareTest::Test::PassthroughExceptions
+      rescue ::BareTest::Phase::Failure, ::BareTest::Context::NotReturned, *::BareTest::Test::PassthroughExceptions
         ::Kernel.raise
       rescue Exception => e
         fail "Could not test whether %p responds to %p due to %s", obj, methods, e
@@ -400,7 +378,7 @@ module BareTest
         actual_index = named.index(:actual)
         if args.size == 1 && Hash === args.first then
           if actual_index && !hash_args.has_key?(:actual) then
-            hash_args = args.first.merge(:actual => @__returned__)
+            hash_args = args.first.merge(:actual => __returned__)
           else
             hash_args = args.first
           end
@@ -408,7 +386,7 @@ module BareTest
         else
           if actual_index && args.size <= actual_index then
             args = args.dup
-            args[actual_index] = @__returned__
+            args[actual_index] = __returned__
           end
           args.first(named.size)
         end

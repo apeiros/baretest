@@ -4,7 +4,7 @@ BareTest.new_component :rr do
   BareTest::Assertion::Context.send :include, RR::Adapters::RRMethods
 
   handle_verification_exceptions RR::Errors::RRError do |assertion, phase, exception|
-    ::BareTest::Status.new(assertion, :failure, :verify, nil, exception.message)
+    ::BareTest::Status.new(assertion, :failure, :verification, nil, exception.message)
   end
 
   teardown do
