@@ -3,13 +3,19 @@ In Prose
 
 * The return value is only considered in 'verify' blocks. Those have to return a
   trueish value. Nil and false make the verify fail.
-* Setting the test status to failure is only allowed in verify and teardown.
+* Setting the test status to failure is only allowed in setup, verify and teardown.
+  * setup: missing dependency, source file, component, ...
+  * verify: verification failed
+  * teardown: additional verifications performed by components (e.g. mock teardowns)
 * Setting the test status to pending is always final
+  The moment a test becomes pending, execution of it is halted
 * Setting the test status to skipped is always final
+  The moment a test becomes skipped, execution of it is halted
 * Setting the test status to error is final in setup, verify and teardown, but
-  NOT in exercise (this is to allow testing for exceptions being raised)
+  NOT in exercise.
+  This is to allow testing for exceptions being raised
 * If there's no test status set at the end of all phases, the test status
-  becomes set to success
+  becomes set to success. The phase of the status will be :cleanup
 
 
 

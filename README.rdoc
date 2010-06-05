@@ -247,6 +247,7 @@ From examples/tests/01_basics_I.rb:
 * Tass
   * adding rr integration
   * reporting bugs
+  * chief evangelist
 * robgleeson
   * Introducing me to rack-test
   * Feedback
