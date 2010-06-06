@@ -73,7 +73,7 @@ module BareTest
 
       # Exit irb, returning the passed value
       def r(value)
-        throw :IRB_EXIT, value
+        throw :IRB_RETURN, [true, value]
       end
     end
 
@@ -89,22 +89,33 @@ module BareTest
 
     def run_irb_failure(test)
       if reconstructable?(test)
-        require 'irb'
-        copy = reconstruct_context(test)
-        p :returned => irb_drop(copy.context)
+        header "Failure in phase #{test.status.phase.to_s}, invoking IRB"
+        start_irb_session(test)
       else
-        puts "irb_failure, #{test.status.phase} - irreconstructable"
+        header "Failure in phase #{test.status.phase}, can't invoke IRB", false
       end
     end
 
     def run_irb_error(test)
       if reconstructable?(test)
-        require 'irb'
-        copy = reconstruct_context(test)
-        p :returned => irb_drop(copy.context)
+        header "Error in phase #{test.status.phase}, invoking IRB"
+        start_irb_session(test)
       else
-        puts "irb_error, #{test.status.phase} - irreconstructable"
+        header "Error in phase #{test.status.phase}, can't invoke IRB", false
       end
+    end
+
+    def header(msg, good=true)
+      printf "\n\e[1;#{good ? 32 : 31};40m %-79s\e[0m\n", msg
+    end
+
+    def start_irb_session(test)
+      require 'irb'
+      copy                   = reconstruct_context(test)
+      has_returned, returned = irb_drop(copy.context)
+      # we don't currently do anything with irb's return value
+      # later it may serve as to continue running the test, using the supplied
+      # return value
     end
 
     def reconstructable?(test)
@@ -115,10 +126,10 @@ module BareTest
       status = test.status
       copy   = test.dup
       copy.run_setup
-      puts "executed setups"
+      puts "-> executed setups"
       if status.phase == :verification then
         copy.run_exercise
-        puts "executed exercise"
+        puts "-> executed exercise"
       end
       copy.context.__phase__ = status.phase
       copy
@@ -131,16 +142,16 @@ module BareTest
         ::IRB.setup(nil)
         Object.const_set(:IRB_SETUP, true)
       end
-      ws  = ::IRB::WorkSpace.new(context)
-      irb = ::IRB::Irb.new(ws)
+      irb = ::IRB::Irb.new(IRB::WorkSpace.new(context))
       ::IRB.conf[:IRB_RC].call(irb.context) if ::IRB.conf[:IRB_RC] # loads the irbrc?
       ::IRB.conf[:MAIN_CONTEXT] = irb.context # why would the main context be set here?
       trap("SIGINT") do irb.signal_handle end
       ARGV.replace(original_argv)
       context.extend IRBContext
-      context.instance_variable_set(:@irb, irb)
-      context.instance_variable_set(:@ws, ws)
-      catch(:IRB_EXIT) do irb.eval_input end
+      catch(:IRB_RETURN) {
+        catch(:IRB_EXIT) { irb.eval_input }
+        [false, nil]
+      }
     end
   end
 end

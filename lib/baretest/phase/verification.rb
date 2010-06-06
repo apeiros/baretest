@@ -16,6 +16,10 @@ module BareTest
       attr_reader :description
 
       def initialize(description, options=nil, &code)
+        @user_file = nil
+        @user_line = nil
+        @user_code = code
+
         if options then
           code = proc {
             raise BareTest::Phase::Pending.new(:verification, "Tagged as pending (#{options[:pending]})")

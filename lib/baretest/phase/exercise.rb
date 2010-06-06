@@ -16,6 +16,10 @@ module BareTest
       attr_reader :description
 
       def initialize(description, options, &code)
+        @user_file = nil
+        @user_line = nil
+        @user_code = code
+
         if options then
           code = proc {
             raise BareTest::Phase::Pending.new(:exercise, "Tagged as pending (#{options[:pending]})")
@@ -34,6 +38,9 @@ module BareTest
           returned
         end
       end
+
+      def decorated_user_code
+        user_code.sub(/\Aproc \{(?: \|[^|]*\|)?/, '').sub(/ \}\z/, '')
 
       def phase
         :exercise
