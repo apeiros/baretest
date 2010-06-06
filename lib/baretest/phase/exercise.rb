@@ -40,7 +40,8 @@ module BareTest
       end
 
       def decorated_user_code
-        user_code.sub(/\Aproc \{(?: \|[^|]*\|)?/, '').sub(/ \}\z/, '')
+        user_code.sub(/\Aproc \{(?: \|[^|]*\|)?(.*)\}\z/m, '\1')
+      end
 
       def phase
         :exercise
