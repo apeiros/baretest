@@ -39,8 +39,8 @@ module BareTest
         end
       end
 
-      def decorated_user_code
-        user_code.sub(/\Aproc \{(?: \|[^|]*\|)?(.*)\}\z/m, '\1')
+      def decorated_user_code(code)
+        code
       end
 
       def phase

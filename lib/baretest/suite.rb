@@ -266,6 +266,7 @@ module BareTest
 
     def exercise(description, options=nil, &code)
       exercise       = Phase::Exercise.new(description, options, &code)
+      exercise.user_file, exercise.user_line = extract_file_and_line(caller.first)
       unit           = Unit.new(self, exercise)
       @children     << unit
       @current_unit  = unit
@@ -275,6 +276,7 @@ module BareTest
     def verify(description, options=nil, &code)
       raise "You must define an exercise before defining verifications" unless @current_unit
       verification = Phase::Verification.new(description, options, &code)
+      verification.user_file, verification.user_line = extract_file_and_line(caller.first)
       @current_unit.out_of_order(verification)
       verification
     end
@@ -282,6 +284,7 @@ module BareTest
     def then_verify(description, &code)
       raise "You must define an exercise before defining verifications" unless @current_unit
       verification = Phase::Verification.new(description, &code)
+      verification.user_file, verification.user_line = extract_file_and_line(caller.first)
       @current_unit.in_order(verification)
       verification
     end
@@ -289,6 +292,7 @@ module BareTest
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
     def setup(id=nil, variables=nil, &code)
+      #p :setup_caller => caller
       existing = id && @by_name[id]
       if code then
         if existing then
@@ -313,8 +317,19 @@ module BareTest
     # assertion once, even for nested suites.
     def teardown(&code)
       teardown    = Phase::Teardown.new(&code)
+      teardown.user_file, teardown.user_line = extract_file_and_line(caller.first)
       @teardowns << teardown
       teardown
+    end
+
+    def extract_file_and_line(caller_line)
+      matched = caller_line.match(/^(.*):(\d+)/)
+      if matched then
+        file, line = matched.captures
+        [File.expand_path(file), line.to_i]
+      else
+        [nil, nil]
+      end
     end
 
     def to_s #:nodoc:

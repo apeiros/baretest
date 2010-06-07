@@ -89,7 +89,8 @@ module BareTest
 
     def run_irb_failure(test)
       if reconstructable?(test)
-        header "Failure in phase #{test.status.phase.to_s}, invoking IRB"
+        header "Failure in phase #{test.status.phase}, invoking IRB"
+        code(test, test.status.phase)
         start_irb_session(test)
       else
         header "Failure in phase #{test.status.phase}, can't invoke IRB", false
@@ -99,6 +100,7 @@ module BareTest
     def run_irb_error(test)
       if reconstructable?(test)
         header "Error in phase #{test.status.phase}, invoking IRB"
+        code(test, test.status.phase)
         start_irb_session(test)
       else
         header "Error in phase #{test.status.phase}, can't invoke IRB", false
@@ -107,6 +109,24 @@ module BareTest
 
     def header(msg, good=true)
       printf "\n\e[1;#{good ? 32 : 31};40m %-79s\e[0m\n", msg
+    end
+
+    def code(test, phase)
+      phase_obj = case phase
+        when :exercise then test.exercise
+        when :verification then test.verification
+      end
+      if phase_obj then
+        puts "Code of #{phase_obj.user_file}:#{phase_obj.user_line}"
+        puts insert_line_numbers(phase_obj.user_code, phase_obj.user_line)
+        puts
+      end
+    end
+
+    def insert_line_numbers(code, start_line=1)
+      digits       = Math.log10(start_line+code.count("\n")).floor+1
+      current_line = start_line-1
+      code.gsub(/^/) { sprintf '  %0*d  ', digits, current_line+=1 }
     end
 
     def start_irb_session(test)

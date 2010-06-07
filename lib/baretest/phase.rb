@@ -12,15 +12,9 @@ require 'baretest/status'
 
 module BareTest
   class Phase
-    def self.extract_code(data)
-      if data.is_a?(String) then
-        data
-      elsif data.is_a?(Proc) && defined?(ParseTree) && defined?(Ruby2Ruby) then
-        data.to_ruby
-      else
-        "<<could not extract code>>"
-      end
-    end
+
+    attr_accessor :user_file
+    attr_accessor :user_line
 
     def initialize(&code)
       @code      ||= code
@@ -41,16 +35,43 @@ module BareTest
       context.instance_eval(&@code)
     end
 
-    def user_code
-      @user_code ? Phase.extract_code(@user_code) : "<<could not extract code>>"
+    def user_code(until_line=nil)
+      extract_code(@user_code, @user_file, @user_line, until_line)
     end
 
-    def user_file
-      @user_file || "?"
+    def extract_code(proc_or_string, file, line, until_line=nil)
+      use_parse_tree = nil
+#       begin
+#         require 'parse_tree'
+#         require 'parse_tree_extensions'
+#         require 'ruby2ruby'
+#         use_parse_tree = true
+#       rescue LoadError
+#         use_parse_tree = false
+#       end
+
+      if proc_or_string.is_a?(String) then
+        data
+      elsif proc_or_string.is_a?(Proc) && use_parse_tree then
+        decorate_user_code(data.to_ruby.sub(/\Aproc \{(?: \|[^|]*\|)?(.*)\}\z/m, '\1'))
+      elsif file && line
+        lines  = File.readlines(file)
+        string = lines[(line-1)..(until_line || -1)].join("").sub(/[\r\n]*\z/, '').tr("\r", "\n")
+        string.gsub!(/^\t+/) { |m| "  "*m.size }
+        indent = string[/^ +/]
+        string.gsub!(/^ {0,#{indent.size-1}}[^ ].*\z/m, '') # drop everything that is less indented
+        string.gsub!(/^#{indent}/, '  ') # reindent
+        string
+      else
+        "<<could not extract code>>"
+      end
     end
 
-    def user_line
-      @user_line || "?"
+    # Prepend the line number in front of ever line
+    def insert_line_numbers(code, start_line=1) # :nodoc:
+      digits       = Math.log10(start_line+code.count("\n")).floor+1
+      current_line = start_line-1
+      code.gsub(/^/) { sprintf '  %0*d  ', digits, current_line+=1 }
     end
   end
 end
