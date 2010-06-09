@@ -60,7 +60,7 @@ module BareTest
         string.gsub!(/^\t+/) { |m| "  "*m.size }
         indent = string[/^ +/]
         string.gsub!(/^ {0,#{indent.size-1}}[^ ].*\z/m, '') # drop everything that is less indented
-        string.gsub!(/^#{indent}/, '  ') # reindent
+        string.gsub!(/^#{indent}/, '') # unindent
         string
       else
         "<<could not extract code>>"

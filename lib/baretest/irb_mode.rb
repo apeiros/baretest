@@ -90,7 +90,6 @@ module BareTest
     def run_irb_failure(test)
       if reconstructable?(test)
         header "Failure in phase #{test.status.phase}, invoking IRB"
-        code(test, test.status.phase)
         start_irb_session(test)
       else
         header "Failure in phase #{test.status.phase}, can't invoke IRB", false
@@ -100,7 +99,6 @@ module BareTest
     def run_irb_error(test)
       if reconstructable?(test)
         header "Error in phase #{test.status.phase}, invoking IRB"
-        code(test, test.status.phase)
         start_irb_session(test)
       else
         header "Error in phase #{test.status.phase}, can't invoke IRB", false
@@ -108,7 +106,7 @@ module BareTest
     end
 
     def header(msg, good=true)
-      printf "\n\e[1;#{good ? 32 : 31};40m %-79s\e[0m\n", msg
+      printf "\n\e[1;#{good ? 33 : 31};40m %-79s\e[0m\n", msg
     end
 
     def code(test, phase)
@@ -117,21 +115,24 @@ module BareTest
         when :verification then test.verification
       end
       if phase_obj then
-        puts "Code of #{phase_obj.user_file}:#{phase_obj.user_line}"
-        puts insert_line_numbers(phase_obj.user_code, phase_obj.user_line)
+        puts "  | Code of #{phase_obj.user_file}:#{phase_obj.user_line}\n  |"
+        puts insert_line_numbers(phase_obj.user_code, phase_obj.user_line, "  | %0*d   ")
         puts
       end
     end
 
-    def insert_line_numbers(code, start_line=1)
+    def insert_line_numbers(code, start_line=1, template='%0*d ')
       digits       = Math.log10(start_line+code.count("\n")).floor+1
       current_line = start_line-1
-      code.gsub(/^/) { sprintf '  %0*d  ', digits, current_line+=1 }
+      code.gsub(/^/) { sprintf template, digits, current_line+=1 }
     end
 
     def start_irb_session(test)
       require 'irb'
+      puts
+      code(test, test.status.phase)
       copy                   = reconstruct_context(test)
+      puts
       has_returned, returned = irb_drop(copy.context)
       # we don't currently do anything with irb's return value
       # later it may serve as to continue running the test, using the supplied
@@ -143,13 +144,19 @@ module BareTest
     end
 
     def reconstruct_context(test)
-      status = test.status
-      copy   = test.dup
+      status   = test.status
+      copy     = test.dup
+      executed = []
       copy.run_setup
-      puts "-> executed setups"
+      executed << "setups"
       if status.phase == :verification then
         copy.run_exercise
-        puts "-> executed exercise"
+        executed << "exercise"
+      end
+      case executed.size
+        when 0 then puts "Executed nothing"
+        when 1,2 then puts "Executed #{executed.join(' and ')}"
+        else puts "Executed #{executed[0..-2].join(', ')} and #{executed.last}"
       end
       copy.context.__phase__ = status.phase
       copy
