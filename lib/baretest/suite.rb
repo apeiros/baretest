@@ -292,24 +292,28 @@ module BareTest
     # Define a setup block for this suite. The block will be ran before every
     # assertion once, even for nested suites.
     def setup(id=nil, variables=nil, &code)
-      #p :setup_caller => caller
+      file, line = extract_file_and_line(caller.first)
       existing = id && @by_name[id]
       if code then
         if existing then
           existing.add_variant(variables, &code)
         elsif id then
-          add_setup Phase::SetupBlockVariants.new(id, variables, &code)
+          add_setup Phase::SetupBlockVariants.new(id, variables, &code), file, line
         else
-          add_setup Phase::Setup.new(id, &code)
+          add_setup Phase::Setup.new(id, &code), file, line
         end
       else
-        SetupConstructor.new(self, id, existing)
+        obj = SetupConstructor.new(self, id, existing)
+        obj.user_file = file
+        obj.user_line = line
       end
     end
 
-    def add_setup(setup)
+    def add_setup(setup, file, line)
       @by_name[setup.id]  = setup if setup.id
       @setups << setup
+      setup.user_file = file
+      setup.user_line = line
       setup
     end
 
