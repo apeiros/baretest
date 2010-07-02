@@ -28,7 +28,7 @@ examples/tests/07_advanced_III_requires.rb
 examples/tests/08_advanced_IV_components.rb
 examples/tests/09_expert_I_setup_variants.rb
 lib/baretest.rb
-lib/baretest/assertion.rb
+lib/baretest/codeblock.rb
 lib/baretest/commandline.rb
 lib/baretest/component/basic_verifications.rb
 lib/baretest/component/tabular_data.rb
