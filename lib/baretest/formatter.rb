@@ -119,10 +119,17 @@ module BareTest
       args.map { |arg| arg.gsub(/\e\[[^m]*m/, '') }
     end
 
+    # @return [String]
+    #   An indent string for the given item's nesting level
+    #
+    # @see Suite#nesting_level, Test#nesting_level
     def indent(item, offset=0)
       @indent_string*(item.nesting_level+offset)
     end
 
+    # @return [Array<String>]
+    #   The backtrace (or ['No backtrace']) for the given status object,
+    #   respecting set options (e.g. set via command line use of baretest)
     def backtrace(status)
       return ['No backtrace'] unless backtrace = status.exception && status.exception.backtrace
       @options[:verbose] ? backtrace : backtrace.first(1)
@@ -132,17 +139,40 @@ module BareTest
     # We defer in order to be able to ignore suites. Ignored suites that
     # contain unignored suites/assertions must be displayed, ignored suites
     # that don't, will be popped from the deferred-stack
+    #
+    # @see drop_last_deferred, deferred?, apply_deferred
     def defer(deferred=true, &block)
       @deferred << (deferred ? block : proc{})
     end
 
+    # Remove the last thing that was deferred, without executing it
+    #
+    # @return [Boolean]
+    #   Whether something was applied or not
+    #
+    # @see defer
     def drop_last_deferred
-      @deferred.pop
+      !!@deferred.pop
     end
 
+    # Check whether something has been deferred
+    #
+    # @see defer
+    def deferred?
+      !@deferred.empty?
+    end
+
+    # Execute and then remove everything that was deferred
+    #
+    # @return [Boolean]
+    #   Whether something was applied or not
+    #
+    # @see defer
     def apply_deferred
+      applied = !@deferred.empty?
       @deferred.each do |deferred| deferred.call end
       @deferred.clear
+      applied
     end
   end
 end

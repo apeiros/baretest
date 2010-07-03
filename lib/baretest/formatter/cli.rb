@@ -39,18 +39,23 @@ module BareTest
       env_option      :profile, 'PROFILE'
 
       def start_all
+        @insert_blank_line = false
+
         puts "Running tests in #{File.expand_path(Dir.getwd)}"
         puts "Using #{BareTest.ruby_description} with baretest #{BareTest::VERSION}"
+        puts
       end
 
       def start_suite(suite)
         defer do
-          puts "\n          #{indent(suite, -1)}\e[1m#{suite.description}\e[0m" if suite.description
+          @insert_blank_line = true
+          puts "          #{indent(suite, -1)}\e[1m#{suite.description}\e[0m" if suite.description
         end
       end
 
       def end_test(test, status, elapsed_time)
         apply_deferred
+        @insert_blank_line = true
 
         puts "#{Labels[status.code]} #{indent(test, -1)}#{test.description}"
         case status.code
@@ -65,7 +70,11 @@ module BareTest
       end
 
       def end_suite(suite, *args)
-        drop_last_deferred
+        had_deferred = drop_last_deferred # append a line if nothing deferred had to be dropped (== there have been tests in the suite)
+        if !had_deferred && @insert_blank_line then
+          @insert_blank_line = false
+          puts
+        end
       end
 
       def end_all(status_collection, elapsed_time)
