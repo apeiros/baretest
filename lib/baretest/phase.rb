@@ -23,6 +23,11 @@ module BareTest
       @user_code ||= nil
     end
 
+    def set_file_and_line(file, line)
+      @user_line = file
+      @user_code = line
+    end
+
     def phase
       raise "Your Phase subclass #{self.class.to_s} must override #phase."
     end

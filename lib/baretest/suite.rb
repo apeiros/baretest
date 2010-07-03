@@ -266,7 +266,7 @@ module BareTest
 
     def exercise(description, options=nil, &code)
       exercise       = Phase::Exercise.new(description, options, &code)
-      exercise.user_file, exercise.user_line = extract_file_and_line(caller.first)
+      exercise.set_file_and_line(*extract_file_and_line(caller.first))
       unit           = Unit.new(self, exercise)
       @children     << unit
       @current_unit  = unit
@@ -276,7 +276,7 @@ module BareTest
     def verify(description, options=nil, &code)
       raise "You must define an exercise before defining verifications" unless @current_unit
       verification = Phase::Verification.new(description, options, &code)
-      verification.user_file, verification.user_line = extract_file_and_line(caller.first)
+      verification.set_file_and_line(*extract_file_and_line(caller.first))
       @current_unit.out_of_order(verification)
       verification
     end
@@ -284,7 +284,7 @@ module BareTest
     def then_verify(description, &code)
       raise "You must define an exercise before defining verifications" unless @current_unit
       verification = Phase::Verification.new(description, &code)
-      verification.user_file, verification.user_line = extract_file_and_line(caller.first)
+      verification.set_file_and_line(*extract_file_and_line(caller.first))
       @current_unit.in_order(verification)
       verification
     end
@@ -303,17 +303,14 @@ module BareTest
           add_setup Phase::Setup.new(id, &code), file, line
         end
       else
-        obj = SetupConstructor.new(self, id, existing)
-        obj.user_file = file
-        obj.user_line = line
+        obj = SetupConstructor.new(self, id, existing, file, line)
       end
     end
 
     def add_setup(setup, file, line)
       @by_name[setup.id]  = setup if setup.id
       @setups << setup
-      setup.user_file = file
-      setup.user_line = line
+      setup.set_file_and_line(file, line)
       setup
     end
 
@@ -321,7 +318,7 @@ module BareTest
     # assertion once, even for nested suites.
     def teardown(&code)
       teardown    = Phase::Teardown.new(&code)
-      teardown.user_file, teardown.user_line = extract_file_and_line(caller.first)
+      teardown.set_file_and_line(*extract_file_and_line(caller.first))
       @teardowns << teardown
       teardown
     end
