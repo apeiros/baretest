@@ -100,7 +100,7 @@ module BareTest
     files      = [DefaultInitialPositiveGlob] if (files.nil? || files.empty?)
     Dir.chdir(chdir) do
       $LOAD_PATH.unshift(File.expand_path(lib_path)) if File.exist?(lib_path)
-      load(setup_path) if File.exist?(setup_path)
+      load_with_warnings(setup_path) if File.exist?(setup_path)
       files.each do |glob|
         glob = "#{glob}/**/*.rb" if File.directory?(glob)
         Dir.glob(glob) { |path|
@@ -115,12 +115,20 @@ module BareTest
               puts "No helper file #{helper_path} to load"
             end
           end
-          load(helper_path) if exists
+          load_with_warnings(helper_path) if exists
           puts "Loading test file #{path}" if verbose
-          load(path)
+          load_with_warnings(path)
         }
       end
     end
+  end
+
+  def self.load_with_warnings(path)
+    load(path)
+  rescue SyntaxError => e
+    puts "Could not load file '#{path}' due to a SyntaxError."
+    puts "#{e.class} #{e}", *e.backtrace.first(3)
+    puts
   end
 
   # Determine which of the named states is the most important one (see
