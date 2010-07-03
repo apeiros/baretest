@@ -25,7 +25,7 @@ BareTest.suite "Advanced I - Dependencies via :provides and :depends_on", :use =
         exercise "The given exercise" do
         end
 
-        verify "will fail, due to that, :c will NOT be provided" do
+        verify "will fail, and due to that, :c will NOT be provided" do
           fail 'Intentional failure'
         end
       end
@@ -35,7 +35,7 @@ BareTest.suite "Advanced I - Dependencies via :provides and :depends_on", :use =
         end
 
         verify "will be skipped, because the dependency ':c' is not provided" do
-          fail "This exercise should have been skipped."
+          fail "This exercise should have been skipped, if you read this, something went wrong."
         end
       end
     end
