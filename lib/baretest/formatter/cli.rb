@@ -48,7 +48,8 @@ module BareTest
 
       def start_suite(suite)
         defer do
-          @insert_blank_line = true
+          puts if @insert_blank_line
+          @insert_blank_line = false
           puts "          #{indent(suite, -1)}\e[1m#{suite.description}\e[0m" if suite.description
         end
       end
