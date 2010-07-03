@@ -61,8 +61,9 @@ BareTest.suite "Basics IV - The four classical test phases", :use => :basic_veri
       end
     end
 
-    exercise "" do
+    exercise "In outer suite again," do
     end
+
     verify "@inner_setup is not defined in outer suite" do
       !defined?(@inner_setup)
     end
